@@ -2226,9 +2226,9 @@ do
     Codex:SelectTab("Stats")
     local dump = ShownText(Codex.statLinePool)
     check(dump:find("By Hero Talent Tree", 1, true) ~= nil, "the Stats tab has a hero-tree section", dump)
-    check(dump:find("Spellslinger: Primary Stat > Haste > Mastery > Crit > Versatility", 1, true) ~= nil,
-        "Spellslinger's order is spelled out in the Codex's own stat words", dump)
-    check(dump:find("Sunfury: Primary Stat > Haste > Versatility > Crit > Mastery", 1, true) ~= nil,
+    check(dump:find("Spellslinger\nPrimary Stat > Haste > Mastery > Crit > Versatility", 1, true) ~= nil,
+        "Spellslinger's order is spelled out under its name in the Codex's own stat words", dump)
+    check(dump:find("Sunfury\nPrimary Stat > Haste > Versatility > Crit > Mastery", 1, true) ~= nil,
         "Sunfury's order is listed separately", dump)
     check(dump:find("Wowhead Arcane Mage stat priority guide", 1, true) ~= nil,
         "the section is attributed to the Wowhead page it came from", dump)
@@ -2238,7 +2238,7 @@ do
     Codex:Open("DEMONHUNTER", 1480)
     Codex:SelectTab("Stats")
     dump = ShownText(Codex.statLinePool)
-    check(dump:find("Void-Scarred:", 1, true) ~= nil, "Devourer lists its Void-Scarred order", dump)
+    check(dump:find("Void-Scarred\nPrimary Stat", 1, true) ~= nil, "Devourer lists its Void-Scarred order", dump)
     check(dump:find("800 rating", 1, true) ~= nil, "Wowhead's haste-cap caveat rides along as a note", dump)
 
     -- Leaving the tab hides the rows, the same contract every other tab's
@@ -3552,18 +3552,19 @@ do
     Codex:SelectTab("Stats")
     local statsDump = ShownText(Codex.pools.stats)
     check(statsDump:find("2. Haste", 1, true) ~= nil, "the numbered priority is the hero tree's order", statsDump)
-    check(statsDump:find("for your hero tree: Rider of the Apocalypse", 1, true) ~= nil,
-        "and says which tree it is for", statsDump)
     local lineDump = ShownText(Codex.statLinePool)
-    check(lineDump:find("Rider of the Apocalypse  (you):", 1, true) ~= nil,
-        "the hero-tree section marks the player's tree", lineDump)
-    check(lineDump:find("San'layn  (you)", 1, true) == nil, "and only that one")
+    check(lineDump:find("Stat Priority\nFor your hero tree, Rider of the Apocalypse", 1, true) ~= nil,
+        "and says which tree it is for, under the Stat Priority header", lineDump)
+    check(lineDump:find("Other Hero Trees", 1, true) ~= nil
+        and select(2, lineDump:gsub("Rider of the Apocalypse", "")) == 1,
+        "the other trees are listed without repeating the player's own", lineDump)
+    check(lineDump:find("San'layn", 1, true) ~= nil, "the other tree is there")
 
     -- Swapping trees redraws an open Stats tab.
     mock.heroSubTreeID = 1
     mock.Fire("TRAIT_CONFIG_UPDATED", 1)
     statsDump = ShownText(Codex.pools.stats)
-    check(statsDump:find("for your hero tree: San'layn", 1, true) ~= nil
+    check(ShownText(Codex.statLinePool):find("For your hero tree, San'layn", 1, true) ~= nil
         and statsDump:find("2. Crit", 1, true) ~= nil, "a hero tree swap redraws the Stats tab", statsDump)
     Codex:Toggle()
 

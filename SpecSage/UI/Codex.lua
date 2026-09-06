@@ -788,7 +788,13 @@ local function PlaceLine(pool, index, parent, y, width, text, opts)
 
     row.text:ClearAllPoints()
     row.text:SetPoint("TOPLEFT", row, "TOPLEFT", textInset, 0)
-    row.text:SetFontObject(opts.isHeader and SpecSageHeadingFont or SpecSageBodyFontSmall)
+    -- Heading face for headers; bold small for a sub-heading (a hero tree's
+    -- name); the italic for an aside; the body face for everything else.
+    local font = SpecSageBodyFontSmall
+    if opts.isHeader then font = SpecSageHeadingFont
+    elseif opts.bold then font = SpecSageBoldFontSmall
+    elseif opts.italic then font = SpecSageItalicFont end
+    row.text:SetFontObject(font)
 
     local color = opts.color or TEXT_PRIMARY_COLOR
     row.text:SetTextColor(color[1], color[2], color[3])
@@ -1005,10 +1011,26 @@ function Codex:RenderStats(guide, specID)
     local linePool = self.statLinePool
     local y, index = -PADDING, 0
 
+    -- Laid out as headed blocks (the same shape as the character sheet
+    -- panel's Gear section, owner's call 2026-09-06): "Stat Priority" with
+    -- the player's hero tree as an italic aside under it, then the numbered
+    -- stats; "Other Hero Trees", each tree a bold name over its order and
+    -- note; then the attribution. Headers and asides come from the wrapping
+    -- line pool, the numbered stats from the two-column stat pool - both
+    -- share one y cursor, so the order on the page is the order here.
+    local lineIndex = 0
+
     -- For the player's own spec this is Wowhead's order for the hero tree
     -- they are in (activeTitle names it); for any other spec, or when the
     -- tree cannot be read, the guide's flat order.
     local priorities, activeTitle = ns.GuideStore:GetActiveStatPriority(specID)
+    lineIndex = lineIndex + 1
+    y = PlaceLine(linePool, lineIndex, parent, y, width, "Stat Priority", { color = HEADER_COLOR, isHeader = true })
+    if activeTitle then
+        lineIndex = lineIndex + 1
+        y = PlaceLine(linePool, lineIndex, parent, y, width, "For your hero tree, " .. activeTitle,
+            { color = TEXT_SECONDARY_COLOR, italic = true })
+    end
     if not priorities or #priorities == 0 then
         index = index + 1
         y = PlaceStatRow(pool, index, parent, y, width, NO_DATA_TEXT, nil, true)
@@ -1024,49 +1046,51 @@ function Codex:RenderStats(guide, specID)
             index = index + 1
             y = PlaceStatRow(pool, index, parent, y, width, label, value)
         end
-        if activeTitle then
-            index = index + 1
-            y = PlaceStatRow(pool, index, parent, y, width,
-                format("for your hero tree: %s", activeTitle), nil, true)
-        end
     end
 
     self:FinishPool(pool, index, y)
 
     -- Wowhead's own per-hero-tree priorities (v1.6, generated
-    -- Data/StatPriority.lua). Drawn into a second, wrapping pool below the
-    -- rows above: these are ordered text, not live values, and a note like
-    -- "Haste only to roughly 800 rating" needs to wrap rather than clip.
-    y = y - GROUP_GAP
-    local lineIndex = 0
+    -- Data/StatPriority.lua). The tree the player is in is already the list
+    -- above, so it is left out here; the block only appears when there is
+    -- another tree to show. A note like "Haste only to roughly 800 rating"
+    -- wraps under its tree.
     local data = specID and ns.GuideStore:GetStatPriority(specID)
     if data and data.lists and #data.lists > 0 then
-        lineIndex = lineIndex + 1
-        y = PlaceLine(linePool, lineIndex, parent, y, width, "By Hero Talent Tree",
-            { color = HEADER_COLOR, isHeader = true })
+        local others = {}
         for _, listEntry in ipairs(data.lists) do
-            local names = {}
-            for order, entry in ipairs(listEntry.list) do
-                names[order] = STAT_LABELS[entry.stat] or entry.stat
-            end
-            local isCurrent = activeTitle ~= nil and listEntry.title == activeTitle
+            if activeTitle == nil or listEntry.title ~= activeTitle then others[#others + 1] = listEntry end
+        end
+        if #others > 0 then
+            y = y - GROUP_GAP
             lineIndex = lineIndex + 1
-            y = PlaceLine(linePool, lineIndex, parent, y, width,
-                format("%s%s: %s", listEntry.title, isCurrent and "  (you)" or "", table.concat(names, " > ")),
-                isCurrent and { color = HEADER_COLOR } or nil)
-            if listEntry.note then
+            y = PlaceLine(linePool, lineIndex, parent, y, width, activeTitle and "Other Hero Trees" or "By Hero Talent Tree",
+                { color = HEADER_COLOR, isHeader = true })
+            for i, listEntry in ipairs(others) do
+                local names = {}
+                for order, entry in ipairs(listEntry.list) do
+                    names[order] = STAT_LABELS[entry.stat] or entry.stat
+                end
                 lineIndex = lineIndex + 1
-                y = PlaceLine(linePool, lineIndex, parent, y, width, listEntry.note,
-                    { color = CONDITION_COLOR, indent = CONDITION_INDENT })
+                y = PlaceLine(linePool, lineIndex, parent, y, width, listEntry.title, { color = TEXT_PRIMARY_COLOR, bold = true })
+                lineIndex = lineIndex + 1
+                y = PlaceLine(linePool, lineIndex, parent, y, width, table.concat(names, " > "),
+                    { color = TEXT_SECONDARY_COLOR, indent = CONDITION_INDENT })
+                if listEntry.note then
+                    lineIndex = lineIndex + 1
+                    y = PlaceLine(linePool, lineIndex, parent, y, width, listEntry.note,
+                        { color = CONDITION_COLOR, indent = CONDITION_INDENT, italic = true })
+                end
+                if i < #others then y = y - LINE_GAP end
             end
         end
         -- Same attribution contract the BiS lists carry: whose editorial
         -- order this is, and when it was read, so a stale season is visible
         -- on the tab rather than assumed to be current.
         if data.source then
-            y = y - LINE_GAP
+            y = y - GROUP_GAP
             lineIndex = lineIndex + 1
-            y = PlaceLine(linePool, lineIndex, parent, y, width, data.source, { color = MUTED_COLOR })
+            y = PlaceLine(linePool, lineIndex, parent, y, width, data.source, { color = MUTED_COLOR, italic = true })
         end
     end
 

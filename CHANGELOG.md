@@ -12,7 +12,7 @@
 - **Stagger** stat row (off by default).
 
 **Improved**
-- The character sheet panel's Gear section is laid out as headed blocks: Stat Priority with your hero tree under it, Other Hero Trees, Best in Slot.
+- The Stats tab and the character sheet panel's Gear section are laid out as headed blocks: Stat Priority with your hero tree under it, Other Hero Trees (each tree named over its order), Best in Slot.
 - Buttons read as buttons: ink plates with a shadow and lit edge, wax red on hover, they sink when pressed, and they size to their labels.
 - Armor tooltip shows reduction against your current target and falls back to a self-checking estimate when the live figure is unavailable.
 - Mastery tooltip quotes your spec's own mastery text and shows mastery points.
