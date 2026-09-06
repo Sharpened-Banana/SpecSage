@@ -13,7 +13,7 @@ it goes stale every patch. This skill repeats the refresh pipeline that
 produced the addon's first Midnight-era update, so it doesn't need to be
 re-derived from scratch each time.
 
-Read `/home/user/WOW-AIO/DESIGN.md` before starting — specifically the
+Read the repo's `DESIGN.md` (at the repo root, next to this `.claude/` directory) before starting — specifically the
 "Shipped Mythic+ talent loadout (v1.2)" and "Shipped raid loadout &
 structured rotation conditions (v1.3)" sections, which are the schema and
 the reasoning for why SimC (not a guide website) is the source.
