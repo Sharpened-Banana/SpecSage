@@ -3577,11 +3577,12 @@ do
         if row:IsShown() then panelDump[#panelDump + 1] = row.text:GetText() or "" end
     end
     panelDump = table.concat(panelDump, "\n")
-    check(panelDump:find("Stat Priority \194\183 Rider of the Apocalypse", 1, true) ~= nil,
-        "the panel's Stat Priority header names the player's hero tree", panelDump)
+    check(panelDump:find("Stat Priority\nRider of the Apocalypse", 1, true) ~= nil,
+        "the panel's Stat Priority header is followed by the player's hero tree", panelDump)
     check(panelDump:find("2. Haste", 1, true) ~= nil, "and its rows follow that tree's order", panelDump)
-    check(panelDump:find("Rider of the Apocalypse  (you)", 1, true) ~= nil,
-        "and the hero-tree list marks it", panelDump)
+    check(panelDump:find("Other Hero Trees", 1, true) ~= nil
+        and select(2, panelDump:gsub("Rider of the Apocalypse", "")) == 1,
+        "the other trees are listed once, without repeating the player's own", panelDump)
     mock.ShowCharacterFrame(false)
 
     mock.heroSubTreeID = nil
@@ -3644,8 +3645,11 @@ do
     local critRow = ShownRow("2. Crit")
     check(critRow ~= nil and critRow.value:GetText() ~= "",
         "each stat row carries the player's live rating", critRow and critRow.value:GetText())
-    check(dump:find("By Hero Talent Tree", 1, true) ~= nil, "the hero-tree orders are shown too", dump)
+    check(dump:find("Hero T", 1, true) ~= nil, "the hero-tree orders are shown too", dump)
     check(dump:find("San'layn", 1, true) ~= nil, "one row per hero tree", dump)
+    local header = ShownRow("Stat Priority")
+    check(header ~= nil and header.rule.shown == true, "section headers carry a hairline rule")
+    check(ShownRow("1. Primary") ~= nil and ShownRow("1. Primary").rule.shown == false, "plain rows do not")
 
     check(Panel.frame:GetWidth() == CharacterFrame:GetWidth(),
         "the panel is exactly as wide as the character sheet",
@@ -3671,7 +3675,7 @@ do
         "and is as wide as a row", Panel.frame.scrollChild:GetWidth())
 
     -- No slot hovered yet, so the BiS half asks for one.
-    check(dump:find("hover a gear slot", 1, true) ~= nil, "the BiS half prompts for a slot first", dump)
+    check(dump:find("Hover a gear slot", 1, true) ~= nil, "the BiS half prompts for a slot first", dump)
 
     -- Hovering a paper doll slot fills the BiS half with that slot. The
     -- redraw is throttled (see the sections block below), so it lands on
@@ -3680,7 +3684,7 @@ do
     mock.RunAfter()
     dump = ShownText()
     check(Panel.hoveredSlot == "Neck", "hovering the neck slot selects it", Panel.hoveredSlot)
-    check(dump:find("BiS: Neck", 1, true) ~= nil, "the BiS half names the hovered slot", dump)
+    check(dump:find("Best in Slot: Neck", 1, true) ~= nil, "the BiS half names the hovered slot", dump)
 
     -- The item shown is the one the spec's active BiS list has for that slot,
     -- and it carries the bonus-carrying item string (v1.6) so hovering it

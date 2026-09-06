@@ -233,6 +233,15 @@ local function AcquireRow(pool, index, parent)
     row.value:SetJustifyH("RIGHT")
     row.value:SetPoint("TOPRIGHT", row, "TOPRIGHT", 0, 0)
 
+    -- A hairline under a section header, so the Gear section reads as
+    -- headed blocks rather than one run of lines (owner, 2026-09-06).
+    row.rule = row:CreateTexture(nil, "ARTWORK")
+    row.rule:SetPoint("BOTTOMLEFT", row, "BOTTOMLEFT", 0, 0)
+    row.rule:SetPoint("BOTTOMRIGHT", row, "BOTTOMRIGHT", 0, 0)
+    row.rule:SetHeight(1)
+    row.rule:SetColorTexture(0.431, 0.353, 0.227, 0.9)
+    row.rule:Hide()
+
     -- Item rows behave like the Codex's: hover for the tooltip, click for the
     -- clickable ItemRefTooltip, shift-click to link into chat.
     row:SetScript("OnEnter", function(self)
@@ -681,12 +690,17 @@ local function PlaceRow(pool, index, parent, width, y, text, opts)
     row.text:SetText(text or "")
     local color = opts.color or TEXT_PRIMARY_COLOR
     row.text:SetTextColor(color[1], color[2], color[3])
-    -- Section headers in the heading face; everything else in the body.
-    if opts.color == HEADER_COLOR and SpecSageHeadingFont then
+    -- Section headers in the heading face over a rule; asides (the hero
+    -- tree under Stat Priority) in the italic; everything else in the body.
+    local isHeader = opts.isHeader or opts.color == HEADER_COLOR
+    if isHeader and SpecSageHeadingFont then
         row.text:SetFontObject(SpecSageHeadingFont)
+    elseif opts.italic and SpecSageItalicFont then
+        row.text:SetFontObject(SpecSageItalicFont)
     elseif SpecSageBodyFontSmall then
         row.text:SetFontObject(SpecSageBodyFontSmall)
     end
+    row.rule:SetShown(opts.isHeader == true)
 
     row.value:SetText(opts.value or "")
     row.value:SetTextColor(TEXT_SECONDARY_COLOR[1], TEXT_SECONDARY_COLOR[2], TEXT_SECONDARY_COLOR[3])
@@ -701,9 +715,12 @@ local function PlaceRow(pool, index, parent, width, y, text, opts)
     local ok, measured = pcall(row.text.GetStringHeight, row.text)
     if ok and measured and measured > ROW_HEIGHT then
         height = measured
-        row:SetHeight(height)
     end
-    return y - (height + (ROW_STEP - ROW_HEIGHT))
+    -- A header is a little taller so its rule sits clear of the letters,
+    -- and leaves a breath under the rule before the first row.
+    if opts.isHeader then height = height + 4 end
+    row:SetHeight(height)
+    return y - (height + (ROW_STEP - ROW_HEIGHT) + (opts.isHeader and 3 or 0))
 end
 
 -- The BiS rows for `slot` out of the spec's active list. Ring and Trinket
@@ -738,19 +755,22 @@ function CharacterPanel:RenderGear()
     local guide = specID and ns.GuideStore and ns.GuideStore:GetGuide(specID)
     local y, index = 0, 0
 
-    -- Stat priority, with the player's live rating beside each stat.
-    -- Wowhead's order for the hero tree the player is in, when the client
-    -- can say which; else the guide's flat order (GuideStore).
+    -- Stat priority: a headed block, the player's hero tree as an italic
+    -- aside under the heading (Wowhead's order for that tree when the
+    -- client can say which; else the guide's flat order), then the numbered
+    -- stats with the player's live rating beside each.
     local StatsModule = ns:GetModule("Stats")
     local priorities, activeTitle
     if ns.GuideStore then priorities, activeTitle = ns.GuideStore:GetActiveStatPriority(specID) end
     index = index + 1
-    y = PlaceRow(pool, index, child, width, y,
-        activeTitle and format("Stat Priority \194\183 %s", activeTitle) or "Stat Priority",
-        { color = HEADER_COLOR })
+    y = PlaceRow(pool, index, child, width, y, "Stat Priority", { color = HEADER_COLOR, isHeader = true })
+    if activeTitle then
+        index = index + 1
+        y = PlaceRow(pool, index, child, width, y, activeTitle, { color = TEXT_SECONDARY_COLOR, italic = true })
+    end
     if not priorities or #priorities == 0 then
         index = index + 1
-        y = PlaceRow(pool, index, child, width, y, "no stat priority for this spec", { color = MUTED_COLOR })
+        y = PlaceRow(pool, index, child, width, y, "No stat priority for this spec yet.", { color = MUTED_COLOR })
     else
         for order, entry in ipairs(priorities) do
             local value = StatsModule and StatsModule:GetStatValue(entry.stat) or nil
@@ -761,26 +781,32 @@ function CharacterPanel:RenderGear()
         end
     end
 
-    -- Wowhead's per-hero-tree orders (Data/StatPriority.lua). Names only, no
-    -- live values: these are alternatives to the order above, not extra rows
-    -- of the player's own stats.
+    -- The other hero trees' orders (Data/StatPriority.lua), for a player
+    -- weighing a swap. The tree the player is in is already the list above,
+    -- so it is not repeated here; the block only appears when there is
+    -- another tree to show. Names only, no live values.
     local statData = specID and ns.GuideStore and ns.GuideStore:GetStatPriority(specID)
     if statData and statData.lists then
-        y = y - SECTION_GAP
-        index = index + 1
-        y = PlaceRow(pool, index, child, width, y, "By Hero Talent Tree", { color = HEADER_COLOR })
+        local others = {}
         for _, listEntry in ipairs(statData.lists) do
-            local names = {}
-            for order, entry in ipairs(listEntry.list) do
-                names[order] = STAT_LABELS[entry.stat] or entry.stat
+            if activeTitle == nil or listEntry.title ~= activeTitle then others[#others + 1] = listEntry end
+        end
+        if #others > 0 then
+            y = y - SECTION_GAP
+            index = index + 1
+            y = PlaceRow(pool, index, child, width, y, activeTitle and "Other Hero Trees" or "By Hero Talent Tree",
+                { color = HEADER_COLOR, isHeader = true })
+            for _, listEntry in ipairs(others) do
+                local names = {}
+                for order, entry in ipairs(listEntry.list) do
+                    names[order] = STAT_LABELS[entry.stat] or entry.stat
+                end
+                index = index + 1
+                y = PlaceRow(pool, index, child, width, y, listEntry.title, { color = CONDITION_COLOR })
+                index = index + 1
+                y = PlaceRow(pool, index, child, width, y, table.concat(names, " > "),
+                    { color = TEXT_SECONDARY_COLOR, indent = 10 })
             end
-            local isCurrent = activeTitle ~= nil and listEntry.title == activeTitle
-            index = index + 1
-            y = PlaceRow(pool, index, child, width, y, listEntry.title .. (isCurrent and "  (you)" or ""),
-                { color = isCurrent and HEADER_COLOR or CONDITION_COLOR })
-            index = index + 1
-            y = PlaceRow(pool, index, child, width, y, table.concat(names, " > "),
-                { color = TEXT_SECONDARY_COLOR, indent = 10 })
         end
     end
 
@@ -792,16 +818,16 @@ function CharacterPanel:RenderGear()
     frame.listToggle:SetShown(listTitle ~= nil)
 
     index = index + 1
-    y = PlaceRow(pool, index, child, width, y, slot and ("BiS: " .. slot) or "Best in Slot",
-        { color = HEADER_COLOR })
+    y = PlaceRow(pool, index, child, width, y, slot and ("Best in Slot: " .. slot) or "Best in Slot",
+        { color = HEADER_COLOR, isHeader = true })
 
     if not slot then
         index = index + 1
-        y = PlaceRow(pool, index, child, width, y, "hover a gear slot to see its BiS item",
+        y = PlaceRow(pool, index, child, width, y, "Hover a gear slot on your character sheet to see its best item.",
             { color = MUTED_COLOR })
     elseif not entries or #entries == 0 then
         index = index + 1
-        y = PlaceRow(pool, index, child, width, y, format("no %s in this list", slot), { color = MUTED_COLOR })
+        y = PlaceRow(pool, index, child, width, y, format("Nothing listed for %s in this list.", slot), { color = MUTED_COLOR })
     else
         local BiSModule = ns:GetModule("BiS")
         for _, entry in ipairs(entries) do
