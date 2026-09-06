@@ -1431,13 +1431,19 @@ function Codex:RenderBiSLinkSection(pool, index, parent, width, y, specID)
         return index, y
     end
 
-    index = index + 1
-    y = PlaceLine(pool, index, parent, y, width, "Best in Slot (Icy Veins)", { color = HEADER_COLOR, isHeader = true })
-    local headerRow = pool[index]
-
     local count = #data.lists
     if (self.bisListIndex or 1) > count then self.bisListIndex = 1 end
     local active = data.lists[self.bisListIndex or 1]
+
+    -- The header names the site the ACTIVE list came from. It used to say
+    -- "Icy Veins" whatever the toggle was on (2026-09-06); the Wowhead list
+    -- is a different site's opinion and the header should say so. A list
+    -- may carry its own `site`; failing that, the generated data titles
+    -- the Wowhead list "Wowhead" and the Icy Veins ones by context.
+    local site = active.site or (active.title == "Wowhead" and "Wowhead") or "Icy Veins"
+    index = index + 1
+    y = PlaceLine(pool, index, parent, y, width, format("Best in Slot (%s)", site), { color = HEADER_COLOR, isHeader = true })
+    local headerRow = pool[index]
 
     toggle:ClearAllPoints()
     toggle:SetPoint("TOPRIGHT", headerRow, "TOPRIGHT", 0, 2)

@@ -2325,6 +2325,32 @@ Codex:Open("MAGE", 9004)
 Codex:SelectTab("BiS")
 
 --------------------------------------------------------------------------------
+section("Codex: BiS header names the active list's site (2026-09-06)")
+--------------------------------------------------------------------------------
+
+do
+    ns.GuideStore:RegisterBiS(9607, { source = "test", patch = "12.1", lists = {
+        { title = "Overall", list = { { slot = "Head", itemID = 19019, name = "A", from = "x" } } },
+        { title = "Wowhead", list = { { slot = "Head", itemID = 19019, name = "B", from = "y" } } },
+    } })
+    ns.GuideStore:RegisterSpec("MAGE", 9607, { specName = "Header Spec", role = "DAMAGER" })
+    Codex.bisListIndex = 1
+    Codex:Open("MAGE", 9607)
+    Codex:SelectTab("BiS")
+    local function header()
+        for _, row in ipairs(Codex.pools.bis) do
+            if row:IsShown() and (row.text:GetText() or ""):find("Best in Slot", 1, true) then return row.text:GetText() end
+        end
+    end
+    check(header() == "Best in Slot (Icy Veins)", "an Icy Veins list is headed Icy Veins", header())
+    Codex:CycleBiSList()
+    check(Codex.bisListToggle:GetText() == "Wowhead" and header() == "Best in Slot (Wowhead)",
+        "switching to the Wowhead list changes the header to Wowhead", header())
+    Codex:CycleBiSList()
+    check(header() == "Best in Slot (Icy Veins)", "and back")
+end
+
+--------------------------------------------------------------------------------
 section("Codex: leaving a tab clears its edit box focus")
 --------------------------------------------------------------------------------
 

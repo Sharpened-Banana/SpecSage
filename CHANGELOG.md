@@ -20,6 +20,7 @@
 - Feedback link now points at github.com/Sharpened-Banana/SpecSage, in a dialog that fits its text.
 
 **Fixed**
+- The BiS header names the site of the list you are looking at instead of always saying Icy Veins.
 - "Save current" and "Add from string" no longer overflow their buttons.
 - One watched proc failing to build no longer hides the others.
 
