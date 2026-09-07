@@ -4558,6 +4558,23 @@ do
     -- Procs shares the same back-off, so it reports blocked in step.
     check(ns:GetModule("Procs"):AurasBlocked() == ns.AurasBlocked(), "Procs:AurasBlocked mirrors the shared state")
 
+    -- A refusal IN combat parks reads for the whole fight, not 5s: auras
+    -- stay secret until combat ends, and every retry logged another
+    -- "Auras cannot be accessed" warning.
+    mock.inCombat = true
+    C_UnitAuras.GetPlayerAuraBySpellID = function() error("Auras cannot be accessed when secret") end
+    BuffsModule:Update()
+    C_UnitAuras.GetPlayerAuraBySpellID = savedByID
+    check(ns.AurasBlocked(), "a refusal in combat blocks")
+    mock.Advance(60)
+    BuffsModule:Update()
+    check(ns.AurasBlocked() and #rendered.buffs == 0, "and stays blocked a minute later while still in combat")
+    mock.inCombat = false
+    mock.Fire("PLAYER_REGEN_ENABLED")
+    check(not ns.AurasBlocked(), "leaving combat lifts the block")
+    BuffsModule:Update()
+    check(findRow("buffs", "Arcane Intellect") ~= nil, "and the next read goes through")
+
     -- Flask & food: matched by name, so any "Flask of ..." counts.
     ns.db.buffs.showSelfBuffs = true
     mock.inGroup = false

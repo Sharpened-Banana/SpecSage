@@ -124,13 +124,21 @@ end
 local AURA_RETRY_INTERVAL = 5
 local auraBlockedUntil = 0
 local auraNoticeShown = false
+-- Set when the refusal came in combat: auras stay secret for the whole
+-- fight, so retrying every 5s just logs "Auras cannot be accessed" again
+-- each time (BugSack counted 71 in one dungeon, 2026-09-07). In combat
+-- the back-off lasts until PLAYER_REGEN_ENABLED instead; out of combat
+-- the short retry stands, since a refusal there is usually momentary.
+local auraBlockedForCombat = false
 
 function ns.AurasReadable()
+    if auraBlockedForCombat then return false end
     return GetTime() >= auraBlockedUntil
 end
 
 function ns.NoteAurasBlocked()
     auraBlockedUntil = GetTime() + AURA_RETRY_INTERVAL
+    if InCombatLockdown and InCombatLockdown() then auraBlockedForCombat = true end
 
     -- Said once per session, not once per refusal: the player should know
     -- why the Procs and Buffs sections emptied out, but this is a game
@@ -146,6 +154,14 @@ end
 function ns.AurasBlocked()
     return not ns.AurasReadable()
 end
+
+-- Leaving combat lifts a combat-long block; the next read is a fresh try.
+ns:RegisterEvent("PLAYER_REGEN_ENABLED", function()
+    if auraBlockedForCombat then
+        auraBlockedForCombat = false
+        auraBlockedUntil = 0
+    end
+end)
 
 --------------------------------------------------------------------------------
 -- Number / text helpers
