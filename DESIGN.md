@@ -899,6 +899,22 @@ rest are desaturated.
   Notes / Options** — rendered by `UI/Codex.lua`'s own methods, not copies
   of them.
 
+**One guide, unnamed (2026-09-08):** the owner dropped the Icy Veins data
+and asked that the remaining guide (the one the generators label Wowhead)
+not be named anywhere. `tools/strip_sites.py` runs after `fetch_bis.py`,
+`fetch_trinkets.py`, `fetch_talents.py` and `fetch_stats.py`: it removes the
+Icy Veins lists and builds, retitles the kept lists "Guide" (a BiS list
+split by hero tree keeps its suffix, "Guide (San'layn)"), drops each build's
+`site` field and each sim trinket row's `siteTier` (the Icy Veins tier;
+`whTier` stays and is what the UI shows as "Guide"), and rewrites every
+`source`, `note` and header comment to "Gear / Talent / Stat priority
+guide, updated <date>" so the freshness date survives without the name. The
+UI follows: the BiS header is plain "Best in Slot", trinket rows say
+"Guide A" or "not on the guide's list", build rows and the talent-window
+menu say "Guide: <label>". A test walks every shipped title, source, note
+and label and fails on either site's name, so a regeneration that forgets
+the strip step is caught.
+
 **Talent window button (2026-09-05):** `Modules/TalentButton.lua` puts a
 SpecSage button (Codex skin, via `ns.SkinButton` / `ns.SetParchmentBackdrop`
 exported from `UI/Codex.lua`) at the bottom left of the PlayerSpells Talents

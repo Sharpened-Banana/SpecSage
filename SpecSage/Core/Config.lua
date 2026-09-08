@@ -220,11 +220,11 @@ local function BuildOptionGroups()
         { kind = "check", scope = "db", key = "itemStatRanks",
           variable = "SpecSage_itemStatRanks", label = "Tier and stat ranks on item tooltips",
           tooltip = "Add lines to every item tooltip: a trinket's tier in your current spec's trinket "
-              .. "lists (Single Target S, Icy Veins A, ...) and each secondary stat's rank (#1, #2, ...) "
+              .. "lists (Single Target S, Guide A, ...) and each secondary stat's rank (#1, #2, ...) "
               .. "against your spec's stat priority from the Codex." },
         { kind = "check", scope = "characterPanel", key = "enabled",
           variable = "SpecSage_characterPanel", label = "Dock gearing panel to the character sheet",
-          tooltip = "Show your stat priority, your live rating for each stat, Wowhead's order for "
+          tooltip = "Show your stat priority, your live rating for each stat, the guide's order for "
               .. "each hero talent tree, and the BiS item for whichever gear slot you hover - "
               .. "attached to the character sheet, opening and closing with it." },
         { kind = "check", scope = "characterPanel", key = "tabLabels",

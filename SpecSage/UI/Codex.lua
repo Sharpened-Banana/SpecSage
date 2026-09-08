@@ -1459,14 +1459,12 @@ function Codex:RenderBiSLinkSection(pool, index, parent, width, y, specID)
     if (self.bisListIndex or 1) > count then self.bisListIndex = 1 end
     local active = data.lists[self.bisListIndex or 1]
 
-    -- The header names the site the ACTIVE list came from. It used to say
-    -- "Icy Veins" whatever the toggle was on (2026-09-06); the Wowhead list
-    -- is a different site's opinion and the header should say so. A list
-    -- may carry its own `site`; failing that, the generated data titles
-    -- the Wowhead list "Wowhead" and the Icy Veins ones by context.
-    local site = active.site or (active.title == "Wowhead" and "Wowhead") or "Icy Veins"
+    -- The site is not named anywhere in the addon (owner's call,
+    -- 2026-09-08; tools/strip_sites.py keeps the data in step), so the
+    -- header is just "Best in Slot"; the attribution line under the list
+    -- says when the guide was read.
     index = index + 1
-    y = PlaceLine(pool, index, parent, y, width, format("Best in Slot (%s)", site), { color = HEADER_COLOR, isHeader = true })
+    y = PlaceLine(pool, index, parent, y, width, "Best in Slot", { color = HEADER_COLOR, isHeader = true })
     local headerRow = pool[index]
 
     toggle:ClearAllPoints()
@@ -1514,7 +1512,7 @@ function Codex:RenderBiSLinkSection(pool, index, parent, width, y, specID)
 
     index = index + 1
     y = PlaceLine(pool, index, parent, y, width,
-        format("One site's list (%s), and it goes stale every patch: %s. Click an item for its link.",
+        format("One guide's list (%s), and it goes stale every patch: %s. Click an item for its link.",
             active.title or "", data.source or "source unknown"),
         { color = MUTED_COLOR })
 
@@ -1655,19 +1653,18 @@ function Codex:RenderTrinketSection(pool, index, parent, width, y, specID)
         if entry.ilvl then detail[#detail + 1] = "ilvl " .. tostring(entry.ilvl) end
         if entry.source and entry.source ~= "" then detail[#detail + 1] = entry.source end
         if entry.onUse then detail[#detail + 1] = "on-use" end
-        -- A sim row shows the guide site's tier for the same item beside it,
-        -- or says the site does not list it, so the two views are compared
-        -- on the row rather than by flipping between lists.
+        -- A sim row shows the guide's tier for the same item beside it, or
+        -- says the guide does not list it, so the two views are compared on
+        -- the row rather than by flipping between lists.
         if entry.gain ~= nil then
-            for _, site in ipairs({ { "Icy Veins", entry.siteTier }, { "Wowhead", entry.whTier } }) do
-                if site[2] then
-                    local st = TIER_COLORS[site[2]] or MUTED_COLOR
-                    detail[#detail + 1] = format("%s |cff%02x%02x%02x%s|r|cff2b1f14", site[1],
-                        math.floor(st[1] * 255 + 0.5), math.floor(st[2] * 255 + 0.5), math.floor(st[3] * 255 + 0.5),
-                        site[2])
-                else
-                    detail[#detail + 1] = format("not on %s' list", site[1])
-                end
+            local guideTier = entry.whTier or entry.siteTier
+            if guideTier then
+                local st = TIER_COLORS[guideTier] or MUTED_COLOR
+                detail[#detail + 1] = format("Guide |cff%02x%02x%02x%s|r|cff2b1f14",
+                    math.floor(st[1] * 255 + 0.5), math.floor(st[2] * 255 + 0.5), math.floor(st[3] * 255 + 0.5),
+                    guideTier)
+            else
+                detail[#detail + 1] = "not on the guide's list"
             end
         end
         local detailText = #detail > 0 and ("  |cff2b1f14" .. table.concat(detail, " · ") .. "|r") or ""
@@ -1968,7 +1965,7 @@ function Codex:RenderLoadouts(specID, guide)
         end
     end
 
-    -- Guide-site builds (Data/SiteLoadouts.lua): a pooled row per build,
+    -- Guide builds (Data/SiteLoadouts.lua): a pooled row per build,
     -- same View / Copy buttons as the suggested rows above.
     local site = specID and ns.GuideStore:GetSiteLoadouts(specID)
     self.siteLoadoutRowPool = self.siteLoadoutRowPool or {}
@@ -1984,12 +1981,11 @@ function Codex:RenderLoadouts(specID, guide)
             row:ClearAllPoints()
             row:SetPoint("TOPLEFT", parent, "TOPLEFT", 0, y)
             row:SetSize(width, ROW_HEIGHT)
-            local siteName = build.site or "Icy Veins"
-            row.name:SetText(format("%s: %s (patch %s)", siteName, build.label, site.patch or "?"))
+            row.name:SetText(format("Guide: %s (patch %s)", build.label, site.patch or "?"))
             row.name:SetTextColor(TEXT_PRIMARY_COLOR[1], TEXT_PRIMARY_COLOR[2], TEXT_PRIMARY_COLOR[3])
             row.copyButton:Show()
             row.copyButton:SetScript("OnClick", function() self:ShowCopyDialog(build.string) end)
-            local buildName = siteName .. ": " .. build.label
+            local buildName = "Guide: " .. build.label
             row.viewButton:Show()
             row.viewButton:SetScript("OnClick", function(btn)
                 self:OnViewLoadoutClicked(btn, build.string, buildName)

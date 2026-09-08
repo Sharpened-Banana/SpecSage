@@ -8,7 +8,7 @@ class guides, talent loadouts, and live character tracking in one place:
   practical tips. Opens on your own spec, but you can read up on any class —
   teammates, enemies, or the alt you are levelling.
 - **Stat priority per hero talent tree** — the Stats tab shows your spec's
-  priority with your live values beside it, then Wowhead's own order for
+  priority with your live values beside it, then the guide's order for
   *each* hero talent tree underneath, with their caveats ("Haste only to
   roughly 800 rating", "Crit and Mastery are ranked equal") and a line saying
   which page it came from and when, so you can see when it has gone stale.
@@ -19,7 +19,7 @@ class guides, talent loadouts, and live character tracking in one place:
   clicking one shows the item level the guide actually means rather than the
   item's base form.
 - **Tier and stat ranks on item tooltips** — a trinket's tooltip shows its
-  tier in your current spec's trinket lists (Single Target S, Icy Veins A,
+  tier in your current spec's trinket lists (Single Target S, Guide A,
   …), and every item tooltip gets each secondary stat's rank written next to
   the stat itself ("+512 Haste  #1") against the stat priority for the hero
   talent tree you are in, so
@@ -32,7 +32,7 @@ class guides, talent loadouts, and live character tracking in one place:
   tabs down its right edge switch between Overview, Stats, Rotation,
   Cooldowns, Consumables, BiS, Loadouts, Notes and Options. Its side tabs carry their section names (an option turns them off). Its own **Gear** section
   reacts to the paper doll beside it: your stat priority for the hero
-  talent tree you are in, with your live rating beside each stat, Wowhead's
+  talent tree you are in, with your live rating beside each stat, the guide's
   order for every hero tree, and the
   BiS item for whichever gear slot you hover, tagged equipped / owned /
   missing. A checkbox on the character sheet turns it off, and the grip in
@@ -42,9 +42,9 @@ class guides, talent loadouts, and live character tracking in one place:
 - **Talent Loadout Vault** — save, label, import, and export talent loadout
   strings per spec, organised by content type (Raid, Mythic+, Delves, PvP).
   Ships with suggested builds per spec: SimulationCraft's default profile,
-  the live top-Mythic+-players build from Blizzard's API, and Icy Veins'
-  and Wowhead's recommended builds (`tools/fetch_talents.py` regenerates
-  `Data/SiteLoadouts.lua`, verifying every string decodes to its spec) —
+  the live top-Mythic+-players build from Blizzard's API, and a guide's
+  recommended builds (`tools/fetch_talents.py` then `tools/strip_sites.py`
+  regenerate `Data/SiteLoadouts.lua`, verifying every string decodes to its spec) —
   each one Copy-able or **View**-able: View opens the talent window with
   the build laid out on your tree, unsaved, so you can look before you
   commit.
@@ -98,21 +98,18 @@ BiS tab:
 - **Slot-by-slot guidance** in SpecSage's own words (which slots carry your
   tier set, what stats to look for on rings, what trinket styles suit the
   spec).
-- **Linked Best-in-Slot lists per spec** from both Icy Veins (Overall,
-  Mythic+, Raid) and Wowhead (`tools/fetch_bis.py` regenerates
-  `Data/BiS.lua`; Wowhead is harvested in a browser by
-  `tools/wowhead_harvest.js`): one clickable item per slot with its drop
-  source. Each is one site's list at the time of the release, and it
-  goes stale every patch; the tab says so.
+- **Linked Best-in-Slot list per spec** from a guide (`tools/fetch_bis.py`
+  then `tools/strip_sites.py` regenerate `Data/BiS.lua`): one clickable item
+  per slot with its drop source. It is one guide's list at the time of the
+  release, and it goes stale every patch; the tab says so.
 - **A trinket tier list per spec**, from two sources side by side
   (`tools/fetch_trinkets.py` regenerates `Data/Trinkets.lua`): bloodmallet.com's
   public SimulationCraft trinket sims — each row shows the simulated DPS gain
   over no trinket and an S/A/B/C tier relative to the best one, for
-  single-target, 3-target and 5-target fights — and Icy Veins' and
-  Wowhead's editorial trinket rankings as their own lists, with both sites'
-  tiers also shown beside every sim row. Healers and the few specs SimC has
-  no current-patch profile for yet get the site lists only, and the tab
-  says why. None of it is a verdict for your fight, and the tab says that
+  single-target, 3-target and 5-target fights — and a guide's editorial
+  trinket ranking as its own list, with the guide's tier also shown beside
+  every sim row. Healers and the few specs SimC has no current-patch
+  profile for yet get the guide list only, and the tab says why. None of it is a verdict for your fight, and the tab says that
   too.
 Every item on the tab is a real item link: hover for the tooltip, click to
 open it, shift-click to put it in chat.

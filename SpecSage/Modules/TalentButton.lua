@@ -67,8 +67,10 @@ function TalentButton:BuildsFor(specID)
     if site and type(site.builds) == "table" then
         for _, build in ipairs(site.builds) do
             if type(build.string) == "string" and build.string ~= "" then
-                builds[#builds + 1] = { name = build.label or "Build", detail = build.site or site.source or "guide site",
-                                        string = build.string, source = "Guide sites" }
+                local detail = "Guide"
+                if site.patch then detail = detail .. ", patch " .. tostring(site.patch) end
+                builds[#builds + 1] = { name = build.label or "Build", detail = detail,
+                                        string = build.string, source = "Guide builds" }
             end
         end
     end

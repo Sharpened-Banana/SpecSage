@@ -2029,18 +2029,16 @@ do
         format("%d of %d", withBonus, rows))
 
     -- The exact row from the bug report.
+    -- (The list that carried the exact bug-report row was dropped with the
+    -- second guide site on 2026-09-08; the remaining guide list's neck row
+    -- must carry its bonus list the same way.)
     local neck
-    for _, listEntry in ipairs(ns.GuideStore:GetBiS(66).lists) do
-        if listEntry.title == "Icy Veins Mythic+" then
-            for _, row in ipairs(listEntry.list) do
-                if row.slot == "Neck" then neck = row end
-            end
-        end
+    for _, row in ipairs(ns.GuideStore:GetBiS(66).lists[1].list) do
+        if row.slot == "Neck" then neck = row end
     end
-    check(neck ~= nil and neck.itemID == 273781, "Protection Paladin's Mythic+ neck is item 273781",
-        neck and neck.itemID)
+    check(neck ~= nil and type(neck.itemID) == "number", "Protection Paladin's guide list has a neck", neck and neck.itemID)
     check(neck ~= nil and neck.bonus ~= nil and neck.bonus ~= "",
-        "and it now carries the bonus list Icy Veins links it with", neck and neck.bonus)
+        "and it carries the bonus list the guide links it with", neck and neck.bonus)
 
     -- A malformed bonus list is rejected rather than reaching the client.
     local base = { lists = { { title = "T", list = {
@@ -2163,8 +2161,9 @@ do
         "Arcane's lists are titled after its two hero talent trees")
     check(arcane and arcane.lists[1].list[3].stat == "mastery" and arcane.lists[2].list[3].stat == "versatility",
         "Spellslinger and Sunfury diverge below Haste, as Wowhead has them")
-    check(arcane and arcane.source and arcane.source:find("Wowhead", 1, true) ~= nil,
-        "the table carries a Wowhead attribution line the Codex can show", arcane and arcane.source)
+    check(arcane and arcane.source and arcane.source:find("Stat priority guide, updated", 1, true) ~= nil
+        and arcane.source:find("Wowhead", 1, true) == nil,
+        "the table carries an attribution line that names no site", arcane and arcane.source)
     check(arcane and arcane.url and arcane.url:find("wowhead.com", 1, true) ~= nil,
         "the table records the page it was read from", arcane and arcane.url)
 
@@ -2230,8 +2229,8 @@ do
         "Spellslinger's order is spelled out under its name in the Codex's own stat words", dump)
     check(dump:find("Sunfury\nPrimary Stat > Haste > Versatility > Crit > Mastery", 1, true) ~= nil,
         "Sunfury's order is listed separately", dump)
-    check(dump:find("Wowhead Arcane Mage stat priority guide", 1, true) ~= nil,
-        "the section is attributed to the Wowhead page it came from", dump)
+    check(dump:find("Stat priority guide, updated", 1, true) ~= nil and dump:find("Wowhead", 1, true) == nil,
+        "the section carries the guide's date without naming the site", dump)
 
     -- A list's note (Wowhead's own caveat - a haste cap, a tie between two
     -- stats) renders under it rather than being dropped.
@@ -2342,12 +2341,12 @@ do
             if row:IsShown() and (row.text:GetText() or ""):find("Best in Slot", 1, true) then return row.text:GetText() end
         end
     end
-    check(header() == "Best in Slot (Icy Veins)", "an Icy Veins list is headed Icy Veins", header())
+    check(header() == "Best in Slot", "the BiS header names no site", header())
     Codex:CycleBiSList()
-    check(Codex.bisListToggle:GetText() == "Wowhead" and header() == "Best in Slot (Wowhead)",
-        "switching to the Wowhead list changes the header to Wowhead", header())
+    check(Codex.bisListToggle:GetText() == "Wowhead" and header() == "Best in Slot",
+        "switching lists changes the toggle, not the header", header())
     Codex:CycleBiSList()
-    check(header() == "Best in Slot (Icy Veins)", "and back")
+    check(header() == "Best in Slot", "and back")
 end
 
 --------------------------------------------------------------------------------
@@ -3057,18 +3056,21 @@ do
                 elseif data then
                     withLists = withLists + 1
                     if data.note then withNote = withNote + 1 end
-                    local sawSim, sawIcyVeins, sorted, simRowsCarrySiteTier = false, false, true, true
+                    local sawSim, sawGuide, sorted, simRowsCarryGuideTier = false, false, true, true
                     for _, listEntry in ipairs(data.lists) do
                         local isSim = listEntry.list[1] and listEntry.list[1].gain ~= nil
                         if isSim then sawSim = true end
-                        if listEntry.title == "Icy Veins" then sawIcyVeins = true end
+                        if listEntry.title == "Guide" then sawGuide = true end
+                        -- No site is named anywhere in the data (2026-09-08).
+                        if listEntry.title:find("Wowhead", 1, true) or listEntry.title:find("Icy Veins", 1, true) then sawGuide = false end
                         for i, row in ipairs(listEntry.list) do
                             if isSim and i > 1 and row.gain > listEntry.list[i - 1].gain then sorted = false end
-                            -- A sim row either names Icy Veins' tier for the item or
-                            -- carries none (the site does not list it); never junk.
-                            if row.siteTier ~= nil and not ({ S = 1, A = 1, B = 1, C = 1, D = 1 })[row.siteTier] then
-                                simRowsCarrySiteTier = false
+                            -- A sim row either names the guide's tier for the item or
+                            -- carries none (the guide does not list it); never junk.
+                            if row.whTier ~= nil and not ({ S = 1, A = 1, B = 1, C = 1, D = 1, F = 1 })[row.whTier] then
+                                simRowsCarryGuideTier = false
                             end
+                            if row.siteTier ~= nil then simRowsCarryGuideTier = false end
                         end
                         check(#listEntry.list > 0 and (not isSim or #listEntry.list <= 15),
                             format("spec %d '%s' list has rows (sim lists at most 15)", specID, listEntry.title), #listEntry.list)
@@ -3081,10 +3083,10 @@ do
                             format("spec %d '%s' top trinket is tier S (or A for an editorial list)", specID, listEntry.title), top)
                     end
                     check(sorted, format("spec %d sim lists are sorted by gain, best first", specID))
-                    check(simRowsCarrySiteTier, format("spec %d siteTier values are valid tiers", specID))
-                    check(sawIcyVeins, format("spec %d carries an Icy Veins list", specID))
+                    check(simRowsCarryGuideTier, format("spec %d guide tier values are valid tiers and no second-site tier remains", specID))
+                    check(sawGuide, format("spec %d carries a Guide list and names no site", specID))
                     if sawSim then withSim = withSim + 1 end
-                    if sawIcyVeins then withIcyVeins = withIcyVeins + 1 end
+                    if sawGuide then withIcyVeins = withIcyVeins + 1 end
                     -- A spec with no sim list explains why.
                     check(sawSim or (data.note and data.note:find("No sim list", 1, true) ~= nil),
                         format("spec %d without a sim list carries a note saying why", specID))
@@ -3095,7 +3097,7 @@ do
     check(total == 40, "all 40 shipped specs were checked", total)
     check(withLists == 40 and unavailable == 0, "every shipped spec has at least one trinket list", withLists)
     check(withSim == 27, "27 specs ship a bloodmallet-derived sim list", withSim)
-    check(withIcyVeins == 40, "all 40 specs ship an Icy Veins list", withIcyVeins)
+    check(withIcyVeins == 40, "all 40 specs ship a Guide list", withIcyVeins)
     check(withNote == 13, "the 13 specs without sims (6 healers + 7 without a current SimC profile) carry a note", withNote)
 end
 
@@ -3285,11 +3287,11 @@ do
     local tiers = ItemRanks:DescribeTrinket(topRow.itemID, 252)
     check(tiers and #tiers >= 2 and tiers[1].title == "Single Target" and tiers[1].tier == "S",
         "DescribeTrinket finds the spec's top single-target trinket as S in the Single Target list", tiers and #tiers)
-    local sawIcyVeins = false
+    local sawGuide = false
     for _, entry in ipairs(tiers or {}) do
-        if entry.title == "Icy Veins" then sawIcyVeins = true end
+        if entry.title == "Guide" then sawGuide = true end
     end
-    check(sawIcyVeins, "DescribeTrinket also reports the Icy Veins list's tier for the same trinket")
+    check(sawGuide, "DescribeTrinket also reports the Guide list's tier for the same trinket")
     check(ItemRanks:DescribeTrinket(19019, 252) == nil, "DescribeTrinket returns nil for an item no list ranks")
 
     mock.items[topRow.itemID] = { name = topRow.name, quality = 4, equipLoc = "INVTYPE_TRINKET" }
@@ -3299,7 +3301,8 @@ do
     check(dump:find("SpecSage trinket tier (Unholy):", 1, true) ~= nil, "a ranked trinket's tooltip gains a trinket tier header", dump)
     check(dump:find("Single Target |cff", 1, true) ~= nil and dump:find("S|r (+", 1, true) ~= nil,
         "the trinket tier line names the list, the tier and the sim gain", dump)
-    check(dump:find("Icy Veins |cff", 1, true) ~= nil, "the trinket tier line includes Icy Veins' tier", dump)
+    check(dump:find("Guide |cff", 1, true) ~= nil and dump:find("Icy Veins", 1, true) == nil and dump:find("Wowhead", 1, true) == nil,
+        "the trinket tier line includes the guide's tier and names no site", dump)
     check(dump:find("stat ranks", 1, true) == nil, "a trinket with no secondary stats adds no stat-rank lines")
     mock.items[topRow.itemID] = nil
 
@@ -3357,7 +3360,7 @@ do
                     end
                 end
                 local site = GuideStore:GetSiteLoadouts(specID)
-                check(site ~= nil and #site.builds >= 1, format("spec %d ships at least one Icy Veins build", specID))
+                check(site ~= nil and #site.builds >= 1, format("spec %d ships at least one guide build", specID))
                 if site then
                     buildSpecs = buildSpecs + 1
                     for _, build in ipairs(site.builds) do
@@ -3375,48 +3378,61 @@ do
     check(buildSpecs == 40, "all 40 specs have site builds", buildSpecs)
     check(builds >= 100, "over 100 site builds ship in total", builds)
 
-    -- Wowhead sits beside Icy Veins on every spec: a Wowhead BiS list, a
-    -- Wowhead trinket list, Wowhead builds, and whTier on sim trinket rows.
-    local whBis, whTrinkets, whBuilds, ivBuilds, whTierRows = 0, 0, 0, 0, 0
+    -- One guide, never named (2026-09-08; tools/strip_sites.py): every spec
+    -- has a "Guide" BiS list, a "Guide" trinket list, builds with no site
+    -- field, whTier on sim trinket rows, and no site name in any title,
+    -- source or note.
+    local guideBis, guideTrinkets, guideBuilds, whTierRows, named = 0, 0, 0, 0, {}
+    local function names(text) return type(text) == "string" and (text:find("Wowhead", 1, true) or text:find("Icy Veins", 1, true)) end
     for _, classEntry in ipairs(GuideStore:GetClasses()) do
         for _, specID in ipairs(GuideStore:GetClassSpecs(classEntry.token)) do
             if specID < 9000 then
                 local bis = GuideStore:GetBiS(specID)
-                local sawWH, sawIV = false, false
+                local sawGuide = false
+                if names(bis.source) then named[#named + 1] = "bis source " .. specID end
                 for _, listEntry in ipairs(bis.lists) do
-                    if listEntry.title:find("^Wowhead") then sawWH = true end
-                    if listEntry.title:find("^Icy Veins") then sawIV = true end
+                    if listEntry.title:find("^Guide") then sawGuide = true end
+                    if names(listEntry.title) then named[#named + 1] = "bis title " .. specID end
                 end
-                check(sawWH and sawIV, format("spec %d has both an Icy Veins and a Wowhead BiS list", specID))
-                if sawWH then whBis = whBis + 1 end
+                check(sawGuide, format("spec %d has a Guide BiS list", specID))
+                if sawGuide then guideBis = guideBis + 1 end
                 local trinkets = GuideStore:GetTrinkets(specID)
+                if names(trinkets.source) or names(trinkets.note) then named[#named + 1] = "trinkets " .. specID end
                 for _, listEntry in ipairs(trinkets.lists) do
-                    if listEntry.title == "Wowhead" then whTrinkets = whTrinkets + 1 end
+                    if listEntry.title == "Guide" then guideTrinkets = guideTrinkets + 1 end
+                    if names(listEntry.title) then named[#named + 1] = "trinket title " .. specID end
                     for _, row in ipairs(listEntry.list) do
                         if row.whTier then whTierRows = whTierRows + 1 end
                     end
                 end
                 local site = GuideStore:GetSiteLoadouts(specID)
-                local specWH, specIV = 0, 0
+                if names(site.source) then named[#named + 1] = "builds source " .. specID end
                 for _, build in ipairs(site.builds) do
-                    if build.site == "Wowhead" then specWH = specWH + 1 elseif build.site == "Icy Veins" then specIV = specIV + 1 end
-                    check(build.site == "Wowhead" or build.site == "Icy Veins", format("spec %d build names its site", specID), build.site)
+                    check(build.site == nil, format("spec %d build carries no site field", specID), build.site)
+                    if names(build.label) then named[#named + 1] = "build label " .. specID end
+                    guideBuilds = guideBuilds + 1
                 end
-                check(specWH > 0 and specIV > 0, format("spec %d has builds from both sites", specID), specWH .. "/" .. specIV)
-                whBuilds, ivBuilds = whBuilds + specWH, ivBuilds + specIV
+                local stats = GuideStore:GetStatPriority(specID)
+                if stats then
+                    if names(stats.source) then named[#named + 1] = "stats source " .. specID end
+                    for _, listEntry in ipairs(stats.lists or {}) do
+                        if names(listEntry.note) or names(listEntry.title) then named[#named + 1] = "stats list " .. specID end
+                    end
+                end
             end
         end
     end
-    check(whBis == 40, "all 40 specs have a Wowhead BiS list", whBis)
-    check(whTrinkets == 40, "all 40 specs have a Wowhead trinket list", whTrinkets)
-    check(whBuilds >= 150 and ivBuilds >= 100, "both sites contribute builds in bulk", whBuilds .. "/" .. ivBuilds)
-    check(whTierRows >= 200, "most sim trinket rows carry a Wowhead tier", whTierRows)
+    check(guideBis == 40, "all 40 specs have a Guide BiS list", guideBis)
+    check(guideTrinkets == 40, "all 40 specs have a Guide trinket list", guideTrinkets)
+    check(guideBuilds >= 150, "the guide contributes builds in bulk", guideBuilds)
+    check(whTierRows >= 200, "most sim trinket rows carry the guide's tier", whTierRows)
+    check(#named == 0, "no shipped title, source, note or label names a guide site", table.concat(named, ", "))
     local _, badTier = silently(function()
         return GuideStore:RegisterTrinkets(9702, { lists = { { title = "x", list = { { itemID = 1, name = "n", tier = "S", whTier = "Z" } } } } })
     end)
     check(badTier == false, "RegisterTrinkets rejects an invalid whTier")
     check(GuideStore:RegisterTrinkets(9702, { lists = { { title = "x", list = { { itemID = 1, name = "n", tier = "F" } } } } }) == true,
-        "RegisterTrinkets accepts tier F (Wowhead uses it)")
+        "RegisterTrinkets accepts tier F (the guide uses it)")
 
     -- Validation.
     local _, bad = silently(function() return GuideStore:RegisterBiS(9701, { lists = { { title = "x", list = { { slot = "Cape", itemID = 1, name = "n" } } } } }) end)
@@ -3461,7 +3477,7 @@ do
     Codex:SelectTab("Overview")
     check(shownLinkRows() == 0 and not Codex.bisListToggle:IsShown(), "leaving the tab hides the linked BiS rows")
 
-    -- Loadouts tab: Icy Veins build rows with View and Copy.
+    -- Loadouts tab: guide build rows with View and Copy.
     GuideStore:RegisterSiteLoadouts(9604, {
         source = "test", patch = "12.1",
         builds = {
@@ -3472,9 +3488,9 @@ do
     Codex:SelectTab("Loadouts")
     local shownSite = 0
     for _, row in ipairs(Codex.siteLoadoutRowPool) do if row:IsShown() then shownSite = shownSite + 1 end end
-    check(shownSite == 2, "the Loadouts tab renders one row per Icy Veins build", shownSite)
+    check(shownSite == 2, "the Loadouts tab renders one row per guide build", shownSite)
     local siteRow = Codex.siteLoadoutRowPool[1]
-    check(siteRow.name:GetText():find("Icy Veins: Raid / Cleave - Sunfury", 1, true) ~= nil, "a site build row is labelled with its source and title", siteRow.name:GetText())
+    check(siteRow.name:GetText():find("Guide: Raid / Cleave - Sunfury", 1, true) ~= nil, "a guide build row is labelled Guide plus its title", siteRow.name:GetText())
     siteRow.copyButton:GetScript("OnClick")()
     check(Codex.copyBox:GetText():find("^C4DAAAA") ~= nil, "Copy on a site build row opens the copy dialog with its string")
     Codex.copyDialog:Hide()
@@ -3729,12 +3745,17 @@ do
     -- The context toggle cycles the BiS list the rows come from, and does so
     -- without touching the Codex's own list index.
     local codexIndex = Codex.bisListIndex
+    local playerBis = ns.GuideStore:GetBiS(252)
+    local savedLists = playerBis.lists
+    playerBis.lists = { savedLists[1], { title = "Second", list = savedLists[1].list } }
+    Panel:Render()
     local firstTitle = Panel.frame.listToggle:GetText()
     Panel:CycleList()
     check(Panel.frame.listToggle:GetText() ~= firstTitle, "the context toggle cycles to the next BiS list",
         Panel.frame.listToggle:GetText())
     check(Codex.bisListIndex == codexIndex, "and leaves the Codex's own list alone")
     ns.db.characterPanel.listIndex = 1
+    playerBis.lists = savedLists
     Panel:Update()
 
     -- The checkbox turns it off, and the choice is remembered.
@@ -3941,11 +3962,15 @@ do
     -- View state stays per-window: cycling the panel's BiS context must not
     -- move the Codex's, and vice versa.
     local codexBefore = Codex.bisListIndex
+    local playerBis2 = ns.GuideStore:GetBiS(252)
+    local savedLists2 = playerBis2.lists
+    playerBis2.lists = { savedLists2[1], { title = "Second", list = savedLists2[1].list } }
     Panel.surface.bisListIndex = 1
     Panel.surface:CycleBiSList()
     check(Panel.surface.bisListIndex ~= 1, "the panel's BiS context cycles",
         Panel.surface.bisListIndex)
     check(Codex.bisListIndex == codexBefore, "without moving the Codex window's")
+    playerBis2.lists = savedLists2
 
     -- The footer names the build and the patch the data was written for.
     check((Panel.frame.footer:GetText() or ""):find("patch", 1, true) ~= nil,

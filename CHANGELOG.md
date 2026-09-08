@@ -13,6 +13,7 @@
 - The character sheet panel's side tabs now carry their section names beside the icons; a **Label the gearing panel's tabs** option turns them off.
 
 **Improved**
+- One guide's data: the second site's BiS lists, trinket rankings and talent builds are gone, and the remaining guide is not named anywhere. Lists are titled "Guide"; attribution lines keep the date the guide was read.
 - The Stats tab and the character sheet panel's Gear section are laid out as headed blocks: Stat Priority with your hero tree under it, Other Hero Trees (each tree named over its order), Best in Slot.
 - Buttons read as buttons: ink plates with a shadow and lit edge, wax red on hover, they sink when pressed, and they size to their labels.
 - Armor tooltip shows reduction against your current target and falls back to a self-checking estimate when the live figure is unavailable.
