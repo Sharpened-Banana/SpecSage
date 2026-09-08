@@ -1,5 +1,21 @@
 # Changelog
 
+## 1.3.2 (2026-09-08)
+
+**New**
+- **Old trinkets, current copies.** Returning dungeons put years-old trinkets (Merektha's Fang, Ruby Whelp Shell, Algeth'ar Puzzle Box) in this season's tier lists. Trinket rows on the Codex's BiS tab now carry the current copy's bonus IDs wherever a BiS guide links them (25 trinkets), so hovering the row shows this season's item level and numbers, not the base item from its original expansion.
+- **Hover Codex trinkets at their simmed item level** (option, default on). For a trinket no guide links, the row projects the base item to the level the sims ranked it at, only when the client confirms the level, and the tooltip says it is a projection, not a drop.
+- **Label the gearing panel's tabs** option. The character sheet panel's side tabs carry their section names beside the icons; the option turns the names off.
+
+**Improved**
+- A levelling-era copy of a ranked trinket (an item level 19 Merektha's Fang from Chromie Time) no longer shows the current-season tiers on its tooltip. A grey note names both item levels and points at the Codex row for the ranked copy.
+- One guide's data: the second site's BiS lists, trinket rankings and talent builds are gone, and the remaining guide is not named anywhere. Lists are titled "Guide"; attribution lines keep the date the guide was read.
+- The Stats tab and the character sheet panel's Gear section are laid out as headed blocks: Stat Priority with your hero tree under it, Other Hero Trees (each tree named over its order), Best in Slot.
+- The BiS header names the site of the list you are looking at.
+
+**Fixed**
+- When the game hides auras in combat, proc and buff tracking waits for the fight to end instead of retrying every 5 seconds and logging a warning each time.
+
 ## 1.3.1 (2026-09-05)
 
 **New**
@@ -10,15 +26,9 @@
 - **Buffs section** on the overlay: missing raid buffs and, optionally, a missing flask or food. Silent when nothing is missing.
 - **Show stat overlay** option, plus **Toggle stat overlay** and **Toggle the Codex** key bindings.
 - **Stagger** stat row (off by default).
-- The character sheet panel's side tabs now carry their section names beside the icons; a **Label the gearing panel's tabs** option turns them off.
 
 **Improved**
-- One guide's data: the second site's BiS lists, trinket rankings and talent builds are gone, and the remaining guide is not named anywhere. Lists are titled "Guide"; attribution lines keep the date the guide was read.
-- The Stats tab and the character sheet panel's Gear section are laid out as headed blocks: Stat Priority with your hero tree under it, Other Hero Trees (each tree named over its order), Best in Slot.
 - Buttons read as buttons: ink plates with a shadow and lit edge, wax red on hover, they sink when pressed, and they size to their labels.
-- A ranked trinket far below the item level the lists simmed (a levelling drop from a returning dungeon, like an item level 19 Merektha's Fang) no longer carries the current-season tiers on its tooltip; a grey note names both item levels instead.
-- Trinket tier-list rows carry the current copy's bonus IDs where a BiS guide links them (Merektha's Fang and 24 other trinkets), so hovering the row shows this season's item, not the years-old base.
-- **Hover Codex trinkets at their simmed item level** (option, default on). A trinket row on the Codex's BiS tab shows its tooltip at the level the sims ranked it at, so an old trinket from a returning dungeon reads as this season's copy. The tooltip marks it as a projection, not a drop, and the row falls back to the base item when the client cannot confirm the level.
 - Armor tooltip shows reduction against your current target and falls back to a self-checking estimate when the live figure is unavailable.
 - Mastery tooltip quotes your spec's own mastery text and shows mastery points.
 - Combat report shows "?" for one protected number instead of blanking the whole line.
@@ -26,8 +36,6 @@
 - Feedback link now points at github.com/Sharpened-Banana/SpecSage, in a dialog that fits its text.
 
 **Fixed**
-- When the game hides auras in combat, proc and buff tracking now waits for the fight to end instead of retrying every 5 seconds and logging a warning each time.
-- The BiS header names the site of the list you are looking at instead of always saying Icy Veins.
 - "Save current" and "Add from string" no longer overflow their buttons.
 - One watched proc failing to build no longer hides the others.
 
