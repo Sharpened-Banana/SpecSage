@@ -1638,7 +1638,13 @@ function Codex:RenderTrinketSection(pool, index, parent, width, y, specID)
         -- Quality colour once the client knows the item; a not-yet-cached
         -- item shows the sim's own name in the default item colour and asks
         -- the client to fetch it (OnBiSItemInfoReceived re-renders).
+        -- A row with no bonus list but a simmed level hovers at that level
+        -- (ns.ItemStringAtLevel), when the option is on and the client
+        -- confirms the projection; otherwise the bare item.
         local item = ItemString(entry.itemID, entry.bonus)
+        if item == entry.itemID and entry.ilvl and ns.db and ns.db.trinketSimLevelTooltips then
+            item = ns.ItemStringAtLevel(entry.itemID, entry.ilvl) or item
+        end
         local name, quality = entry.name
         if GetItemInfoAPI then
             local ok, realName, _, realQuality = pcall(GetItemInfoAPI, item)

@@ -3154,6 +3154,37 @@ do
     first.hit:GetScript("OnEnter")(first.hit)
     check(GameTooltip.itemID == 19019, "hovering a trinket row's item shows its tooltip", GameTooltip.itemID)
     first.hit:GetScript("OnLeave")(first.hit)
+
+    -- Simmed-level projection (ns.ItemStringAtLevel): a row whose source
+    -- gives a level but no bonus list hovers at that level once the client
+    -- knows the item's base level and confirms the level-bonus string.
+    check(ns.ItemStringAtLevel(19019, 344) == nil, "an item with no known base level cannot be projected")
+    check(first.itemLink == nil, "so its row hovers the bare item")
+    mock.items[19019].level = 300
+    local projected = ns.ItemStringAtLevel(19019, 344)
+    check(projected == "item:19019:0:0:0:0:0:0:0:0:0:0:0:1:1516",
+        "a cached item projects to its simmed level through the +44 level bonus ID", projected)
+    check(ns.ProjectedItemLevel(projected) == 344 and ns.ProjectedItemLevel("|Hitem:19019:0:0:0:0:0:0:0:0:0:0:0:1:1516|h[x]|h") == 344,
+        "ProjectedItemLevel recognises the string, bare or wrapped in a link")
+    check(ns.ProjectedItemLevel("item:19019") == nil and ns.ProjectedItemLevel("item:19019:0:0:0:0:0:0:0:0:0:0:0:1:1516:4786") == nil,
+        "ProjectedItemLevel knows nothing about strings it did not build")
+    check(ns.ItemStringAtLevel(19019, 700) == nil, "a level outside the bonus run's reach is not projected")
+    mock.noLevelBonuses = true
+    mock.items[19019].level = 301
+    check(ns.ItemStringAtLevel(19019, 345) == nil, "a client that does not honour the level bonus gets nil, not a wrong tooltip")
+    mock.noLevelBonuses = nil
+    mock.items[19019].level = 300
+    Codex:RenderActiveTab()
+    first = Codex.trinketRowPool[1]
+    check(first.itemLink == projected, "the trinket row hovers the projected string", first.itemLink)
+    first.hit:GetScript("OnEnter")(first.hit)
+    check(GameTooltip.itemID == projected, "hovering opens the tooltip at the simmed level", GameTooltip.itemID)
+    first.hit:GetScript("OnLeave")(first.hit)
+    ns.db.trinketSimLevelTooltips = false
+    Codex:RenderActiveTab()
+    check(Codex.trinketRowPool[1].itemLink == nil, "with the option off the row hovers the bare item again")
+    ns.db.trinketSimLevelTooltips = true
+    mock.items[19019].level = nil
     mock.itemRefClicks = {}
     first.hit:GetScript("OnMouseUp")(first.hit, "LeftButton")
     check(#mock.itemRefClicks == 1 and mock.itemRefClicks[1].link:find("item:19019", 1, true) ~= nil,
@@ -3335,6 +3366,32 @@ do
     mock.FireTooltipItem(GameTooltip, topRow.itemID)
     check(table.concat(GameTooltip:Dump(), "\n"):find("Single Target |cff", 1, true) ~= nil,
         "a copy whose item level is unknown keeps its tiers")
+
+    -- A Codex row hovered at its simmed level carries a caveat line above
+    -- the tiers, and the low copy's note points at that row.
+    mock.items[topRow.itemID].level = topRow.ilvl - 30
+    local projected = ns.ItemStringAtLevel(topRow.itemID, topRow.ilvl)
+    check(projected ~= nil, "the ranked trinket projects to its simmed level", projected)
+    GameTooltip:SetOwner(nil, "ANCHOR_NONE")
+    mock.FireTooltipItem(GameTooltip, projected)
+    dump = table.concat(GameTooltip:Dump(), "\n")
+    check(dump:find(format("shown at item level %d, the level the lists simmed; a projection, not a drop", topRow.ilvl), 1, true) ~= nil
+        and dump:find("Single Target |cff", 1, true) ~= nil,
+        "a projected tooltip says it is a projection and still lists the tiers", dump)
+    local caveatAt, tiersAt = dump:find("a projection", 1, true), dump:find("Single Target |cff", 1, true)
+    check(caveatAt < tiersAt, "the caveat comes before the tiers")
+    mock.items[topRow.itemID].level = 19
+    GameTooltip:SetOwner(nil, "ANCHOR_NONE")
+    mock.FireTooltipItem(GameTooltip, topRow.itemID)
+    dump = table.concat(GameTooltip:Dump(), "\n")
+    check(dump:find("far below it (hover it on the Codex's BiS tab for that copy)", 1, true) ~= nil,
+        "the low copy's note points at the Codex row when the projection is available", dump)
+    ns.db.trinketSimLevelTooltips = false
+    GameTooltip:SetOwner(nil, "ANCHOR_NONE")
+    mock.FireTooltipItem(GameTooltip, topRow.itemID)
+    check(table.concat(GameTooltip:Dump(), "\n"):find("hover it on the Codex", 1, true) == nil,
+        "with the option off the note does not point at the Codex")
+    ns.db.trinketSimLevelTooltips = true
     mock.items[topRow.itemID] = nil
 
     -- A trinket no list ranks says so; a non-trinket no list ranks says nothing.

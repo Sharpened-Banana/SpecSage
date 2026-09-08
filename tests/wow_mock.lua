@@ -974,6 +974,17 @@ local function ResolveItem(key)
         for k, v in pairs(variant) do merged[k] = v end
         return merged
     end
+    -- The client's ITEM_BONUS_TYPE_ITEM_LEVEL run (1372..1672, 1472 = +0)
+    -- offsets a cached item's level; modelled so ns.ItemStringAtLevel's
+    -- self-check has something real to check against. mock.noLevelBonuses
+    -- makes the client "not know" those IDs, leaving the level alone.
+    local single = bonus and tonumber(bonus:match("^(%d+)$"))
+    if single and single >= 1372 and single <= 1672 and base.level and not mock.noLevelBonuses then
+        local merged = {}
+        for k, v in pairs(base) do merged[k] = v end
+        merged.level = base.level + (single - 1472)
+        return merged
+    end
     return base
 end
 
@@ -1224,13 +1235,16 @@ TooltipDataProcessor = {
 }
 
 -- Simulates the client finishing an item tooltip: sets the item on the
--- tooltip the way SetItemByID does, then runs every registered Item
--- post-call with a TooltipDataProcessor-style data table.
-function mock.FireTooltipItem(tooltip, itemID)
-    tooltip:SetItemByID(itemID)
+-- tooltip the way SetItemByID (a numeric ID) or SetHyperlink (an item
+-- string) does, then runs every registered Item post-call with a
+-- TooltipDataProcessor-style data table.
+function mock.FireTooltipItem(tooltip, item)
+    local link = type(item) == "string" and item or ("item:" .. item)
+    local itemID = type(item) == "number" and item or tonumber(link:match("^item:(%d+)"))
+    if type(item) == "string" then tooltip:SetHyperlink(item) else tooltip:SetItemByID(item) end
     for _, entry in ipairs(mock.tooltipPostCalls) do
         if entry.dataType == Enum.TooltipDataType.Item then
-            entry.handler(tooltip, { type = Enum.TooltipDataType.Item, hyperlink = "item:" .. itemID, id = itemID })
+            entry.handler(tooltip, { type = Enum.TooltipDataType.Item, hyperlink = link, id = itemID })
         end
     end
 end

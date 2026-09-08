@@ -222,6 +222,11 @@ local function BuildOptionGroups()
           tooltip = "Add lines to every item tooltip: a trinket's tier in your current spec's trinket "
               .. "lists (Single Target S, Guide A, ...) and each secondary stat's rank (#1, #2, ...) "
               .. "against your spec's stat priority from the Codex." },
+        { kind = "check", scope = "db", key = "trinketSimLevelTooltips",
+          variable = "SpecSage_trinketSimLevelTooltips", label = "Hover Codex trinkets at their simmed item level",
+          tooltip = "A trinket row on the Codex's BiS tab shows its tooltip at the item level the sims "
+              .. "ranked it at, not the item's base level, so a returning dungeon's old trinket reads "
+              .. "as the copy that drops this season. The tooltip says so; it is a projection, not a drop." },
         { kind = "check", scope = "characterPanel", key = "enabled",
           variable = "SpecSage_characterPanel", label = "Dock gearing panel to the character sheet",
           tooltip = "Show your stat priority, your live rating for each stat, the guide's order for "
@@ -340,6 +345,10 @@ local DEFAULTS = {
     -- Modules/ItemRanks.lua: rank an item tooltip's secondary stats against
     -- the player's current spec's Codex stat priority.
     itemStatRanks = true,
+
+    -- UI/Codex.lua: hover a trinket tier-list row at the item level it was
+    -- simmed at (ns.ItemStringAtLevel), when the client agrees to build it.
+    trinketSimLevelTooltips = true,
 
     -- UI/CharacterPanel.lua: the gearing panel docked to the character
     -- sheet. On by default - it only ever appears while the character sheet

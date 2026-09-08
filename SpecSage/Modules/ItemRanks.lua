@@ -334,11 +334,21 @@ function ItemRanks:Annotate(tooltip, link)
     if tiers then
         local simLevel = self:TrinketSimLevel(tiers)
         local actualLevel = ItemLevelOf(link)
+        local projectedLevel = ns.ProjectedItemLevel(link)
         if self:IsFarBelowSimLevel(actualLevel, simLevel) then
-            tierParts = { format("%sranked at item level %d; this item level %d copy is far below it|r",
-                ColorCode(TIER_COLORS.D), simLevel, actualLevel) }
+            local pointer = (ns.db.trinketSimLevelTooltips and ns.ItemStringAtLevel(itemID, simLevel))
+                and " (hover it on the Codex's BiS tab for that copy)" or ""
+            tierParts = { format("%sranked at item level %d; this item level %d copy is far below it%s|r",
+                ColorCode(TIER_COLORS.D), simLevel, actualLevel, pointer) }
         else
             tierParts = {}
+            -- A Codex row hovered at its simmed level (ns.ItemStringAtLevel)
+            -- says so first: the numbers above are a projection of the
+            -- base item to that level, not an item that dropped.
+            if projectedLevel then
+                tierParts.caveat = format("%sshown at item level %d, the level the lists simmed; a projection, not a drop|r",
+                    ColorCode(TIER_COLORS.D), projectedLevel)
+            end
             for _, entry in ipairs(tiers) do
                 local color = TIER_COLORS[entry.tier] or TIER_COLORS.D
                 local gainText = entry.gain and format(" (+%.1f%%)", entry.gain) or ""
@@ -375,6 +385,7 @@ function ItemRanks:Annotate(tooltip, link)
         tooltip:AddLine(" ")
         if tierParts then
             tooltip:AddLine(format("SpecSage trinket tier (%s):", specName), 0.776, 0.608, 0.427)
+            if tierParts.caveat then tooltip:AddLine(tierParts.caveat, 1, 1, 1) end
             tooltip:AddLine(table.concat(tierParts, "  "), 1, 1, 1)
         end
         if statParts then

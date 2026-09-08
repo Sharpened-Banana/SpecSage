@@ -224,6 +224,53 @@ function ns.ItemString(itemID, bonus)
     return string.format("item:%d:0:0:0:0:0:0:0:0:0:0:0:%d:%s", itemID, count, table.concat(ids, ":"))
 end
 
+-- An item string that puts the base item at `ilvl`, for a row whose source
+-- gives a simmed item level but no bonus list (Data/Trinkets.lua: bloodmallet
+-- publishes the level it simmed at, not the bonus IDs that produce it), so a
+-- returning dungeon's trinket can be hovered at the level the lists rank it
+-- rather than at its years-old base. The client has carried a run of
+-- ITEM_BONUS_TYPE_ITEM_LEVEL bonus IDs since Warlords, one per level delta:
+-- 1472 is +0, 1372 is -100, 1672 is +200. Nothing is taken on faith: the
+-- string is handed back to the client and only returned when it reports the
+-- level asked for, so a client that has dropped or moved those IDs gets nil
+-- (and callers fall back to the bare item), never a tooltip at the wrong
+-- level. Nil too for an item the client has not cached (no base level to
+-- offset from; the row re-renders on GET_ITEM_INFO_RECEIVED and asks again)
+-- and for a delta outside the run. Successes are memoised per itemID and
+-- level; a nil is not, since the two lookups behind it are cheap and the
+-- uncached case has to be retried anyway.
+ns.ILVL_BONUS_ZERO, ns.ILVL_BONUS_MIN_DELTA, ns.ILVL_BONUS_MAX_DELTA = 1472, -100, 200
+local projectedStrings = {}   -- "itemID:ilvl" -> string
+local projectedLevels = {}    -- string -> ilvl, for ns.ProjectedItemLevel
+function ns.ItemStringAtLevel(itemID, ilvl)
+    if type(itemID) ~= "number" or type(ilvl) ~= "number" then return nil end
+    local key = itemID .. ":" .. ilvl
+    if projectedStrings[key] then return projectedStrings[key] end
+
+    local getLevel = (C_Item and C_Item.GetDetailedItemLevelInfo) or GetDetailedItemLevelInfo
+    if not getLevel then return nil end
+    local ok, base = pcall(getLevel, itemID)
+    if not ok or type(base) ~= "number" or base <= 0 then return nil end
+
+    local delta = ilvl - base
+    if delta < ns.ILVL_BONUS_MIN_DELTA or delta > ns.ILVL_BONUS_MAX_DELTA then return nil end
+    local candidate = string.format("item:%d:0:0:0:0:0:0:0:0:0:0:0:1:%d", itemID, ns.ILVL_BONUS_ZERO + delta)
+    local okLevel, level = pcall(getLevel, candidate)
+    if not okLevel or level ~= ilvl then return nil end
+    projectedStrings[key] = candidate
+    projectedLevels[candidate] = ilvl
+    return candidate
+end
+
+-- The level an item link was projected to by ns.ItemStringAtLevel, or nil
+-- for any link this session did not build that way. Takes a bare item
+-- string or a full |H...|h link.
+function ns.ProjectedItemLevel(link)
+    if type(link) ~= "string" then return nil end
+    local inner = link:match("item:[%d:%-]+")
+    return inner and projectedLevels[inner] or nil
+end
+
 function ns.FormatPercent(value)
     local ok, result = pcall(function() return format("%.2f%%", value or 0) end)
     if ok then return result end

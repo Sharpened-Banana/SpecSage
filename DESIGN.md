@@ -563,6 +563,28 @@ Heroic or early Mythic+ copy keeps its tiers; an unknown item level (uncached
 item, older client) also keeps them, since the question cannot be answered.
 `TrinketSimLevel` and `IsFarBelowSimLevel` are the pure halves.
 
+The other direction — seeing the copy the lists *do* rank — is
+`ns.ItemStringAtLevel(itemID, ilvl)` (Core/Init.lua). Bloodmallet publishes
+the level it simmed at but not the bonus IDs that put an item there, so the
+string is built from the client's own ITEM_BONUS_TYPE_ITEM_LEVEL run (bonus
+1472 is +0, one ID per level from −100 to +200) offset from the base level
+`C_Item.GetDetailedItemLevelInfo(itemID)` reports. Nothing is taken on
+faith: the candidate string is handed back to the client and only returned
+when it reports the level asked for, so a client that has dropped or moved
+those IDs (or a base level too far from the target, which the Midnight
+squish may well have made of an old dungeon's trinket) yields nil and the
+caller falls back to the bare item. Nil for an uncached item too, retried on
+the GET_ITEM_INFO_RECEIVED re-render. Successes are memoised.
+`ns.ProjectedItemLevel(link)` recognises a string this session built.
+The Codex's trinket rows hover (and click) that string when
+`SpecSageDB.trinketSimLevelTooltips` ("Hover Codex trinkets at their simmed
+item level", default on) is set and the projection is available; the item
+tooltip then opens with a grey "shown at item level 334, the level the lists
+simmed; a projection, not a drop" above the tiers, and the low copy's note
+adds "hover it on the Codex's BiS tab for that copy". The item tooltip
+itself is never swapped for the projected one: an addon cannot change which
+item the game's tooltip shows, only add lines to it.
+
 **Stat ranks**: every item tooltip in the game gets each secondary stat's
 rank written onto that stat's own line, in the line's right-aligned column
 so the ranks form one column down the tooltip's edge (`+512 Haste ...... #1`,
