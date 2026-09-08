@@ -987,6 +987,13 @@ C_Item = {
             item.reqLevel or 1, item.itemType or "Miscellaneous", item.subType or "Junk",
             item.stackCount or 1, item.equipLoc or "", item.texture or 0, item.sellPrice or 0
     end,
+    -- The item's actual level, upgrade track and scaling included (the
+    -- fixture's `level`, a bonus variant's own when the link carries one);
+    -- nil for an uncached item, as on the client.
+    GetDetailedItemLevelInfo = function(key)
+        local item = ResolveItem(key)
+        return item and item.level or nil
+    end,
     -- Records the request rather than doing anything with it: the real
     -- client's async fetch-then-fire-GET_ITEM_INFO_RECEIVED behaviour is
     -- simulated by a test populating mock.items and firing that event

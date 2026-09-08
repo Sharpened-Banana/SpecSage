@@ -52,6 +52,16 @@ local RANK_COLORS = {
 
 local GetItemStatsAPI = (C_Item and C_Item.GetItemStats) or GetItemStats
 local GetItemInfoAPI = (C_Item and C_Item.GetItemInfo) or GetItemInfo
+local GetItemLevelAPI = (C_Item and C_Item.GetDetailedItemLevelInfo) or GetDetailedItemLevelInfo
+
+-- How far below its simmed item level a trinket may be before the tooltip
+-- stops quoting the tier as if it applied. Returning dungeons put old
+-- trinkets (Merektha's Fang, Ruby Whelp Shell) in the current lists at the
+-- current dungeon item level; the same items also drop, decades of levels
+-- lower, while levelling through their original dungeon, and a level 19
+-- Fang carrying "5 Targets S (+13.6%)" reads as a recommendation. A gap this
+-- large is a whole expansion's worth of gear, never a difficulty step.
+ItemRanks.TIER_ILVL_SLACK = 60
 
 -- Trinket tier colours, matching the Codex's tier tags (UI/Codex.lua).
 local TIER_COLORS = {
@@ -71,6 +81,15 @@ end
 local function ItemIDFromLink(link)
     if type(link) ~= "string" then return nil end
     return tonumber(link:match("item:(%d+)"))
+end
+
+-- The actual item level of the item a link points at (upgrade track and
+-- scaling included), or nil when the client cannot say.
+local function ItemLevelOf(link)
+    if not GetItemLevelAPI or type(link) ~= "string" then return nil end
+    local ok, level = pcall(GetItemLevelAPI, link)
+    if ok and type(level) == "number" and level > 0 then return level end
+    return nil
 end
 
 -- Whether the item is a trinket, so an unranked trinket can say "not in
@@ -237,9 +256,10 @@ function ItemRanks:AnnotateInline(tooltip, lines)
 end
 
 -- Where `itemID` sits in the spec's trinket tier lists (Data/Trinkets.lua):
--- an ordered array of { title, tier, gain } with one entry per list that
--- ranks it, or nil when no list does. Public so the Codex or a test can ask
--- without a tooltip.
+-- an ordered array of { title, tier, gain, ilvl } with one entry per list
+-- that ranks it (`ilvl` the item level the row was simmed at, when the list
+-- records one), or nil when no list does. Public so the Codex or a test can
+-- ask without a tooltip.
 function ItemRanks:DescribeTrinket(itemID, specID)
     local data = itemID and specID and ns.GuideStore and ns.GuideStore:GetTrinkets(specID)
     if not data or type(data.lists) ~= "table" then return nil end
@@ -248,13 +268,32 @@ function ItemRanks:DescribeTrinket(itemID, specID)
     for _, listEntry in ipairs(data.lists) do
         for _, row in ipairs(listEntry.list or {}) do
             if row.itemID == itemID then
-                found[#found + 1] = { title = listEntry.title, tier = row.tier, gain = row.gain }
+                found[#found + 1] = { title = listEntry.title, tier = row.tier, gain = row.gain, ilvl = row.ilvl }
                 break
             end
         end
     end
     if #found == 0 then return nil end
     return found
+end
+
+-- The item level a trinket's tier lines were simmed at: the lowest `ilvl`
+-- among the lists that rank it, or nil when none records one (the guide's
+-- editorial list carries no item level).
+function ItemRanks:TrinketSimLevel(tiers)
+    local lowest
+    for _, entry in ipairs(tiers or {}) do
+        if type(entry.ilvl) == "number" and (not lowest or entry.ilvl < lowest) then lowest = entry.ilvl end
+    end
+    return lowest
+end
+
+-- Whether `actualLevel` (the copy on the tooltip) is so far below `simLevel`
+-- (the copy the lists rank) that the tier does not describe it. Nil for
+-- either level means the question cannot be answered, so the tier is shown.
+function ItemRanks:IsFarBelowSimLevel(actualLevel, simLevel)
+    if type(actualLevel) ~= "number" or type(simLevel) ~= "number" then return false end
+    return actualLevel < simLevel - self.TIER_ILVL_SLACK
 end
 
 --------------------------------------------------------------------------------
@@ -284,17 +323,27 @@ function ItemRanks:Annotate(tooltip, link)
     local itemID = ItemIDFromLink(link)
 
     -- Trinket tier: one line per list that ranks it ("Single Target S
-    -- (+10.2%)", "Icy Veins A"), or, for a trinket no list ranks, a line
+    -- (+10.2%)", "Guide A"), or, for a trinket no list ranks, a line
     -- saying so - a trinket in your bags with no SpecSage line at all would
-    -- read as "the addon has no opinion" when it actually does.
+    -- read as "the addon has no opinion" when it actually does. A copy far
+    -- below the level the lists simmed (a levelling drop from a returning
+    -- dungeon) gets a grey note instead of the tiers, which describe the
+    -- current-season copy and not this one.
     local tierParts
     local tiers = self:DescribeTrinket(itemID, specID)
     if tiers then
-        tierParts = {}
-        for _, entry in ipairs(tiers) do
-            local color = TIER_COLORS[entry.tier] or TIER_COLORS.D
-            local gainText = entry.gain and format(" (+%.1f%%)", entry.gain) or ""
-            tierParts[#tierParts + 1] = format("%s %s%s|r%s", entry.title, ColorCode(color), entry.tier, gainText)
+        local simLevel = self:TrinketSimLevel(tiers)
+        local actualLevel = ItemLevelOf(link)
+        if self:IsFarBelowSimLevel(actualLevel, simLevel) then
+            tierParts = { format("%sranked at item level %d; this item level %d copy is far below it|r",
+                ColorCode(TIER_COLORS.D), simLevel, actualLevel) }
+        else
+            tierParts = {}
+            for _, entry in ipairs(tiers) do
+                local color = TIER_COLORS[entry.tier] or TIER_COLORS.D
+                local gainText = entry.gain and format(" (+%.1f%%)", entry.gain) or ""
+                tierParts[#tierParts + 1] = format("%s %s%s|r%s", entry.title, ColorCode(color), entry.tier, gainText)
+            end
         end
     elseif IsTrinket(itemID) and ns.GuideStore and ns.GuideStore:GetTrinkets(specID) then
         tierParts = { "not in this spec's trinket lists" }

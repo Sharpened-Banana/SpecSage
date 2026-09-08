@@ -550,6 +550,19 @@ lists", since silence would read as "no opinion" when the addon does have
 lists for the spec; a non-trinket gets no tier line at all.
 `ItemRanks:DescribeTrinket(itemID, specID)` is the tooltip-free half.
 
+Returning dungeons put old trinkets (Merektha's Fang, Ruby Whelp Shell,
+Algeth'ar Puzzle Box) in the current lists at the current dungeon item
+level, and the same items also drop, scaled to a levelling character, from
+their original dungeon in Chromie Time. The tiers describe the former copy
+only, so when the copy on the tooltip (`C_Item.GetDetailedItemLevelInfo` on
+the link) is more than `ItemRanks.TIER_ILVL_SLACK` (60) levels below the
+lowest simmed `ilvl` among the lists that rank it, the tier line is replaced
+with a grey "ranked at item level 334; this item level 19 copy is far below
+it". Sixty levels is a whole expansion's gear, never a difficulty step, so a
+Heroic or early Mythic+ copy keeps its tiers; an unknown item level (uncached
+item, older client) also keeps them, since the question cannot be answered.
+`TrinketSimLevel` and `IsFarBelowSimLevel` are the pure halves.
+
 **Stat ranks**: every item tooltip in the game gets each secondary stat's
 rank written onto that stat's own line, in the line's right-aligned column
 so the ranks form one column down the tooltip's edge (`+512 Haste ...... #1`,

@@ -16,6 +16,7 @@
 - One guide's data: the second site's BiS lists, trinket rankings and talent builds are gone, and the remaining guide is not named anywhere. Lists are titled "Guide"; attribution lines keep the date the guide was read.
 - The Stats tab and the character sheet panel's Gear section are laid out as headed blocks: Stat Priority with your hero tree under it, Other Hero Trees (each tree named over its order), Best in Slot.
 - Buttons read as buttons: ink plates with a shadow and lit edge, wax red on hover, they sink when pressed, and they size to their labels.
+- A ranked trinket far below the item level the lists simmed (a levelling drop from a returning dungeon, like an item level 19 Merektha's Fang) no longer carries the current-season tiers on its tooltip; a grey note names both item levels instead.
 - Armor tooltip shows reduction against your current target and falls back to a self-checking estimate when the live figure is unavailable.
 - Mastery tooltip quotes your spec's own mastery text and shows mastery points.
 - Combat report shows "?" for one protected number instead of blanking the whole line.

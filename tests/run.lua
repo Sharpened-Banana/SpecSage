@@ -3306,6 +3306,37 @@ do
     check(dump:find("stat ranks", 1, true) == nil, "a trinket with no secondary stats adds no stat-rank lines")
     mock.items[topRow.itemID] = nil
 
+    -- A levelling-era copy of a ranked trinket (Merektha's Fang at item
+    -- level 19, from a returning dungeon run in Chromie Time) does not get
+    -- the current-season tiers quoted at it: a grey note names both levels.
+    local simLevel = ItemRanks:TrinketSimLevel(tiers)
+    check(simLevel == topRow.ilvl, "TrinketSimLevel is the simmed item level of the ranking rows", simLevel)
+    check(ItemRanks:IsFarBelowSimLevel(19, 334) and not ItemRanks:IsFarBelowSimLevel(300, 334)
+        and not ItemRanks:IsFarBelowSimLevel(nil, 334) and not ItemRanks:IsFarBelowSimLevel(19, nil),
+        "IsFarBelowSimLevel flags a whole-expansion gap, not a difficulty step or an unknown level")
+    mock.items[topRow.itemID] = { name = topRow.name, quality = 3, equipLoc = "INVTYPE_TRINKET", level = 19 }
+    GameTooltip:SetOwner(nil, "ANCHOR_NONE")
+    mock.FireTooltipItem(GameTooltip, topRow.itemID)
+    dump = table.concat(GameTooltip:Dump(), "\n")
+    check(dump:find("SpecSage trinket tier (Unholy):", 1, true) ~= nil, "a low-level copy still gets the trinket tier header", dump)
+    check(dump:find(format("ranked at item level %d; this item level 19 copy is far below it", topRow.ilvl), 1, true) ~= nil,
+        "a low-level copy's tier line names the simmed and actual item levels instead of the tiers", dump)
+    check(dump:find("Single Target |cff", 1, true) == nil and dump:find("S|r (+", 1, true) == nil,
+        "a low-level copy's tooltip quotes no tier or gain", dump)
+    -- The current-season copy, and a copy whose level the client cannot
+    -- give yet, both show the tiers as before.
+    mock.items[topRow.itemID].level = topRow.ilvl - 30
+    GameTooltip:SetOwner(nil, "ANCHOR_NONE")
+    mock.FireTooltipItem(GameTooltip, topRow.itemID)
+    check(table.concat(GameTooltip:Dump(), "\n"):find("Single Target |cff", 1, true) ~= nil,
+        "a copy a difficulty step below the simmed level keeps its tiers")
+    mock.items[topRow.itemID].level = nil
+    GameTooltip:SetOwner(nil, "ANCHOR_NONE")
+    mock.FireTooltipItem(GameTooltip, topRow.itemID)
+    check(table.concat(GameTooltip:Dump(), "\n"):find("Single Target |cff", 1, true) ~= nil,
+        "a copy whose item level is unknown keeps its tiers")
+    mock.items[topRow.itemID] = nil
+
     -- A trinket no list ranks says so; a non-trinket no list ranks says nothing.
     mock.items[880003] = { name = "Obscure Trinket", quality = 2, equipLoc = "INVTYPE_TRINKET" }
     GameTooltip:SetOwner(nil, "ANCHOR_NONE")
