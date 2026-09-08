@@ -2,11 +2,11 @@
 -- Shared status-colour palette and overlay-chrome theme presets.
 --
 -- Brought across from the Upkeep addon (the same author's later fork of the
--- overlay), which had kept refining this half while SpecSage grew the Codex.
+-- overlay), which had kept refining this half while SpecSage grew the Tome.
 -- Centralising colours here means a palette fix applies everywhere at once
 -- instead of being repeated (and drifting) across every module, and a new
 -- theme is one table added to THEMES rather than a change scattered across
--- UI/Overlay.lua, Core/Options.lua and UI/Codex.lua.
+-- UI/Overlay.lua, Core/Options.lua and UI/Tome.lua.
 --
 -- Load order: this file sits right after Core/Config.lua in the TOC, and
 -- Modules/Combat.lua and Modules/Procs.lua read ns.Colors at file load, so

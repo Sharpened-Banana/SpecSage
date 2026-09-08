@@ -39,7 +39,7 @@ def main():
         "-- silently dropped. Anything Wowhead ranks that is not a character stat",
         "-- (item level, weapon damage) is carried in the list's note instead of",
         "-- being invented into the order. This is Wowhead's editorial priority at",
-        "-- the time each page was read - it goes stale every patch, and the Codex",
+        "-- the time each page was read - it goes stale every patch, and the Tome",
         "-- says so - not a sim of your character. See DESIGN.md's \"Stat priority\".",
         "-- Generated: %s UTC" % datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d %H:%M"),
         "",

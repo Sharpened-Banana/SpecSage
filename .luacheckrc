@@ -11,8 +11,8 @@ globals = {
     "SpecSageDB",
     "SpecSageCharDB",
     "SpecSageOverlayFrame",
-    "SpecSageCodexFrame",
-    "SpecSageCodexScrollFrame",
+    "SpecSageTomeFrame",
+    "SpecSageTomeScrollFrame",
     -- The hover tooltip has a fixed name; the pinned tooltips
     -- (SpecSagePinnedTooltip1, 2, 3, ...) do not, since luacheck's globals
     -- list takes exact names, not patterns - those are only exercised by
@@ -77,10 +77,10 @@ read_globals = {
     -- Misc
     "GetTime", "format", "strjoin", "tostringall", "bit", "tinsert", "tremove",
 
-    -- Codex: class rail colours/icons, and the talent-loadout export surface.
+    -- Tome: class rail colours/icons, and the talent-loadout export surface.
     "RAID_CLASS_COLORS", "CLASS_ICON_TCOORDS",
 
-    -- Codex: fonts and widget templates the buttons/editboxes need to
+    -- Tome: fonts and widget templates the buttons/editboxes need to
     -- actually render in the client, rather than a bare untemplated frame
     -- that draws nothing.
     "ChatFontNormal", "UIPanelButtonTemplate", "InputBoxTemplate", "UIPanelCloseButton",

@@ -2,7 +2,7 @@ local _, ns = ...
 
 -- Item IDs for every consumable, enchant and gem the shipped guides name in
 -- their `consumables` blocks (Data/Guides_*.lua). The guides carry the IDs
--- themselves (each entry's `items` list) and the Codex's Consumables tab
+-- themselves (each entry's `items` list) and the Tome's Consumables tab
 -- draws those as hoverable, clickable chips; this table is the name each
 -- ID falls back to before the client has the item cached, and lets the
 -- prose scanner below find items in a line that names them without an

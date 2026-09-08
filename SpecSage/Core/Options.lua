@@ -209,7 +209,7 @@ local function BuildPanel()
     if not category then return nil end
 
     -- Driven entirely by ns.OPTION_GROUPS (Core/Config.lua), which the
-    -- Codex's own Options tab renders from as well - the two surfaces show
+    -- Tome's own Options tab renders from as well - the two surfaces show
     -- the same settings because they read the same table, not because two
     -- lists were kept in step by hand.
     for _, group in ipairs(ns.OPTION_GROUPS) do

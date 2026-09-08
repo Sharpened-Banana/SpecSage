@@ -28,7 +28,7 @@ same file — there is no separately-talented dungeon variant to source a
 second field from. Pointing `mplusLoadout` and `raidLoadout` at the same
 file (even if the strings happen to differ because they were fetched on
 different dates as SimC's own automation updated the profile) would show a
-player two Codex rows — "Suggested Mythic+" and "Suggested Raid" — that
+player two Tome rows — "Suggested Mythic+" and "Suggested Raid" — that
 promise a real distinction neither string actually carries, with no way for
 the player to know that from the UI. Check the tier's directory listing
 each refresh (layouts can change); if it's still one file per spec, refresh
@@ -61,7 +61,7 @@ Two things still matter, independent of that copyright question:
 - **Where sites genuinely disagree** (a hero-talent pick, a stat-priority
   split, a contested tuning point), that's a signal real analytical
   judgment is involved rather than a single discoverable answer — note the
-  disagreement honestly (as the Codex's live `mplusMetaLoadout` data
+  disagreement honestly (as the Tome's live `mplusMetaLoadout` data
   already does for hero-talent splits) rather than silently picking one
   side and presenting it as settled.
 
@@ -157,7 +157,7 @@ split. Each agent's job per spec:
    example), `patch` (short — "12.1", or "12.0 (MID1, previous tier)" for
    a fallback-tier pull; put any longer explanation in a comment, not the
    UI-rendered `patch` string itself, since it renders in a fixed-width
-   Codex row). Re-fetch the `talents=` line a second time before using it
+   Tome row). Re-fetch the `talents=` line a second time before using it
    (two independent `curl`s, compare byte-for-byte) — this is the same
    double-check the first v1.3 pass used, catching a transient truncation
    or a copy mistake before it ships silently wrong.

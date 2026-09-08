@@ -10,7 +10,7 @@
 -- silently dropped. Anything the guide site ranks that is not a character stat
 -- (item level, weapon damage) is carried in the list's note instead of
 -- being invented into the order. This is the guide site's editorial priority at
--- the time each page was read - it goes stale every patch, and the Codex
+-- the time each page was read - it goes stale every patch, and the Tome
 -- says so - not a sim of your character. See DESIGN.md's "Stat priority".
 -- Generated: 2026-09-03 18:03 UTC
 

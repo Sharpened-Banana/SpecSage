@@ -62,7 +62,7 @@ function CreateColor(r, g, b, a)
     return { r = r, g = g, b = b, a = a or 1 }
 end
 
--- Reusable Font objects (UI/Codex.lua's "Blizzard Modern" pass builds a
+-- Reusable Font objects (UI/Tome.lua's "Blizzard Modern" pass builds a
 -- handful once at load, via SetFontObject rather than a fresh CreateFont per
 -- row/button).
 mock.fonts = {}
@@ -102,7 +102,7 @@ local function NewRegion(kind)
     function region:SetShown(value) self.shown = value and true or false end
     -- Real IsObjectType also matches ancestor widget types (a Button
     -- IsObjectType("Frame") is true); this mock only ever needs an exact
-    -- kind match (SkinButton in UI/Codex.lua asks "is this a Texture"), so
+    -- kind match (SkinButton in UI/Tome.lua asks "is this a Texture"), so
     -- that's all it implements.
     function region:IsObjectType(kind) return type(kind) == "string" and kind:lower() == self.kind end
 
@@ -285,7 +285,7 @@ function CreateFrame(frameType, name, parent, template)
     -- the real client where these methods simply do not exist on the wrong
     -- widget subclass. An earlier version of this mock granted the full
     -- EditBox/ScrollFrame/Button surface to every frame regardless of type or
-    -- template, which is exactly what let an untemplated, unfonted Codex
+    -- template, which is exactly what let an untemplated, unfonted Tome
     -- button or editbox pass the test suite while rendering nothing in game.
     if frameType == "EditBox" then
         -- InputBoxTemplate is the only template here that provides a font by
@@ -436,7 +436,7 @@ function mock.HoverPaperDollSlot(slotName)
     if script then script(button) end
 end
 
--- ESC closes any frame named here; the Codex registers itself into this so
+-- ESC closes any frame named here; the Tome registers itself into this so
 -- ESC works without the addon needing its own keybind for it.
 UISpecialFrames = {}
 
@@ -463,10 +463,10 @@ for _, event in ipairs({
     "LIFESTEAL_UPDATE", "AVOIDANCE_UPDATE",
     "PLAYER_EQUIPMENT_CHANGED", "PLAYER_AVG_ITEM_LEVEL_UPDATE",
     "PLAYER_SPECIALIZATION_CHANGED", "PLAYER_TALENT_UPDATE",
-    -- Reserved for the Codex/Loadouts work: talent config changes.
+    -- Reserved for the Tome/Loadouts work: talent config changes.
     "TRAIT_CONFIG_UPDATED", "TRAIT_CONFIG_LIST_UPDATED",
     -- Modules/BiS.lua: fires once C_Item.RequestLoadItemDataByID's async
-    -- fetch resolves, so Codex:OnBiSItemInfoReceived can re-render a
+    -- fetch resolves, so Tome:OnBiSItemInfoReceived can re-render a
     -- checklist row that was still showing "Item 12345" when it was added.
     "GET_ITEM_INFO_RECEIVED",
     -- Modules/Buffs.lua: re-check raid buffs when the group changes shape.
@@ -698,7 +698,7 @@ end
 --------------------------------------------------------------------------------
 -- Classes and specializations
 --
--- Used by the Codex's class rail and by guide-data validation tooling, not by
+-- Used by the Tome's class rail and by guide-data validation tooling, not by
 -- the overlay itself. classID order matches Blizzard's (Warrior=1 ...
 -- Evoker=13).
 --------------------------------------------------------------------------------
@@ -727,7 +727,7 @@ function GetClassInfo(classID)
     return entry.name, entry.token, entry.id
 end
 
--- The Codex defaults to the player's own class/spec on first open. Kept in
+-- The Tome defaults to the player's own class/spec on first open. Kept in
 -- sync with mock.specializations[252] below (Death Knight) so that default
 -- lands on a spec the mock actually knows about.
 function UnitClass(unit)
@@ -735,7 +735,7 @@ function UnitClass(unit)
     return "Death Knight", "DEATHKNIGHT", 6
 end
 
--- Real client globals the Codex's class rail reads directly (not wrapped in
+-- Real client globals the Tome's class rail reads directly (not wrapped in
 -- a namespace, so they must exist as plain globals here too). Colours are
 -- close to Blizzard's but not pixel-exact — nothing in the addon depends on
 -- the exact channel values, only on every class token resolving to *a* colour.
@@ -773,7 +773,7 @@ CLASS_ICON_TCOORDS = {
     EVOKER      = { 0, 0.25, 0.75, 1.0 },
 }
 
--- A handful of specializations, enough to exercise the Codex/GuideStore
+-- A handful of specializations, enough to exercise the Tome/GuideStore
 -- integration without hand-typing all 39 retail specs into the mock.
 mock.specializations = {
     [71] = { id = 71, name = "Arms",       icon = 132355, role = "DAMAGER", classID = 1, primaryStat = 1 },
@@ -941,7 +941,7 @@ end
 -- Items (BiS checklist)
 --
 -- itemID-keyed fixtures a test can populate before exercising Modules/BiS.lua
--- or the Codex's BiS tab. Only the fields those actually read (name, quality)
+-- or the Tome's BiS tab. Only the fields those actually read (name, quality)
 -- are modelled; the rest of GetItemInfo's real ~11-value return is filled
 -- with a placeholder so the shape still matches what the addon unpacks.
 --------------------------------------------------------------------------------
@@ -955,7 +955,7 @@ mock.items = {
 -- ("item:<id>:0:...:<numBonus>:<bonus...>"), and the two do NOT resolve to the
 -- same item: the bare ID gives the item's base form, while the bonus IDs put
 -- it on its current upgrade track. That difference is the whole point of
--- UI/Codex.lua's ItemString, so the mock models it - a fixture may carry a
+-- UI/Tome.lua's ItemString, so the mock models it - a fixture may carry a
 -- `bonus` table keyed by the bonus list ("4786:12854") with its own name,
 -- quality and level, and a lookup by item string prefers it.
 local function ResolveItem(key)
@@ -1018,7 +1018,7 @@ C_Item = {
 mock.itemLoadRequests = {}
 
 -- Approximates Blizzard's real item-quality colours (0=Poor..5=Legendary is
--- all the Codex needs to colour a BiS entry's name by).
+-- all the Tome needs to colour a BiS entry's name by).
 ITEM_QUALITY_COLORS = {
     [0] = { r = 0.61, g = 0.61, b = 0.61 },
     [1] = { r = 1.00, g = 1.00, b = 1.00 },
@@ -1207,7 +1207,7 @@ GameTooltip.hooks = {}
 function GameTooltip:HookScript(event, handler) self.hooks[event] = handler end
 
 -- The tooltip that opens when an item link is clicked, plus the two
--- link-click entry points UI/Codex.lua's BiS rows go through. Both record
+-- link-click entry points UI/Tome.lua's BiS rows go through. Both record
 -- rather than act so a test can assert on what was clicked.
 ItemRefTooltip = setmetatable({ lines = {}, shown = false, hooks = {} }, { __index = GameTooltip })
 function ItemRefTooltip:GetName() return "ItemRefTooltip" end

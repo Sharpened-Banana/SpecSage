@@ -6,7 +6,7 @@
 -- source they trust; see DESIGN.md's "BiS / Gear (v1.1)" section.
 --
 -- Frame-free (see Core/Init.lua's module conventions), same as
--- Modules/Loadouts.lua and Modules/Notes.lua — the Codex's BiS tab is the
+-- Modules/Loadouts.lua and Modules/Notes.lua — the Tome's BiS tab is the
 -- only caller.
 
 local ADDON, ns = ...
@@ -18,7 +18,7 @@ local BiS = ns:NewModule("BiS")
 -- The same 14-slot vocabulary Data/API.lua validates a guide's `gear` array
 -- against. Kept as its own copy rather than reaching into ns.GuideStore's
 -- internals, the same independence Modules/Loadouts.lua's VALID_CATEGORIES
--- has from the rest of the addon. Ordered for UI cycling (the Codex's Add
+-- has from the rest of the addon. Ordered for UI cycling (the Tome's Add
 -- row slot-cycler button), the same role Loadouts.CATEGORY_ORDER plays.
 BiS.SLOT_ORDER = {
     "Head", "Neck", "Shoulder", "Back", "Chest", "Wrist", "Hands", "Waist",
@@ -82,8 +82,8 @@ end
 
 -- Asks the client to fetch an uncached item's data from the server, pcall
 -- wrapped and guarded the same way every other real-client call in this
--- module is: a bad itemID or a missing API must never take the Codex down.
--- Fire-and-forget - Codex:OnBiSItemInfoReceived (UI/Codex.lua) is what
+-- module is: a bad itemID or a missing API must never take the Tome down.
+-- Fire-and-forget - Tome:OnBiSItemInfoReceived (UI/Tome.lua) is what
 -- actually re-renders once GET_ITEM_INFO_RECEIVED tells us the request
 -- resolved.
 local function RequestItemLoad(itemID)
@@ -206,7 +206,7 @@ function BiS:Delete(specID, index)
 end
 
 -- Re-resolves an entry's display name against the item cache and returns it
--- alongside the item's quality (for the Codex's quality-coloured text).
+-- alongside the item's quality (for the Tome's quality-coloured text).
 -- GetItemInfo can be genuinely async — the server hands back nil until the
 -- client has cached the item — so this re-resolves on every call rather than
 -- once at Add time: an entry added while its item was uncached still picks
@@ -232,7 +232,7 @@ end
 -- "do I already own this to go equip it"), in one pass. A checklist render
 -- with N rows used to call GetStatus per row, each of which rescanned all
 -- five bags itself - up to ~14 x 5 x 36 container reads on a full checklist,
--- every render. Codex:RenderBiS now calls this once per render and passes
+-- every render. Tome:RenderBiS now calls this once per render and passes
 -- the result into GetStatus below instead. Pcall-wrapped, same as the scan
 -- it replaces: a client without C_Container, or one where a read throws
 -- mid-scan, degrades to an empty set (every row falls through to "missing")
@@ -258,12 +258,12 @@ end
 -- or nil when the entry has no itemID to check at all (a plain-name entry
 -- can never be more specific than that). Every game-API call is
 -- pcall-wrapped: a client without C_Container, or one where a bag/inventory
--- read throws mid-scan, degrades to "missing" rather than taking the Codex
+-- read throws mid-scan, degrades to "missing" rather than taking the Tome
 -- down. Equipped is checked before owned, so an item that is both equipped
 -- and (for whatever reason) also sitting in a bag still reports as equipped.
 --
 -- `bagSet`, when given, is a precomputed BiS:ScanBags() result: pass one in
--- when checking many entries in the same render pass (Codex:RenderBiS does)
+-- when checking many entries in the same render pass (Tome:RenderBiS does)
 -- so the bag scan happens once rather than once per row. Omit it (or pass
 -- nil) to fall back to scanning bags right here for this one entry - keeps
 -- GetStatus independently callable/testable without a caller having to build

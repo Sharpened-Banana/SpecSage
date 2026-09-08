@@ -1,12 +1,12 @@
 -- Core/Commands.lua
 -- Slash command interface: /sage and /specsage.
 --
--- The bare command toggles the Codex (the class/spec guide window) rather
--- than the overlay, since the Codex is the addon's primary surface; the
--- overlay moved to its own "overlay" subcommand. Every Codex-facing handler
--- here still checks for ns.Codex rather than assuming it exists, so a build
--- of the addon with the Codex stripped out (a guide pack installed without
--- it) degrades to a "Codex not loaded" print instead of erroring.
+-- The bare command toggles the Tome (the class/spec guide window) rather
+-- than the overlay, since the Tome is the addon's primary surface; the
+-- overlay moved to its own "overlay" subcommand. Every Tome-facing handler
+-- here still checks for ns.Tome rather than assuming it exists, so a build
+-- of the addon with the Tome stripped out (a guide pack installed without
+-- it) degrades to a "Tome not loaded" print instead of erroring.
 
 local ADDON, ns = ...
 
@@ -14,9 +14,9 @@ local Commands = ns:NewModule("Commands")
 
 local HELP = {
     "|cff33ff99SpecSage|r commands:",
-    "  |cffffff00/sage|r - toggle the Codex window",
+    "  |cffffff00/sage|r - toggle the Tome window",
     "  |cffffff00/sage overlay|r - toggle the stat overlay",
-    "  |cffffff00/sage guide <class> [spec]|r - open the Codex at a class/spec (fuzzy match)",
+    "  |cffffff00/sage guide <class> [spec]|r - open the Tome at a class/spec (fuzzy match)",
     "  |cffffff00/sage lock|r / |cffffff00unlock|r - lock or unlock overlay dragging",
     "  |cffffff00/sage config|r - open the Options tab (add |cffffff00blizzard|r for the Settings panel)",
     "  |cffffff00/sage feedback|r - show the GitHub Issues link for bug reports and feature requests",
@@ -49,26 +49,26 @@ local function PrintLines(lines, emptyMessage)
 end
 
 --------------------------------------------------------------------------------
--- Codex hand-off
+-- Tome hand-off
 --
--- Every path that would open or drive the Codex checks for it here instead
--- of assuming it exists, so /sage stays usable even without UI/Codex.lua
+-- Every path that would open or drive the Tome checks for it here instead
+-- of assuming it exists, so /sage stays usable even without UI/Tome.lua
 -- loaded.
 --------------------------------------------------------------------------------
 
-local function ToggleCodex()
-    if ns.Codex and ns.Codex.Toggle then
-        ns.Codex:Toggle()
+local function ToggleTome()
+    if ns.Tome and ns.Tome.Toggle then
+        ns.Tome:Toggle()
     else
-        ns.Print("Codex not loaded.")
+        ns.Print("Tome not loaded.")
     end
 end
 
-local function OpenCodex(classToken, specID)
-    if ns.Codex and ns.Codex.Open then
-        ns.Codex:Open(classToken, specID)
+local function OpenTome(classToken, specID)
+    if ns.Tome and ns.Tome.Open then
+        ns.Tome:Open(classToken, specID)
     else
-        ns.Print("Codex not loaded.")
+        ns.Print("Tome not loaded.")
     end
 end
 
@@ -151,8 +151,8 @@ handlers.help = function()
 end
 
 handlers.feedback = function()
-    local Codex = ns:GetModule("Codex")
-    if Codex then Codex:ShowFeedback() end
+    local Tome = ns:GetModule("Tome")
+    if Tome then Tome:ShowFeedback() end
 end
 
 handlers.overlay = function()
@@ -186,7 +186,7 @@ handlers.guide = function(argument)
         specID = matchedSpecID
     end
 
-    OpenCodex(classToken, specID)
+    OpenTome(classToken, specID)
 end
 
 handlers.lock = function()
@@ -201,7 +201,7 @@ handlers.unlock = function()
     ns.Print("overlay unlocked - drag it to move.")
 end
 
--- Opens the Codex's own Options tab rather than Blizzard's Settings panel.
+-- Opens the Tome's own Options tab rather than Blizzard's Settings panel.
 -- The in-addon tab is the more dependable of the two surfaces (it is built
 -- from primitives this addon controls, not from Settings widget templates
 -- that move between game versions), and both render the same
@@ -216,9 +216,9 @@ handlers.config = function(argument)
         return
     end
 
-    if ns.Codex and ns.Codex.Open then
-        ns.Codex:Open()
-        ns.Codex:SelectTab("Options")
+    if ns.Tome and ns.Tome.Open then
+        ns.Tome:Open()
+        ns.Tome:SelectTab("Options")
     else
         ns.OpenOptions()
     end
@@ -407,7 +407,7 @@ local function HandleCommand(input)
     input = (input or ""):match("^%s*(.-)%s*$")
 
     if input == "" then
-        ToggleCodex()
+        ToggleTome()
         return
     end
 

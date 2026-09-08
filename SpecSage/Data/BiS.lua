@@ -4,9 +4,9 @@
 -- Per-spec Best in Slot lists from the guide site' gear guides (one list per
 -- context: Overall, Mythic+, Raid) and the guide site's (one per hero tree where the
 -- guide splits them; see tools/wowhead_harvest.js), one row per slot, every
--- row a concrete itemID the Codex shows as a clickable item link. This is
+-- row a concrete itemID the Tome shows as a clickable item link. This is
 -- each site's editorial BiS at the time the script ran - it goes stale every
--- patch, and the Codex says so - not a claim of the single best item for
+-- patch, and the Tome says so - not a claim of the single best item for
 -- your character. See DESIGN.md's "Linked BiS lists".
 --
 -- A row's `bonus` is the item's bonus-ID list, "a:b:c", as the guide site links

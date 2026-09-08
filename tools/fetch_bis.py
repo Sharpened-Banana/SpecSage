@@ -6,7 +6,7 @@ context (Overall, then Mythic+ and/or Raid where the guide splits them);
 every entry is a .bis_item div with the item's wowhead ID, name, slot and
 drop source. This turns that into one RegisterBiS(specID, ...) call per
 spec: a list per tab, one row per slot, every row a concrete itemID the
-Codex renders as a clickable item link. Wowhead's guide pages are rendered
+Tome renders as a clickable item link. Wowhead's guide pages are rendered
 client-side and refuse plain HTTP clients, so only Icy Veins is read.
 
 Bonus IDs matter as much as the item ID. Icy Veins links every BiS entry as
@@ -14,7 +14,7 @@ Bonus IDs matter as much as the item ID. Icy Veins links every BiS entry as
 its current-season upgrade track - drop them and the client resolves the
 bare item ID to the item's *base* form, which for a current dungeon neck is
 a level-48 rare rather than the item level 334 epic the guide means. So the
-bonus list rides along into Data/BiS.lua and the Codex builds a full item
+bonus list rides along into Data/BiS.lua and the Tome builds a full item
 string from it. Icy Veins also appends "&original-item=<id>" to catalysed
 pieces (the token's pre-catalyst source); that is not part of the bonus
 list and is dropped.
@@ -144,9 +144,9 @@ def main():
         "-- Per-spec Best in Slot lists from Icy Veins' gear guides (one list per",
         "-- context: Overall, Mythic+, Raid) and Wowhead's (one per hero tree where the",
         "-- guide splits them; see tools/wowhead_harvest.js), one row per slot, every",
-        "-- row a concrete itemID the Codex shows as a clickable item link. This is",
+        "-- row a concrete itemID the Tome shows as a clickable item link. This is",
         "-- each site's editorial BiS at the time the script ran - it goes stale every",
-        "-- patch, and the Codex says so - not a claim of the single best item for",
+        "-- patch, and the Tome says so - not a claim of the single best item for",
         "-- your character. See DESIGN.md's \"Linked BiS lists\".",
         "--",
         "-- A row's `bonus` is the item's bonus-ID list, \"a:b:c\", as Icy Veins links",

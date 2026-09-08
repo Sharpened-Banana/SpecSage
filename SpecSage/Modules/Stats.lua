@@ -797,7 +797,7 @@ function Stats:Update()
     ns.UI:SetSection("stats", rows, TooltipProvider)
 end
 
--- Public accessor for other parts of the addon (the Codex's stat-priority
+-- Public accessor for other parts of the addon (the Tome's stat-priority
 -- page) that want just the formatted display value for a stat, without
 -- caring whether the overlay is showing that row right now. Accepts both the
 -- overlay's internal keys and the guide-facing vocabulary from

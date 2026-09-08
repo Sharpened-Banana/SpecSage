@@ -5,7 +5,7 @@
 	<Binding name="SPECSAGE_TOGGLE_OVERLAY">
 		SpecSage_ToggleOverlay()
 	</Binding>
-	<Binding name="SPECSAGE_TOGGLE_CODEX">
-		SpecSage_ToggleCodex()
+	<Binding name="SPECSAGE_TOGGLE_TOME">
+		SpecSage_ToggleTome()
 	</Binding>
 </Bindings>

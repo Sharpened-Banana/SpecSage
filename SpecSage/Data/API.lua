@@ -110,7 +110,7 @@ local function ValidateGear(gear)
         if type(entry.text) ~= "string" or entry.text == "" then
             return false, format("gear[%d] must have non-empty text", index)
         end
-        -- Optional (v1.5): a concrete item the Codex renders as a clickable
+        -- Optional (v1.5): a concrete item the Tome renders as a clickable
         -- item link beside the guidance text.
         if entry.itemID ~= nil and type(entry.itemID) ~= "number" then
             return false, format("gear[%d].itemID must be a number when present", index)
@@ -121,7 +121,7 @@ local function ValidateGear(gear)
 end
 
 -- Trinket tier lists (v1.5, DESIGN.md's "Trinket tier lists" section). A
--- registration is either { unavailable = "<reason>" } (the Codex shows the
+-- registration is either { unavailable = "<reason>" } (the Tome shows the
 -- reason) or { source, patch, lists = { { title, fightStyle, list = { row,
 -- ... } }, ... } } where every row is a concrete item: itemID, name, tier
 -- (S/A/B/C), gain (percent over baseline), and optional ilvl/source/onUse.
@@ -205,11 +205,11 @@ end
 -- `mplusMetaLoadout` (v1.4): most guides have none of these keys at all,
 -- which must validate the same as a pre-v1.2 guide. `source` is documentary
 -- (credits SimC or Blizzard's API) and is not itself validated - only
--- `string` and `patch` gate acceptance, the two fields the Codex actually
+-- `string` and `patch` gate acceptance, the two fields the Tome actually
 -- reads to render and Add-to-vault a row. `sampleSize`, when present (only
 -- mplusMetaLoadout carries one - an empirical aggregate has a sample size,
 -- a single curated SimC profile does not), must be a positive number: the
--- Codex renders it directly into the row label ("top 50"), so a bad value
+-- Tome renders it directly into the row label ("top 50"), so a bad value
 -- there would show garbage to the player rather than merely failing to
 -- validate. `fieldName` is only used to word the error.
 local function ValidateLoadoutSuggestion(loadout, fieldName)
@@ -592,7 +592,7 @@ end
 
 -- Returns all 13 retail classes in classID order, each as a fresh
 -- { token, name, classID } table. Classes with no guides registered are
--- still listed, so the Codex's class rail is always complete.
+-- still listed, so the Tome's class rail is always complete.
 function GuideStore:GetClasses()
     local list = {}
     for index, entry in ipairs(CLASSES) do

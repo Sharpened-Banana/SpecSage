@@ -14,8 +14,8 @@ Then:                    lua tests/run.lua
 
 Entry shape written into the guides:
     { slot = "Flask", items = { 241325, 241323 }, text = "..." }
-`items` are the item IDs the Codex draws as hoverable chips under the line
-(UI/Codex.lua RenderConsumables), in the order given; `text` is the prose.
+`items` are the item IDs the Tome draws as hoverable chips under the line
+(UI/Tome.lua RenderConsumables), in the order given; `text` is the prose.
 """
 
 import re
@@ -341,7 +341,7 @@ def main():
     for path in sorted(DATA.glob("Guides_*.lua")):
         total += process(path)
     print(f"rewrote consumables for {total} specs")
-    # The Codex's Data/Consumables.lua item table, so chip fallbacks and the
+    # The Tome's Data/Consumables.lua item table, so chip fallbacks and the
     # prose scanner know every name the guides now use.
     lines = [f'    ["{n}"] = {i},' for n, i in sorted(ITEMS.items(), key=lambda kv: kv[0].lower())]
     table = "ns.ConsumableItems = {\n" + "\n".join(lines) + "\n}"

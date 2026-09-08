@@ -11,7 +11,7 @@ labels: enhancement
 **Why / what problem it solves**
 
 
-**Where it should live** (Codex tab, overlay, tooltip, slash command, ...)
+**Where it should live** (Tome tab, overlay, tooltip, slash command, ...)
 
 
 **Anything else** (screenshots of another addon doing it, links, a spec it matters most for)

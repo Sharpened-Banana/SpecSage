@@ -1,31 +1,31 @@
 -- UI/CharacterPanel.lua
 -- The gearing panel docked to Blizzard's character sheet.
 --
--- The Codex already holds all of this, but it is a separate window you have
+-- The Tome already holds all of this, but it is a separate window you have
 -- to go and open. The one screen where stat priority and BiS actually get
 -- used is the character sheet, while you are looking at the piece you just
 -- picked up - so this puts the same data there, anchored to CharacterFrame's
 -- right edge and following it open and closed.
 --
--- It shows everything the Codex window does, one section at a time down a
+-- It shows everything the Tome window does, one section at a time down a
 -- single column. The sections are picked from a column of icon tabs hanging
 -- off the panel's right edge, the way Blizzard's own character sheet hangs
--- its titles and equipment-set tabs off its side: the Codex's horizontal
+-- its titles and equipment-set tabs off its side: the Tome's horizontal
 -- strip needs roughly twice this panel's width, but ten 32px icons stacked
 -- down the side fit comfortably inside the sheet's height and cost the
 -- content no room at all.
 --
--- Sections are the Codex's own tabs plus one of this panel's own:
+-- Sections are the Tome's own tabs plus one of this panel's own:
 --   * Gear  - the spec's stat priority with the player's live rating beside
 --     each stat, Wowhead's per-hero-tree orders, and the guide's item(s) for
 --     whichever paper doll slot the mouse last touched. The one view that
 --     only makes sense here, because only here is there a paper doll to
 --     hover. Rendered by this file.
 --   * Overview / Stats / Rotation / Cooldowns / Consumables / BiS /
---     Loadouts / Notes / Options - rendered by UI/Codex.lua's own methods,
---     not copies of them. Codex:NewSurface hands back a table carrying the
+--     Loadouts / Notes / Options - rendered by UI/Tome.lua's own methods,
+--     not copies of them. Tome:NewSurface hands back a table carrying the
 --     per-window frames, row pools and view state those methods reach
---     through `self`, with `__index` pointing at the Codex, so the same code
+--     through `self`, with `__index` pointing at the Tome, so the same code
 --     draws into this panel's scroll area. Duplicating nine render paths so
 --     two windows could show the same guide was never going to stay correct.
 
@@ -34,7 +34,7 @@ local ADDON, ns = ...
 local CharacterPanel = ns:NewModule("CharacterPanel")
 
 --------------------------------------------------------------------------------
--- Layout and palette, matching UI/Codex.lua's "Blizzard Modern" pass
+-- Layout and palette, matching UI/Tome.lua's "Blizzard Modern" pass
 --------------------------------------------------------------------------------
 
 -- The panel matches the character sheet's own dimensions rather than sizing
@@ -91,7 +91,7 @@ local TAB_LABEL_COLOR = { 0.941, 0.894, 0.784 }        -- #F0E4C8 paper on leath
 -- which is a visible freeze. One redraw per interval covers a burst.
 local RENDER_THROTTLE = 0.25
 
--- The Codex's own tabs, plus this panel's Gear section in front of them.
+-- The Tome's own tabs, plus this panel's Gear section in front of them.
 -- Gear is first because it is the reason to have the panel docked at all:
 -- it is the only view that reacts to the paper doll next to it.
 local GEAR_SECTION = "Gear"
@@ -119,7 +119,7 @@ local ROW_HEIGHT = 16
 local ROW_STEP = 18
 local SECTION_GAP = 10
 
--- The Tome skin (2026-09-05), matching UI/Codex.lua: a single chart page
+-- The Tome skin (2026-09-05), matching UI/Tome.lua: a single chart page
 -- in a leather edge, ink text, wax red for emphasis. Side tabs are leather
 -- with the open one sealed in wax.
 local TEXTURE_PATH = "Interface\\AddOns\\SpecSage\\Textures\\"
@@ -136,7 +136,7 @@ local TEXT_PRIMARY_COLOR = { 0.169, 0.122, 0.078 }
 local TEXT_SECONDARY_COLOR = { 0.169, 0.122, 0.078 }
 local DEFAULT_ITEM_COLOR = { 0.35, 0.35, 0.35 }
 
--- Matches the Codex's BiS tab tags so the two surfaces read the same.
+-- Matches the Tome's BiS tab tags so the two surfaces read the same.
 local STATUS_COLORS = {
     equipped = { 0.25, 0.42, 0.23 },   -- ink green, readable on paper
     owned    = { 0.478, 0.184, 0.122 }, -- wax red
@@ -189,10 +189,10 @@ local function ColorCode(rgb)
         math.floor(rgb[2] * 255 + 0.5), math.floor(rgb[3] * 255 + 0.5))
 end
 
--- The class token the player is on. The Codex's renderers colour their
+-- The class token the player is on. The Tome's renderers colour their
 -- active-tab underline from it, and the panel's active side tab borrows the
 -- same colour; it is also what makes a surface self-contained rather than
--- reading the Codex's selection.
+-- reading the Tome's selection.
 local function PlayerClassToken()
     if not UnitClass then return nil end
     local ok, _, token = pcall(UnitClass, "player")
@@ -201,7 +201,7 @@ local function PlayerClassToken()
 end
 
 -- The spec the player is actually on. The panel is always about the player's
--- own character - unlike the Codex, there is nothing here to browse - so a
+-- own character - unlike the Tome, there is nothing here to browse - so a
 -- failed lookup means "draw nothing" rather than falling back to a default.
 local function PlayerSpecID()
     local getSpec = GetSpecialization
@@ -247,7 +247,7 @@ local function AcquireRow(pool, index, parent)
     row.rule:SetColorTexture(0.431, 0.353, 0.227, 0.9)
     row.rule:Hide()
 
-    -- Item rows behave like the Codex's: hover for the tooltip, click for the
+    -- Item rows behave like the Tome's: hover for the tooltip, click for the
     -- clickable ItemRefTooltip, shift-click to link into chat.
     row:SetScript("OnEnter", function(self)
         if not self.itemID then return end
@@ -351,7 +351,7 @@ function CharacterPanel:BuildFrame()
 
     -- Fixed height means the content can outrun the panel on almost any
     -- section, so it scrolls rather than being cut off. Named for the same
-    -- reason the Codex's is (see UI/Codex.lua).
+    -- reason the Tome's is (see UI/Tome.lua).
     local scrollFrame = CreateFrame("ScrollFrame", "SpecSageCharacterPanelScroll", frame,
         "UIPanelScrollFrameTemplate")
     scrollFrame:SetPoint("TOPLEFT", frame, "TOPLEFT", PADDING, -(PADDING + TITLE_HEIGHT + 8))
@@ -366,8 +366,8 @@ function CharacterPanel:BuildFrame()
 
     -- Cycles which BiS context the Gear section's item rows come from
     -- (Overall / Mythic+ / Raid / Wowhead). Its own setting rather than the
-    -- Codex's, so opening the character sheet never quietly changes what the
-    -- Codex is showing.
+    -- Tome's, so opening the character sheet never quietly changes what the
+    -- Tome is showing.
     local listToggle = CreateFrame("Button", nil, frame, "UIPanelButtonTemplate")
     listToggle:SetSize(110, 18)
     listToggle:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -(PADDING + GRIP_SIZE), PADDING - 2)
@@ -384,10 +384,10 @@ function CharacterPanel:BuildFrame()
 
     self.rows = {}
 
-    -- The Codex's own render methods, pointed at this panel's scroll area.
+    -- The Tome's own render methods, pointed at this panel's scroll area.
     -- Built here rather than lazily so nothing can render before it exists.
-    local Codex = ns:GetModule("Codex")
-    self.surface = Codex and Codex:NewSurface(frame, scrollFrame, scrollChild, self:ContentWidth())
+    local Tome = ns:GetModule("Tome")
+    self.surface = Tome and Tome:NewSurface(frame, scrollFrame, scrollChild, self:ContentWidth())
 
     return frame
 end
@@ -603,7 +603,7 @@ function CharacterPanel:BuildSideTabs(frame)
         tab.icon = icon
 
         -- Active marker: a 2px bar down the tab's outer edge, coloured like
-        -- the Codex's active-tab underline.
+        -- the Tome's active-tab underline.
         local marker = tab:CreateTexture(nil, "OVERLAY")
         marker:SetPoint("TOPRIGHT", tab, "TOPRIGHT", -1, -1)
         marker:SetPoint("BOTTOMRIGHT", tab, "BOTTOMRIGHT", -1, 1)
@@ -664,7 +664,7 @@ function CharacterPanel:ApplyTabLabels()
     end
 end
 
--- Options changed (the Codex's Options tab or the Settings panel): the
+-- Options changed (the Tome's Options tab or the Settings panel): the
 -- tab labels and the panel's enabled state both take effect at once.
 function CharacterPanel:OnConfigChanged()
     self:ApplyTabLabels()
@@ -788,7 +788,7 @@ function CharacterPanel:RowsForSlot(specID, slot)
     return out, active.title
 end
 
--- The Gear section: this panel's own view, and the only one the Codex has
+-- The Gear section: this panel's own view, and the only one the Tome has
 -- no equivalent of, because only here is there a paper doll to hover.
 function CharacterPanel:RenderGear()
     local frame = self.frame
@@ -931,11 +931,11 @@ function CharacterPanel:SelectSection(section)
 end
 
 -- Draws the active section. Gear is this file's own; everything else is the
--- Codex's own render method running against this panel's surface.
+-- Tome's own render method running against this panel's surface.
 --
 -- Whichever half draws, the other's rows have to go: the two share one
 -- scroll child, so leftovers from the last section would sit under the new
--- one. HideOtherTabWidgets("Gear") does that for the Codex side - "Gear" is
+-- one. HideOtherTabWidgets("Gear") does that for the Tome side - "Gear" is
 -- not one of its tabs, so every pool and every tab-owned widget it knows
 -- about is hidden.
 function CharacterPanel:Render()
@@ -999,7 +999,7 @@ function CharacterPanel:SyncSize()
         if ok and type(sheetWidth) == "number" and sheetWidth > 0 then width = sheetWidth end
     end
     if width then self.frame:SetWidth(width) end
-    -- The Codex's renderers lay rows out against self.contentWidth, so the
+    -- The Tome's renderers lay rows out against self.contentWidth, so the
     -- surface has to be told too or a resized panel would keep drawing at
     -- the old width.
     local contentWidth = self:ContentWidth()

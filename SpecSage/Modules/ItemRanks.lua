@@ -1,8 +1,8 @@
 -- Modules/ItemRanks.lua
 -- Stat ranks on item tooltips: every item tooltip in the game gets a line
 -- ranking the item's secondary stats (#1, #2, ...) against the player's
--- current spec's Codex stat priority, so "is Haste/Versatility good for me?"
--- is answered on the item itself rather than by alt-tabbing to the Codex.
+-- current spec's Tome stat priority, so "is Haste/Versatility good for me?"
+-- is answered on the item itself rather than by alt-tabbing to the Tome.
 -- See DESIGN.md's "Item stat ranks (v1.5)" section.
 --
 -- Frame-free (Core/Init.lua's module conventions): the only thing this
@@ -63,7 +63,7 @@ local GetItemLevelAPI = (C_Item and C_Item.GetDetailedItemLevelInfo) or GetDetai
 -- large is a whole expansion's worth of gear, never a difficulty step.
 ItemRanks.TIER_ILVL_SLACK = 60
 
--- Trinket tier colours, matching the Codex's tier tags (UI/Codex.lua).
+-- Trinket tier colours, matching the Tome's tier tags (UI/Tome.lua).
 local TIER_COLORS = {
     S = { 1.00, 0.55, 0.10 },
     A = { 0.64, 0.21, 0.93 },
@@ -259,7 +259,7 @@ end
 -- an ordered array of { title, tier, gain, ilvl, bonus } with one entry per
 -- list that ranks it (`ilvl` the item level the row was simmed at and
 -- `bonus` the current copy's bonus-ID list, each when the list records one),
--- or nil when no list does. Public so the Codex or a test can
+-- or nil when no list does. Public so the Tome or a test can
 -- ask without a tooltip.
 function ItemRanks:DescribeTrinket(itemID, specID)
     local data = itemID and specID and ns.GuideStore and ns.GuideStore:GetTrinkets(specID)
@@ -337,18 +337,18 @@ function ItemRanks:Annotate(tooltip, link)
         local actualLevel = ItemLevelOf(link)
         local projectedLevel = ns.ProjectedItemLevel(link)
         if self:IsFarBelowSimLevel(actualLevel, simLevel) then
-            -- The Codex row hovers the ranked copy when the data carries its
+            -- The Tome row hovers the ranked copy when the data carries its
             -- bonus list (a real item string) or, failing that, when the
             -- option is on and the level projection is available.
             local hasBonus = false
             for _, entry in ipairs(tiers) do if entry.bonus then hasBonus = true end end
             local pointer = (hasBonus or (ns.db.trinketSimLevelTooltips and ns.ItemStringAtLevel(itemID, simLevel)))
-                and " (hover it on the Codex's BiS tab for that copy)" or ""
+                and " (hover it on the Tome's BiS tab for that copy)" or ""
             tierParts = { format("%sranked at item level %d; this item level %d copy is far below it%s|r",
                 ColorCode(TIER_COLORS.D), simLevel, actualLevel, pointer) }
         else
             tierParts = {}
-            -- A Codex row hovered at its simmed level (ns.ItemStringAtLevel)
+            -- A Tome row hovered at its simmed level (ns.ItemStringAtLevel)
             -- says so first: the numbers above are a projection of the
             -- base item to that level, not an item that dropped.
             if projectedLevel then

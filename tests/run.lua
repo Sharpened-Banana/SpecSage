@@ -56,7 +56,7 @@ local FILES = {
     "Data\\Consumables.lua",
     "UI\\Overlay.lua",
     "UI\\Tooltips.lua",
-    "UI\\Codex.lua",
+    "UI\\Tome.lua",
     "UI\\CharacterPanel.lua",
     "Modules\\Stats.lua",
     "Modules\\Combat.lua",
@@ -89,11 +89,11 @@ _G.print = realPrint
 -- could pass the whole suite unnoticed.
 check(#addonOutput == 0, "no addon warnings printed while loading", addonOutput[1])
 
--- The slash-command tests further down replace ns.Codex with bare stand-in
--- tables (and finally nil) to exercise Commands.lua's "Codex not loaded"
--- fallback. Keep a handle on the real UI/Codex.lua module here so the Codex
+-- The slash-command tests further down replace ns.Tome with bare stand-in
+-- tables (and finally nil) to exercise Commands.lua's "Tome not loaded"
+-- fallback. Keep a handle on the real UI/Tome.lua module here so the Tome
 -- section near the end of this file can restore it.
-local RealCodex = ns.Codex
+local RealTome = ns.Tome
 
 -- Record every section the modules render, without touching production code.
 local rendered = {}
@@ -176,7 +176,7 @@ ns.chardb.statsShow.stamina = false
 ns.RefreshAll()
 
 --------------------------------------------------------------------------------
-section("Stats:GetStatValue (public accessor for the Codex)")
+section("Stats:GetStatValue (public accessor for the Tome)")
 --------------------------------------------------------------------------------
 
 local StatsModule = ns:GetModule("Stats")
@@ -1349,23 +1349,23 @@ local function run(input)
     return success, err
 end
 
--- The bare command now toggles the Codex, not the overlay; the overlay moved
+-- The bare command now toggles the Tome, not the overlay; the overlay moved
 -- to its own "overlay" subcommand.
-local codexToggled = 0
-ns.Codex = {
-    Toggle = function() codexToggled = codexToggled + 1 end,
+local tomeToggled = 0
+ns.Tome = {
+    Toggle = function() tomeToggled = tomeToggled + 1 end,
 }
 
 do
     local success, err = run("")
     check(success, "/sage (bare) does not error", err)
-    check(codexToggled == 1, "/sage (bare) toggles the Codex when it is loaded")
+    check(tomeToggled == 1, "/sage (bare) toggles the Tome when it is loaded")
 end
 
-ns.Codex = nil
+ns.Tome = nil
 do
     local success, err = run("")
-    check(success, "/sage (bare) with no Codex loaded does not error", err)
+    check(success, "/sage (bare) with no Tome loaded does not error", err)
 end
 
 do
@@ -1381,11 +1381,11 @@ do
     run("overlay") -- put it back
 end
 
--- /sage guide <class> [spec] fuzzy-matches and hands off to the Codex.
+-- /sage guide <class> [spec] fuzzy-matches and hands off to the Tome.
 do
     local opened = {}
-    ns.Codex = {
-        Toggle = function() codexToggled = codexToggled + 1 end,
+    ns.Tome = {
+        Toggle = function() tomeToggled = tomeToggled + 1 end,
         Open = function(_, classToken, specID) opened[#opened + 1] = { classToken, specID } end,
     }
 
@@ -1411,19 +1411,19 @@ do
     -- rather than guessing.
     success, err = run("guide war")
     check(success, "/sage guide war (ambiguous prefix) does not error", err)
-    check(#opened == 3, "/sage guide war does not call Codex:Open when the class is ambiguous")
+    check(#opened == 3, "/sage guide war does not call Tome:Open when the class is ambiguous")
 
     success, err = run("guide nosuchclass")
     check(success, "/sage guide <unknown class> does not error", err)
-    check(#opened == 3, "/sage guide <unknown class> does not call Codex:Open")
+    check(#opened == 3, "/sage guide <unknown class> does not call Tome:Open")
 
     success, err = run("guide")
     check(success, "/sage guide with no argument does not error", err)
-    check(#opened == 3, "/sage guide with no argument does not call Codex:Open")
+    check(#opened == 3, "/sage guide with no argument does not call Tome:Open")
 
-    ns.Codex = nil
+    ns.Tome = nil
     success, err = run("guide warrior")
-    check(success, "/sage guide warrior with no Codex loaded does not error", err)
+    check(success, "/sage guide warrior with no Tome loaded does not error", err)
 end
 
 local commands = {
@@ -1837,7 +1837,7 @@ mock.bags = {}
 section("BiS module: GetStatus with a precomputed bag set (Medium #6, perf cache)")
 --------------------------------------------------------------------------------
 
--- Codex:RenderBiS now builds one bagSet per render (BiS:ScanBags()) and
+-- Tome:RenderBiS now builds one bagSet per render (BiS:ScanBags()) and
 -- passes it into GetStatus instead of letting GetStatus rescan bags itself
 -- on every row. GetStatus's own contract when a bagSet is supplied:
 do
@@ -1906,30 +1906,30 @@ check(NotesModule:Set("not-a-number", "text") == false, "Set rejects a non-numbe
 check(NotesModule:Get("not-a-number") == "", "Get returns empty for a non-number specID rather than erroring")
 
 --------------------------------------------------------------------------------
-section("Codex (UI/Codex.lua)")
+section("Tome (UI/Tome.lua)")
 --------------------------------------------------------------------------------
 
 -- Restore the real module the slash-command tests replaced with stand-ins.
-ns.Codex = RealCodex
-local Codex = ns.Codex
+ns.Tome = RealTome
+local Tome = ns.Tome
 
-check(Codex ~= nil, "Codex module registered at load time")
-check(type(Codex.Toggle) == "function" and type(Codex.Open) == "function" and type(Codex.IsShown) == "function",
-    "Codex exposes Toggle/Open/IsShown")
-check(Codex:IsShown() == false, "Codex starts hidden with no frame built yet")
+check(Tome ~= nil, "Tome module registered at load time")
+check(type(Tome.Toggle) == "function" and type(Tome.Open) == "function" and type(Tome.IsShown) == "function",
+    "Tome exposes Toggle/Open/IsShown")
+check(Tome:IsShown() == false, "Tome starts hidden with no frame built yet")
 
-Codex:Toggle()
-check(Codex.frame ~= nil, "Toggle builds the frame lazily on first use, not at load")
-check(Codex:IsShown() == true, "Toggle shows the frame")
-check(Codex.selectedClass ~= nil, "first-ever open defaults to a class", Codex.selectedClass)
-check(Codex.selectedClass == "DEATHKNIGHT", "first-ever open defaults to the player's own class (per UnitClass in the mock)",
-    Codex.selectedClass)
-check(Codex.selectedSpecID == 252, "first-ever open defaults to the player's own current spec", Codex.selectedSpecID)
+Tome:Toggle()
+check(Tome.frame ~= nil, "Toggle builds the frame lazily on first use, not at load")
+check(Tome:IsShown() == true, "Toggle shows the frame")
+check(Tome.selectedClass ~= nil, "first-ever open defaults to a class", Tome.selectedClass)
+check(Tome.selectedClass == "DEATHKNIGHT", "first-ever open defaults to the player's own class (per UnitClass in the mock)",
+    Tome.selectedClass)
+check(Tome.selectedSpecID == 252, "first-ever open defaults to the player's own current spec", Tome.selectedSpecID)
 
 -- The very first Toggle() must render visible content with no explicit
--- SelectTab call: Codex.activeTab used to start out nil (only ever set
+-- SelectTab call: Tome.activeTab used to start out nil (only ever set
 -- inside SelectTab), so RenderActiveTab's "if tab == ..." chain matched
--- nothing and the Codex opened completely blank until the player happened
+-- nothing and the Tome opened completely blank until the player happened
 -- to click a tab.
 do
     local function CountShown(pool)
@@ -1939,50 +1939,50 @@ do
         end
         return n
     end
-    check(Codex.activeTab == "Overview", "the Codex defaults to the Overview tab", Codex.activeTab)
-    check(CountShown(Codex.pools.overview) > 0,
+    check(Tome.activeTab == "Overview", "the Tome defaults to the Overview tab", Tome.activeTab)
+    check(CountShown(Tome.pools.overview) > 0,
         "the first Toggle() renders visible Overview content rows without an explicit SelectTab")
 end
 
-Codex:Toggle()
-check(Codex:IsShown() == false, "a second Toggle hides the frame")
-Codex:Toggle()
-check(Codex:IsShown() == true, "a third Toggle shows it again, keeping the prior selection")
+Tome:Toggle()
+check(Tome:IsShown() == false, "a second Toggle hides the frame")
+Tome:Toggle()
+check(Tome:IsShown() == true, "a third Toggle shows it again, keeping the prior selection")
 
 -- Open() selects an explicit class/spec regardless of what was open before.
-Codex:Open("WARRIOR", 72)
-check(Codex.selectedClass == "WARRIOR", "Open selects the requested class")
-check(Codex.selectedSpecID == 72, "Open selects the requested spec")
-check(Codex:IsShown() == true, "Open leaves the frame shown")
+Tome:Open("WARRIOR", 72)
+check(Tome.selectedClass == "WARRIOR", "Open selects the requested class")
+check(Tome.selectedSpecID == 72, "Open selects the requested spec")
+check(Tome:IsShown() == true, "Open leaves the frame shown")
 
 local TAB_NAMES = { "Overview", "Stats", "Rotation", "Cooldowns", "Consumables", "BiS", "Loadouts", "Notes" }
 
 -- Tab switching must render every tab without error for a spec with real
 -- guide data (Warrior Fury, spec 72 - see Data/Guides_Warrior.lua).
 for _, tabName in ipairs(TAB_NAMES) do
-    local ok, err = pcall(function() Codex:SelectTab(tabName) end)
+    local ok, err = pcall(function() Tome:SelectTab(tabName) end)
     check(ok, "tab " .. tabName .. " renders without error for a spec WITH guide data (Warrior/72)", err)
 end
-check(Codex.activeTab == "Notes", "SelectTab updates the active tab", Codex.activeTab)
+check(Tome.activeTab == "Notes", "SelectTab updates the active tab", Tome.activeTab)
 
 -- ...and for a spec with no guide registered at all.
 check(ns.GuideStore:GetGuide(424242) == nil, "sanity check: specID 424242 has no guide registered")
-Codex:Open("WARRIOR", 424242)
+Tome:Open("WARRIOR", 424242)
 for _, tabName in ipairs(TAB_NAMES) do
-    local ok, err = pcall(function() Codex:SelectTab(tabName) end)
+    local ok, err = pcall(function() Tome:SelectTab(tabName) end)
     check(ok, "tab " .. tabName .. " renders without error for a spec WITHOUT guide data", err)
 end
 
 -- Stats tab must not error whether or not the viewed spec is the player's
 -- own (252); the live-value lookup only applies to the player's own spec.
-Codex:Open("DEATHKNIGHT", 252)
-check(pcall(function() Codex:SelectTab("Stats") end), "Stats tab renders for the player's own spec")
-Codex:Open("WARRIOR", 71) -- Arms: a real, different spec
-check(pcall(function() Codex:SelectTab("Stats") end), "Stats tab renders for a spec that is not the player's own")
+Tome:Open("DEATHKNIGHT", 252)
+check(pcall(function() Tome:SelectTab("Stats") end), "Stats tab renders for the player's own spec")
+Tome:Open("WARRIOR", 71) -- Arms: a real, different spec
+check(pcall(function() Tome:SelectTab("Stats") end), "Stats tab renders for a spec that is not the player's own")
 
 -- The class rail lists all 13 classes, matching GuideStore:GetClasses().
 for _, entry in ipairs(ns.GuideStore:GetClasses()) do
-    check(Codex.classButtons[entry.token] ~= nil, "class rail has a button for " .. entry.token)
+    check(Tome.classButtons[entry.token] ~= nil, "class rail has a button for " .. entry.token)
 end
 
 -- Under the stricter mock, Button:SetText only works when the button was
@@ -1991,7 +1991,7 @@ end
 -- would raise an assertion the moment it tried to set its label, failing
 -- this run outright rather than passing while rendering nothing in game.
 for _, tabName in ipairs(TAB_NAMES) do
-    check(Codex.tabButtons[tabName]:GetText() == tabName,
+    check(Tome.tabButtons[tabName]:GetText() == tabName,
         "tab strip button '" .. tabName .. "' has a text-capable template and shows its label")
 end
 
@@ -2004,7 +2004,7 @@ section("BiS item bonus IDs (v1.6)")
 -- was Protection Paladin's Mythic+ neck, item 273781, which the BiS tab
 -- showed as a level-48 rare with +8 Stamina rather than the item level 334
 -- epic on Icy Veins' page. The bonus-ID list is what separates them, so it
--- ships alongside the item ID and the Codex builds a full item string.
+-- ships alongside the item ID and the Tome builds a full item string.
 do
     local rows, withBonus, badBonus = 0, 0, {}
     for _, classEntry in ipairs(ns.GuideStore:GetClasses()) do
@@ -2053,7 +2053,7 @@ do
 end
 
 --------------------------------------------------------------------------------
-section("Codex: BiS rows resolve the upgraded item, not its base form (v1.6)")
+section("Tome: BiS rows resolve the upgraded item, not its base form (v1.6)")
 --------------------------------------------------------------------------------
 
 do
@@ -2070,17 +2070,17 @@ do
             { slot = "Ring", itemID = 880101, name = "Shipped Name", from = "Somewhere" },
         },
     } } })
-    Codex.bisListIndex = 1
-    Codex:Open("MAGE", 9604)
-    Codex:SelectTab("BiS")
+    Tome.bisListIndex = 1
+    Tome:Open("MAGE", 9604)
+    Tome:SelectTab("BiS")
 
-    local linked = Codex.bisLinkRowPool[1]
+    local linked = Tome.bisLinkRowPool[1]
     check(linked ~= nil and linked.text:GetText():find("Upgraded Neck", 1, true) ~= nil,
         "a row with a bonus list shows the upgraded item's name", linked and linked.text:GetText())
     check(linked ~= nil and linked.itemLink == "item:880101:0:0:0:0:0:0:0:0:0:0:0:2:4786:12854",
         "the row carries the full item string, bonus count and all", linked and linked.itemLink)
 
-    local bare = Codex.bisLinkRowPool[2]
+    local bare = Tome.bisLinkRowPool[2]
     check(bare ~= nil and bare.text:GetText():find("Base Form Neck", 1, true) ~= nil,
         "a row with no bonus list still resolves the bare item", bare and bare.text:GetText())
     check(bare ~= nil and bare.itemLink == nil, "and carries no item string of its own", bare and bare.itemLink)
@@ -2209,7 +2209,7 @@ do
 end
 
 --------------------------------------------------------------------------------
-section("Codex: Stats tab renders the per-hero-tree lists (v1.6)")
+section("Tome: Stats tab renders the per-hero-tree lists (v1.6)")
 --------------------------------------------------------------------------------
 
 do
@@ -2221,12 +2221,12 @@ do
         return table.concat(out, "\n")
     end
 
-    Codex:Open("MAGE", 62)
-    Codex:SelectTab("Stats")
-    local dump = ShownText(Codex.statLinePool)
+    Tome:Open("MAGE", 62)
+    Tome:SelectTab("Stats")
+    local dump = ShownText(Tome.statLinePool)
     check(dump:find("By Hero Talent Tree", 1, true) ~= nil, "the Stats tab has a hero-tree section", dump)
     check(dump:find("Spellslinger\nPrimary Stat > Haste > Mastery > Crit > Versatility", 1, true) ~= nil,
-        "Spellslinger's order is spelled out under its name in the Codex's own stat words", dump)
+        "Spellslinger's order is spelled out under its name in the Tome's own stat words", dump)
     check(dump:find("Sunfury\nPrimary Stat > Haste > Versatility > Crit > Mastery", 1, true) ~= nil,
         "Sunfury's order is listed separately", dump)
     check(dump:find("Stat priority guide, updated", 1, true) ~= nil and dump:find("Wowhead", 1, true) == nil,
@@ -2234,28 +2234,28 @@ do
 
     -- A list's note (Wowhead's own caveat - a haste cap, a tie between two
     -- stats) renders under it rather than being dropped.
-    Codex:Open("DEMONHUNTER", 1480)
-    Codex:SelectTab("Stats")
-    dump = ShownText(Codex.statLinePool)
+    Tome:Open("DEMONHUNTER", 1480)
+    Tome:SelectTab("Stats")
+    dump = ShownText(Tome.statLinePool)
     check(dump:find("Void-Scarred\nPrimary Stat", 1, true) ~= nil, "Devourer lists its Void-Scarred order", dump)
     check(dump:find("800 rating", 1, true) ~= nil, "Wowhead's haste-cap caveat rides along as a note", dump)
 
     -- Leaving the tab hides the rows, the same contract every other tab's
     -- own row pool has (HideOtherTabWidgets).
-    Codex:SelectTab("Rotation")
+    Tome:SelectTab("Rotation")
     local shown = 0
-    for _, row in ipairs(Codex.statLinePool) do
+    for _, row in ipairs(Tome.statLinePool) do
         if row:IsShown() then shown = shown + 1 end
     end
     check(shown == 0, "leaving the Stats tab hides the hero-tree rows", shown)
 
     -- A spec with no stat priority registered still renders the tab.
-    Codex:Open("WARRIOR", 424242)
-    check(pcall(function() Codex:SelectTab("Stats") end), "the Stats tab renders for a spec with no stat data")
+    Tome:Open("WARRIOR", 424242)
+    check(pcall(function() Tome:SelectTab("Stats") end), "the Stats tab renders for a spec with no stat data")
 end
 
 --------------------------------------------------------------------------------
-section("Codex: BiS tab")
+section("Tome: BiS tab")
 --------------------------------------------------------------------------------
 
 -- CONTENT_WIDTH's documented invariant: the scroll area is the right page
@@ -2265,9 +2265,9 @@ section("Codex: BiS tab")
 -- than a second magic number, so widening the frame for another tab cannot
 -- leave the content area behind.
 local rightPageLeft = 30 + 6 + 298 + 8
-check(Codex.scrollChild:GetWidth() == Codex.frame:GetWidth() - rightPageLeft - 12 - 12 - 30,
+check(Tome.scrollChild:GetWidth() == Tome.frame:GetWidth() - rightPageLeft - 12 - 12 - 30,
     "CONTENT_WIDTH is the right page's inner width minus the scrollbar",
-    format("frame=%d content=%d", Codex.frame:GetWidth(), Codex.scrollChild:GetWidth()))
+    format("frame=%d content=%d", Tome.frame:GetWidth(), Tome.scrollChild:GetWidth()))
 
 do
     -- The bug this guards: DESIGN.md's original +60 sizing left the tab
@@ -2277,21 +2277,21 @@ do
     -- adding a tab without widening the frame fails here instead of
     -- silently clipping in the client.
     local tabCount = 0
-    for _ in pairs(Codex.tabButtons) do tabCount = tabCount + 1 end
+    for _ in pairs(Tome.tabButtons) do tabCount = tabCount + 1 end
 
     -- Each tab is as wide as its own word (plus a 16px gap), so the need
     -- is the strip's actual laid-out width, not a count times a stride.
-    local needed = Codex.tabStripUsedWidth
+    local needed = Tome.tabStripUsedWidth
     check(needed > tabCount * 30, "tabs are sized to their words", needed)
     local stripLeft = rightPageLeft + 12
-    local stripRight = Codex.frame:GetWidth() - 12 - 12
+    local stripRight = Tome.frame:GetWidth() - 12 - 12
     local available = stripRight - stripLeft
     check(available >= needed,
         format("tab strip has enough width for all %d tabs without clipping", tabCount),
         format("available=%d needed=%d", available, needed))
 end
 
-local BiSCodexModule = ns:GetModule("BiS")
+local BiSTomeModule = ns:GetModule("BiS")
 
 local function CountShownRows(pool)
     local n = 0
@@ -2307,24 +2307,24 @@ end
 -- linked lists: the Trinket Tier List header + its "no data" reason line
 -- (9005 registers no trinkets). The personal checklist that used to follow
 -- was pulled on 2026-09-03 at the owner's request.
-Codex:Open("MAGE", 9005)
-Codex:SelectTab("BiS")
-check(Codex.activeTab == "BiS", "SelectTab switches to the BiS tab")
-check(CountShownRows(Codex.pools.bis) == 2,
+Tome:Open("MAGE", 9005)
+Tome:SelectTab("BiS")
+check(Tome.activeTab == "BiS", "SelectTab switches to the BiS tab")
+check(CountShownRows(Tome.pools.bis) == 2,
     "the BiS tab draws no gear prose and no checklist, only the trinket header and its reason",
-    CountShownRows(Codex.pools.bis))
-check(Codex.bisRowPool == nil and Codex.bisItemBox == nil and Codex.bisButtons == nil,
+    CountShownRows(Tome.pools.bis))
+check(Tome.bisRowPool == nil and Tome.bisItemBox == nil and Tome.bisButtons == nil,
     "no checklist rows, Add box or Add row are built")
-for _, row in ipairs(Codex.pools.bis) do
+for _, row in ipairs(Tome.pools.bis) do
     check(not (row:IsShown() and (row.text:GetText() or ""):find("^Head:")),
         "no per-slot prose row is drawn", row.text:GetText())
 end
 
-Codex:Open("MAGE", 9004)
-Codex:SelectTab("BiS")
+Tome:Open("MAGE", 9004)
+Tome:SelectTab("BiS")
 
 --------------------------------------------------------------------------------
-section("Codex: BiS header names the active list's site (2026-09-06)")
+section("Tome: BiS header names the active list's site (2026-09-06)")
 --------------------------------------------------------------------------------
 
 do
@@ -2333,63 +2333,63 @@ do
         { title = "Wowhead", list = { { slot = "Head", itemID = 19019, name = "B", from = "y" } } },
     } })
     ns.GuideStore:RegisterSpec("MAGE", 9607, { specName = "Header Spec", role = "DAMAGER" })
-    Codex.bisListIndex = 1
-    Codex:Open("MAGE", 9607)
-    Codex:SelectTab("BiS")
+    Tome.bisListIndex = 1
+    Tome:Open("MAGE", 9607)
+    Tome:SelectTab("BiS")
     local function header()
-        for _, row in ipairs(Codex.pools.bis) do
+        for _, row in ipairs(Tome.pools.bis) do
             if row:IsShown() and (row.text:GetText() or ""):find("Best in Slot", 1, true) then return row.text:GetText() end
         end
     end
     check(header() == "Best in Slot", "the BiS header names no site", header())
-    Codex:CycleBiSList()
-    check(Codex.bisListToggle:GetText() == "Wowhead" and header() == "Best in Slot",
+    Tome:CycleBiSList()
+    check(Tome.bisListToggle:GetText() == "Wowhead" and header() == "Best in Slot",
         "switching lists changes the toggle, not the header", header())
-    Codex:CycleBiSList()
+    Tome:CycleBiSList()
     check(header() == "Best in Slot", "and back")
 end
 
 --------------------------------------------------------------------------------
-section("Codex: leaving a tab clears its edit box focus")
+section("Tome: leaving a tab clears its edit box focus")
 --------------------------------------------------------------------------------
 
 -- HideOtherTabWidgets clears focus before hiding self.notesBox: a focused
 -- EditBox hidden without releasing keyboard focus is the classic "my
 -- keybinds stopped working" report.
-Codex:Open("WARRIOR", 72)
-Codex:SelectTab("Notes")Codex:SelectTab("Notes")
-Codex.notesBox:SetFocus()
-check(Codex.notesBox.focused == true, "sanity: the notes box can be focused while its tab is active")
-Codex:SelectTab("BiS")
-check(Codex.notesBox.focused == false, "switching away from Notes clears its focus too")
+Tome:Open("WARRIOR", 72)
+Tome:SelectTab("Notes")Tome:SelectTab("Notes")
+Tome.notesBox:SetFocus()
+check(Tome.notesBox.focused == true, "sanity: the notes box can be focused while its tab is active")
+Tome:SelectTab("BiS")
+check(Tome.notesBox.focused == false, "switching away from Notes clears its focus too")
 
 -- All 8 tabs (BiS included) still render for both a spec with data and a
 -- spec without, and the widened tab strip still builds without error.
-Codex:Open("WARRIOR", 424242)
+Tome:Open("WARRIOR", 424242)
 for _, tabName in ipairs(TAB_NAMES) do
-    local ok, err = pcall(function() Codex:SelectTab(tabName) end)
+    local ok, err = pcall(function() Tome:SelectTab(tabName) end)
     check(ok, "tab " .. tabName .. " still renders without error now that BiS has been added", err)
 end
 
 --------------------------------------------------------------------------------
-section("Codex: Loadouts tab")
+section("Tome: Loadouts tab")
 --------------------------------------------------------------------------------
 
-Codex:Open("WARRIOR", 72)
-Codex:SelectTab("Loadouts")
+Tome:Open("WARRIOR", 72)
+Tome:SelectTab("Loadouts")
 
 local beforeCount = #LoadoutsModule:GetForSpec(72)
 
-Codex:ShowAddDialog("TestImportString123")
-check(Codex.addDialog:IsShown(), "Save/Add opens the Add-from-string dialog")
-check(Codex.addImportBox:GetText() == "TestImportString123",
+Tome:ShowAddDialog("TestImportString123")
+check(Tome.addDialog:IsShown(), "Save/Add opens the Add-from-string dialog")
+check(Tome.addImportBox:GetText() == "TestImportString123",
     "the dialog prefills the import string when one is given (as Save current would)")
 
-Codex.addNameBox:SetText("My Mythic+ Build")
-Codex.addCategoryButton:GetScript("OnClick")() -- cycle the category away from its "Other" default
-Codex:OnAddDialogSave()
+Tome.addNameBox:SetText("My Mythic+ Build")
+Tome.addCategoryButton:GetScript("OnClick")() -- cycle the category away from its "Other" default
+Tome:OnAddDialogSave()
 
-check(not Codex.addDialog:IsShown(), "saving closes the Add dialog")
+check(not Tome.addDialog:IsShown(), "saving closes the Add dialog")
 local afterAdd = LoadoutsModule:GetForSpec(72)
 check(#afterAdd == beforeCount + 1, "saving from the Add dialog stores exactly one new loadout", #afterAdd)
 check(afterAdd[#afterAdd].name == "My Mythic+ Build", "the saved loadout keeps the entered name")
@@ -2397,11 +2397,11 @@ check(afterAdd[#afterAdd].export == "TestImportString123", "the saved loadout ke
 check(afterAdd[#afterAdd].category ~= "Other", "cycling the category button changed it away from the default",
     afterAdd[#afterAdd].category)
 
-local savedRow = Codex.loadoutRowPool[#afterAdd]
+local savedRow = Tome.loadoutRowPool[#afterAdd]
 check(savedRow ~= nil, "the newly saved loadout has a row in the Loadouts tab")
 
-check(Codex.loadoutButtons.save:GetText() == "Save current", "the Save current button has a text-capable template")
-check(Codex.loadoutButtons.add:GetText() == "Add from string", "the Add from string button has a text-capable template")
+check(Tome.loadoutButtons.save:GetText() == "Save current", "the Save current button has a text-capable template")
+check(Tome.loadoutButtons.add:GetText() == "Add from string", "the Add from string button has a text-capable template")
 check(savedRow.copyButton:GetText() == "Copy", "the loadout row's Copy button has a text-capable template")
 check(savedRow.deleteButton:GetText() == "Delete", "the loadout row's Delete button has a text-capable template")
 
@@ -2412,10 +2412,10 @@ check(savedRow.deleteButton:GetText() == "Delete", "the loadout row's Delete but
 -- of silently copying nothing).
 local copyOk = pcall(function() savedRow.copyButton:GetScript("OnClick")() end)
 check(copyOk, "Copy does not error under the mock's visibility-checked SetFocus (dialog is shown before focusing)")
-check(Codex.copyDialog:IsShown(), "Copy opens a dialog")
-check(Codex.copyBox:GetText() == "TestImportString123", "the Copy dialog is populated with the loadout's export string")
-check(Codex.copyBox.focused == true, "the copy box is focused once the dialog is shown")
-check(Codex.copyBox.highlighted == true, "the copy box's text is highlighted (selected) once focused, ready for Ctrl+C")
+check(Tome.copyDialog:IsShown(), "Copy opens a dialog")
+check(Tome.copyBox:GetText() == "TestImportString123", "the Copy dialog is populated with the loadout's export string")
+check(Tome.copyBox.focused == true, "the copy box is focused once the dialog is shown")
+check(Tome.copyBox.highlighted == true, "the copy box's text is highlighted (selected) once focused, ready for Ctrl+C")
 
 -- Delete is a two-click confirm: the first click arms it, the second removes it.
 local deleteButton = savedRow.deleteButton
@@ -2429,16 +2429,16 @@ deleteButton:GetScript("OnClick")(deleteButton)
 check(#LoadoutsModule:GetForSpec(72) == countBeforeDelete - 1, "the second Delete click removes the loadout")
 
 -- "Save current" is only offered for the player's own spec.
-Codex:Open("DEATHKNIGHT", 252) -- the player's own spec, per the mock
-Codex:SelectTab("Loadouts")
-check(Codex.loadoutButtons.save:IsShown(), "Save current is shown while viewing the player's own spec")
+Tome:Open("DEATHKNIGHT", 252) -- the player's own spec, per the mock
+Tome:SelectTab("Loadouts")
+check(Tome.loadoutButtons.save:IsShown(), "Save current is shown while viewing the player's own spec")
 
-Codex:Open("WARRIOR", 71) -- not the player's own spec
-Codex:SelectTab("Loadouts")
-check(not Codex.loadoutButtons.save:IsShown(), "Save current is hidden while viewing another spec")
+Tome:Open("WARRIOR", 71) -- not the player's own spec
+Tome:SelectTab("Loadouts")
+check(not Tome.loadoutButtons.save:IsShown(), "Save current is hidden while viewing another spec")
 
 --------------------------------------------------------------------------------
-section("Codex: Suggested Mythic+, Raid, and live-meta loadout rows (v1.2 / v1.3 / v1.4)")
+section("Tome: Suggested Mythic+, Raid, and live-meta loadout rows (v1.2 / v1.3 / v1.4)")
 --------------------------------------------------------------------------------
 
 -- Inline fixture guides on scratch specIDs (the >=9000 convention used
@@ -2484,11 +2484,11 @@ GuideStore:RegisterSpec("WARRIOR", 9202, { specName = "No Loadout Warrior", role
 -- what an earlier version of this rendering did (it would have mislabeled
 -- the Blizzard-API-sourced row as SimC's) - and none of the three rows'
 -- content bleeds into another's.
-Codex:Open("WARRIOR", 9201)
-Codex:SelectTab("Loadouts")
-local mplusRow = Codex.suggestedLoadoutRows.mplus
-local raidRow = Codex.suggestedLoadoutRows.raid
-local metaRow = Codex.suggestedLoadoutRows.mplusMeta
+Tome:Open("WARRIOR", 9201)
+Tome:SelectTab("Loadouts")
+local mplusRow = Tome.suggestedLoadoutRows.mplus
+local raidRow = Tome.suggestedLoadoutRows.raid
+local metaRow = Tome.suggestedLoadoutRows.mplusMeta
 
 check(mplusRow:IsShown(), "the Mythic+ row is shown for a spec whose guide ships mplusLoadout")
 check(mplusRow.name:GetText() == "Suggested Mythic+ (via SimulationCraft, patch 12.1)",
@@ -2525,22 +2525,22 @@ check(type(metaTop) == "number" and raidTop > metaTop,
 
 -- Only one kind present: that row shows, the others stay hidden, and no gap
 -- is left where a missing one would have gone.
-Codex:Open("WARRIOR", 9203)
-Codex:SelectTab("Loadouts")
-check(Codex.suggestedLoadoutRows.mplus:IsShown(), "the Mythic+ row shows on a spec with only mplusLoadout")
-check(not Codex.suggestedLoadoutRows.raid:IsShown(), "the Raid row stays hidden on a spec with no raidLoadout")
-check(not Codex.suggestedLoadoutRows.mplusMeta:IsShown(),
+Tome:Open("WARRIOR", 9203)
+Tome:SelectTab("Loadouts")
+check(Tome.suggestedLoadoutRows.mplus:IsShown(), "the Mythic+ row shows on a spec with only mplusLoadout")
+check(not Tome.suggestedLoadoutRows.raid:IsShown(), "the Raid row stays hidden on a spec with no raidLoadout")
+check(not Tome.suggestedLoadoutRows.mplusMeta:IsShown(),
     "the live-meta row stays hidden on a spec with no mplusMetaLoadout")
 
 -- None present: no placeholder text, all three rows simply don't render
 -- (per DESIGN.md).
-Codex:Open("WARRIOR", 9202)
-Codex:SelectTab("Loadouts")
-check(not Codex.suggestedLoadoutRows.mplus:IsShown(),
+Tome:Open("WARRIOR", 9202)
+Tome:SelectTab("Loadouts")
+check(not Tome.suggestedLoadoutRows.mplus:IsShown(),
     "the Mythic+ row is hidden entirely for a spec whose guide has no mplusLoadout")
-check(not Codex.suggestedLoadoutRows.raid:IsShown(),
+check(not Tome.suggestedLoadoutRows.raid:IsShown(),
     "the Raid row is hidden entirely for a spec whose guide has no raidLoadout")
-check(not Codex.suggestedLoadoutRows.mplusMeta:IsShown(),
+check(not Tome.suggestedLoadoutRows.mplusMeta:IsShown(),
     "the live-meta row is hidden entirely for a spec whose guide has no mplusMetaLoadout")
 
 -- Copy: same read-only highlighted-editbox pattern as a saved loadout's
@@ -2550,45 +2550,45 @@ check(not Codex.suggestedLoadoutRows.mplusMeta:IsShown(),
 -- nothing. Checked for all three kinds, so a shared-helper bug that only
 -- shows up on the second or third row built is not masked by testing just
 -- the first.
-Codex:Open("WARRIOR", 9201)
-Codex:SelectTab("Loadouts")
+Tome:Open("WARRIOR", 9201)
+Tome:SelectTab("Loadouts")
 
 local mplusCopyOk = pcall(function() mplusRow.copyButton:GetScript("OnClick")() end)
 check(mplusCopyOk, "Copy on the Mythic+ row does not error under the mock's visibility-checked SetFocus")
-check(Codex.copyDialog:IsShown(), "Copy on the Mythic+ row opens the copy dialog")
-check(Codex.copyBox:GetText() == "C0EAy0kSampleExportStringFromSimC",
-    "the copy dialog is populated with the Mythic+ loadout's export string", Codex.copyBox:GetText())
+check(Tome.copyDialog:IsShown(), "Copy on the Mythic+ row opens the copy dialog")
+check(Tome.copyBox:GetText() == "C0EAy0kSampleExportStringFromSimC",
+    "the copy dialog is populated with the Mythic+ loadout's export string", Tome.copyBox:GetText())
 
 local raidCopyOk = pcall(function() raidRow.copyButton:GetScript("OnClick")() end)
 check(raidCopyOk, "Copy on the Raid row does not error under the mock's visibility-checked SetFocus")
-check(Codex.copyBox:GetText() == "C0EAy0kSampleRaidExportStringFromSimC",
+check(Tome.copyBox:GetText() == "C0EAy0kSampleRaidExportStringFromSimC",
     "the copy dialog is populated with the Raid loadout's export string, not the Mythic+ one",
-    Codex.copyBox:GetText())
+    Tome.copyBox:GetText())
 
 local metaCopyOk = pcall(function() metaRow.copyButton:GetScript("OnClick")() end)
 check(metaCopyOk, "Copy on the live-meta row does not error under the mock's visibility-checked SetFocus")
-check(Codex.copyBox:GetText() == "C0EAy0kSampleLiveMetaExportString",
+check(Tome.copyBox:GetText() == "C0EAy0kSampleLiveMetaExportString",
     "the copy dialog is populated with the live-meta loadout's export string, not either SimC one",
-    Codex.copyBox:GetText())
+    Tome.copyBox:GetText())
 
 --------------------------------------------------------------------------------
-section("Codex: View sends a build to the talent window")
+section("Tome: View sends a build to the talent window")
 --------------------------------------------------------------------------------
 
 -- Every loadout row has a View button. With no talent UI in the client the
 -- reason goes to chat and the copy dialog opens instead.
 check(mplusRow.viewButton:IsShown() and mplusRow.viewButton:GetText() == "View",
     "a suggested row has a View button")
-Codex.copyDialog:Hide()
+Tome.copyDialog:Hide()
 local printed = {}
 local realPrint = ns.Print
 ns.Print = function(...) printed[#printed + 1] = table.concat({ ... }, " ") end
 mplusRow.viewButton:GetScript("OnClick")(mplusRow.viewButton)
 ns.Print = realPrint
-check(Codex.copyDialog:IsShown(), "with no talent window View falls back to the copy dialog")
+check(Tome.copyDialog:IsShown(), "with no talent window View falls back to the copy dialog")
 check(#printed > 0 and printed[#printed]:find("talent window", 1, true) ~= nil,
     "and says why", printed[#printed])
-Codex.copyDialog:Hide()
+Tome.copyDialog:Hide()
 
 -- A client with Blizzard's PlayerSpells talent frame: the build is decoded
 -- the way Blizzard's own import does and handed to ViewLoadout. Nothing is
@@ -2617,7 +2617,7 @@ ns.Print = function(...) printed[#printed + 1] = table.concat({ ... }, " ") end
 mplusRow.viewButton:GetScript("OnClick")(mplusRow.viewButton)
 ns.Print = realPrint
 check(opened == 0, "View never opens the talent window itself")
-check(viewed == nil and not Codex.copyDialog:IsShown(), "with it closed nothing is shown and no copy dialog opens")
+check(viewed == nil and not Tome.copyDialog:IsShown(), "with it closed nothing is shown and no copy dialog opens")
 check(#printed == 1 and printed[1]:find("open your talent window", 1, true) ~= nil,
     "the player is told to open it", printed[1])
 talentsVisible = true
@@ -2628,7 +2628,7 @@ check(#LoadoutsModule:GetForSpec(9201) == vaultBefore, "viewing saves nothing to
 check(mplusRow.viewButton:GetText() == "Shown", "the button confirms")
 mock.RunAfter()
 check(mplusRow.viewButton:GetText() == "View", "and reverts")
-check(not Codex.copyDialog:IsShown(), "the copy dialog stays closed when the window could show it")
+check(not Tome.copyDialog:IsShown(), "the copy dialog stays closed when the window could show it")
 
 -- A build for another spec is refused before the window opens.
 local ok2, err2 = LoadoutsModule:OpenInTalentUI("OtherSpecBuild", "x")
@@ -2661,8 +2661,8 @@ check(importText == "C0EAy0kSampleExportStringFromSimC" and importName == "Sugge
 
 -- Saved vault rows carry the same button.
 LoadoutsModule:Add(9201, "A saved build", "Raid", "C0EAy0kSampleExportStringFromSimC")
-Codex:SelectTab("Loadouts")
-local savedRow = Codex.loadoutRowPool[1]
+Tome:SelectTab("Loadouts")
+local savedRow = Tome.loadoutRowPool[1]
 check(savedRow and savedRow.viewButton and savedRow.viewButton:IsShown(), "a saved vault row has a View button")
 
 ExportUtil, PlayerSpellsUtil, PlayerSpellsFrame = nil, nil, nil
@@ -2698,7 +2698,7 @@ do
     local button = TalentButton.button
     check(button ~= nil and button.parent == talents and button:GetText() == "SpecSage",
         "a SpecSage button attaches to the Talents tab when Blizzard_PlayerSpells loads")
-    check(button.specSageSkinned == true, "it wears the Codex's button skin")
+    check(button.specSageSkinned == true, "it wears the Tome's button skin")
     check(TalentButton:Attach() == true and TalentButton.button == button, "attaching again is a no-op")
 
     -- The player is Frost DK (252); every build SpecSage knows for it lists.
@@ -2769,7 +2769,7 @@ do
 end
 
 --------------------------------------------------------------------------------
-section("Codex: rotation/cooldown conditions (v1.3)")
+section("Tome: rotation/cooldown conditions (v1.3)")
 --------------------------------------------------------------------------------
 
 -- A step's optional `condition` (the APL if= logic behind it, translated to
@@ -2791,10 +2791,10 @@ GuideStore:RegisterSpec("WARRIOR", 9301, {
     },
 })
 
-Codex:Open("WARRIOR", 9301)
-Codex:SelectTab("Rotation")
+Tome:Open("WARRIOR", 9301)
+Tome:SelectTab("Rotation")
 
-local rotationPool = Codex.pools.rotation
+local rotationPool = Tome.pools.rotation
 check(rotationPool[1].text:GetText() == "Single Target", "the rotation group title renders first",
     rotationPool[1].text:GetText())
 check(rotationPool[2].text:GetText() == "Execute", "a step with a condition still renders its own line first",
@@ -2814,8 +2814,8 @@ check(rotationPool[4].text:GetText() == "Mortal Strike on cooldown",
 check(rotationPool[5] == nil or not rotationPool[5]:IsShown(),
     "a step with no condition costs no extra row")
 
-Codex:SelectTab("Cooldowns")
-local cooldownsPool = Codex.pools.cooldowns
+Tome:SelectTab("Cooldowns")
+local cooldownsPool = Tome.pools.cooldowns
 check(cooldownsPool[1].text:GetText() == "Bladestorm", "a cooldown entry's own line renders first",
     cooldownsPool[1].text:GetText())
 check(cooldownsPool[2].text:GetText() == "while your Colossus Smash debuff is active",
@@ -2825,11 +2825,11 @@ check(cooldownsPool[3].text:GetText() == "Avatar",
     cooldownsPool[3].text:GetText())
 
 --------------------------------------------------------------------------------
-section("Codex: Options tab")
+section("Tome: Options tab")
 --------------------------------------------------------------------------------
 
-Codex:SelectTab("Options")
-check(Codex.activeTab == "Options", "the Options tab can be selected")
+Tome:SelectTab("Options")
+check(Tome.activeTab == "Options", "the Options tab can be selected")
 
 local function CountShownOptionRows(pool)
     local shown = 0
@@ -2850,15 +2850,15 @@ do
         end
     end
 
-    check(CountShownOptionRows(Codex.optionPools.check) == expected.check,
+    check(CountShownOptionRows(Tome.optionPools.check) == expected.check,
         "every check option renders a row",
-        format("shown=%d expected=%d", CountShownOptionRows(Codex.optionPools.check), expected.check))
-    check(CountShownOptionRows(Codex.optionPools.range) == expected.range,
+        format("shown=%d expected=%d", CountShownOptionRows(Tome.optionPools.check), expected.check))
+    check(CountShownOptionRows(Tome.optionPools.range) == expected.range,
         "every range option renders a row",
-        format("shown=%d expected=%d", CountShownOptionRows(Codex.optionPools.range), expected.range))
-    check(CountShownOptionRows(Codex.optionPools.action) == expected.action,
+        format("shown=%d expected=%d", CountShownOptionRows(Tome.optionPools.range), expected.range))
+    check(CountShownOptionRows(Tome.optionPools.action) == expected.action,
         "every action option renders a row",
-        format("shown=%d expected=%d", CountShownOptionRows(Codex.optionPools.action), expected.action))
+        format("shown=%d expected=%d", CountShownOptionRows(Tome.optionPools.action), expected.action))
 end
 
 do
@@ -2875,9 +2875,9 @@ do
     check(entry ~= nil, "the Lock overlay checkbox is in the schema")
 
     local before = ns.db.locked
-    Codex:ToggleOption(entry)
+    Tome:ToggleOption(entry)
     check(ns.db.locked ~= before, "toggling a check option flips the stored value")
-    Codex:ToggleOption(entry)
+    Tome:ToggleOption(entry)
     check(ns.db.locked == before, "toggling it back restores the original value")
 end
 
@@ -2892,17 +2892,17 @@ do
     check(entry ~= nil, "the Font size range option is in the schema")
 
     ns.db.fontSize = 12
-    Codex:StepOption(entry, 1)
+    Tome:StepOption(entry, 1)
     check(ns.db.fontSize == 13, "stepping up moves one step", ns.db.fontSize)
-    Codex:StepOption(entry, -1)
+    Tome:StepOption(entry, -1)
     check(ns.db.fontSize == 12, "stepping down moves one step back", ns.db.fontSize)
 
     ns.db.fontSize = entry.max
-    Codex:StepOption(entry, 1)
+    Tome:StepOption(entry, 1)
     check(ns.db.fontSize == entry.max, "stepping past the maximum clamps", ns.db.fontSize)
 
     ns.db.fontSize = entry.min
-    Codex:StepOption(entry, -1)
+    Tome:StepOption(entry, -1)
     check(ns.db.fontSize == entry.min, "stepping below the minimum clamps", ns.db.fontSize)
     ns.db.fontSize = 12
 end
@@ -2918,7 +2918,7 @@ do
     end
 
     ns.db.opacity = 0
-    for _ = 1, 10 do Codex:StepOption(entry, 1) end
+    for _ = 1, 10 do Tome:StepOption(entry, 1) end
     check(math.abs(ns.db.opacity - 0.5) < 1e-9,
         "ten 0.05 steps land exactly on 0.5 with no float drift", ns.db.opacity)
     ns.db.opacity = 0.75
@@ -2928,58 +2928,58 @@ do
     -- /sage config must land on the Options tab: that is the surface this
     -- feature exists to provide, and it works even when Blizzard's Settings
     -- panel refuses to build.
-    Codex:SelectTab("Overview")
-    Codex.frame:Hide()
+    Tome:SelectTab("Overview")
+    Tome.frame:Hide()
     SlashCmdList.SPECSAGE("config")
-    check(Codex.activeTab == "Options", "/sage config opens the Options tab", tostring(Codex.activeTab))
-    check(Codex.frame:IsShown(), "/sage config shows the Codex")
+    check(Tome.activeTab == "Options", "/sage config opens the Options tab", tostring(Tome.activeTab))
+    check(Tome.frame:IsShown(), "/sage config shows the Tome")
 end
 
 do
     -- Leaving the tab hides its widgets, the same contract every other tab
     -- honours; a stale checkbox drawn over the Rotation tab would be a
     -- visible bug.
-    Codex:SelectTab("Rotation")
-    check(CountShownOptionRows(Codex.optionPools.check) == 0,
+    Tome:SelectTab("Rotation")
+    check(CountShownOptionRows(Tome.optionPools.check) == 0,
         "leaving Options hides its check rows")
-    check(CountShownOptionRows(Codex.optionPools.range) == 0,
+    check(CountShownOptionRows(Tome.optionPools.range) == 0,
         "leaving Options hides its range rows")
-    check(CountShownOptionRows(Codex.optionPools.action) == 0,
+    check(CountShownOptionRows(Tome.optionPools.action) == 0,
         "leaving Options hides its action rows")
-    Codex:SelectTab("Options")
+    Tome:SelectTab("Options")
 end
 
 --------------------------------------------------------------------------------
-section("Codex: Notes tab")
+section("Tome: Notes tab")
 --------------------------------------------------------------------------------
 
-Codex:Open("WARRIOR", 72)
-Codex:SelectTab("Notes")
-check(Codex.notesBox ~= nil, "the Notes tab builds an editbox")
-check(Codex.notesBox:GetText() == NotesModule:Get(72), "the Notes tab loads the spec's saved note")
+Tome:Open("WARRIOR", 72)
+Tome:SelectTab("Notes")
+check(Tome.notesBox ~= nil, "the Notes tab builds an editbox")
+check(Tome.notesBox:GetText() == NotesModule:Get(72), "the Notes tab loads the spec's saved note")
 
-Codex.notesBox:SetText("Watch for the add-phase trinket swap.")
-Codex.notesBox:GetScript("OnEditFocusLost")(Codex.notesBox)
+Tome.notesBox:SetText("Watch for the add-phase trinket swap.")
+Tome.notesBox:GetScript("OnEditFocusLost")(Tome.notesBox)
 check(NotesModule:Get(72) == "Watch for the add-phase trinket swap.", "losing focus saves the note")
 
-Codex.notesBox:SetText("Saved on window close.")
-Codex.frame:GetScript("OnHide")(Codex.frame)
-check(NotesModule:Get(72) == "Saved on window close.", "the Codex frame's OnHide also saves the open note")
+Tome.notesBox:SetText("Saved on window close.")
+Tome.frame:GetScript("OnHide")(Tome.frame)
+check(NotesModule:Get(72) == "Saved on window close.", "the Tome frame's OnHide also saves the open note")
 
 --------------------------------------------------------------------------------
-section("Codex: notes survive a spec switch")
+section("Tome: notes survive a spec switch")
 --------------------------------------------------------------------------------
 
 -- Clicking a spec-rail button does not clear an EditBox's focus in WoW, so
 -- SelectSpec must flush the still-open note itself before RenderNotes
 -- overwrites the buffer with the newly selected spec's saved text.
-Codex:Open("WARRIOR", 72)
-Codex:SelectTab("Notes")
-Codex.notesBox:SetText("Typed but not yet saved for 72.")
-Codex:SelectSpec(71) -- Arms: a different real spec, same class, Notes tab stays open
+Tome:Open("WARRIOR", 72)
+Tome:SelectTab("Notes")
+Tome.notesBox:SetText("Typed but not yet saved for 72.")
+Tome:SelectSpec(71) -- Arms: a different real spec, same class, Notes tab stays open
 check(NotesModule:Get(72) == "Typed but not yet saved for 72.",
     "switching spec flushes the previously open note for its own spec")
-check(Codex.notesBox:GetText() == NotesModule:Get(71),
+check(Tome.notesBox:GetText() == NotesModule:Get(71),
     "the newly selected spec's own note is shown, not the old spec's buffer")
 
 --------------------------------------------------------------------------------
@@ -3102,42 +3102,42 @@ do
 end
 
 --------------------------------------------------------------------------------
-section("Codex: BiS tab trinket tier list and clickable item links (v1.5)")
+section("Tome: BiS tab trinket tier list and clickable item links (v1.5)")
 --------------------------------------------------------------------------------
 
 do
     -- MAGE 9604 (registered above) has one gear entry with an itemID and no
     -- trinket registration of its own; give it the 9602 fixture's lists.
     ns.GuideStore:RegisterTrinkets(9604, ns.GuideStore:GetTrinkets(9602))
-    Codex.trinketListIndex = 1
-    Codex:Open("MAGE", 9604)
-    Codex:SelectTab("BiS")
+    Tome.trinketListIndex = 1
+    Tome:Open("MAGE", 9604)
+    Tome:SelectTab("BiS")
 
     local function shownTrinketRows()
         local n = 0
-        for _, row in ipairs(Codex.trinketRowPool) do
+        for _, row in ipairs(Tome.trinketRowPool) do
             if row:IsShown() then n = n + 1 end
         end
         return n
     end
 
     check(shownTrinketRows() == 2, "the Single Target list renders one row per trinket", shownTrinketRows())
-    local first = Codex.trinketRowPool[1]
+    local first = Tome.trinketRowPool[1]
     check(first.tag:GetText() == "S", "the top trinket row carries its S tier tag", first.tag:GetText())
     check(first.itemID == 19019, "the trinket row knows its itemID", first.itemID)
     check(first.text:GetText():find("Thunderfury", 1, true) ~= nil,
         "a cached trinket shows the client's item name", first.text:GetText())
     check(first.text:GetText():find("ilvl 344", 1, true) ~= nil, "the row shows the simmed item level")
     check(first.gain:GetText() == "+10.5%", "the row shows the sim gain", first.gain:GetText())
-    local second = Codex.trinketRowPool[2]
+    local second = Tome.trinketRowPool[2]
     check(second.text:GetText():find("Uncached Test Trinket", 1, true) ~= nil,
         "an uncached trinket falls back to the sim's own name", second.text:GetText())
     check(second.text:GetText():find("on%-use") ~= nil, "an on-use trinket is tagged as such")
     local requested = false
     for _, id in ipairs(mock.itemLoadRequests) do if id == 777001 then requested = true end end
     check(requested, "an uncached trinket queues a RequestLoadItemDataByID call")
-    check(Codex.trinketToggle:IsShown() and Codex.trinketToggle:GetText() == "Single Target",
-        "the fight-style toggle shows the active list's title", Codex.trinketToggle:GetText())
+    check(Tome.trinketToggle:IsShown() and Tome.trinketToggle:GetText() == "Single Target",
+        "the fight-style toggle shows the active list's title", Tome.trinketToggle:GetText())
 
     -- Hover and click behave like an item link - on the item text only. The
     -- row itself is inert, so scrolling the list past the mouse does not
@@ -3174,15 +3174,15 @@ do
     check(ns.ItemStringAtLevel(19019, 345) == nil, "a client that does not honour the level bonus gets nil, not a wrong tooltip")
     mock.noLevelBonuses = nil
     mock.items[19019].level = 300
-    Codex:RenderActiveTab()
-    first = Codex.trinketRowPool[1]
+    Tome:RenderActiveTab()
+    first = Tome.trinketRowPool[1]
     check(first.itemLink == projected, "the trinket row hovers the projected string", first.itemLink)
     first.hit:GetScript("OnEnter")(first.hit)
     check(GameTooltip.itemID == projected, "hovering opens the tooltip at the simmed level", GameTooltip.itemID)
     first.hit:GetScript("OnLeave")(first.hit)
     ns.db.trinketSimLevelTooltips = false
-    Codex:RenderActiveTab()
-    check(Codex.trinketRowPool[1].itemLink == nil, "with the option off the row hovers the bare item again")
+    Tome:RenderActiveTab()
+    check(Tome.trinketRowPool[1].itemLink == nil, "with the option off the row hovers the bare item again")
     ns.db.trinketSimLevelTooltips = true
     mock.items[19019].level = nil
     mock.itemRefClicks = {}
@@ -3192,34 +3192,34 @@ do
         mock.itemRefClicks[1] and mock.itemRefClicks[1].link)
 
     -- Toggling cycles to the next list and wraps.
-    Codex:CycleTrinketList()
-    check(Codex.trinketToggle:GetText() == "5 Targets", "the toggle cycles to the next fight style", Codex.trinketToggle:GetText())
+    Tome:CycleTrinketList()
+    check(Tome.trinketToggle:GetText() == "5 Targets", "the toggle cycles to the next fight style", Tome.trinketToggle:GetText())
     check(shownTrinketRows() == 1, "the 5 Targets list renders its own row count", shownTrinketRows())
-    Codex:CycleTrinketList()
-    check(Codex.trinketToggle:GetText() == "Single Target", "the toggle wraps back to the first list")
+    Tome:CycleTrinketList()
+    check(Tome.trinketToggle:GetText() == "Single Target", "the toggle wraps back to the first list")
 
     -- Once the uncached trinket resolves, GET_ITEM_INFO_RECEIVED re-renders it.
     mock.items[777001] = { name = "Now Cached Trinket", quality = 4 }
     mock.Fire("GET_ITEM_INFO_RECEIVED", 777001)
-    check(Codex.trinketRowPool[2].text:GetText():find("Now Cached Trinket", 1, true) ~= nil,
-        "a trinket row re-renders with the real name once the item loads", Codex.trinketRowPool[2].text:GetText())
+    check(Tome.trinketRowPool[2].text:GetText():find("Now Cached Trinket", 1, true) ~= nil,
+        "a trinket row re-renders with the real name once the item loads", Tome.trinketRowPool[2].text:GetText())
     mock.items[777001] = nil
 
     -- A spec with an unavailable reason shows it and no rows or toggle.
-    Codex:Open("MAGE", 9005)
+    Tome:Open("MAGE", 9005)
     ns.GuideStore:RegisterTrinkets(9005, { unavailable = "no sims for this spec" })
-    Codex:SelectTab("BiS")
+    Tome:SelectTab("BiS")
     check(shownTrinketRows() == 0, "an unavailable spec renders no trinket rows")
-    check(not Codex.trinketToggle:IsShown(), "an unavailable spec hides the fight-style toggle")
+    check(not Tome.trinketToggle:IsShown(), "an unavailable spec hides the fight-style toggle")
     local found = false
-    for _, row in ipairs(Codex.pools.bis) do
+    for _, row in ipairs(Tome.pools.bis) do
         if row:IsShown() and row.text:GetText() == "no sims for this spec" then found = true end
     end
     check(found, "the unavailable reason is rendered as a line")
 
     -- Leaving the tab hides the trinket widgets.
-    Codex:SelectTab("Overview")
-    check(shownTrinketRows() == 0 and not Codex.trinketToggle:IsShown(), "leaving the BiS tab hides the trinket rows and toggle")
+    Tome:SelectTab("Overview")
+    check(shownTrinketRows() == 0 and not Tome.trinketToggle:IsShown(), "leaving the BiS tab hides the trinket rows and toggle")
 
 end
 
@@ -3367,7 +3367,7 @@ do
     check(table.concat(GameTooltip:Dump(), "\n"):find("Single Target |cff", 1, true) ~= nil,
         "a copy whose item level is unknown keeps its tiers")
 
-    -- A Codex row hovered at its simmed level carries a caveat line above
+    -- A Tome row hovered at its simmed level carries a caveat line above
     -- the tiers, and the low copy's note points at that row.
     mock.items[topRow.itemID].level = topRow.ilvl - 30
     local projected = ns.ItemStringAtLevel(topRow.itemID, topRow.ilvl)
@@ -3384,18 +3384,18 @@ do
     GameTooltip:SetOwner(nil, "ANCHOR_NONE")
     mock.FireTooltipItem(GameTooltip, topRow.itemID)
     dump = table.concat(GameTooltip:Dump(), "\n")
-    check(dump:find("far below it (hover it on the Codex's BiS tab for that copy)", 1, true) ~= nil,
-        "the low copy's note points at the Codex row when the projection is available", dump)
+    check(dump:find("far below it (hover it on the Tome's BiS tab for that copy)", 1, true) ~= nil,
+        "the low copy's note points at the Tome row when the projection is available", dump)
     ns.db.trinketSimLevelTooltips = false
     GameTooltip:SetOwner(nil, "ANCHOR_NONE")
     mock.FireTooltipItem(GameTooltip, topRow.itemID)
-    check((table.concat(GameTooltip:Dump(), "\n"):find("hover it on the Codex", 1, true) ~= nil) == (topRow.bonus ~= nil),
-        "with the option off the note points at the Codex only when the row carries the copy's bonus list")
+    check((table.concat(GameTooltip:Dump(), "\n"):find("hover it on the Tome", 1, true) ~= nil) == (topRow.bonus ~= nil),
+        "with the option off the note points at the Tome only when the row carries the copy's bonus list")
     ns.db.trinketSimLevelTooltips = true
     mock.items[topRow.itemID] = nil
 
     -- Merektha's Fang (Temple of Sethraliss, back in the 12.1 Mythic+ pool):
-    -- its rows carry the current copy's bonus list, so the Codex row hovers
+    -- its rows carry the current copy's bonus list, so the Tome row hovers
     -- the real item string, no projection needed, and a level 19 copy from
     -- Chromie Time gets the note with the pointer whatever the option says.
     local fang = ItemRanks:DescribeTrinket(158367, 73)
@@ -3408,7 +3408,7 @@ do
     GameTooltip:SetOwner(nil, "ANCHOR_NONE")
     mock.FireTooltipItem(GameTooltip, 158367)
     dump = table.concat(GameTooltip:Dump(), "\n")
-    check(dump:find("ranked at item level 334; this item level 19 copy is far below it (hover it on the Codex's BiS tab for that copy)", 1, true) ~= nil,
+    check(dump:find("ranked at item level 334; this item level 19 copy is far below it (hover it on the Tome's BiS tab for that copy)", 1, true) ~= nil,
         "a level 19 Fang gets the note and the pointer without the projection option", dump)
     ns.db.trinketSimLevelTooltips = true
     Loadouts.GetCurrentSpecID = savedSpec
@@ -3426,7 +3426,7 @@ do
     check(table.concat(GameTooltip:Dump(), "\n"):find("trinket", 1, true) == nil,
         "a non-trinket with nothing to rank gets no trinket line")
 
-    -- The option is exposed through the shared schema (Codex Options tab and
+    -- The option is exposed through the shared schema (Tome Options tab and
     -- the Settings panel both read ns.OPTION_GROUPS).
     local exposed = false
     for _, group in ipairs(ns.OPTION_GROUPS) do
@@ -3559,20 +3559,20 @@ do
             { title = "Raid", list = { { slot = "Neck", itemID = 42, name = "Champion's Dreadful Gladiator's Pendant of Alacrity", from = "PvP" } } },
         },
     })
-    Codex.bisListIndex = 1
-    Codex:Open("MAGE", 9604)
-    Codex:SelectTab("BiS")
+    Tome.bisListIndex = 1
+    Tome:Open("MAGE", 9604)
+    Tome:SelectTab("BiS")
     local function shownLinkRows()
         local n = 0
-        for _, row in ipairs(Codex.bisLinkRowPool) do if row:IsShown() then n = n + 1 end end
+        for _, row in ipairs(Tome.bisLinkRowPool) do if row:IsShown() then n = n + 1 end end
         return n
     end
     check(shownLinkRows() == 2, "the Overall BiS list renders one row per slot", shownLinkRows())
-    local linkRow = Codex.bisLinkRowPool[1]
+    local linkRow = Tome.bisLinkRowPool[1]
     check(linkRow.slot:GetText() == "Weapon" and linkRow.itemID == 19019, "a BiS row shows its slot and knows its item")
     check(linkRow.text:GetText():find("Thunderfury", 1, true) ~= nil and linkRow.text:GetText():find("Molten Core", 1, true) ~= nil,
         "a BiS row shows the item name and drop source", linkRow.text:GetText())
-    check(Codex.bisListToggle:IsShown() and Codex.bisListToggle:GetText() == "Overall", "the BiS context toggle shows the active list")
+    check(Tome.bisListToggle:IsShown() and Tome.bisListToggle:GetText() == "Overall", "the BiS context toggle shows the active list")
     mock.itemRefClicks = {}
     check(linkRow:GetScript("OnMouseUp") == nil and linkRow.hit ~= nil, "a BiS row's mouse lives on its item text")
     linkRow.hit:GetScript("OnMouseUp")(linkRow.hit, "LeftButton")
@@ -3580,10 +3580,10 @@ do
 
     check(linkRow.addButton == nil, "a BiS row has no Add button (the checklist was pulled)")
 
-    Codex:CycleBiSList()
-    check(Codex.bisListToggle:GetText() == "Raid" and shownLinkRows() == 1, "the toggle cycles to the Raid list", shownLinkRows())
-    Codex:SelectTab("Overview")
-    check(shownLinkRows() == 0 and not Codex.bisListToggle:IsShown(), "leaving the tab hides the linked BiS rows")
+    Tome:CycleBiSList()
+    check(Tome.bisListToggle:GetText() == "Raid" and shownLinkRows() == 1, "the toggle cycles to the Raid list", shownLinkRows())
+    Tome:SelectTab("Overview")
+    check(shownLinkRows() == 0 and not Tome.bisListToggle:IsShown(), "leaving the tab hides the linked BiS rows")
 
     -- Loadouts tab: guide build rows with View and Copy.
     GuideStore:RegisterSiteLoadouts(9604, {
@@ -3593,20 +3593,20 @@ do
             { label = "High Mythic+ Keys - Spellslinger", string = "C4DAAAAAAAAAAAAAAAAAAAAAAYGGLzMzswMDamZGAAAGAwMz0sssMDAgNAAAzMDbWmxMLzYMzMzMsxMmZmBAYAAAGgZGwMAYYmZB" },
         },
     })
-    Codex:SelectTab("Loadouts")
+    Tome:SelectTab("Loadouts")
     local shownSite = 0
-    for _, row in ipairs(Codex.siteLoadoutRowPool) do if row:IsShown() then shownSite = shownSite + 1 end end
+    for _, row in ipairs(Tome.siteLoadoutRowPool) do if row:IsShown() then shownSite = shownSite + 1 end end
     check(shownSite == 2, "the Loadouts tab renders one row per guide build", shownSite)
-    local siteRow = Codex.siteLoadoutRowPool[1]
+    local siteRow = Tome.siteLoadoutRowPool[1]
     check(siteRow.name:GetText():find("Guide: Raid / Cleave - Sunfury", 1, true) ~= nil, "a guide build row is labelled Guide plus its title", siteRow.name:GetText())
     siteRow.copyButton:GetScript("OnClick")()
-    check(Codex.copyBox:GetText():find("^C4DAAAA") ~= nil, "Copy on a site build row opens the copy dialog with its string")
-    Codex.copyDialog:Hide()
+    check(Tome.copyBox:GetText():find("^C4DAAAA") ~= nil, "Copy on a site build row opens the copy dialog with its string")
+    Tome.copyDialog:Hide()
     check(siteRow.viewButton:IsShown() and siteRow.addButton == nil,
         "a site build row has View but no Add to my vault")
-    Codex:SelectTab("Overview")
+    Tome:SelectTab("Overview")
     shownSite = 0
-    for _, row in ipairs(Codex.siteLoadoutRowPool) do if row:IsShown() then shownSite = shownSite + 1 end end
+    for _, row in ipairs(Tome.siteLoadoutRowPool) do if row:IsShown() then shownSite = shownSite + 1 end end
     check(shownSite == 0, "leaving the Loadouts tab hides the site build rows")
 end
 
@@ -3660,7 +3660,7 @@ do
     local ranks = ItemRanks:GetRankTable(252)
     check(ranks and ranks.haste == 1 and ranks.crit == 3, "item stat ranks use the hero tree's order", ranks and ranks.haste)
 
-    -- The Codex Stats tab numbers the tree's order, says which tree, and
+    -- The Tome Stats tab numbers the tree's order, says which tree, and
     -- marks it in the hero-tree section.
     local function ShownText(pool)
         local out = {}
@@ -3672,11 +3672,11 @@ do
         end
         return table.concat(out, "\n")
     end
-    Codex:Open("DEATHKNIGHT", 252)
-    Codex:SelectTab("Stats")
-    local statsDump = ShownText(Codex.pools.stats)
+    Tome:Open("DEATHKNIGHT", 252)
+    Tome:SelectTab("Stats")
+    local statsDump = ShownText(Tome.pools.stats)
     check(statsDump:find("2. Haste", 1, true) ~= nil, "the numbered priority is the hero tree's order", statsDump)
-    local lineDump = ShownText(Codex.statLinePool)
+    local lineDump = ShownText(Tome.statLinePool)
     check(lineDump:find("Stat Priority\nFor your hero tree, Rider of the Apocalypse", 1, true) ~= nil,
         "and says which tree it is for, under the Stat Priority header", lineDump)
     check(lineDump:find("Other Hero Trees", 1, true) ~= nil
@@ -3687,10 +3687,10 @@ do
     -- Swapping trees redraws an open Stats tab.
     mock.heroSubTreeID = 1
     mock.Fire("TRAIT_CONFIG_UPDATED", 1)
-    statsDump = ShownText(Codex.pools.stats)
-    check(ShownText(Codex.statLinePool):find("For your hero tree, San'layn", 1, true) ~= nil
+    statsDump = ShownText(Tome.pools.stats)
+    check(ShownText(Tome.statLinePool):find("For your hero tree, San'layn", 1, true) ~= nil
         and statsDump:find("2. Crit", 1, true) ~= nil, "a hero tree swap redraws the Stats tab", statsDump)
-    Codex:Toggle()
+    Tome:Toggle()
 
     -- The docked panel's Gear section does the same.
     mock.heroSubTreeID = 2
@@ -3839,7 +3839,7 @@ do
     end
     check(ringRows == 2, "both of the list's rings are shown", ringRows)
 
-    -- Clicking a row opens the item link, the same contract the Codex's rows have.
+    -- Clicking a row opens the item link, the same contract the Tome's rows have.
     mock.HoverPaperDollSlot("CharacterNeckSlot")
     mock.RunAfter()
     local clickable
@@ -3851,8 +3851,8 @@ do
     check(#mock.itemRefClicks == 1, "clicking an item row opens its link")
 
     -- The context toggle cycles the BiS list the rows come from, and does so
-    -- without touching the Codex's own list index.
-    local codexIndex = Codex.bisListIndex
+    -- without touching the Tome's own list index.
+    local tomeIndex = Tome.bisListIndex
     local playerBis = ns.GuideStore:GetBiS(252)
     local savedLists = playerBis.lists
     playerBis.lists = { savedLists[1], { title = "Second", list = savedLists[1].list } }
@@ -3861,7 +3861,7 @@ do
     Panel:CycleList()
     check(Panel.frame.listToggle:GetText() ~= firstTitle, "the context toggle cycles to the next BiS list",
         Panel.frame.listToggle:GetText())
-    check(Codex.bisListIndex == codexIndex, "and leaves the Codex's own list alone")
+    check(Tome.bisListIndex == tomeIndex, "and leaves the Tome's own list alone")
     ns.db.characterPanel.listIndex = 1
     playerBis.lists = savedLists
     Panel:Update()
@@ -3909,10 +3909,10 @@ end
 section("Character sheet panel: sections (v1.6)")
 --------------------------------------------------------------------------------
 
--- The panel shows everything the Codex window does, picked from icon tabs
--- down its right edge (the Codex's strip needs about twice the panel's
--- width). The Codex's own
--- render methods draw it, running against a surface from Codex:NewSurface -
+-- The panel shows everything the Tome window does, picked from icon tabs
+-- down its right edge (the Tome's strip needs about twice the panel's
+-- width). The Tome's own
+-- render methods draw it, running against a surface from Tome:NewSurface -
 -- so these check both that every section renders and that the two windows
 -- keep their frames, pools, widgets and view state apart.
 do
@@ -3922,7 +3922,7 @@ do
     local SECTIONS = { "Gear", "Overview", "Stats", "Rotation", "Cooldowns",
                        "Consumables", "BiS", "Loadouts", "Notes", "Options" }
 
-    check(Panel.surface ~= nil, "the panel owns a Codex rendering surface")
+    check(Panel.surface ~= nil, "the panel owns a Tome rendering surface")
     check(#Panel.frame.sectionTabs == #SECTIONS,
         "there is a side tab for every section", #Panel.frame.sectionTabs)
     for i, sectionName in ipairs(SECTIONS) do
@@ -3955,10 +3955,10 @@ do
     ns.RefreshAll()
     check(gearTab.label:IsShown() and gearTab.width > 32, "and back on widens them again")
 
-    -- Nothing may be shared by reference with the Codex's own surface: a
+    -- Nothing may be shared by reference with the Tome's own surface: a
     -- shared pool would have the two windows fighting over the same rows,
-    -- and a shared widget would put the panel's Notes text in the Codex's
-    -- edit box. This is the __index fallthrough Codex:NewSurface guards
+    -- and a shared widget would put the panel's Notes text in the Tome's
+    -- edit box. This is the __index fallthrough Tome:NewSurface guards
     -- against by listing every field explicitly.
     local function CountShown()
         local n = 0
@@ -3987,7 +3987,7 @@ do
     end
 
     -- The Consumables section carries the item chips too, on the panel's own
-    -- scroll child (not the Codex window's), and they hover like the Codex's.
+    -- scroll child (not the Tome window's), and they hover like the Tome's.
     Panel:SelectSection("Consumables")
     local panelChips = 0
     for _, chip in ipairs(Panel.surface.consumableChipPool) do
@@ -3999,8 +3999,8 @@ do
     end
     for _, chip in ipairs(Panel.surface.consumableChipPool) do if chip:IsShown() then panelChips = panelChips + 1 end end
     check(panelChips > 1, "the panel's Consumables section draws item chips", panelChips)
-    check(Panel.surface.consumableChipPool ~= Codex.consumableChipPool,
-        "the panel's chip pool is its own, not the Codex window's")
+    check(Panel.surface.consumableChipPool ~= Tome.consumableChipPool,
+        "the panel's chip pool is its own, not the Tome window's")
     local chip = Panel.surface.consumableChipPool[1]
     chip:GetScript("OnEnter")(chip)
     check(GameTooltip.itemID == chip.itemID and chip.itemID ~= nil, "hovering a panel chip shows its item tooltip", GameTooltip.itemID)
@@ -4010,17 +4010,17 @@ do
 
     -- Having visited every section, the lazily-built widgets all exist, so
     -- this is the point at which sharing would show up.
-    check(Panel.surface.pools ~= Codex.pools, "the panel's row pools are its own")
-    check(Panel.surface.scrollChild ~= Codex.scrollChild, "as is its scroll child")
-    check(Panel.surface.frame == Panel.frame and Panel.surface.frame ~= Codex.frame,
-        "the surface hosts widgets in the panel, not the Codex window")
-    check(Panel.surface.notesBox ~= Codex.notesBox, "the Notes box is the panel's own, not the Codex's")
-    check(Panel.surface.optionPools ~= Codex.optionPools, "as are the Options widgets")
-    check(Panel.surface.bisListToggle ~= Codex.bisListToggle, "and the BiS list toggle")
-    check(Panel.surface.suggestedLoadoutRows ~= Codex.suggestedLoadoutRows,
+    check(Panel.surface.pools ~= Tome.pools, "the panel's row pools are its own")
+    check(Panel.surface.scrollChild ~= Tome.scrollChild, "as is its scroll child")
+    check(Panel.surface.frame == Panel.frame and Panel.surface.frame ~= Tome.frame,
+        "the surface hosts widgets in the panel, not the Tome window")
+    check(Panel.surface.notesBox ~= Tome.notesBox, "the Notes box is the panel's own, not the Tome's")
+    check(Panel.surface.optionPools ~= Tome.optionPools, "as are the Options widgets")
+    check(Panel.surface.bisListToggle ~= Tome.bisListToggle, "and the BiS list toggle")
+    check(Panel.surface.suggestedLoadoutRows ~= Tome.suggestedLoadoutRows,
         "and the suggested loadout rows")
     check(Panel.surface.contentWidth == Panel:ContentWidth(),
-        "the surface lays rows out at the panel's width, not the Codex's",
+        "the surface lays rows out at the panel's width, not the Tome's",
         Panel.surface.contentWidth)
 
     -- Switching sections must clear the previous one: both halves draw into
@@ -4068,8 +4068,8 @@ do
         "the active marker follows the selection")
 
     -- View state stays per-window: cycling the panel's BiS context must not
-    -- move the Codex's, and vice versa.
-    local codexBefore = Codex.bisListIndex
+    -- move the Tome's, and vice versa.
+    local tomeBefore = Tome.bisListIndex
     local playerBis2 = ns.GuideStore:GetBiS(252)
     local savedLists2 = playerBis2.lists
     playerBis2.lists = { savedLists2[1], { title = "Second", list = savedLists2[1].list } }
@@ -4077,7 +4077,7 @@ do
     Panel.surface:CycleBiSList()
     check(Panel.surface.bisListIndex ~= 1, "the panel's BiS context cycles",
         Panel.surface.bisListIndex)
-    check(Codex.bisListIndex == codexBefore, "without moving the Codex window's")
+    check(Tome.bisListIndex == tomeBefore, "without moving the Tome window's")
     playerBis2.lists = savedLists2
 
     -- The footer names the build and the patch the data was written for.
@@ -4188,7 +4188,7 @@ do
 end
 
 --------------------------------------------------------------------------------
-section("Codex: Consumables tab item chips (2026-09-05)")
+section("Tome: Consumables tab item chips (2026-09-05)")
 --------------------------------------------------------------------------------
 
 do
@@ -4256,11 +4256,11 @@ do
             { slot = "Enchants", text = "Nothing this table knows." },
         },
     })
-    Codex:Open("MAGE", 9605)
-    Codex:SelectTab("Consumables")
+    Tome:Open("MAGE", 9605)
+    Tome:SelectTab("Consumables")
 
     local shown = {}
-    for _, chip in ipairs(Codex.consumableChipPool) do
+    for _, chip in ipairs(Tome.consumableChipPool) do
         if chip:IsShown() then shown[#shown + 1] = chip end
     end
     check(#shown == 3, "two chips from the item list plus one found in prose", #shown)
@@ -4278,7 +4278,7 @@ do
     check(first.hit == nil and first:GetScript("OnEnter") ~= nil, "the chip itself is the hit area")
 
     -- Layout: heading, chips, prose, then a gap before the next heading.
-    local lines = Codex.pools.consumables
+    local lines = Tome.pools.consumables
     check(lines[1].text:GetText() == "Flask" and lines[2].text:GetText():find("Magisters for Mastery", 1, true) ~= nil
         and lines[3].text:GetText() == "Prose-only",
         "each kind is a heading followed by its prose", lines[1].text:GetText(), lines[3].text:GetText())
@@ -4302,36 +4302,36 @@ do
         specName = "Enchant Spec", role = "DAMAGER",
         consumables = { { slot = "Ring Enchants", items = { 244015 }, text = "" } },
     })
-    Codex:Open("MAGE", 9606)
-    Codex:SelectTab("Consumables")
-    check(Codex.consumableChipPool[1].text:GetText() == "Silvermoon's Alacrity",
-        "an enchant chip drops the scroll's slot prefix", Codex.consumableChipPool[1].text:GetText())
-    check(Codex.pools.consumables[2] == nil or not Codex.pools.consumables[2]:IsShown(),
+    Tome:Open("MAGE", 9606)
+    Tome:SelectTab("Consumables")
+    check(Tome.consumableChipPool[1].text:GetText() == "Silvermoon's Alacrity",
+        "an enchant chip drops the scroll's slot prefix", Tome.consumableChipPool[1].text:GetText())
+    check(Tome.pools.consumables[2] == nil or not Tome.pools.consumables[2]:IsShown(),
         "an entry with empty prose draws no prose line")
 
     -- Switching tabs hides the chips.
-    Codex:SelectTab("Overview")
-    check(not Codex.consumableChipPool[1]:IsShown(), "chips hide when another tab is chosen")
+    Tome:SelectTab("Overview")
+    check(not Tome.consumableChipPool[1]:IsShown(), "chips hide when another tab is chosen")
 
     -- The item arriving later redraws the chip under its real name.
-    Codex:Open("MAGE", 9605)
-    Codex:SelectTab("Consumables")
+    Tome:Open("MAGE", 9605)
+    Tome:SelectTab("Consumables")
     mock.items[241325] = { name = "Flask of the Blood Knights (cached)", quality = 1 }
-    Codex:OnBiSItemInfoReceived(241325)
-    check(Codex.consumableChipPool[2].text:GetText() == "Flask of the Blood Knights (cached)",
-        "GET_ITEM_INFO_RECEIVED for a chip's item redraws the chip", Codex.consumableChipPool[2].text:GetText())
+    Tome:OnBiSItemInfoReceived(241325)
+    check(Tome.consumableChipPool[2].text:GetText() == "Flask of the Blood Knights (cached)",
+        "GET_ITEM_INFO_RECEIVED for a chip's item redraws the chip", Tome.consumableChipPool[2].text:GetText())
     mock.items[241325] = nil
     mock.items[241323] = nil
 end
 
 --------------------------------------------------------------------------------
-section("Codex: skinned buttons fit their labels and read as ink plates (2026-09-05)")
+section("Tome: skinned buttons fit their labels and read as ink plates (2026-09-05)")
 --------------------------------------------------------------------------------
 
 do
-    Codex:Open("MAGE", 9605)
-    Codex:SelectTab("Loadouts")
-    local save, add = Codex.loadoutButtons.save, Codex.loadoutButtons.add
+    Tome:Open("MAGE", 9605)
+    Tome:SelectTab("Loadouts")
+    local save, add = Tome.loadoutButtons.save, Tome.loadoutButtons.add
     check((add.width or 0) >= #"Add from string" * 7 + 20,
         "Add from string is at least its text plus 10px a side", add.width)
     check((save.width or 0) >= #"Save current" * 7 + 20,
@@ -4342,14 +4342,14 @@ do
     add:SetText("A much longer label than before")
     check((add.width or 0) >= #"A much longer label than before" * 7 + 20, "SetText refits the button to the new label", add.width)
     add:SetText("Add from string")
-    Codex:SelectTab("Options")
+    Tome:SelectTab("Options")
     local feedbackRow
-    for _, row in ipairs(Codex.optionPools and Codex.optionPools.action or {}) do
+    for _, row in ipairs(Tome.optionPools and Tome.optionPools.action or {}) do
         if row:IsShown() and row.button and row.button:GetText() == "Feedback / requests" then feedbackRow = row end
     end
     check(feedbackRow ~= nil and (feedbackRow.button.width or 0) >= #"Feedback / requests" * 7 + 20,
         "the Options tab's Feedback button is as wide as its label", feedbackRow and feedbackRow.button.width)
-    Codex:SelectTab("Loadouts")
+    Tome:SelectTab("Loadouts")
     -- Depth cues: a drop shadow at rest that goes when the button is
     -- pressed, and the pointing-hand cursor on hover.
     check(add.specSageShadow ~= nil and add.specSageShadow.shown ~= false, "a skinned button casts a shadow at rest")
@@ -4408,12 +4408,12 @@ do
         "a Toggle stat overlay binding exists")
     SpecSage_ToggleOverlay()
     check(ns.db.hidden == false, "the overlay binding toggles the overlay")
-    check(type(SpecSage_ToggleCodex) == "function" and BINDING_NAME_SPECSAGE_TOGGLE_CODEX == "Toggle the Codex",
-        "a Toggle the Codex binding exists")
-    if Codex:IsShown() then Codex:Toggle() end
-    SpecSage_ToggleCodex()
-    check(Codex:IsShown(), "the Codex binding opens the Codex")
-    SpecSage_ToggleCodex()
+    check(type(SpecSage_ToggleTome) == "function" and BINDING_NAME_SPECSAGE_TOGGLE_TOME == "Toggle the Tome",
+        "a Toggle the Tome binding exists")
+    if Tome:IsShown() then Tome:Toggle() end
+    SpecSage_ToggleTome()
+    check(Tome:IsShown(), "the Tome binding opens the Tome")
+    SpecSage_ToggleTome()
     ns.db.hidden = wasHidden
     ns.RefreshAll()
 end
@@ -4433,7 +4433,7 @@ do
     check(button ~= nil and button:IsShown(), "enabling creates and shows the seal on the minimap")
     check(button and button.parent == Minimap, "the seal is parented to the minimap")
     check(button and button.wax and button.wax.texture and button.wax.texture:find("wax_seal", 1, true) ~= nil,
-        "the seal wears the Codex's wax-seal art")
+        "the seal wears the Tome's wax-seal art")
     check(button and button.icon and button.icon.texture == "Interface\\Icons\\INV_Misc_Book_11",
         "the addon's book icon sits inside the seal")
 
@@ -4445,12 +4445,12 @@ do
     check(math.abs(x0 - 72) < 0.01 and math.abs(y0) < 0.01,
         "at 0 degrees the seal sits just off the minimap's right edge", x0, y0)
 
-    -- Clicks: left opens the Codex, right toggles the overlay.
-    if Codex:IsShown() then Codex:Toggle() end
+    -- Clicks: left opens the Tome, right toggles the overlay.
+    if Tome:IsShown() then Tome:Toggle() end
     button:GetScript("OnClick")(button, "LeftButton")
-    check(Codex:IsShown(), "left-clicking the seal opens the Codex")
+    check(Tome:IsShown(), "left-clicking the seal opens the Tome")
     button:GetScript("OnClick")(button, "LeftButton")
-    check(not Codex:IsShown(), "left-clicking again closes it")
+    check(not Tome:IsShown(), "left-clicking again closes it")
     local overlayBefore = ns.db.hidden
     button:GetScript("OnClick")(button, "RightButton")
     check(ns.db.hidden ~= overlayBefore, "right-clicking the seal toggles the stat overlay")
@@ -4460,7 +4460,7 @@ do
     button:GetScript("OnEnter")(button)
     local hint = false
     for _, line in ipairs(GameTooltip.lines or {}) do
-        if (line.left or ""):find("Codex", 1, true) then hint = true end
+        if (line.left or ""):find("Tome", 1, true) then hint = true end
     end
     check(GameTooltip.shown and hint, "hovering the seal explains its clicks")
     button:GetScript("OnLeave")(button)
@@ -4496,28 +4496,28 @@ do
 end
 
 --------------------------------------------------------------------------------
-section("Codex: Feedback button")
+section("Tome: Feedback button")
 --------------------------------------------------------------------------------
 
 do
     check(ns.FeedbackURL() == "https://github.com/Sharpened-Banana/SpecSage",
         "the feedback URL comes from the TOC's X-Website field", ns.FeedbackURL())
-    check(Codex.frame.feedbackButton ~= nil and Codex.frame.feedbackButton:GetText() == "Feedback",
-        "the Codex title bar has a Feedback button")
+    check(Tome.frame.feedbackButton ~= nil and Tome.frame.feedbackButton:GetText() == "Feedback",
+        "the Tome title bar has a Feedback button")
 
-    if Codex:IsShown() then Codex:Toggle() end
-    Codex.frame.feedbackButton:GetScript("OnClick")()
-    check(Codex:IsShown(), "the Feedback button opens the Codex if it was closed")
-    check(Codex.copyDialog:IsShown(), "the Feedback button opens the copy dialog")
-    check(Codex.copyBox:GetText() == ns.FeedbackURL(), "the copy dialog holds the feedback URL", Codex.copyBox:GetText())
-    check(Codex.copyBox.focused and Codex.copyBox.highlighted, "the URL is focused and selected, ready for Ctrl+C")
-    check(Codex.copyLabel:GetText():lower():find("bug reports", 1, true) ~= nil, "the dialog caption says what the link is for",
-        Codex.copyLabel:GetText())
+    if Tome:IsShown() then Tome:Toggle() end
+    Tome.frame.feedbackButton:GetScript("OnClick")()
+    check(Tome:IsShown(), "the Feedback button opens the Tome if it was closed")
+    check(Tome.copyDialog:IsShown(), "the Feedback button opens the copy dialog")
+    check(Tome.copyBox:GetText() == ns.FeedbackURL(), "the copy dialog holds the feedback URL", Tome.copyBox:GetText())
+    check(Tome.copyBox.focused and Tome.copyBox.highlighted, "the URL is focused and selected, ready for Ctrl+C")
+    check(Tome.copyLabel:GetText():lower():find("bug reports", 1, true) ~= nil, "the dialog caption says what the link is for",
+        Tome.copyLabel:GetText())
 
     -- The same dialog reverts to its default caption for a loadout copy.
-    Codex:ShowCopyDialog("SomeExportString")
-    check(Codex.copyLabel:GetText() == "Ctrl+C to copy", "a loadout copy restores the default caption", Codex.copyLabel:GetText())
-    Codex.copyDialog:Hide()
+    Tome:ShowCopyDialog("SomeExportString")
+    check(Tome.copyLabel:GetText() == "Ctrl+C to copy", "a loadout copy restores the default caption", Tome.copyLabel:GetText())
+    Tome.copyDialog:Hide()
 
     -- Reachable from the Options schema and the slash command too.
     local exposed = false
@@ -4527,10 +4527,10 @@ do
         end
     end
     check(exposed and ns.OPTION_ACTIONS.feedback ~= nil, "a Feedback action is in ns.OPTION_GROUPS")
-    Codex.copyBox:SetText("")
+    Tome.copyBox:SetText("")
     run("feedback")
-    check(Codex.copyBox:GetText() == ns.FeedbackURL(), "/sage feedback shows the same dialog")
-    Codex.copyDialog:Hide()
+    check(Tome.copyBox:GetText() == ns.FeedbackURL(), "/sage feedback shows the same dialog")
+    Tome.copyDialog:Hide()
 end
 
 --------------------------------------------------------------------------------
@@ -4585,30 +4585,30 @@ do
     end
     check(ordered, "the choices match THEME_ORDER, value and label alike")
 
-    -- Codex Options tab: a select renders as a label plus a cycling button.
+    -- Tome Options tab: a select renders as a label plus a cycling button.
     ns.db.theme = "minimal"
-    Codex:SelectTab("Options")
-    check(Codex.optionPools.select ~= nil and CountShownOptionRows(Codex.optionPools.select) == 1,
-        "the Options tab renders one select row", Codex.optionPools.select and CountShownOptionRows(Codex.optionPools.select))
-    local selectRow = Codex.optionPools.select[1]
+    Tome:SelectTab("Options")
+    check(Tome.optionPools.select ~= nil and CountShownOptionRows(Tome.optionPools.select) == 1,
+        "the Options tab renders one select row", Tome.optionPools.select and CountShownOptionRows(Tome.optionPools.select))
+    local selectRow = Tome.optionPools.select[1]
     check(selectRow and selectRow.button:GetText() == "Minimal",
         "the select button shows the current choice's label", selectRow and selectRow.button:GetText())
 
-    Codex:CycleOption(entry)
+    Tome:CycleOption(entry)
     check(ns.db.theme == "bordered", "cycling advances db.theme to the next preset", ns.db.theme)
     check(selectRow.button:GetText() == "Bordered", "the button re-renders with the new label", selectRow.button:GetText())
-    Codex:CycleOption(entry)
+    Tome:CycleOption(entry)
     check(ns.db.theme == "classcolor", "cycling again reaches the third preset", ns.db.theme)
-    Codex:CycleOption(entry)
+    Tome:CycleOption(entry)
     check(ns.db.theme == "minimal", "cycling wraps back to the first preset", ns.db.theme)
 
     -- A stale saved value reads as the first choice and cycles onward.
     ns.db.theme = "retired-theme"
     check(ns.OptionChoiceIndex(entry) == 1, "an unknown stored value reads as the first choice")
-    Codex:CycleOption(entry)
+    Tome:CycleOption(entry)
     check(ns.db.theme == "bordered", "cycling from an unknown value lands on the second choice", ns.db.theme)
     ns.db.theme = "minimal"
-    Codex:OnOptionChanged()
+    Tome:OnOptionChanged()
 
     -- Settings panel: the same entry registers as a dropdown without a
     -- recorded failure, and the dropdown speaks in indices.
@@ -4771,9 +4771,9 @@ do
     check(buffsGroup ~= nil and #buffsGroup.options == 3, "a Buffs group with three checks is in ns.OPTION_GROUPS",
         buffsGroup and #buffsGroup.options)
     local enabledEntry = buffsGroup and buffsGroup.options[1]
-    Codex:SelectTab("Options")
-    Codex:ToggleOption(enabledEntry)
-    check(ns.db.buffs.enabled == true, "the Codex Options tab toggles the buffs section back on")
+    Tome:SelectTab("Options")
+    Tome:ToggleOption(enabledEntry)
+    check(ns.db.buffs.enabled == true, "the Tome Options tab toggles the buffs section back on")
     check(#rendered.buffs == 5, "and the section re-renders through OnOptionChanged", #rendered.buffs)
 
     -- The overlay lays the fourth section out under its own header. The
@@ -5141,13 +5141,32 @@ do
 end
 
 --------------------------------------------------------------------------------
-section("Codex: close")
+--------------------------------------------------------------------------------
+section("Vocabulary: the guide window is the Tome (2026-09-08)")
 --------------------------------------------------------------------------------
 
-if not Codex:IsShown() then Codex:Toggle() end
-check(Codex:IsShown() == true, "Codex is shown before the final close check")
-Codex:Toggle()
-check(Codex:IsShown() == false, "Toggle closes the Codex")
+do
+    -- The owner's rule: the window's former name is never used in this
+    -- project. The pattern is assembled so this file passes its own check.
+    local banned = "c" .. "odex"
+    local ok, pipe = pcall(io.popen, "grep -rlI -i " .. banned
+        .. " --exclude-dir=.git --exclude-dir=__pycache__ --exclude=SpecSage.zip . 2>/dev/null")
+    if ok and pipe then
+        local hits = pipe:read("*a") or ""
+        pipe:close()
+        check(hits == "", "no file in the repository uses the guide window's former name", hits)
+    else
+        check(true, "vocabulary scan skipped: io.popen unavailable")
+    end
+end
+
+section("Tome: close")
+--------------------------------------------------------------------------------
+
+if not Tome:IsShown() then Tome:Toggle() end
+check(Tome:IsShown() == true, "Tome is shown before the final close check")
+Tome:Toggle()
+check(Tome:IsShown() == false, "Toggle closes the Tome")
 
 --------------------------------------------------------------------------------
 

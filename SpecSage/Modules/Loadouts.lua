@@ -2,11 +2,11 @@
 -- The talent loadout vault: save, label, import and export talent strings
 -- per spec. This module is a plain data API deliberately kept frame-free
 -- (see Core/Init.lua's module conventions) so it is fully testable without
--- the Codex UI, which is the only thing that calls it.
+-- the Tome UI, which is the only thing that calls it.
 
 local ADDON, ns = ...
 
--- Reached only via ns:GetModule("Loadouts") (the pattern UI/Codex.lua uses
+-- Reached only via ns:GetModule("Loadouts") (the pattern UI/Tome.lua uses
 -- throughout); no separate ns.Loadouts alias, so there is exactly one path
 -- to this module.
 local Loadouts = ns:NewModule("Loadouts")
@@ -22,7 +22,7 @@ local VALID_CATEGORIES = {
 }
 Loadouts.VALID_CATEGORIES = VALID_CATEGORIES
 
--- Ordered for UI cycling (e.g. a category-picker button in the Codex).
+-- Ordered for UI cycling (e.g. a category-picker button in the Tome).
 Loadouts.CATEGORY_ORDER = { "Raid", "Mythic+", "Delves", "PvP", "Other" }
 
 local function Trim(text)
@@ -94,7 +94,7 @@ end
 --------------------------------------------------------------------------------
 
 -- The specialization ID the player is currently playing, or nil if unknown
--- (e.g. no spec chosen yet, very low level). Shared by the Codex to decide
+-- (e.g. no spec chosen yet, very low level). Shared by the Tome to decide
 -- whether "Save current" / live stat values apply to the spec being viewed.
 function Loadouts:GetCurrentSpecID()
     local spec = GetSpecialization and GetSpecialization()

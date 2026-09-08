@@ -3,7 +3,7 @@
 An all-in-one World of Warcraft addon for **Retail (Midnight, patch 12.1)** that puts
 class guides, talent loadouts, and live character tracking in one place:
 
-- **The Codex** — a browsable guide window for every class and spec: overview,
+- **The Tome** — a browsable guide window for every class and spec: overview,
   stat priority, rotation priorities, cooldowns, consumables & enchants, and
   practical tips. Opens on your own spec, but you can read up on any class —
   teammates, enemies, or the alt you are levelling.
@@ -24,11 +24,11 @@ class guides, talent loadouts, and live character tracking in one place:
   the stat itself ("+512 Haste  #1") against the stat priority for the hero
   talent tree you are in, so
   you can tell at a glance whether a drop in your bags is for you.
-- **The Tome** — the Codex is a leather-bound book: parchment pages,
+- **Bound in leather** — the Tome is a book: parchment pages,
   serif type, a wax seal carrying your hero talent tree's own icon. The
   docked panel is a page of the same book.
 - **Docked panel** — an optional panel attached to the character sheet,
-  opening and closing with it, showing everything the Codex does: icon
+  opening and closing with it, showing everything the Tome does: icon
   tabs down its right edge switch between Overview, Stats, Rotation,
   Cooldowns, Consumables, BiS, Loadouts, Notes and Options. Its side tabs carry their section names (an option turns them off). Its own **Gear** section
   reacts to the paper doll beside it: your stat priority for the hero
@@ -54,9 +54,9 @@ class guides, talent loadouts, and live character tracking in one place:
   top-players' build, guide-site builds, your saved loadouts); pick one and it is
   laid onto the tree for you to look at, unsaved and unapplied until you choose.
 - **Minimap button** — SpecSage's wax seal on the minimap ring. Left-click
-  opens the Codex, right-click toggles the stat overlay, drag it around the
+  opens the Tome, right-click toggles the stat overlay, drag it around the
   ring to move it; the Options tab can hide it.
-- **Feedback button** — in the Codex title bar (and `/sage feedback`): shows
+- **Feedback button** — in the Tome title bar (and `/sage feedback`): shows
   the addon's GitHub Issues link ready to Ctrl+C for bug reports and feature
   requests. WoW gives addons no network access, so no addon can open your
   browser or send a report itself; copying a link is the honest version.
@@ -74,7 +74,7 @@ class guides, talent loadouts, and live character tracking in one place:
   clearly labelled estimate when the game hides the live figure) and Mastery
   shows your spec's own mastery text with its current value plugged in.
 
-The pieces talk to each other: the Codex's stat-priority page shows *your
+The pieces talk to each other: the Tome's stat-priority page shows *your
 live values* next to each stat in the priority, so the guide and your
 character sheet are one screen.
 
@@ -126,16 +126,16 @@ The folder name must stay `SpecSage` so it matches `SpecSage.toc`.
 
 ## Usage
 
-`/sage` (or the wax seal on the minimap) opens the Codex. `/sage overlay` toggles the overlay; drag it to move
+`/sage` (or the wax seal on the minimap) opens the Tome. `/sage overlay` toggles the overlay; drag it to move
 it, then `/sage lock` to fix it in place (locking lets clicks pass through).
 
 ### Commands
 
 | Command | What it does |
 | --- | --- |
-| `/sage` | Toggle the Codex window |
+| `/sage` | Toggle the Tome window |
 | `/sage overlay` | Show or hide the stat overlay |
-| `/sage guide <class> [spec]` | Open the Codex at a class/spec, e.g. `/sage guide druid resto` |
+| `/sage guide <class> [spec]` | Open the Tome at a class/spec, e.g. `/sage guide druid resto` |
 | `/sage lock` / `/sage unlock` | Lock or unlock overlay dragging |
 | `/sage config` | Open the options panel |
 | `/sage scale <0.5-2>` | Set the overlay scale |
@@ -149,10 +149,10 @@ it, then `/sage lock` to fix it in place (locking lets clicks pass through).
 | `/sage unpin [stat\|all]` | Close pinned tooltips |
 | `/sage pins` | List what is pinned |
 
-Key bindings (Options → Keybindings → SpecSage): **Toggle the Codex**, **Toggle
-stat overlay**, and **Pin hovered tooltip**. The Codex's Options tab and the
+Key bindings (Options → Keybindings → SpecSage): **Toggle the Tome**, **Toggle
+stat overlay**, and **Pin hovered tooltip**. The Tome's Options tab and the
 Settings panel both carry a **Show stat overlay** check as well, the **Theme**
-picker (a dropdown in the Settings panel; in the Codex a button that cycles
+picker (a dropdown in the Settings panel; in the Tome a button that cycles
 Minimal → Bordered → Class-coloured), and a **Buffs** group: *Show buffs
 section*, *Missing raid buffs* (on by default, only while grouped) and
 *Missing flask & food* (off by default).

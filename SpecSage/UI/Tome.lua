@@ -1,5 +1,5 @@
--- UI/Codex.lua
--- The Codex: a browsable class/spec guide window with a talent-loadout vault
+-- UI/Tome.lua
+-- The Tome: a browsable class/spec guide window with a talent-loadout vault
 -- and personal notes. Built lazily (BuildFrame runs on the first Toggle or
 -- Open, not at load) so an addon load never pays for a frame nobody opens.
 --
@@ -15,22 +15,22 @@
 
 local ADDON, ns = ...
 
-local Codex = ns:NewModule("Codex")
-ns.Codex = Codex
+local Tome = ns:NewModule("Tome")
+ns.Tome = Tome
 
 -- Without this, the first /sage of a session runs RenderActiveTab with
--- activeTab == nil: none of its "if tab == ..." branches match, so the Codex
+-- activeTab == nil: none of its "if tab == ..." branches match, so the Tome
 -- opens completely blank until the player happens to click a tab. See
 -- RenderActiveTab's own defensive fallback below for the second half of this
 -- fix.
-function Codex:OnInit()
+function Tome:OnInit()
     self.activeTab = self.activeTab or "Overview"
 end
 
 -- The BiS tab asks the client for every item it shows; each answer arrives
 -- as GET_ITEM_INFO_RECEIVED, and the row that was showing an "Item 12345"
 -- placeholder redraws with the real name and quality colour.
-function Codex:OnEnable()
+function Tome:OnEnable()
     ns:RegisterEvent("GET_ITEM_INFO_RECEIVED", function(_, itemID)
         self:OnBiSItemInfoReceived(itemID)
     end)
@@ -136,7 +136,7 @@ local DEFAULT_CLASS_COLOR = { r = 0.8, g = 0.8, b = 0.8 }
 -- nothing at all. WoW's SetFont has no italic flag, only OUTLINE/MONOCHROME/
 -- THICKOUTLINE, so "italic" here is approximated with a muted colour. Names
 -- the real place to add data (a Lua data file) rather than the options
--- panel, which has no Codex section (see Core/Options.lua).
+-- panel, which has no Tome section (see Core/Options.lua).
 local NO_DATA_TEXT = "no guide data yet - see SpecSage/Data/Guides_<Class>.lua to add some"
 -- "Blizzard Modern" palette: soft dark blue-gray panels with a faked vertical
 -- gradient (real frames stay flat-color BackdropTemplate; the gradient comes
@@ -167,7 +167,7 @@ local TEXT_SECONDARY_COLOR = { 0.169, 0.122, 0.078 }    -- ink
 -- Type: Libre Baskerville for everything read (rows 14pt, paragraphs
 -- 15pt), Playfair Display for what is looked at - the title, chapter tabs
 -- and section headings. Both are SIL OFL, bundled under SpecSage/Fonts/
--- with their licences. This is the third face the Codex has worn: Friz
+-- with their licences. This is the third face the Tome has worn: Friz
 -- Quadrata (the client's own) after the 2026-09-02 readability pass
 -- replaced PT Sans; the owner picked the Tome look on 2026-09-05 and a
 -- serif is what makes parchment read as parchment. Sizes went up one more
@@ -244,7 +244,7 @@ end
 -- entry, or an itemID GetItemInfo has not resolved yet).
 local DEFAULT_ITEM_COLOR = { 0.8, 0.8, 0.8 }
 
--- Data/API.lua's statPriority vocabulary, in the Codex's own display words.
+-- Data/API.lua's statPriority vocabulary, in the Tome's own display words.
 local STAT_LABELS = {
     primary = "Primary Stat", crit = "Crit", haste = "Haste", mastery = "Mastery",
     versatility = "Versatility", leech = "Leech", avoidance = "Avoidance",
@@ -263,7 +263,7 @@ local function PlayerClassToken()
 end
 
 -- Whether `specID` is the spec the player is currently playing, i.e. whether
--- the Codex should show live stat values / offer "Save current" for it.
+-- the Tome should show live stat values / offer "Save current" for it.
 local function IsPlayersSpec(specID)
     if specID == nil then return false end
     local Loadouts = ns:GetModule("Loadouts")
@@ -299,7 +299,7 @@ end
 
 -- Fallback chain for a rotation/cooldown step's spell icon, fully pcall
 -- wrapped: a bad or removed spellID from a third-party guide pack must never
--- take the Codex down.
+-- take the Tome down.
 local function SpellIcon(spellID)
     if not spellID then return nil end
     local ok, icon = pcall(function()
@@ -324,7 +324,7 @@ local function SpellIcon(spellID)
 end
 
 -- Maps an item quality (0=Poor..5=Legendary) to its r,g,b colour, the same
--- ITEM_QUALITY_COLORS global fallback pattern Codex.lua already uses for
+-- ITEM_QUALITY_COLORS global fallback pattern Tome.lua already uses for
 -- RAID_CLASS_COLORS. A nil quality (item link/plain-name entry, or an
 -- itemID GetItemInfo has not resolved yet) falls back to a neutral grey.
 local function ItemQualityColor(quality)
@@ -652,7 +652,7 @@ local function SkinButton(button, opts)
 end
 
 -- Shared with Modules/TalentButton.lua, whose button sits in Blizzard's
--- talent window but should look like the Codex's.
+-- talent window but should look like the Tome's.
 ns.SkinButton = SkinButton
 ns.SetParchmentBackdrop = SetParchmentBackdrop
 
@@ -676,7 +676,7 @@ local function NewBackdropEditBox(parent, width, height)
     box:SetTextInsets(4, 4, 2, 2)
     box:SetPoint("TOPLEFT", backdrop, "TOPLEFT", 4, -4)
     box:SetPoint("BOTTOMRIGHT", backdrop, "BOTTOMRIGHT", -4, 4)
-    -- The Codex is in UISpecialFrames, so an unhandled ESC inside a focused
+    -- The Tome is in UISpecialFrames, so an unhandled ESC inside a focused
     -- EditBox would otherwise close the whole window out from under whatever
     -- was being typed.
     box:SetScript("OnEscapePressed", function(self2) self2:ClearFocus() end)
@@ -878,19 +878,19 @@ end
 -- actually drawn. `y` is the cursor value after the last row was placed.
 -- Builds a second rendering surface: a plain table the Render*/Ensure*
 -- methods below can run against, drawing into `host`'s own scroll area
--- instead of the Codex window's.
+-- instead of the Tome window's.
 --
--- `__index = Codex` is what makes those methods reachable, and is also the
+-- `__index = Tome` is what makes those methods reachable, and is also the
 -- one hazard: a field the surface forgets to set falls through and reads the
--- Codex's, which would silently share a row pool between two windows. Every
+-- Tome's, which would silently share a row pool between two windows. Every
 -- per-surface field is therefore listed here explicitly, empty, rather than
--- being created lazily on first use - if a new one is added to the Codex
+-- being created lazily on first use - if a new one is added to the Tome
 -- later, this table is the place it has to be repeated.
 --
--- `host` is the frame interactive widgets anchor into (the Codex's own is
--- Codex.frame); `scrollFrame`/`scrollChild`/`contentWidth` are the scroll
+-- `host` is the frame interactive widgets anchor into (the Tome's own is
+-- Tome.frame); `scrollFrame`/`scrollChild`/`contentWidth` are the scroll
 -- area the rows are laid out in.
-function Codex:NewSurface(host, scrollFrame, scrollChild, contentWidth)
+function Tome:NewSurface(host, scrollFrame, scrollChild, contentWidth)
     return setmetatable({
         frame = host,
         scrollFrame = scrollFrame,
@@ -907,8 +907,8 @@ function Codex:NewSurface(host, scrollFrame, scrollChild, contentWidth)
         loadoutRowPool = {},
         siteLoadoutRowPool = {},
         -- The Consumables tab's item chips. Without this the docked panel
-        -- fell through to the Codex window's chips (parented to the
-        -- Codex's own scroll child) and showed none of its own.
+        -- fell through to the Tome window's chips (parented to the
+        -- Tome's own scroll child) and showed none of its own.
         consumableChipPool = {},
 
         -- Per-surface view state. Scalars, so unlike the pools above these
@@ -921,15 +921,15 @@ function Codex:NewSurface(host, scrollFrame, scrollChild, contentWidth)
         -- Lazily-built widgets, and the pools an Ensure*Widgets builds
         -- rather than the surface. `false`, deliberately, on both counts:
         --
-        --   * nil would fall through __index to the Codex's own widget, so
-        --     the panel's Notes tab would write into the Codex window's edit
-        --     box and its Options tab would drive the Codex's checkboxes.
+        --   * nil would fall through __index to the Tome's own widget, so
+        --     the panel's Notes tab would write into the Tome window's edit
+        --     box and its Options tab would drive the Tome's checkboxes.
         --   * a ready-made table would satisfy the "if self.X then return"
         --     guard every Ensure*Widgets opens with, so the widgets would
         --     never be built at all and the first render would index nil.
         --
         -- `false` is the only value that is both non-nil (no fallthrough)
-        -- and falsy (the guard still builds). Anything added to the Codex
+        -- and falsy (the guard still builds). Anything added to the Tome
         -- that an Ensure*Widgets creates has to be repeated here the same
         -- way.
         bisListToggle = false,
@@ -942,7 +942,7 @@ function Codex:NewSurface(host, scrollFrame, scrollChild, contentWidth)
 
         -- UpdateTabHighlight iterates this; a surface with no tab strip of
         -- its own gets an empty table rather than falling through to the
-        -- Codex's real buttons and highlighting the wrong window's tab.
+        -- Tome's real buttons and highlighting the wrong window's tab.
         tabButtons = {},
     }, { __index = self })
 end
@@ -951,17 +951,17 @@ end
 --
 -- Every Render*/Ensure* method below reaches its frames, row pools and
 -- per-window state through `self` rather than through an upvalue: `self`
--- here is a *surface*, not necessarily the Codex module. The Codex is its
--- own surface (Codex.frame, Codex.pools, Codex.contentWidth, ... all live
+-- here is a *surface*, not necessarily the Tome module. The Tome is its
+-- own surface (Tome.frame, Tome.pools, Tome.contentWidth, ... all live
 -- directly on the module), and UI/CharacterPanel.lua builds a second one -
--- a plain table carrying the same field names, with `__index = Codex` so
+-- a plain table carrying the same field names, with `__index = Tome` so
 -- these same methods run against it. Nothing here may close over the
--- Codex's own frames or pools, or the docked panel would draw into the
+-- Tome's own frames or pools, or the docked panel would draw into the
 -- floating window; `self.contentWidth` rather than the CONTENT_WIDTH
 -- upvalue is that rule applied to the one number rendering needs.
 --
--- Codex:NewSurface lists exactly what a surface must provide.
-function Codex:FinishPool(pool, usedCount, y)
+-- Tome:NewSurface lists exactly what a surface must provide.
+function Tome:FinishPool(pool, usedCount, y)
     HidePoolFrom(pool, usedCount + 1)
     self.scrollChild:SetHeight(math.max(-y, 10))
     pcall(self.scrollFrame.UpdateScrollChildRect, self.scrollFrame)
@@ -975,7 +975,7 @@ end
 -- "guide missing/empty -> NO_DATA_TEXT" fallback DESIGN.md specifies.
 --------------------------------------------------------------------------------
 
-function Codex:RenderOverview(guide)
+function Tome:RenderOverview(guide)
     local parent, width = self.scrollChild, self.contentWidth
     local pool = self.pools.overview
     local y, index = -PADDING, 0
@@ -1004,7 +1004,7 @@ function Codex:RenderOverview(guide)
     self:FinishPool(pool, index, y)
 end
 
-function Codex:RenderStats(guide, specID)
+function Tome:RenderStats(guide, specID)
     local parent, width = self.scrollChild, self.contentWidth
     local pool = self.pools.stats
     self.statLinePool = self.statLinePool or {}
@@ -1099,7 +1099,7 @@ function Codex:RenderStats(guide, specID)
     pcall(self.scrollFrame.UpdateScrollChildRect, self.scrollFrame)
 end
 
-function Codex:RenderRotation(guide)
+function Tome:RenderRotation(guide)
     local parent, width = self.scrollChild, self.contentWidth
     local pool = self.pools.rotation
     local y, index = -PADDING, 0
@@ -1134,7 +1134,7 @@ function Codex:RenderRotation(guide)
     self:FinishPool(pool, index, y)
 end
 
-function Codex:RenderCooldowns(guide)
+function Tome:RenderCooldowns(guide)
     local parent, width = self.scrollChild, self.contentWidth
     local pool = self.pools.cooldowns
     local y, index = -PADDING, 0
@@ -1221,7 +1221,7 @@ end
 -- Lays the chips for one guide line starting at (x = 0, y), wrapping within
 -- `width`. Returns the next free chip index and the y cursor under the
 -- last chip row (unchanged when there were no items to show).
-function Codex:PlaceConsumableChips(chipIndex, parent, y, width, items)
+function Tome:PlaceConsumableChips(chipIndex, parent, y, width, items)
     if #items == 0 then return chipIndex, y end
     local pool = self.consumableChipPool
     local x = 0
@@ -1267,7 +1267,7 @@ function Codex:PlaceConsumableChips(chipIndex, parent, y, width, items)
     return chipIndex, rowY - CHIP_HEIGHT - LINE_GAP
 end
 
-function Codex:RenderConsumables(guide)
+function Tome:RenderConsumables(guide)
     local parent, width = self.scrollChild, self.contentWidth
     local pool = self.pools.consumables
     local y, index = -PADDING, 0
@@ -1304,7 +1304,7 @@ end
 -- The items a consumables entry links: its own `items` list of IDs when it
 -- has one (the shipped guides, via tools/gen_consumables.py), else whatever
 -- Data/Consumables.lua can find by name in its prose.
-function Codex:ConsumableItemsFor(entry)
+function Tome:ConsumableItemsFor(entry)
     if type(entry.items) == "table" and #entry.items > 0 then
         local items = {}
         for _, itemID in ipairs(entry.items) do
@@ -1434,7 +1434,7 @@ end
 
 -- Cycles the linked BiS list through the registered contexts (Overall /
 -- Mythic+ / Raid).
-function Codex:CycleBiSList()
+function Tome:CycleBiSList()
     local data = self.selectedSpecID and ns.GuideStore:GetBiS(self.selectedSpecID)
     local count = (data and data.lists and #data.lists) or 1
     self.bisListIndex = ((self.bisListIndex or 1) % count) + 1
@@ -1445,7 +1445,7 @@ end
 -- with the context toggle beside it, one row per slot into
 -- self.bisLinkRowPool, and an attribution line. Returns the new pool index
 -- and y cursor; draws nothing when the spec has no list registered.
-function Codex:RenderBiSLinkSection(pool, index, parent, width, y, specID)
+function Tome:RenderBiSLinkSection(pool, index, parent, width, y, specID)
     local data = specID and ns.GuideStore:GetBiS(specID)
     local rowPool = self.bisLinkRowPool
     local toggle = self.bisListToggle
@@ -1519,7 +1519,7 @@ function Codex:RenderBiSLinkSection(pool, index, parent, width, y, specID)
     return index, y - GROUP_GAP
 end
 
-function Codex:EnsureBiSWidgets()
+function Tome:EnsureBiSWidgets()
     if self.bisListToggle then return end
 
     local parent = self.scrollChild
@@ -1545,13 +1545,13 @@ function Codex:EnsureBiSWidgets()
 
 end
 
--- Fired (via Codex:OnEnable) on GET_ITEM_INFO_RECEIVED. Re-renders only the
--- BiS tab's own pool/rows (RenderBiS), not the whole Codex, and only when
+-- Fired (via Tome:OnEnable) on GET_ITEM_INFO_RECEIVED. Re-renders only the
+-- BiS tab's own pool/rows (RenderBiS), not the whole Tome, and only when
 -- the resolved itemID is on a row the tab is showing - an item info event
 -- for some unrelated addon's lookup is a no-op.
-function Codex:OnBiSItemInfoReceived(itemID)
+function Tome:OnBiSItemInfoReceived(itemID)
     if type(itemID) ~= "number" then return end
-    -- A closed Codex left on its BiS tab must not redraw for every item
+    -- A closed Tome left on its BiS tab must not redraw for every item
     -- the docked panel asked about; the next Open redraws anyway.
     if not self.frame or not self.frame:IsShown() then return end
 
@@ -1587,7 +1587,7 @@ function Codex:OnBiSItemInfoReceived(itemID)
 end
 
 -- Cycles the trinket tier list through the spec's registered fight styles.
-function Codex:CycleTrinketList()
+function Tome:CycleTrinketList()
     local data = self.selectedSpecID and ns.GuideStore:GetTrinkets(self.selectedSpecID)
     local count = (data and data.lists and #data.lists) or 1
     self.trinketListIndex = ((self.trinketListIndex or 1) % count) + 1
@@ -1597,7 +1597,7 @@ end
 -- The trinket tier-list section of the BiS tab. Draws the header (with the
 -- fight-style toggle beside it) into `pool` from `index`, then the rows into
 -- self.trinketRowPool, and returns the new pool index and y cursor.
-function Codex:RenderTrinketSection(pool, index, parent, width, y, specID)
+function Tome:RenderTrinketSection(pool, index, parent, width, y, specID)
     local data = specID and ns.GuideStore:GetTrinkets(specID)
     local rowPool = self.trinketRowPool
     local toggle = self.trinketToggle
@@ -1704,7 +1704,7 @@ function Codex:RenderTrinketSection(pool, index, parent, width, y, specID)
     return index, y
 end
 
-function Codex:RenderBiS(guide, specID)
+function Tome:RenderBiS(guide, specID)
     self:EnsureBiSWidgets()
     local parent, width = self.scrollChild, self.contentWidth
     local pool = self.pools.bis
@@ -1766,7 +1766,7 @@ local function AcquireLoadoutRow(pool, index, parent)
     return row
 end
 
-function Codex:EnsureLoadoutWidgets()
+function Tome:EnsureLoadoutWidgets()
     if self.loadoutButtons then return end
 
     local parent = self.scrollChild
@@ -1836,7 +1836,7 @@ local function CreateSuggestedLoadoutRow(parent)
     return row
 end
 
-function Codex:EnsureSuggestedLoadoutRow()
+function Tome:EnsureSuggestedLoadoutRow()
     if self.suggestedLoadoutRows then return end
 
     self.suggestedLoadoutRows = {}
@@ -1862,7 +1862,7 @@ end
 -- one, else in the import dialog pre-filled. A closed window just gets the
 -- instruction in chat; anything else that fails also opens the copy
 -- dialog so the player still has the string.
-function Codex:OnViewLoadoutClicked(button, exportString, label)
+function Tome:OnViewLoadoutClicked(button, exportString, label)
     local Loadouts = ns:GetModule("Loadouts")
     if not Loadouts then return end
     local result, err = Loadouts:OpenInTalentUI(exportString, label)
@@ -1885,7 +1885,7 @@ end
 -- loadout now occupies this pooled row back to its idle label, which is
 -- always the correct state for it to be in, so a row recycled mid-countdown
 -- is not left showing a stale "Confirm?".
-function Codex:OnDeleteLoadoutClicked(button, specID, index)
+function Tome:OnDeleteLoadoutClicked(button, specID, index)
     if button.armed then
         local Loadouts = ns:GetModule("Loadouts")
         Loadouts:Delete(specID, index)
@@ -1902,7 +1902,7 @@ function Codex:OnDeleteLoadoutClicked(button, specID, index)
     end)
 end
 
-function Codex:RenderLoadouts(specID, guide)
+function Tome:RenderLoadouts(specID, guide)
     self:EnsureLoadoutWidgets()
     local parent, width = self.scrollChild, self.contentWidth
     local y = -PADDING
@@ -2052,7 +2052,7 @@ function Codex:RenderLoadouts(specID, guide)
     pcall(self.scrollFrame.UpdateScrollChildRect, self.scrollFrame)
 end
 
-function Codex:OnSaveCurrentClicked()
+function Tome:OnSaveCurrentClicked()
     local specID = self.selectedSpecID
     if not IsPlayersSpec(specID) then return end
 
@@ -2066,7 +2066,7 @@ function Codex:OnSaveCurrentClicked()
     self:ShowAddDialog(exportString)
 end
 
-function Codex:CycleAddCategory()
+function Tome:CycleAddCategory()
     local Loadouts = ns:GetModule("Loadouts")
     local order = (Loadouts and Loadouts.CATEGORY_ORDER) or { "Other" }
 
@@ -2082,7 +2082,7 @@ function Codex:CycleAddCategory()
     self.addCategoryButton:SetText(self.addCategory)
 end
 
-function Codex:EnsureAddDialog()
+function Tome:EnsureAddDialog()
     if self.addDialog then return end
 
     local dialog = CreateFrame("Frame", nil, self.frame, "BackdropTemplate")
@@ -2139,7 +2139,7 @@ function Codex:EnsureAddDialog()
     self.addCategoryButton = categoryButton
 end
 
-function Codex:ShowAddDialog(prefillImport)
+function Tome:ShowAddDialog(prefillImport)
     self:EnsureAddDialog()
     self.addNameBox:SetText("")
     self.addImportBox:SetText(prefillImport or "")
@@ -2148,11 +2148,11 @@ function Codex:ShowAddDialog(prefillImport)
     self.addDialog:Show()
 end
 
-function Codex:HideAddDialog()
+function Tome:HideAddDialog()
     if self.addDialog then self.addDialog:Hide() end
 end
 
-function Codex:OnAddDialogSave()
+function Tome:OnAddDialogSave()
     local Loadouts = ns:GetModule("Loadouts")
     local name = self.addNameBox:GetText()
     local importString = self.addImportBox:GetText()
@@ -2169,7 +2169,7 @@ end
 local COPY_DIALOG_WIDTH = 480
 local COPY_DIALOG_MARGIN = 12
 
-function Codex:EnsureCopyDialog()
+function Tome:EnsureCopyDialog()
     if self.copyDialog then return end
 
     -- Wide enough for the Feedback caption to sit inside the card in 15px
@@ -2209,7 +2209,7 @@ end
 
 -- `label` (optional) replaces the dialog's default "Ctrl+C to copy" caption
 -- for callers that need to say what the string is for (the Feedback link).
-function Codex:ShowCopyDialog(exportString, label)
+function Tome:ShowCopyDialog(exportString, label)
     self:EnsureCopyDialog()
     -- Show first: EditBox:SetFocus() is a no-op on a hidden widget in the
     -- real client, so focusing/highlighting before Show() leaves nothing
@@ -2224,8 +2224,8 @@ end
 -- Feedback / feature requests. The game gives an addon no way to open a
 -- browser or send anything out, so this is the honest version of a
 -- "feedback button": the GitHub Issues link, selected and ready to
--- Ctrl+C. Opens the Codex first so the dialog has a parent to sit on.
-function Codex:ShowFeedback()
+-- Ctrl+C. Opens the Tome first so the dialog has a parent to sit on.
+function Tome:ShowFeedback()
     if not self.frame or not self:IsShown() then self:Toggle() end
     self:ShowCopyDialog(ns.FeedbackURL(),
         "Ctrl+C this link and paste it in your browser. Bug reports and feature requests go there.")
@@ -2235,14 +2235,14 @@ end
 -- Notes tab
 --------------------------------------------------------------------------------
 
-function Codex:SaveNotes(box)
+function Tome:SaveNotes(box)
     box = box or self.notesBox
     if not box or not box.specID then return end
     local Notes = ns:GetModule("Notes")
     if Notes then Notes:Set(box.specID, box:GetText()) end
 end
 
-function Codex:EnsureNotesBox()
+function Tome:EnsureNotesBox()
     if self.notesBox then return end
 
     local backdrop, box = NewBackdropEditBox(self.scrollChild, self.contentWidth, 400)
@@ -2253,7 +2253,7 @@ function Codex:EnsureNotesBox()
     self.notesBox = box
 end
 
-function Codex:RenderNotes(specID)
+function Tome:RenderNotes(specID)
     self:EnsureNotesBox()
     local backdrop, box = self.notesBoxFrame, self.notesBox
 
@@ -2445,7 +2445,7 @@ local function AcquireOptionSelectRow(pool, index, parent)
     return row
 end
 
-function Codex:EnsureOptionWidgets()
+function Tome:EnsureOptionWidgets()
     if self.optionPools then return end
     self.optionPools = { check = {}, range = {}, action = {}, select = {} }
 end
@@ -2453,17 +2453,17 @@ end
 -- Applies a changed option and refreshes both the overlay (so the change is
 -- visible immediately) and this tab (so the widget reflects the stored
 -- value, including a clamp that refused to move).
-function Codex:OnOptionChanged()
+function Tome:OnOptionChanged()
     ns.RefreshAll()
     if self.activeTab == "Options" then self:RenderActiveTab() end
 end
 
-function Codex:ToggleOption(entry)
+function Tome:ToggleOption(entry)
     ns.SetOptionValue(entry, not ns.GetOptionValue(entry))
     self:OnOptionChanged()
 end
 
-function Codex:StepOption(entry, direction)
+function Tome:StepOption(entry, direction)
     local current = tonumber(ns.GetOptionValue(entry)) or entry.min
     ns.SetOptionValue(entry, ns.ClampOptionValue(entry, current + direction * entry.step))
     self:OnOptionChanged()
@@ -2473,7 +2473,7 @@ end
 -- from the last back to the first. A stored value matching no choice reads
 -- as the first (ns.OptionChoiceIndex), so a stale saved theme cycles onto
 -- the second choice rather than sticking.
-function Codex:CycleOption(entry)
+function Tome:CycleOption(entry)
     local choices = ns.OptionChoices(entry)
     if #choices == 0 then return end
     local nextIndex = ns.OptionChoiceIndex(entry) % #choices + 1
@@ -2481,7 +2481,7 @@ function Codex:CycleOption(entry)
     self:OnOptionChanged()
 end
 
-function Codex:RenderOptions()
+function Tome:RenderOptions()
     self:EnsureOptionWidgets()
 
     local parent, width = self.scrollChild, self.contentWidth
@@ -2596,7 +2596,7 @@ end
 -- ever visible at a time, all sharing the same scroll child.
 local POOL_BY_TAB = { Overview = "overview", Stats = "stats", Rotation = "rotation", Cooldowns = "cooldowns", Consumables = "consumables", BiS = "bis", Options = "options" }
 
-function Codex:HideOtherTabWidgets(activeTab)
+function Tome:HideOtherTabWidgets(activeTab)
     for tabName, poolName in pairs(POOL_BY_TAB) do
         if tabName ~= activeTab then
             HidePoolFrom(self.pools[poolName], 1)
@@ -2646,7 +2646,7 @@ function Codex:HideOtherTabWidgets(activeTab)
     end
 end
 
-function Codex:RenderActiveTab()
+function Tome:RenderActiveTab()
     if not self.frame then return end
 
     local specID = self.selectedSpecID
@@ -2686,7 +2686,7 @@ end
 -- Class rail / spec rail / tab strip
 --------------------------------------------------------------------------------
 
-function Codex:UpdateClassHighlight()
+function Tome:UpdateClassHighlight()
     local color = ClassColor(self.selectedClass)
 
     self:UpdateSubtitle()
@@ -2700,7 +2700,7 @@ end
 
 -- The line under the title on the left page: "Paladin · Protection" in the
 -- class's colour, and the version.
-function Codex:UpdateSubtitle()
+function Tome:UpdateSubtitle()
     local frame = self.frame
     if not (frame and frame.subtitle) then return end
     local className
@@ -2720,7 +2720,7 @@ end
 -- the tree's own icon (the atlas the client hands back with its name).
 -- Shown only while the player's own spec is on the page; another spec's
 -- guide has no "you" to seal.
-function Codex:UpdateHeroSeal()
+function Tome:UpdateHeroSeal()
     local frame = self.frame
     if not (frame and frame.heroSeal) then return end
     local name, atlas = ns.GuideStore:GetActiveHeroTree()
@@ -2738,7 +2738,7 @@ function Codex:UpdateHeroSeal()
     end
 end
 
-function Codex:UpdateSpecHighlight()
+function Tome:UpdateSpecHighlight()
     local color = ClassColor(self.selectedClass)
     for _, btn in ipairs(self.specButtonPool or {}) do
         if btn.specID then
@@ -2757,7 +2757,7 @@ function Codex:UpdateSpecHighlight()
     end
 end
 
-function Codex:UpdateTabHighlight()
+function Tome:UpdateTabHighlight()
     -- The open chapter is ink with a wax-red rule under it; the rest are
     -- faded. Wax red regardless of class: the class colour lives on the
     -- left page (the subtitle and the rails), the right page is the chart.
@@ -2782,7 +2782,7 @@ function Codex:UpdateTabHighlight()
     end
 end
 
-function Codex:RefreshSpecRail(classToken)
+function Tome:RefreshSpecRail(classToken)
     local rail, pool = self.specRail, self.specButtonPool
     local specIDs = ns.GuideStore:GetClassSpecs(classToken)
     local y = -4
@@ -2828,7 +2828,7 @@ function Codex:RefreshSpecRail(classToken)
     HidePoolFrom(pool, #specIDs + 1)
 end
 
-function Codex:SelectClass(classToken)
+function Tome:SelectClass(classToken)
     if not classToken then return end
     self.selectedClass = classToken
     self:RefreshSpecRail(classToken)
@@ -2838,7 +2838,7 @@ function Codex:SelectClass(classToken)
     local defaultSpecID = specIDs[1]
 
     -- Prefer the player's actual current spec when it belongs to this class,
-    -- so opening the Codex on your own class lands on your own spec.
+    -- so opening the Tome on your own class lands on your own spec.
     local Loadouts = ns:GetModule("Loadouts")
     local currentSpecID = Loadouts and Loadouts:GetCurrentSpecID()
     if currentSpecID then
@@ -2853,7 +2853,7 @@ function Codex:SelectClass(classToken)
     self:SelectSpec(defaultSpecID)
 end
 
-function Codex:SelectSpec(specID)
+function Tome:SelectSpec(specID)
     -- Flush whatever note is open against the spec it belongs to before
     -- swapping in a different spec: clicking a spec-rail button does not
     -- clear an EditBox's focus in WoW, so RenderNotes below would otherwise
@@ -2873,7 +2873,7 @@ function Codex:SelectSpec(specID)
     self:RenderActiveTab()
 end
 
-function Codex:SelectTab(tabName)
+function Tome:SelectTab(tabName)
     local valid = false
     for _, name in ipairs(TABS) do
         if name == tabName then valid = true break end
@@ -2893,7 +2893,7 @@ end
 -- Frame construction
 --------------------------------------------------------------------------------
 
-function Codex:BuildClassRail()
+function Tome:BuildClassRail()
     local rail = CreateFrame("Frame", nil, self.frame)
     rail:SetPoint("TOPLEFT", self.frame.leftPage, "TOPLEFT", PAGE_PADDING, -TITLE_HEIGHT)
     rail:SetPoint("BOTTOMLEFT", self.frame.leftPage, "BOTTOMLEFT", PAGE_PADDING, 0)
@@ -2944,7 +2944,7 @@ function Codex:BuildClassRail()
     end
 end
 
-function Codex:BuildSpecRail()
+function Tome:BuildSpecRail()
     local rail = CreateFrame("Frame", nil, self.frame)
     rail:SetPoint("TOPLEFT", self.classRail, "TOPRIGHT", 4, 0)
     rail:SetPoint("BOTTOMLEFT", self.classRail, "BOTTOMRIGHT", 4, 0)
@@ -2953,7 +2953,7 @@ function Codex:BuildSpecRail()
     self.specButtonPool = {}
 end
 
-function Codex:BuildTabStrip()
+function Tome:BuildTabStrip()
     local strip = CreateFrame("Frame", nil, self.frame)
     strip:SetPoint("TOPLEFT", self.frame.rightPage, "TOPLEFT", PAGE_PADDING, -14)
     strip:SetPoint("TOPRIGHT", self.frame.rightPage, "TOPRIGHT", -PAGE_PADDING, -14)
@@ -3008,12 +3008,12 @@ function Codex:BuildTabStrip()
     self.tabStripUsedWidth = x - TAB_GAP
 end
 
-function Codex:BuildContentArea()
+function Tome:BuildContentArea()
     -- Named (rather than anonymous): UIPanelScrollFrameTemplate has, in past
     -- client revisions, resolved its scrollbar via the frame's own global
     -- name when self.ScrollBar is not set by a parentKey; an anonymous frame
     -- makes that a concat-on-nil risk for no benefit.
-    local scrollFrame = CreateFrame("ScrollFrame", "SpecSageCodexScrollFrame", self.frame, "UIPanelScrollFrameTemplate")
+    local scrollFrame = CreateFrame("ScrollFrame", "SpecSageTomeScrollFrame", self.frame, "UIPanelScrollFrameTemplate")
     scrollFrame:SetPoint("TOPLEFT", self.tabStrip, "BOTTOMLEFT", 0, -8)
     scrollFrame:SetPoint("BOTTOMRIGHT", self.frame.rightPage, "BOTTOMRIGHT", -30, PAGE_PADDING)
 
@@ -3031,11 +3031,11 @@ function Codex:BuildContentArea()
     self.statLinePool = {}
 end
 
-function Codex:BuildFrame()
-    local frame = CreateFrame("Frame", "SpecSageCodexFrame", UIParent, "BackdropTemplate")
+function Tome:BuildFrame()
+    local frame = CreateFrame("Frame", "SpecSageTomeFrame", UIParent, "BackdropTemplate")
     frame:SetSize(FRAME_WIDTH, FRAME_HEIGHT)
 
-    local pos = (ns.db and ns.db.codexPosition) or ns.DEFAULTS.codexPosition
+    local pos = (ns.db and ns.db.tomePosition) or ns.DEFAULTS.tomePosition
     frame:SetPoint(pos.point, UIParent, pos.relPoint, pos.x, pos.y)
 
     frame:SetMovable(true)
@@ -3057,7 +3057,7 @@ function Codex:BuildFrame()
     frame:SetScript("OnDragStop", function(self2)
         self2:StopMovingOrSizing()
         local point, _, relPoint, x, y = self2:GetPoint()
-        local saved = ns.db and ns.db.codexPosition
+        local saved = ns.db and ns.db.tomePosition
         if saved then
             saved.point, saved.relPoint, saved.x, saved.y = point, relPoint, x, y
         end
@@ -3122,7 +3122,7 @@ function Codex:BuildFrame()
     closeButton:SetScript("OnClick", function() self:Toggle() end)
 
     -- Feedback button at the foot of the left page, right of the version:
-    -- shows the GitHub Issues link ready to copy (see Codex:ShowFeedback).
+    -- shows the GitHub Issues link ready to copy (see Tome:ShowFeedback).
     -- It sat beside the close button until the first in-game look, where
     -- the right page's top rule ran straight through it.
     local feedbackButton = CreateFrame("Button", nil, frame, "UIPanelButtonTemplate")
@@ -3135,7 +3135,7 @@ function Codex:BuildFrame()
 
     -- Registers the frame's global name for ESC-to-close; UISpecialFrames is
     -- a plain array of frame names that the client's own ESC handler reads.
-    tinsert(UISpecialFrames, "SpecSageCodexFrame")
+    tinsert(UISpecialFrames, "SpecSageTomeFrame")
 
     self.frame = frame
     self:BuildClassRail()
@@ -3144,7 +3144,7 @@ function Codex:BuildFrame()
     self:BuildContentArea()
 
     -- CreateFrame hands back a frame that is already shown (both in the real
-    -- client and in the test mock); the Codex should not pop up the instant
+    -- client and in the test mock); the Tome should not pop up the instant
     -- it is built, only once Toggle/Open actually decide to show it.
     frame:Hide()
 end
@@ -3153,21 +3153,21 @@ end
 -- Public API
 --------------------------------------------------------------------------------
 
-function Codex:EnsureFrame()
+function Tome:EnsureFrame()
     if not self.frame then
         self:BuildFrame()
     end
 end
 
-function Codex:IsShown()
+function Tome:IsShown()
     return self.frame ~= nil and self.frame:IsShown() == true
 end
 
--- Opens the Codex at a class/spec. A nil classToken defaults to whatever is
+-- Opens the Tome at a class/spec. A nil classToken defaults to whatever is
 -- already selected, falling back to the player's own class on a first-ever
 -- open; a nil specID lets SelectClass pick the player's current spec (if it
 -- belongs to that class) or the class's first registered spec.
-function Codex:Open(classToken, specID)
+function Tome:Open(classToken, specID)
     self:EnsureFrame()
 
     classToken = classToken or self.selectedClass or PlayerClassToken()
@@ -3184,7 +3184,7 @@ function Codex:Open(classToken, specID)
     self.frame:Show()
 end
 
-function Codex:Toggle()
+function Tome:Toggle()
     self:EnsureFrame()
 
     if self.frame:IsShown() then

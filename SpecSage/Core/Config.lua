@@ -31,7 +31,7 @@ ns.STAT_LIST = {
 -- Option schema
 --
 -- One description of every setting, consumed by BOTH surfaces that present
--- them: Core/Options.lua (Blizzard's Settings panel) and UI/Codex.lua's
+-- them: Core/Options.lua (Blizzard's Settings panel) and UI/Tome.lua's
 -- Options tab. It lives here, in the file that already owns DEFAULTS and
 -- STAT_LIST, so adding an option is a single edit and the two surfaces
 -- cannot drift apart.
@@ -39,10 +39,10 @@ ns.STAT_LIST = {
 -- Entry kinds:
 --   check  - boolean toggle
 --   range  - number with min/max/step (a slider in the Settings panel, -/+
---            steppers in the Codex, which has no slider widget of its own)
+--            steppers in the Tome, which has no slider widget of its own)
 --   action - a button that runs a named side effect
 --   select - one value out of a fixed list of choices (a dropdown in the
---            Settings panel; in the Codex, which has no dropdown widget, a
+--            Settings panel; in the Tome, which has no dropdown widget, a
 --            button showing the current choice that cycles to the next on
 --            click). `choices` is either an array of { value, label } or a
 --            function returning one - read through ns.OptionChoices, never
@@ -82,8 +82,8 @@ ns.OPTION_ACTIONS = {
     resetPosition = function() ns.UI:ResetPosition() end,
     resetSession = function() ns:GetModule("Combat"):ResetSession() end,
     feedback = function()
-        local Codex = ns:GetModule("Codex")
-        if Codex then Codex:ShowFeedback() end
+        local Tome = ns:GetModule("Tome")
+        if Tome then Tome:ShowFeedback() end
     end,
 }
 
@@ -216,15 +216,15 @@ local function BuildOptionGroups()
           buttonText = "Reset position", tooltip = "Move the overlay back to its default spot." },
     }
 
-    local codex = {
+    local tome = {
         { kind = "check", scope = "db", key = "itemStatRanks",
           variable = "SpecSage_itemStatRanks", label = "Tier and stat ranks on item tooltips",
           tooltip = "Add lines to every item tooltip: a trinket's tier in your current spec's trinket "
               .. "lists (Single Target S, Guide A, ...) and each secondary stat's rank (#1, #2, ...) "
-              .. "against your spec's stat priority from the Codex." },
+              .. "against your spec's stat priority from the Tome." },
         { kind = "check", scope = "db", key = "trinketSimLevelTooltips",
-          variable = "SpecSage_trinketSimLevelTooltips", label = "Hover Codex trinkets at their simmed item level",
-          tooltip = "A trinket row on the Codex's BiS tab shows its tooltip at the item level the sims "
+          variable = "SpecSage_trinketSimLevelTooltips", label = "Hover Tome trinkets at their simmed item level",
+          tooltip = "A trinket row on the Tome's BiS tab shows its tooltip at the item level the sims "
               .. "ranked it at, not the item's base level, so a returning dungeon's old trinket reads "
               .. "as the copy that drops this season. The tooltip says so; it is a projection, not a drop." },
         { kind = "check", scope = "characterPanel", key = "enabled",
@@ -238,7 +238,7 @@ local function BuildOptionGroups()
               .. "Off, the tabs are icons only and the name is in the tooltip." },
         { kind = "check", scope = "minimap", key = "shown",
           variable = "SpecSage_minimapButton", label = "Minimap button",
-          tooltip = "Show SpecSage's wax seal on the minimap. Left-click opens the Codex, "
+          tooltip = "Show SpecSage's wax seal on the minimap. Left-click opens the Tome, "
               .. "right-click toggles the stat overlay, drag it to move it around the ring." },
         { kind = "action", action = "feedback", label = "Feedback",
           buttonText = "Feedback / requests",
@@ -313,7 +313,7 @@ local function BuildOptionGroups()
 
     return {
         { title = "Display", options = display },
-        { title = "Codex", options = codex },
+        { title = "Tome", options = tome },
         { title = "Stats (this character)", options = stats },
         { title = "Combat", options = combat },
         { title = "Procs", options = procs },
@@ -343,10 +343,10 @@ local DEFAULTS = {
     theme = "minimal",
 
     -- Modules/ItemRanks.lua: rank an item tooltip's secondary stats against
-    -- the player's current spec's Codex stat priority.
+    -- the player's current spec's Tome stat priority.
     itemStatRanks = true,
 
-    -- UI/Codex.lua: hover a trinket tier-list row at the item level it was
+    -- UI/Tome.lua: hover a trinket tier-list row at the item level it was
     -- simmed at (ns.ItemStringAtLevel), when the client agrees to build it.
     trinketSimLevelTooltips = true,
 
@@ -355,8 +355,8 @@ local DEFAULTS = {
     -- is open, so it costs nothing until you go looking at your gear, and
     -- the checkbox on the sheet itself turns it off in one click.
     -- `listIndex` is which BiS context (Overall / Mythic+ / Raid / Wowhead)
-    -- its item rows come from, kept apart from the Codex's own so opening
-    -- the character sheet never changes what the Codex is showing.
+    -- its item rows come from, kept apart from the Tome's own so opening
+    -- the character sheet never changes what the Tome is showing.
     characterPanel = {
         enabled = true,
         -- Section names beside the side tabs' icons (owner's request,
@@ -364,8 +364,8 @@ local DEFAULTS = {
         tabLabels = true,
         listIndex = 1,
         -- Which side tab is active. "Gear" is this panel's own view;
-        -- every other value is one of the Codex's tabs, rendered by the
-        -- Codex's own methods against the panel's surface.
+        -- every other value is one of the Tome's tabs, rendered by the
+        -- Tome's own methods against the panel's surface.
         section = "Gear",
         -- How far the grip has dragged the panel right (>= 0) and down
         -- (<= 0) from its docked spot beside the sheet.
@@ -391,10 +391,10 @@ local DEFAULTS = {
 
     position = { point = "CENTER", relPoint = "CENTER", x = 300, y = 0 },
 
-    -- The Codex window's own remembered position, independent of the
-    -- overlay's. Centred by default; updated on drag (see UI/Codex.lua's
+    -- The Tome window's own remembered position, independent of the
+    -- overlay's. Centred by default; updated on drag (see UI/Tome.lua's
     -- OnDragStop).
-    codexPosition = { point = "CENTER", relPoint = "CENTER", x = 0, y = 0 },
+    tomePosition = { point = "CENTER", relPoint = "CENTER", x = 0, y = 0 },
 
     -- Which stats are shown lives per character, in SpecSageCharDB.
     stats = {

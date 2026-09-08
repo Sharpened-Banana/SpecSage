@@ -86,7 +86,7 @@ SPECS = [
     ("EVOKER", 1473, "evoker/augmentation", "augmentation-evoker", "dps"),
 ]
 
-# Sim fight styles, in the order the Codex's list toggle cycles through them;
+# Sim fight styles, in the order the Tome's list toggle cycles through them;
 # the Icy Veins list comes last.
 FIGHT_STYLES = [
     ("castingpatchwerk", "Single Target"),

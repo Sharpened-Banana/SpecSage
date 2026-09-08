@@ -198,7 +198,7 @@ header just needs to point a reader there.
 `lua5.1 tests/run.lua` must still pass with zero failures and
 `find SpecSage -name '*.lua' -exec luac5.1 -p {} +` must be clean, same as
 every other change to this repo. Confirm the new field actually renders in
-the Codex (open the spec's Loadouts tab, the live-meta row should show with
+the Tome (open the spec's Loadouts tab, the live-meta row should show with
 the right label/sample size) before calling this done — a schema that
 validates but never reaches the UI is not actually shipped. Delete any
 scratch files holding the API credentials or raw pull data once you're done

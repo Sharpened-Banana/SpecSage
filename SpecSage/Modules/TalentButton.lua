@@ -3,9 +3,9 @@
 -- every build SpecSage knows for the spec you are on - the SimC-suggested
 -- Mythic+ and Raid builds, the live top-players' build, the guide sites'
 -- builds, and your own saved loadouts - and pick one to lay it onto the
--- tree, using the same view-a-loadout path the Codex's View buttons use
+-- tree, using the same view-a-loadout path the Tome's View buttons use
 -- (Loadouts:OpenInTalentUI: nothing is applied or saved until you choose
--- to). Added at the owner's request on 2026-09-05: the Codex is where you
+-- to). Added at the owner's request on 2026-09-05: the Tome is where you
 -- read about a build, the talent window is where you try it, and having to
 -- walk between the two to do so was the friction.
 --
@@ -151,7 +151,7 @@ local function AcquireRow(menu, index, onClick)
         if SpecSageItalicFont then row.detail:SetFontObject(SpecSageItalicFont) end
         row.detail:SetJustifyH("RIGHT")
         row.detail:SetPoint("RIGHT", row, "RIGHT", -8, 0)
-        -- A flat wax-red wash on hover, like the Codex's buttons.
+        -- A flat wax-red wash on hover, like the Tome's buttons.
         local highlight = row:CreateTexture(nil, "HIGHLIGHT")
         highlight:SetAllPoints(row)
         highlight:SetColorTexture(0.478, 0.184, 0.122, 0.16)
@@ -215,7 +215,7 @@ function TalentButton:FillMenu()
         local header = AcquireHeader(menu, 1)
         header:ClearAllPoints()
         header:SetPoint("TOPLEFT", menu, "TOPLEFT", MENU_PADDING, y - 4)
-        header:SetText("No builds for this spec yet - save one from the Codex's Loadouts tab.")
+        header:SetText("No builds for this spec yet - save one from the Tome's Loadouts tab.")
         header:Show()
         y = y - HEADER_HEIGHT
     end

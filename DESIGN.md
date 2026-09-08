@@ -3,7 +3,7 @@
 SpecSage is an all-in-one World of Warcraft addon for Retail (Midnight,
 Interface 120100). It combines:
 
-1. **The Codex** — a browsable guide window for every class and spec: overview,
+1. **The Tome** — a browsable guide window for every class and spec: overview,
    stat priority, rotation priorities, cooldowns, consumables/enchants, tips.
 2. **Talent Loadout Vault** — save, label, import and export talent loadout
    strings per spec, organised by content type (Raid / Mythic+ / Delves / PvP).
@@ -12,7 +12,7 @@ Interface 120100). It combines:
    metrics (DPS/HPS/damage taken), and proc/cooldown tracking (ported from the
    StatOverlay addon by the same author).
 
-What makes it different from guide-scraper addons (e.g. Class Codex):
+What makes it different from guide-scraper addons (e.g. Class Tome):
 
 - **No scraped data.** Guide content ships as plain, human-editable Lua data
   files with a registration API, so anyone can write or amend a guide pack —
@@ -39,7 +39,7 @@ WOW-AIO/
     Core/Commands.lua       /sage slash commands
     UI/Overlay.lua          overlay frame + row layout engine
     UI/Tooltips.lua         hover + pinnable tooltips for overlay rows
-    UI/Codex.lua            the codex window (class/spec browser + tabs)
+    UI/Tome.lua            the tome window (class/spec browser + tabs)
     UI/CharacterPanel.lua   gearing panel docked to Blizzard's character sheet
     Modules/Stats.lua       character stats -> overlay rows + live stat lookup
     Modules/Combat.lua      combat log metrics
@@ -79,9 +79,9 @@ WOW-AIO/
 
 | Command | Action |
 | --- | --- |
-| `/sage` | Toggle the Codex window |
+| `/sage` | Toggle the Tome window |
 | `/sage overlay` | Toggle the stat overlay |
-| `/sage guide <class> [spec]` | Open the Codex at a class/spec (fuzzy match) |
+| `/sage guide <class> [spec]` | Open the Tome at a class/spec (fuzzy match) |
 | `/sage lock` / `unlock` | Lock/unlock overlay dragging |
 | `/sage config` | Open options |
 | `/sage scale <0.5-2>` / `width <120-320>` / `font <8-20>` | Overlay sizing |
@@ -111,7 +111,7 @@ A guide table:
   role = "DAMAGER",             -- DAMAGER | TANK | HEALER
   overview = { "paragraph 1", "paragraph 2" },   -- plain strings
   statPriority = {
-    -- ordered; statKey matches Modules/Stats keys so the Codex can show
+    -- ordered; statKey matches Modules/Stats keys so the Tome can show
     -- the player's live value beside it (only for the player's own class).
     -- Kept in step with the spec's first Data/StatPriority.lua list; the
     -- per-hero-tree orders live there, not here (see "Stat priority")
@@ -183,7 +183,7 @@ Valid `slot` values: `Head, Neck, Shoulder, Back, Chest, Wrist, Hands,
 Waist, Legs, Feet, Ring, Trinket, Weapon, Off-hand` (validated by
 `Data/API.lua` like statPriority keys; a guide may repeat a slot, e.g. two
 Trinket lines). Since v1.5 an entry may also carry a numeric `itemID`; the
-Codex then appends the item as a clickable, quality-coloured link after the
+Tome then appends the item as a clickable, quality-coloured link after the
 guidance text (see the v1.5 addendum below). No shipped guide sets one yet.
 
 **2. Personal BiS checklist** (`Modules/BiS.lua`, module name "BiS") — the
@@ -202,7 +202,7 @@ tracks progress live:
   `"owned"` (in bags, via `C_Container.GetContainerNumSlots`/`GetContainerItemID`
   fallback chain), or `"missing"` — only meaningful when the entry has an
   itemID and the viewed spec is the player's; pcall-wrap container/item APIs.
-- Codex **BiS** tab: the personal checklist (the shipped per-slot gear
+- Tome **BiS** tab: the personal checklist (the shipped per-slot gear
   prose was drawn above it until 2026-09-03; see "BiS tab prose" below) — each row shows slot,
   item name (item-quality colour when known), status tag
   (green "equipped" / yellow "in bags" / grey "missing", only for own spec
@@ -210,7 +210,7 @@ tracks progress live:
   hover (pcall). Below: an Add row — slot dropdown/cycler + editbox
   accepting link, itemID, or name.
 
-The Codex grows to 8 tabs: Overview | Stats | Rotation | Cooldowns |
+The Tome grows to 8 tabs: Overview | Stats | Rotation | Cooldowns |
 Consumables | BiS | Loadouts | Notes. To fit, `FRAME_WIDTH` widens to 984
 and `CONTENT_WIDTH` grows by the same 84px; tab width/stride stay as they
 are. (The tab strip is a separate geometry chain from `CONTENT_WIDTH` -
@@ -229,7 +229,7 @@ before); a click runs the same path a chat link does — `HandleModifiedItemClic
 first (shift-click inserts into chat, ctrl-click opens the dressing room),
 then `SetItemRef` for a plain click, which opens the standard `ItemRefTooltip`
 the player can move and close. Both are pcall-wrapped (`ClickItemLink` in
-UI/Codex.lua). The link itself is `C_Item.GetItemInfo`'s when the item is
+UI/Tome.lua). The link itself is `C_Item.GetItemInfo`'s when the item is
 cached and a bare `item:<id>` otherwise, which `SetItemRef` still resolves.
 
 ## Trinket tier lists (v1.5)
@@ -271,7 +271,7 @@ a non-empty array of `{ title, list }` whose rows each have a numeric
 `itemID`, non-empty `name`, `tier` in S/A/B/C and numeric `gain`; anything
 else prints one warning and is skipped, like a bad guide.
 
-What the numbers mean (and the Codex says so under the list): `gain` is the
+What the numbers mean (and the Tome says so under the list): `gain` is the
 trinket's simulated DPS over the spec's no-trinket baseline, at the highest
 item level bloodmallet simulated it at (raid trinkets sim at 344, dungeon at
 334, profession at 331 — a deliberate "each at its own best" comparison, the
@@ -307,7 +307,7 @@ How it is folded in, rather than picking a winner:
   there is no sim list; the old `unavailable` shape is still accepted by the
   API but no shipped spec uses it now.
 - Every sim row carries `siteTier`, Icy Veins' tier for the same item, and
-  the Codex renders it in the row's detail ("Icy Veins A", or "not on Icy
+  the Tome renders it in the row's detail ("Icy Veins A", or "not on Icy
   Veins' list") so the two views are compared on the row, not by flipping.
 - Where Icy Veins rates a trinket S that is absent from the sim top 15, the
   script writes a `note` naming it. As of this run there are none: after
@@ -322,10 +322,10 @@ How it is folded in, rather than picking a winner:
 Schema additions (validated in `Data/API.lua`): `gain` is now optional
 (present on sim rows only), `siteTier` is an optional S..D letter, `D` is
 accepted as a tier (editorial lists use it; sim buckets stop at C), and a
-top-level `note` is an optional non-empty string the Codex draws under the
+top-level `note` is an optional non-empty string the Tome draws under the
 list.
 
-Codex BiS tab layout, top to bottom: a **Trinket Tier List** header with a fight-style toggle button beside
+Tome BiS tab layout, top to bottom: a **Trinket Tier List** header with a fight-style toggle button beside
 it (cycles Single Target / 3 Targets / 5 Targets; hidden when only one list
 exists), one row per trinket — tier tag (S orange, A purple, B blue, C
 green) | quality-coloured item name with `ilvl · source · on-use` detail |
@@ -348,7 +348,7 @@ editorial list and the tab's attribution line says so — and says it goes
 stale every patch, which is the whole reason the shipped prose guidance and
 the personal checklist still exist alongside it.
 
-Codex BiS tab order is now: **Best in Slot (Icy Veins)** with a context toggle and one clickable row per slot (slot |
+Tome BiS tab order is now: **Best in Slot (Icy Veins)** with a context toggle and one clickable row per slot (slot |
 quality-coloured item + drop source | **Add**, which files the item on the
 personal checklist under that slot via `BiS:Add`), the trinket tier list,
 then the personal checklist. As of 2026-09-02 all 40 specs have all three
@@ -386,7 +386,7 @@ as a row's `bonus` (validated optional, `"a:b:c"`). Details worth keeping:
   neither trinket source publishes bonus lists and only some trinkets appear
   in a BiS guide; those rows stay bare until a better source turns up.
 
-On the addon side `UI/Codex.lua`'s `ItemString(itemID, bonus)` builds
+On the addon side `UI/Tome.lua`'s `ItemString(itemID, bonus)` builds
 `item:<id>:0:0:0:0:0:0:0:0:0:0:0:<numBonusIDs>:<bonus...>` — the eleven
 fields between the ID and the bonus count zeroed — or returns the plain
 numeric ID when there is no bonus list, which is what every path took
@@ -456,7 +456,7 @@ the one call every consumer uses: for the **player's own spec** it returns
 the hero tree's list (plus its title), for any other spec, or when the tree
 cannot be read or Wowhead has no list for it, the guide's flat order.
 
-Consumers: the Codex Stats tab's numbered list (with a muted "for your hero
+Consumers: the Tome Stats tab's numbered list (with a muted "for your hero
 tree: X" row and an "(you)" mark in the hero-tree section), the docked
 panel's Gear section (header "Stat Priority · X", same mark), and
 `Modules/ItemRanks.lua`'s tooltip ranks. `TRAIT_CONFIG_UPDATED` /
@@ -470,11 +470,11 @@ too but its pages are not harvested; adding them means a second
 `RegisterStatPriority`-shaped source and a source toggle, the way the BiS
 and trinket lists carry both sites.
 
-Codex Stats tab order: the flat priority as before (numbered, with the
+Tome Stats tab order: the flat priority as before (numbered, with the
 player's live value beside each row for their own spec), then a **By Hero
 Talent Tree** section — one wrapping row per list, `Title: A > B > C > D`,
 each note indented under it in the condition colour — then the Wowhead
-attribution line. The section draws into its own `Codex.statLinePool` rather
+attribution line. The section draws into its own `Tome.statLinePool` rather
 than `pools.stats`: those are label/value stat rows that do not wrap, and a
 note like "Haste only to roughly 800 rating" has to.
 
@@ -492,7 +492,7 @@ shipping a site's strings safe where WebFetch never was. Output:
 } } })`. As of 2026-09-02: 136 builds across all 40 specs (2–15 per spec;
 Shadow Priest's page ships per-boss variants).
 
-The Codex Loadouts tab renders them as "Icy Veins: <label> (patch 12.1)"
+The Tome Loadouts tab renders them as "Icy Veins: <label> (patch 12.1)"
 rows under the SimC/Blizzard suggested rows, with the same Copy and Add to
 my vault buttons; the vault category is inferred from the site's own label
 words (`SiteBuildCategory`: Mythic+/keys/dungeon/AoE → Mythic+, delve →
@@ -567,7 +567,7 @@ The other direction — seeing the copy the lists *do* rank — has two
 routes. The first is the real one: a Data/Trinkets.lua row carries `bonus`,
 the current copy's bonus-ID list (`4786:12854` for Merektha's Fang, the same
 pair the guide's links use), whenever tools/item_bonus.json knows it from a
-BiS guide, and the Codex row then hovers the true item string through
+BiS guide, and the Tome row then hovers the true item string through
 `ns.ItemString`, exactly like a linked BiS row. The second is the fallback
 for a row with no bonus list, `ns.ItemStringAtLevel(itemID, ilvl)`
 (Core/Init.lua). Bloodmallet publishes
@@ -582,12 +582,12 @@ squish may well have made of an old dungeon's trinket) yields nil and the
 caller falls back to the bare item. Nil for an uncached item too, retried on
 the GET_ITEM_INFO_RECEIVED re-render. Successes are memoised.
 `ns.ProjectedItemLevel(link)` recognises a string this session built.
-The Codex's trinket rows hover (and click) that string when
-`SpecSageDB.trinketSimLevelTooltips` ("Hover Codex trinkets at their simmed
+The Tome's trinket rows hover (and click) that string when
+`SpecSageDB.trinketSimLevelTooltips` ("Hover Tome trinkets at their simmed
 item level", default on) is set and the projection is available; the item
 tooltip then opens with a grey "shown at item level 334, the level the lists
 simmed; a projection, not a drop" above the tiers, and the low copy's note
-adds "hover it on the Codex's BiS tab for that copy" (also when the row
+adds "hover it on the Tome's BiS tab for that copy" (also when the row
 carries a bonus list, since that copy hovers regardless of the option). The
 item tooltip
 itself is never swapped for the projected one: an addon cannot change which
@@ -597,7 +597,7 @@ item the game's tooltip shows, only add lines to it.
 rank written onto that stat's own line, in the line's right-aligned column
 so the ranks form one column down the tooltip's edge (`+512 Haste ...... #1`,
 `+380 Versatility .. #4`) rather than trailing each stat's text at a
-different offset — against the player's *current spec's* Codex
+different offset — against the player's *current spec's* Tome
 `statPriority`. Tooltip lines are FontString pairs `<tooltipName>TextLeft<i>`
 / `TextRight<i>`; `ItemRanks:AnnotateInline` walks them, takes only lines
 whose left text starts with `+` (so an effect description mentioning Haste
@@ -628,11 +628,11 @@ client, not just ours. `ItemRanks:Describe(link, specID)` is the pure,
 tooltip-free half tests drive directly.
 
 Setting: `SpecSageDB.itemStatRanks` (default on) governs both annotations,
-exposed as "Tier and stat ranks on item tooltips" under a new **Codex**
-group in `ns.OPTION_GROUPS`, so both the Codex Options tab and the Settings
+exposed as "Tier and stat ranks on item tooltips" under a new **Tome**
+group in `ns.OPTION_GROUPS`, so both the Tome Options tab and the Settings
 panel carry it.
 
-A later pass (options-in-Codex work, not otherwise documented in this file)
+A later pass (options-in-Tome work, not otherwise documented in this file)
 added a 9th tab, **Options**, and widened the frame again to 984 -> 1070
 with the same `FRAME_WIDTH - 310` invariant carrying `CONTENT_WIDTH` along
 with it (760). `tests/run.lua`'s tab-strip width assertion derives its
@@ -673,7 +673,7 @@ M+-labeled, and talent trees get retuned every patch. Guide files note this
 per spec where the SimC profile's fight style is not clearly M+-oriented,
 rather than presenting it as more authoritative than it is.
 
-The Codex **Loadouts** tab, when `guide.mplusLoadout` is present, shows one
+The Tome **Loadouts** tab, when `guide.mplusLoadout` is present, shows one
 extra row above the user's own saved loadouts: "Suggested Mythic+ (via
 SimulationCraft, patch 12.1)" with a **Copy** button (same read-only
 highlighted-editbox pattern as a saved loadout) and an **Add to my vault**
@@ -708,7 +708,7 @@ file at the top level is an aggregator that `#include`s each spec's single
 file, not a separately-talented raid build sitting alongside a
 separately-talented dungeon one. Pointing `raidLoadout` at that same file
 under a `mplusLoadout` field that also (from an earlier or later fetch)
-points at it would show a player two different-looking Codex rows —
+points at it would show a player two different-looking Tome rows —
 "Suggested Mythic+" and "Suggested Raid" — that carry no real
 differentiation the label promises, with no way for the player to know that
 from the UI alone. Confirm SimC's directory structure for the current
@@ -725,10 +725,10 @@ Validated identically to `mplusLoadout` (`Data/API.lua`'s
 and `patch` must be non-empty strings). A guide may carry either, both, or
 neither; the two do not interact.
 
-The Codex **Loadouts** tab gains a second suggested-loadout row, "Suggested
+The Tome **Loadouts** tab gains a second suggested-loadout row, "Suggested
 Raid (via SimulationCraft, patch 12.1)", with the same Copy/Add to my vault
 behaviour as the Mythic+ row (`Loadouts:Add(specID, "Suggested Raid (SimC)",
-"Raid", guide.raidLoadout.string)`). `UI/Codex.lua`'s
+"Raid", guide.raidLoadout.string)`). `UI/Tome.lua`'s
 `SUGGESTED_LOADOUT_KINDS` table drives both rows from one shared renderer,
 Mythic+ above Raid, each independently shown or hidden depending on which
 loadout kinds that spec's guide actually ships — a spec with only one still
@@ -748,13 +748,13 @@ never raw `actions.*` syntax - and kept structurally separate from
 hand-authored `text` rather than folded into one sentence, so a future
 refresh pass can update the condition from a newer APL without touching
 prose a person wrote, and so the two read as clearly different things in the
-Codex rather than one run-on line. Not validated by `Data/API.lua` (same
+Tome rather than one run-on line. Not validated by `Data/API.lua` (same
 laissez-faire treatment `rotation`/`cooldowns` steps already get - a bad
 shape renders oddly rather than being rejected, since these are free-text
 fields already, not an enumerable vocabulary like `stat` or `slot`).
 
 Rendered as its own line directly under the step it belongs to, in a
-dedicated colour (`UI/Codex.lua`'s `CONDITION_COLOR`, distinct from a
+dedicated colour (`UI/Tome.lua`'s `CONDITION_COLOR`, distinct from a
 section header's colour and from plain step text) and indented
 (`CONDITION_INDENT`) so it reads as a detail on the step above rather than a
 new item. Present only when the step actually carries a `condition` - a step
@@ -774,7 +774,7 @@ Every other spec in the repo predates this field and has none yet;
 `raidLoadout` has not been applied to any real spec's guide file yet (see
 above) - only exercised by `tests/run.lua`'s fixtures.
 
-## Codex window (UI/Codex.lua)
+## Tome window (UI/Tome.lua)
 
 - One movable, resizable-feeling frame (fixed size is fine: ~740x520),
   `UIPanelDialogTemplate`-style but custom-built (dark backdrop, class-colour
@@ -791,7 +791,7 @@ above) - only exercised by `tests/run.lua`'s fixtures.
   classes/specs just the priority.
 - Rotation steps with a `spellID` show the spell icon (via
   `C_Spell.GetSpellTexture` fallback chain) and the game's spell tooltip on
-  hover (shared `GameTooltip` is fine here — the Codex has no pinning).
+  hover (shared `GameTooltip` is fine here — the Tome has no pinning).
 - Loadouts tab: list of saved loadouts for the viewed spec with name +
   category; buttons: **Save current** (only for own spec, reads
   `C_Traits`/`C_ClassTalents` export string when available), **Add from
@@ -816,10 +816,10 @@ above) - only exercised by `tests/run.lua`'s fixtures.
 - Notes tab: multi-line editbox saved to `SpecSageDB.notes[specID]` on
   focus-lost / window close.
 
-**Visual style — the Tome (2026-09-05):** the Codex is a leather-bound
+**Visual style — the Tome (2026-09-05):** the Tome is a leather-bound
 book, the docked panel a single page of it. Picked by the owner from eight
 mocked directions (a blend of "The Tome" and "Cartographer's Scroll").
-`ApplyTomeChrome` in `UI/Codex.lua` builds it: a tiled leather cover
+`ApplyTomeChrome` in `UI/Tome.lua` builds it: a tiled leather cover
 (`Textures/leather.png`) over the backdrop's leather colour, a plain 30px
 spine (the three gold rivets came out on the first in-game look), two `parchment.png` pages with an alpha-gradient
 gutter between them and hairline rules inset in each (doubled on the
@@ -856,7 +856,7 @@ notes below describe the look this replaced.
 
 **Visual style ("Blizzard Modern", 2026-09-01, replaced):** soft dark blue-gray panels
 with a faked vertical gradient (`Texture:SetGradient`, no bundled art) and a
-1px top-edge highlight seam (`ApplyPanelChrome` in `UI/Codex.lua`), a warm
+1px top-edge highlight seam (`ApplyPanelChrome` in `UI/Tome.lua`), a warm
 bronze accent (`ACCENT_COLOR`) that shifts to the selected class's own color
 for the active-tab underline, and flat bordered buttons (`SkinButton`)
 replacing the stock gray 3D-bevel `UIPanelButtonTemplate` look. Section
@@ -878,7 +878,7 @@ their colour and divider. The PT Sans files and their license were removed
 from `SpecSage/Fonts/` since nothing references them now.
 
 **Rounded corners and a glow texture (2026-09-02 follow-up):** the main
-Codex frame's corners are now genuinely rounded, and buttons get a soft
+Tome frame's corners are now genuinely rounded, and buttons get a soft
 accent glow on hover. Both use bundled PNG assets in `SpecSage/Textures/`
 (generated with PIL for exact, pixel-precise alpha channels — an AI image
 generator can't produce a mathematically exact rounded-rect mask or radial
@@ -888,7 +888,7 @@ the *entire* rectangle including the corners, so a transparent "cut" pixel
 drawn on top of that fill just reveals the same opaque color sitting
 underneath, not the real background behind the frame — the first version
 of this fix looked correct in isolation but would not actually have
-rounded anything in-game. `ApplyRoundedCorners` in `UI/Codex.lua` instead
+rounded anything in-game. `ApplyRoundedCorners` in `UI/Tome.lua` instead
 replaces the backdrop's fill entirely with a manual "cross" of 6 plain
 rects (3 border-colored, 3 fill-colored, each shaped to avoid the 4 corner
 squares) plus the 4 corner PNGs dropped into exactly those unpainted
@@ -904,7 +904,7 @@ safe to revert independently of everything else in this file.
 
 ## Character sheet panel (v1.6, UI/CharacterPanel.lua)
 
-The Codex holds the stat priority and the BiS lists, but it is a separate
+The Tome holds the stat priority and the BiS lists, but it is a separate
 window you have to go and open. The one screen where that data actually gets
 used is the character sheet, with the drop you just picked up in front of
 you — so the owner asked for it docked there, the way other addons dock a
@@ -912,12 +912,12 @@ panel to the character tab.
 
 `UI/CharacterPanel.lua` is a frame parented to `CharacterFrame`, docked to
 its right edge and following it open and closed. It shows **everything the
-Codex window does**, one section at a time, picked from a column of icon
+Tome window does**, one section at a time, picked from a column of icon
 tabs hung off its right edge.
 
-### Why side tabs and not the Codex's strip
+### Why side tabs and not the Tome's strip
 
-The Codex needs ~86px per tab button and there are ten sections; that is
+The Tome needs ~86px per tab button and there are ten sections; that is
 roughly twice the whole panel's width, and a wrapped three-row strip would
 eat a third of the panel before any content. The first cut used a dropdown
 for that reason, and the owner rejected it: a dropdown hides nine of the
@@ -927,7 +927,7 @@ equipment sets), so the panel does the same: ten 32px icon buttons at a
 36px stride run 360px, inside the sheet's height, outside the panel's
 border, costing the content nothing. The section name lives in the tab's
 tooltip and in the panel header, right of the spec name. The active tab
-carries a class-coloured edge marker, matching the Codex's underline; the
+carries a class-coloured edge marker, matching the Tome's underline; the
 rest are desaturated.
 
 ### Sections
@@ -939,7 +939,7 @@ rest are desaturated.
   for whichever paper doll slot the mouse last touched — quality-coloured,
   tagged equipped/owned/missing via `BiS:GetStatus`, drop source underneath.
 - **Overview / Stats / Rotation / Cooldowns / Consumables / BiS / Loadouts /
-  Notes / Options** — rendered by `UI/Codex.lua`'s own methods, not copies
+  Notes / Options** — rendered by `UI/Tome.lua`'s own methods, not copies
   of them.
 
 **One guide, unnamed (2026-09-08):** the owner dropped the Icy Veins data
@@ -959,8 +959,8 @@ and label and fails on either site's name, so a regeneration that forgets
 the strip step is caught.
 
 **Talent window button (2026-09-05):** `Modules/TalentButton.lua` puts a
-SpecSage button (Codex skin, via `ns.SkinButton` / `ns.SetParchmentBackdrop`
-exported from `UI/Codex.lua`) at the bottom left of the PlayerSpells Talents
+SpecSage button (Tome skin, via `ns.SkinButton` / `ns.SetParchmentBackdrop`
+exported from `UI/Tome.lua`) at the bottom left of the PlayerSpells Talents
 tab, attaching when `Blizzard_PlayerSpells` loads. Clicking it opens a
 parchment menu of every build for the current spec, grouped SpecSage /
 Guide sites / My vault (`TalentButton:BuildsFor`), and picking one runs
@@ -969,8 +969,8 @@ A refused pick (window closed, combat, another spec's string) reports the
 reason in chat. The addon still never opens the talent window itself.
 
 **Minimap button (2026-09-05):** `Modules/MinimapButton.lua` puts the
-Codex's wax-seal art with the addon's book icon inside it on the minimap
-ring. Left-click toggles the Codex, right-click the overlay, drag moves it
+Tome's wax-seal art with the addon's book icon inside it on the minimap
+ring. Left-click toggles the Tome, right-click the overlay, drag moves it
 around the ring (the angle is saved in `db.minimap.angle`, degrees
 anticlockwise from 3 o'clock; 220 by default, lower left). No LibDBIcon —
 the addon bundles no libraries and the job is one button plus the ring
@@ -986,7 +986,7 @@ and stones, weapon / ring / chest / leg / helm-shoulder-boot enchants, gems
 and augment runes - every item looked up on Wowhead (name, ID, tooltip) on
 the date in the script. Each entry is `{ slot, items = { itemIDs }, text }`:
 eleven kinds per spec, from Flask through Augment Rune, with the weapon
-oil its own kind. The Codex draws each kind as a heading, then the items as
+oil its own kind. The Tome draws each kind as a heading, then the items as
 chips (icon plus quality-coloured name - hover for the tooltip, click for
 the link, an enchant chip shows the enchant's name without the scroll's
 "Enchant Ring - " prefix), then the reasoning, with a group gap before the
@@ -1029,7 +1029,7 @@ drop source or tier detail after the name (`AttachItemHit` / `SizeItemHit`)
 
 The personal checklist (its rows with equipped / in bags / missing tags,
 the slot + editbox + Add row under it, and the per-row **Add** button on
-the linked BiS lists) was pulled from the Codex on 2026-09-03 at the
+the linked BiS lists) was pulled from the Tome on 2026-09-03 at the
 owner's request: on the docked panel a column of Add buttons was the most
 prominent thing on the tab and the owner had no use for it. `Modules/BiS.lua`
 (storage, `GetStatus`, `ScanBags`) is untouched - the docked panel's Gear
@@ -1048,24 +1048,24 @@ draws it.
 
 ### Rendering surfaces
 
-The v1.6 first cut duplicated the Codex's row pooling, on the reasoning that
+The v1.6 first cut duplicated the Tome's row pooling, on the reasoning that
 threading a second parent through every `Render*` path would couple two
 windows that only happened to draw similar rows. Once the panel had to show
 all nine tabs that reasoning inverted: duplicating nine render paths so two
 windows could show the same guide was never going to stay correct.
 
-`Codex:NewSurface(host, scrollFrame, scrollChild, contentWidth)` returns a
+`Tome:NewSurface(host, scrollFrame, scrollChild, contentWidth)` returns a
 plain table carrying the per-window frames, row pools and view state, with
-`__index` pointing at the Codex. Every `Render*`/`Ensure*` method already
+`__index` pointing at the Tome. Every `Render*`/`Ensure*` method already
 reached those through `self`, so they run against it unchanged — the only
 edit to make it work was replacing the `CONTENT_WIDTH` upvalue with
-`self.contentWidth`. The Codex is its own surface (its fields live directly
+`self.contentWidth`. The Tome is its own surface (its fields live directly
 on the module), which is why no existing call site or test moved.
 
 **The `__index` hazard, and the `false` rule.** A field the surface forgets
-to set falls through and reads the Codex's. That is not theoretical — the
+to set falls through and reads the Tome's. That is not theoretical — the
 first cut of `NewSurface` hit it twice: the panel's Notes tab wrote into the
-Codex window's edit box, and its Options tab drove the Codex's checkboxes,
+Tome window's edit box, and its Options tab drove the Tome's checkboxes,
 because `notesBox` and `optionPools` were left nil. Setting them to a
 ready-made `{}` breaks it the other way: every `Ensure*Widgets` opens with
 `if self.X then return end`, so a truthy value means the widgets are never
@@ -1073,19 +1073,19 @@ built and the first render indexes nil — which is exactly how the Loadouts
 section crashed on `suggestedLoadoutRows`. `false` is the only value that is
 both non-nil (no fallthrough) and falsy (the guard still builds), so every
 lazily-built field is listed in `NewSurface` as `false`. Anything added to
-the Codex that an `Ensure*Widgets` creates has to be repeated there.
+the Tome that an `Ensure*Widgets` creates has to be repeated there.
 
 Tests assert the two surfaces share nothing by reference — pools, scroll
 child, host frame, Notes box, Options pools, BiS Add box, suggested loadout
-rows — and that cycling the panel's BiS context leaves the Codex's alone.
+rows — and that cycling the panel's BiS context leaves the Tome's alone.
 
 ### Section switching
 
 Both halves draw into one scroll child, so the other's rows have to go or
 leftovers stack under the new section. `HideOtherTabWidgets("Gear")` does it
-for the Codex side: `"Gear"` is not one of its tabs, so every pool and
+for the Tome side: `"Gear"` is not one of its tabs, so every pool and
 tab-owned widget it knows about is hidden. The Gear pool is hidden directly
-when a Codex section is active.
+when a Tome section is active.
 
 Decisions worth keeping:
 
@@ -1109,16 +1109,16 @@ Decisions worth keeping:
   rows and every other slot shows one.
 - **Its own BiS context.** `db.characterPanel.listIndex` picks which list
   (Overall / Mythic+ / Raid / Wowhead) the item rows come from, kept apart
-  from the Codex's `bisListIndex` so opening the character sheet never
-  quietly changes what the Codex is showing. A small button in the panel
+  from the Tome's `bisListIndex` so opening the character sheet never
+  quietly changes what the Tome is showing. A small button in the panel
   header cycles it and names the active list.
 - **On by default, with the switch where you see it.** It only ever draws
   while the character sheet is open, so it costs nothing until you go
   looking at your gear. A checkbox on the sheet itself turns it off in one
   click, and it writes the same `db.characterPanel.enabled` the entry in
   `ns.OPTION_GROUPS` does, so the two surfaces cannot disagree.
-- **`ns.ItemString` lives in `Core/Init.lua`,** moved out of `UI/Codex.lua`
-  so the Gear section and the Codex build the same bonus-carrying item
+- **`ns.ItemString` lives in `Core/Init.lua`,** moved out of `UI/Tome.lua`
+  so the Gear section and the Tome build the same bonus-carrying item
   string (see "Linked BiS lists").
 - **A footer names the build and the patch** the shipped guide data targets,
   so a panel left over from a past season is visibly that.
@@ -1139,15 +1139,15 @@ agreeing on a wrong name. `mock.ShowCharacterFrame` and
 
 Ported from `stat-overlay` (same author, code may be reused verbatim where it
 fits) with these changes: namespace/saved-variable/branding renames, slash
-commands folded into `/sage`, options panel gains Codex settings, and
+commands folded into `/sage`, options panel gains Tome settings, and
 `Modules/Stats.lua` additionally exposes
-`Stats:GetStatValue(statKey) -> displayString` for the Codex's live stat
+`Stats:GetStatValue(statKey) -> displayString` for the Tome's live stat
 integration.
 
 ### Theme presets, the `select` option kind, and the Buffs section (2026-09-05)
 
 Brought across from the author's **Upkeep** addon — the later fork of this
-same overlay, which kept refining it while SpecSage grew the Codex around
+same overlay, which kept refining it while SpecSage grew the Tome around
 an older copy. Three pieces, ported with SpecSage's names (`ns`,
 `SpecSageOverlayFrame`, `/sage`):
 
@@ -1177,9 +1177,9 @@ an older copy. Three pieces, ported with SpecSage's names (`ns`,
   `AddDropdown`, which is deliberately backed by a **Number** setting (an
   index) because the only confirmed-working Blizzard example does that and
   a String-typed dropdown is the kind of metadata mismatch that asserts
-  deep in `Blizzard_SettingControls.lua`; the Codex Options tab — which has
+  deep in `Blizzard_SettingControls.lua`; the Tome Options tab — which has
   no dropdown widget — as a label plus one skinned button showing the
-  current choice's label that `Codex:CycleOption(entry)` advances (wrapping)
+  current choice's label that `Tome:CycleOption(entry)` advances (wrapping)
   on click, the same gesture as the BiS list toggle. `Options:GetFailures()`
   exposes the panel's recorded registration failures so the suite can prove
   the dropdown registered rather than merely not erroring.
@@ -1320,7 +1320,7 @@ a positive number when present — the only field of the three loadout kinds
 that isn't just `string`/`source`/`patch`, since an empirical aggregate has a
 sample size and a single curated profile does not).
 
-`UI/Codex.lua`'s `SUGGESTED_LOADOUT_KINDS` gained a third entry and an
+`UI/Tome.lua`'s `SUGGESTED_LOADOUT_KINDS` gained a third entry and an
 `attribution` field per kind ("via SimulationCraft" for the first two, "via
 Blizzard's API" for this one) — the row label is no longer a hardcoded "via
 SimulationCraft" phrase reused across every kind, which would have
@@ -1331,7 +1331,7 @@ patch 12.1)". Same Copy / Add to my vault behaviour as the other two rows
 `"Mythic+"`, the same category the SimC mplus row uses, since it is also a
 Mythic+ build; only the source and name differ).
 
-**What is shipped and tested:** the schema, validation, and full Codex
+**What is shipped and tested:** the schema, validation, and full Tome
 rendering (three independently shown/hidden/ordered rows, correct
 per-kind attribution, Copy, Add to my vault) — proven with `tests/run.lua`
 fixtures, same as `raidLoadout` before any real spec carried one.
@@ -1402,7 +1402,7 @@ it" rule every shipped `source` string follows.
 ## Tests
 
 Port the strict mock and driver from stat-overlay; extend the mock with the
-extra APIs the Codex needs (`C_ClassTalents`, `C_Traits`,
+extra APIs the Tome needs (`C_ClassTalents`, `C_Traits`,
 `GetSpecializationInfoByID`, `GetNumClasses`/`GetClassInfo`,
 `UISpecialFrames`, editbox/scrollframe widget methods, etc. — keep the mock
 strict: unknown registered events fail the run).
@@ -1410,5 +1410,5 @@ strict: unknown registered events fail the run).
 New test areas: GuideStore validation (bad guides rejected, good guides
 retrievable, ordering), every shipped data file registers all of its class's
 specs with valid stat keys and non-empty rotation, loadout add/delete/export
-round-trip, notes persistence, codex open/select-spec/tab-switch smoke tests,
+round-trip, notes persistence, tome open/select-spec/tab-switch smoke tests,
 slash command routing.

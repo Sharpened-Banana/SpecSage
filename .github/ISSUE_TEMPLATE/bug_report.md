@@ -16,7 +16,7 @@ labels: bug
 2.
 
 **Details**
-- SpecSage version (top of the Codex window or `/sage` -> Options):
+- SpecSage version (top of the Tome window or `/sage` -> Options):
 - WoW patch:
 - Class / spec:
 - Any Lua error text (enable Interface > Display > "Display Lua Errors", or install BugSack):

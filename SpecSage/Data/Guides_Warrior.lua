@@ -26,7 +26,7 @@ local ADDON, ns = ...
 --     `raidLoadout` anyway, pointed at the same profile under a UI label
 --     that implies real raid-vs-M+ differentiation, would misrepresent the
 --     data to a player who only sees "Suggested Raid" vs "Suggested
---     Mythic+" in the Codex with no way to see this comment. See
+--     Mythic+" in the Tome with no way to see this comment. See
 --     DESIGN.md's v1.3 section.
 --   * `mplusMetaLoadout` (DESIGN.md's v1.4 section) added for Arms (71),
 --     Fury (72), and Protection (73): pulled live from Blizzard's own

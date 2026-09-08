@@ -1,12 +1,12 @@
 -- Modules/MinimapButton.lua
--- A wax seal on the minimap ring. Left-click opens the Codex, right-click
+-- A wax seal on the minimap ring. Left-click opens the Tome, right-click
 -- toggles the stat overlay, drag it around the ring to move it. Added at the
 -- owner's request on 2026-09-05, alongside /sage and the keybind - the
 -- one addon entry point a player finds without reading anything.
 --
 -- No LibDBIcon / LibDataBroker: the addon bundles no libraries, and the
 -- whole job is one button and a bit of trigonometry. The seal is the
--- Codex's own hero-seal art (Textures/wax_seal.png) with the addon's book
+-- Tome's own hero-seal art (Textures/wax_seal.png) with the addon's book
 -- icon rounded off inside it, so the minimap carries the same mark as the
 -- book's left page rather than a generic ring button.
 
@@ -81,7 +81,7 @@ function MinimapButton:ShowTooltip()
     pcall(function()
         GameTooltip:SetOwner(button, "ANCHOR_LEFT")
         GameTooltip:SetText("SpecSage")
-        GameTooltip:AddLine("Left-click: open the Codex", 1, 1, 1)
+        GameTooltip:AddLine("Left-click: open the Tome", 1, 1, 1)
         GameTooltip:AddLine("Right-click: toggle the stat overlay", 1, 1, 1)
         GameTooltip:AddLine("Drag: move around the minimap", 1, 1, 1)
         GameTooltip:Show()
@@ -92,8 +92,8 @@ function MinimapButton:OnClick(mouseButton)
     if mouseButton == "RightButton" then
         if ns.UI and ns.UI.Toggle then ns.UI:Toggle() end
     else
-        local Codex = ns:GetModule("Codex")
-        if Codex then Codex:Toggle() end
+        local Tome = ns:GetModule("Tome")
+        if Tome then Tome:Toggle() end
     end
 end
 
