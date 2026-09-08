@@ -256,9 +256,10 @@ function ItemRanks:AnnotateInline(tooltip, lines)
 end
 
 -- Where `itemID` sits in the spec's trinket tier lists (Data/Trinkets.lua):
--- an ordered array of { title, tier, gain, ilvl } with one entry per list
--- that ranks it (`ilvl` the item level the row was simmed at, when the list
--- records one), or nil when no list does. Public so the Codex or a test can
+-- an ordered array of { title, tier, gain, ilvl, bonus } with one entry per
+-- list that ranks it (`ilvl` the item level the row was simmed at and
+-- `bonus` the current copy's bonus-ID list, each when the list records one),
+-- or nil when no list does. Public so the Codex or a test can
 -- ask without a tooltip.
 function ItemRanks:DescribeTrinket(itemID, specID)
     local data = itemID and specID and ns.GuideStore and ns.GuideStore:GetTrinkets(specID)
@@ -268,7 +269,7 @@ function ItemRanks:DescribeTrinket(itemID, specID)
     for _, listEntry in ipairs(data.lists) do
         for _, row in ipairs(listEntry.list or {}) do
             if row.itemID == itemID then
-                found[#found + 1] = { title = listEntry.title, tier = row.tier, gain = row.gain, ilvl = row.ilvl }
+                found[#found + 1] = { title = listEntry.title, tier = row.tier, gain = row.gain, ilvl = row.ilvl, bonus = row.bonus }
                 break
             end
         end
@@ -336,7 +337,12 @@ function ItemRanks:Annotate(tooltip, link)
         local actualLevel = ItemLevelOf(link)
         local projectedLevel = ns.ProjectedItemLevel(link)
         if self:IsFarBelowSimLevel(actualLevel, simLevel) then
-            local pointer = (ns.db.trinketSimLevelTooltips and ns.ItemStringAtLevel(itemID, simLevel))
+            -- The Codex row hovers the ranked copy when the data carries its
+            -- bonus list (a real item string) or, failing that, when the
+            -- option is on and the level projection is available.
+            local hasBonus = false
+            for _, entry in ipairs(tiers) do if entry.bonus then hasBonus = true end end
+            local pointer = (hasBonus or (ns.db.trinketSimLevelTooltips and ns.ItemStringAtLevel(itemID, simLevel)))
                 and " (hover it on the Codex's BiS tab for that copy)" or ""
             tierParts = { format("%sranked at item level %d; this item level %d copy is far below it%s|r",
                 ColorCode(TIER_COLORS.D), simLevel, actualLevel, pointer) }

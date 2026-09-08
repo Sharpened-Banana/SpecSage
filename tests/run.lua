@@ -3389,10 +3389,30 @@ do
     ns.db.trinketSimLevelTooltips = false
     GameTooltip:SetOwner(nil, "ANCHOR_NONE")
     mock.FireTooltipItem(GameTooltip, topRow.itemID)
-    check(table.concat(GameTooltip:Dump(), "\n"):find("hover it on the Codex", 1, true) == nil,
-        "with the option off the note does not point at the Codex")
+    check((table.concat(GameTooltip:Dump(), "\n"):find("hover it on the Codex", 1, true) ~= nil) == (topRow.bonus ~= nil),
+        "with the option off the note points at the Codex only when the row carries the copy's bonus list")
     ns.db.trinketSimLevelTooltips = true
     mock.items[topRow.itemID] = nil
+
+    -- Merektha's Fang (Temple of Sethraliss, back in the 12.1 Mythic+ pool):
+    -- its rows carry the current copy's bonus list, so the Codex row hovers
+    -- the real item string, no projection needed, and a level 19 copy from
+    -- Chromie Time gets the note with the pointer whatever the option says.
+    local fang = ItemRanks:DescribeTrinket(158367, 73)
+    check(fang ~= nil and fang[1].bonus == "4786:12854", "Merektha's Fang rows carry the current copy's bonus list", fang and fang[1].bonus)
+    mock.items[158367] = { name = "Merektha's Fang", quality = 3, equipLoc = "INVTYPE_TRINKET", level = 19 }
+    local Loadouts = ns:GetModule("Loadouts")
+    local savedSpec = Loadouts.GetCurrentSpecID
+    Loadouts.GetCurrentSpecID = function() return 73 end
+    ns.db.trinketSimLevelTooltips = false
+    GameTooltip:SetOwner(nil, "ANCHOR_NONE")
+    mock.FireTooltipItem(GameTooltip, 158367)
+    dump = table.concat(GameTooltip:Dump(), "\n")
+    check(dump:find("ranked at item level 334; this item level 19 copy is far below it (hover it on the Codex's BiS tab for that copy)", 1, true) ~= nil,
+        "a level 19 Fang gets the note and the pointer without the projection option", dump)
+    ns.db.trinketSimLevelTooltips = true
+    Loadouts.GetCurrentSpecID = savedSpec
+    mock.items[158367] = nil
 
     -- A trinket no list ranks says so; a non-trinket no list ranks says nothing.
     mock.items[880003] = { name = "Obscure Trinket", quality = 2, equipLoc = "INVTYPE_TRINKET" }

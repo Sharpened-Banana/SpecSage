@@ -563,8 +563,14 @@ Heroic or early Mythic+ copy keeps its tiers; an unknown item level (uncached
 item, older client) also keeps them, since the question cannot be answered.
 `TrinketSimLevel` and `IsFarBelowSimLevel` are the pure halves.
 
-The other direction — seeing the copy the lists *do* rank — is
-`ns.ItemStringAtLevel(itemID, ilvl)` (Core/Init.lua). Bloodmallet publishes
+The other direction — seeing the copy the lists *do* rank — has two
+routes. The first is the real one: a Data/Trinkets.lua row carries `bonus`,
+the current copy's bonus-ID list (`4786:12854` for Merektha's Fang, the same
+pair the guide's links use), whenever tools/item_bonus.json knows it from a
+BiS guide, and the Codex row then hovers the true item string through
+`ns.ItemString`, exactly like a linked BiS row. The second is the fallback
+for a row with no bonus list, `ns.ItemStringAtLevel(itemID, ilvl)`
+(Core/Init.lua). Bloodmallet publishes
 the level it simmed at but not the bonus IDs that put an item there, so the
 string is built from the client's own ITEM_BONUS_TYPE_ITEM_LEVEL run (bonus
 1472 is +0, one ID per level from −100 to +200) offset from the base level
@@ -581,7 +587,9 @@ The Codex's trinket rows hover (and click) that string when
 item level", default on) is set and the projection is available; the item
 tooltip then opens with a grey "shown at item level 334, the level the lists
 simmed; a projection, not a drop" above the tiers, and the low copy's note
-adds "hover it on the Codex's BiS tab for that copy". The item tooltip
+adds "hover it on the Codex's BiS tab for that copy" (also when the row
+carries a bonus list, since that copy hovers regardless of the option). The
+item tooltip
 itself is never swapped for the projected one: an addon cannot change which
 item the game's tooltip shows, only add lines to it.
 
