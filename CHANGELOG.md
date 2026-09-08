@@ -10,6 +10,7 @@
 - **Buffs section** on the overlay: missing raid buffs and, optionally, a missing flask or food. Silent when nothing is missing.
 - **Show stat overlay** option, plus **Toggle stat overlay** and **Toggle the Codex** key bindings.
 - **Stagger** stat row (off by default).
+- The character sheet panel's side tabs now carry their section names beside the icons; a **Label the gearing panel's tabs** option turns them off.
 
 **Improved**
 - The Stats tab and the character sheet panel's Gear section are laid out as headed blocks: Stat Priority with your hero tree under it, Other Hero Trees (each tree named over its order), Best in Slot.

@@ -227,6 +227,10 @@ local function BuildOptionGroups()
           tooltip = "Show your stat priority, your live rating for each stat, Wowhead's order for "
               .. "each hero talent tree, and the BiS item for whichever gear slot you hover - "
               .. "attached to the character sheet, opening and closing with it." },
+        { kind = "check", scope = "characterPanel", key = "tabLabels",
+          variable = "SpecSage_characterPanelLabels", label = "Label the gearing panel's tabs",
+          tooltip = "Write each section's name beside its icon on the panel's side tabs. "
+              .. "Off, the tabs are icons only and the name is in the tooltip." },
         { kind = "check", scope = "minimap", key = "shown",
           variable = "SpecSage_minimapButton", label = "Minimap button",
           tooltip = "Show SpecSage's wax seal on the minimap. Left-click opens the Codex, "
@@ -346,6 +350,9 @@ local DEFAULTS = {
     -- the character sheet never changes what the Codex is showing.
     characterPanel = {
         enabled = true,
+        -- Section names beside the side tabs' icons (owner's request,
+        -- 2026-09-07); off leaves icon-only tabs with the name in a tooltip.
+        tabLabels = true,
         listIndex = 1,
         -- Which side tab is active. "Gear" is this panel's own view;
         -- every other value is one of the Codex's tabs, rendered by the

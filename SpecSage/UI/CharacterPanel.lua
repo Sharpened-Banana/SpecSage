@@ -78,6 +78,11 @@ local TAB_SIZE = 32
 local TAB_STRIDE = 36
 local TAB_TOP_OFFSET = 30
 local TAB_ICON_INSET = 3
+-- With labels on (Settings().tabLabels) each tab widens to carry its
+-- section's name after the icon: icon, gap, text, then this much padding.
+local TAB_LABEL_GAP = 6
+local TAB_LABEL_PAD = 10
+local TAB_LABEL_COLOR = { 0.941, 0.894, 0.784 }        -- #F0E4C8 paper on leather
 
 -- How long a burst of redraw requests is held before one redraw happens.
 -- Opening the sheet asks the client for every item the section shows, and
@@ -608,6 +613,16 @@ function CharacterPanel:BuildSideTabs(frame)
 
         pcall(tab.SetHighlightTexture, tab, "Interface\\Buttons\\UI-Common-MouseHilight", "ADD")
 
+        -- The section's name, beside the icon, shown by ApplyTabLabels.
+        local label = tab:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
+        if SpecSageButtonFont then label:SetFontObject(SpecSageButtonFont) end
+        label:SetJustifyH("LEFT")
+        label:SetPoint("LEFT", tab, "LEFT", TAB_SIZE + TAB_LABEL_GAP - TAB_ICON_INSET, 0)
+        label:SetText(section)
+        label:SetTextColor(unpack(TAB_LABEL_COLOR))
+        label:Hide()
+        tab.label = label
+
         tab.section = section
         tab:SetScript("OnClick", function() self:SelectSection(section) end)
         tab:SetScript("OnEnter", function(button)
@@ -622,6 +637,38 @@ function CharacterPanel:BuildSideTabs(frame)
         frame.sectionTabs[i] = tab
         frame.sectionTabByName[section] = tab
     end
+    self:ApplyTabLabels()
+end
+
+-- Shows or hides the section names on the side tabs per the tabLabels
+-- setting, widening each tab to fit its own name when they are on. The
+-- icon keeps its square at the tab's left; the name sits after it.
+function CharacterPanel:ApplyTabLabels()
+    local frame = self.frame
+    if not (frame and frame.sectionTabs) then return end
+    local labelled = Settings().tabLabels ~= false
+    for _, tab in ipairs(frame.sectionTabs) do
+        tab.icon:ClearAllPoints()
+        tab.icon:SetPoint("TOPLEFT", tab, "TOPLEFT", TAB_ICON_INSET, -TAB_ICON_INSET)
+        if labelled then
+            local ok, measured = pcall(tab.label.GetStringWidth, tab.label)
+            local textWidth = (ok and type(measured) == "number" and measured > 0) and measured or (#tab.section * 7)
+            tab.icon:SetPoint("BOTTOMRIGHT", tab, "BOTTOMLEFT", TAB_SIZE - TAB_ICON_INSET, TAB_ICON_INSET)
+            tab:SetSize(TAB_SIZE + TAB_LABEL_GAP + math.ceil(textWidth) + TAB_LABEL_PAD, TAB_SIZE)
+            tab.label:Show()
+        else
+            tab.icon:SetPoint("BOTTOMRIGHT", tab, "BOTTOMRIGHT", -TAB_ICON_INSET, TAB_ICON_INSET)
+            tab:SetSize(TAB_SIZE, TAB_SIZE)
+            tab.label:Hide()
+        end
+    end
+end
+
+-- Options changed (the Codex's Options tab or the Settings panel): the
+-- tab labels and the panel's enabled state both take effect at once.
+function CharacterPanel:OnConfigChanged()
+    self:ApplyTabLabels()
+    self:Update()
 end
 
 -- The open tab is sealed in wax red with its icon at full colour; the rest

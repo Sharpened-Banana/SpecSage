@@ -3803,6 +3803,29 @@ do
         check(tab.icon.texture ~= nil, "and carries an icon", tab.icon.texture)
     end
 
+    -- Tab labels (2026-09-07): on by default, the section name beside the
+    -- icon and the tab widened to fit; the option turns them off.
+    local gearTab = Panel.frame.sectionTabByName["Gear"]
+    check(ns.db.characterPanel.tabLabels == true, "tab labels are on by default")
+    check(gearTab.label ~= nil and gearTab.label:IsShown() and gearTab.label:GetText() == "Gear",
+        "a tab carries its section's name beside the icon")
+    check((gearTab.width or 0) > 32, "a labelled tab is wider than its icon", gearTab.width)
+    local consumablesTab = Panel.frame.sectionTabByName["Consumables"]
+    check((consumablesTab.width or 0) > (gearTab.width or 0), "each tab is as wide as its own name")
+    local labelEntry
+    for _, group in ipairs(ns.OPTION_GROUPS) do
+        for _, option in ipairs(group.options) do
+            if option.scope == "characterPanel" and option.key == "tabLabels" then labelEntry = option end
+        end
+    end
+    check(labelEntry ~= nil and labelEntry.kind == "check", "the Options tab offers a tab-label check")
+    ns.SetOptionValue(labelEntry, false)
+    ns.RefreshAll()
+    check(not gearTab.label:IsShown() and gearTab.width == 32, "turning labels off returns the tabs to icons", gearTab.width)
+    ns.SetOptionValue(labelEntry, true)
+    ns.RefreshAll()
+    check(gearTab.label:IsShown() and gearTab.width > 32, "and back on widens them again")
+
     -- Nothing may be shared by reference with the Codex's own surface: a
     -- shared pool would have the two windows fighting over the same rows,
     -- and a shared widget would put the panel's Notes text in the Codex's

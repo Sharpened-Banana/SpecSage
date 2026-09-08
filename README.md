@@ -30,7 +30,7 @@ class guides, talent loadouts, and live character tracking in one place:
 - **Docked panel** — an optional panel attached to the character sheet,
   opening and closing with it, showing everything the Codex does: icon
   tabs down its right edge switch between Overview, Stats, Rotation,
-  Cooldowns, Consumables, BiS, Loadouts, Notes and Options. Its own **Gear** section
+  Cooldowns, Consumables, BiS, Loadouts, Notes and Options. Its side tabs carry their section names (an option turns them off). Its own **Gear** section
   reacts to the paper doll beside it: your stat priority for the hero
   talent tree you are in, with your live rating beside each stat, Wowhead's
   order for every hero tree, and the
