@@ -1062,6 +1062,29 @@ function CharacterPanel:QueueRender()
     end)
 end
 
+-- The Tome steps aside for the character sheet (option `hideTome`, owner's
+-- request 2026-09-09): opening the sheet hides an open Tome, and closing
+-- the sheet brings it back - only when it was this hook that hid it and
+-- the player has not touched the window since (Tome:ShownByPlayer clears
+-- the flag), so a Tome they reopened and closed while the sheet was up
+-- stays closed, and one opened while the sheet was up (from the minimap
+-- seal, say) is left alone.
+function CharacterPanel:YieldTome()
+    if not (ns.db and ns.db.characterPanel and ns.db.characterPanel.hideTome) then return end
+    local Tome = ns:GetModule("Tome")
+    if Tome and Tome:IsShown() then
+        Tome.frame:Hide()
+        self.hidTome = true
+    end
+end
+
+function CharacterPanel:RestoreTome()
+    if not self.hidTome then return end
+    self.hidTome = nil
+    local Tome = ns:GetModule("Tome")
+    if Tome and Tome.frame and not Tome:IsShown() then Tome.frame:Show() end
+end
+
 -- Hooks Blizzard's frames. Kept separate from OnEnable so it can be retried:
 -- the character sheet is base UI in retail, but a client that has not built
 -- it yet must not leave the panel permanently dead.
@@ -1072,9 +1095,13 @@ function CharacterPanel:HookBlizzardFrames()
     self:BuildFrame()
     self:BuildToggle()
 
-    CharacterFrame:HookScript("OnShow", function() self:Update() end)
+    CharacterFrame:HookScript("OnShow", function()
+        self:YieldTome()
+        self:Update()
+    end)
     CharacterFrame:HookScript("OnHide", function()
         if self.frame then self.frame:Hide() end
+        self:RestoreTome()
     end)
 
     -- The paper doll slot buttons drive which BiS row is shown. HookScript

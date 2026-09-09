@@ -3955,6 +3955,45 @@ do
     ns.RefreshAll()
     check(gearTab.label:IsShown() and gearTab.width > 32, "and back on widens them again")
 
+    -- Hide the Tome while the sheet is open (2026-09-09): an open Tome
+    -- steps aside when the sheet opens and returns when it closes; one the
+    -- player closed meanwhile stays closed; the option turns it all off.
+    local Tome = ns:GetModule("Tome")
+    check(ns.db.characterPanel.hideTome == true, "hiding the Tome for the sheet is on by default")
+    mock.ShowCharacterFrame(false)
+    Tome:Open("MAGE", 9604)
+    check(Tome:IsShown(), "the Tome is open before the sheet")
+    mock.ShowCharacterFrame(true)
+    check(not Tome:IsShown(), "opening the character sheet hides the Tome")
+    mock.ShowCharacterFrame(false)
+    check(Tome:IsShown(), "closing the sheet brings the Tome back")
+    mock.ShowCharacterFrame(true)
+    Tome:Toggle()
+    check(Tome:IsShown(), "the player can reopen the Tome over the sheet")
+    Tome:Toggle()
+    mock.ShowCharacterFrame(false)
+    check(not Tome:IsShown(), "a Tome the player reopened and closed while the sheet was up stays closed")
+    mock.ShowCharacterFrame(true)
+    Tome:Open("MAGE", 9604)
+    mock.ShowCharacterFrame(false)
+    check(Tome:IsShown(), "a Tome opened while the sheet was up is left alone when it closes")
+    Tome.frame:Hide()
+    local hideEntry
+    for _, group in ipairs(ns.OPTION_GROUPS) do
+        for _, option in ipairs(group.options) do
+            if option.scope == "characterPanel" and option.key == "hideTome" then hideEntry = option end
+        end
+    end
+    check(hideEntry ~= nil and hideEntry.kind == "check", "the Options tab offers the hide-Tome check")
+    ns.SetOptionValue(hideEntry, false)
+    Tome:Open("MAGE", 9604)
+    mock.ShowCharacterFrame(true)
+    check(Tome:IsShown(), "with the option off the Tome stays open over the sheet")
+    mock.ShowCharacterFrame(false)
+    Tome.frame:Hide()
+    ns.SetOptionValue(hideEntry, true)
+    mock.ShowCharacterFrame(true) -- the tests below expect the sheet up
+
     -- Nothing may be shared by reference with the Tome's own surface: a
     -- shared pool would have the two windows fighting over the same rows,
     -- and a shared widget would put the panel's Notes text in the Tome's

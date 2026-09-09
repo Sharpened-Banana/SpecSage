@@ -538,6 +538,18 @@ What it adds, alongside Icy Veins on every spec (never replacing it):
   like Icy Veins'. Each build now carries `site`, and the Loadouts row and
   vault name use it.
 
+## The Tome yields to the character sheet (2026-09-09, UI/CharacterPanel.lua)
+
+`SpecSageDB.characterPanel.hideTome` ("Hide the Tome while the character
+sheet is open", default on). The sheet's `OnShow` hook calls
+`CharacterPanel:YieldTome()`: an open Tome is hidden and `hidTome` set; the
+`OnHide` hook's `RestoreTome()` shows it again only while that flag stands.
+`Tome:Open` and the showing half of `Tome:Toggle` call `Tome.ShownByPlayer`,
+which clears the flag, so a Tome the player reopened over the sheet is
+theirs from then on (closing it again leaves it closed), and one first
+opened while the sheet was up is never touched. The panel's own frame is
+unaffected: it still opens and closes with the sheet.
+
 ## Item stat ranks and trinket tiers on tooltips (v1.5, Modules/ItemRanks.lua)
 
 Two annotations share one tooltip hook. **Trinket tier**: an item that

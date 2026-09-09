@@ -3181,7 +3181,16 @@ function Tome:Open(classToken, specID)
         self:SelectSpec(specID)
     end
 
+    self:ShownByPlayer()
     self.frame:Show()
+end
+
+-- The player deliberately showing the Tome cancels any pending return of
+-- it by the character sheet (UI/CharacterPanel.lua's YieldTome/RestoreTome):
+-- from here on what they do with the window is theirs.
+function Tome.ShownByPlayer()
+    local panel = ns:GetModule("CharacterPanel")
+    if panel then panel.hidTome = nil end
 end
 
 function Tome:Toggle()
@@ -3192,6 +3201,7 @@ function Tome:Toggle()
     elseif not self.selectedClass then
         self:Open()
     else
+        self:ShownByPlayer()
         self.frame:Show()
     end
 end

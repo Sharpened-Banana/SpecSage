@@ -6,6 +6,7 @@
 - **The Tome.** The guide window goes by its own name everywhere now: the window, its title, the slash-command help, the options, the key binding and the source file. Rebind **Toggle the Tome** if you had the old binding set; the window's saved position resets to centre once.
 - **Old trinkets, current copies.** Returning dungeons put years-old trinkets (Merektha's Fang, Ruby Whelp Shell, Algeth'ar Puzzle Box) in this season's tier lists. Trinket rows on the Tome's BiS tab now carry the current copy's bonus IDs wherever a BiS guide links them (25 trinkets), so hovering the row shows this season's item level and numbers, not the base item from its original expansion.
 - **Hover Tome trinkets at their simmed item level** (option, default on). For a trinket no guide links, the row projects the base item to the level the sims ranked it at, only when the client confirms the level, and the tooltip says it is a projection, not a drop.
+- **Hide the Tome while the character sheet is open** (option, default on). Opening the sheet hides an open Tome and closing it brings the Tome back. A Tome you reopen and close yourself while the sheet is up stays closed.
 - **Label the gearing panel's tabs** option. The character sheet panel's side tabs carry their section names beside the icons; the option turns the names off.
 
 **Improved**
