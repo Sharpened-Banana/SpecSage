@@ -31,6 +31,8 @@ end
 -- as GET_ITEM_INFO_RECEIVED, and the row that was showing an "Item 12345"
 -- placeholder redraws with the real name and quality colour.
 function Tome:OnEnable()
+    ns:RegisterEvent("PLAYER_REGEN_DISABLED", function() self:UpdateKeyboard() end)
+    ns:RegisterEvent("PLAYER_REGEN_ENABLED", function() self:UpdateKeyboard() end)
     ns:RegisterEvent("GET_ITEM_INFO_RECEIVED", function(_, itemID)
         self:OnBiSItemInfoReceived(itemID)
     end)
@@ -676,9 +678,9 @@ local function NewBackdropEditBox(parent, width, height)
     box:SetTextInsets(4, 4, 2, 2)
     box:SetPoint("TOPLEFT", backdrop, "TOPLEFT", 4, -4)
     box:SetPoint("BOTTOMRIGHT", backdrop, "BOTTOMRIGHT", -4, 4)
-    -- The Tome is in UISpecialFrames, so an unhandled ESC inside a focused
-    -- EditBox would otherwise close the whole window out from under whatever
-    -- was being typed.
+    -- The Tome's own OnKeyDown closes it on ESC, so an unhandled ESC inside
+    -- a focused EditBox would otherwise close the whole window out from
+    -- under whatever was being typed.
     box:SetScript("OnEscapePressed", function(self2) self2:ClearFocus() end)
 
     return backdrop, box
@@ -3133,9 +3135,27 @@ function Tome:BuildFrame()
     SkinButton(feedbackButton)
     frame.feedbackButton = feedbackButton
 
-    -- Registers the frame's global name for ESC-to-close; UISpecialFrames is
-    -- a plain array of frame names that the client's own ESC handler reads.
-    tinsert(UISpecialFrames, "SpecSageTomeFrame")
+    -- ESC closes the Tome - but not through UISpecialFrames. Writing an
+    -- addon frame's name into that table taints it, and the client's ESC
+    -- handler reads it on every press (TOGGLEGAMEMENU -> CloseSpecialWindows),
+    -- so everything downstream of the key ran tainted by SpecSage: Edit
+    -- Mode's enter, exit and layout pick, and through its UpdateSystems the
+    -- raid frames, cooldown viewer and encounter warnings, each then erroring
+    -- on a secret value (BugSack, 2026-09-10). The frame takes keyboard input
+    -- itself instead while shown and out of combat: ESC hides it, every
+    -- other key passes through to bindings. SetPropagateKeyboardInput is
+    -- protected in combat, so the keyboard is released when a fight starts
+    -- and taken back when it ends (Tome:UpdateKeyboard); mid-fight, ESC opens
+    -- the game menu over the Tome as it would over any addon window.
+    frame:SetScript("OnKeyDown", function(self2, key)
+        if key == "ESCAPE" then
+            self2:SetPropagateKeyboardInput(false)
+            self2:Hide()
+        else
+            self2:SetPropagateKeyboardInput(true)
+        end
+    end)
+    frame:SetScript("OnShow", function() self:UpdateKeyboard() end)
 
     self.frame = frame
     self:BuildClassRail()
@@ -3157,6 +3177,15 @@ function Tome:EnsureFrame()
     if not self.frame then
         self:BuildFrame()
     end
+end
+
+-- Keyboard on while the Tome is shown and out of combat, off otherwise:
+-- see the OnKeyDown note in BuildFrame. Called from the frame's OnShow and
+-- both PLAYER_REGEN events.
+function Tome:UpdateKeyboard()
+    if not self.frame then return end
+    local inCombat = InCombatLockdown and InCombatLockdown()
+    self.frame:EnableKeyboard(self.frame:IsShown() and not inCombat)
 end
 
 function Tome:IsShown()

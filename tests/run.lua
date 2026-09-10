@@ -865,8 +865,16 @@ do
     check(pcall(function() mock.Fire("UNIT_AURA", secretUnit) end),
         "a secret UNIT_AURA payload does not take the handler down")
 
-    -- Leaving restricted content restores proc tracking on its own.
+    -- Consecutive refusals out of combat wait longer each time, 5s doubling
+    -- to a minute, so a whole Mythic+ run does not log one warning per 5s.
+    check(ns.AuraRetryInterval() > 5 and ns.AuraRetryInterval() <= 60,
+        "the out-of-combat wait doubles on each refusal", ns.AuraRetryInterval())
+
+    -- Leaving restricted content (a zone change) restores proc tracking on
+    -- its own and starts the wait over at 5s.
     blocking = false
+    mock.Fire("ZONE_CHANGED_NEW_AREA")
+    check(ns.AuraRetryInterval() == 5, "a zone change resets the wait to 5s", ns.AuraRetryInterval())
     mock.Advance(10)
     ProcsModule:Update()
     check(not ProcsModule:AurasBlocked(), "proc tracking recovers once auras are readable again")
@@ -4709,6 +4717,9 @@ do
         and ns.db.buffs.showSelfBuffs == false, "buffs defaults: enabled, raid buffs on, flask/food off")
 
     -- Solo with nothing missing: no rows at all, so the section hides.
+    -- (Entering the world resets the shared aura back-off the Procs
+    -- tests above left inflated.)
+    mock.Fire("PLAYER_ENTERING_WORLD")
     mock.ClearAuras()
     mock.inGroup = false
     ns.db.buffs.enabled, ns.db.buffs.showRaidBuffs, ns.db.buffs.showSelfBuffs = true, true, false
@@ -5180,6 +5191,52 @@ do
 end
 
 --------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+section("Tome: ESC closes it without touching UISpecialFrames (2026-09-10)")
+--------------------------------------------------------------------------------
+
+do
+    -- UISpecialFrames is the client's own ESC list; an addon name written
+    -- into it taints every ESC press and, through Edit Mode, the raid
+    -- frames, cooldown viewer and encounter warnings (BugSack, 2026-09-10).
+    local Tome = ns:GetModule("Tome")
+    mock.inCombat = false
+    mock.ShowCharacterFrame(false)
+    Tome:Open("MAGE", 9604)
+    local listed = false
+    for _, name in ipairs(UISpecialFrames) do if name == "SpecSageTomeFrame" then listed = true end end
+    check(not listed, "the Tome's frame is not in UISpecialFrames")
+
+    local frame = Tome.frame
+    local onKey = frame:GetScript("OnKeyDown")
+    check(onKey ~= nil and frame.keyboardEnabled == true, "an open Tome takes keyboard input out of combat")
+    onKey(frame, "A")
+    check(frame:IsShown() and frame.propagateKeys == true, "a key other than ESC passes through to bindings")
+    onKey(frame, "ESCAPE")
+    check(not frame:IsShown() and frame.propagateKeys == false, "ESC closes the Tome and is consumed")
+    Tome:Toggle()
+    check(frame.keyboardEnabled == true, "reopening takes the keyboard again")
+
+    -- SetPropagateKeyboardInput is protected in combat, so the keyboard is
+    -- released for the fight and taken back after it.
+    mock.inCombat = true
+    mock.Fire("PLAYER_REGEN_DISABLED")
+    check(frame.keyboardEnabled == false, "entering combat releases the keyboard")
+    mock.inCombat = false
+    mock.Fire("PLAYER_REGEN_ENABLED")
+    check(frame.keyboardEnabled == true, "leaving combat takes it back while the Tome is shown")
+    frame:Hide()
+    mock.Fire("PLAYER_REGEN_ENABLED")
+    check(frame.keyboardEnabled == false, "a hidden Tome holds no keyboard")
+
+    -- Opening in combat: no keyboard, and nothing protected is called.
+    mock.inCombat = true
+    check(pcall(function() Tome:Toggle() end) and frame:IsShown() and frame.keyboardEnabled == false,
+        "opening the Tome in combat leaves the keyboard alone")
+    mock.inCombat = false
+    frame:Hide()
+end
+
 --------------------------------------------------------------------------------
 section("Vocabulary: the guide window is the Tome (2026-09-08)")
 --------------------------------------------------------------------------------

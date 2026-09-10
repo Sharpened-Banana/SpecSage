@@ -222,6 +222,14 @@ function CreateFrame(frameType, name, parent, template)
     function frame:SetClampedToScreen() end
     function frame:SetResizable() end
     function frame:EnableMouse(value) self.mouseEnabled = value end
+    function frame:EnableKeyboard(value) self.keyboardEnabled = value and true or false end
+    -- Protected in combat since 10.1.5: insecure code calling it mid-fight
+    -- errors, so the mock errors too rather than letting a test pass a
+    -- path the client would refuse.
+    function frame:SetPropagateKeyboardInput(value)
+        assert(not mock.inCombat, "SetPropagateKeyboardInput is protected in combat")
+        self.propagateKeys = value and true or false
+    end
     -- CheckButton state. Modelled on every frame rather than only on the
     -- CheckButton type because the mock has no per-type mixins; a Frame that
     -- is never checked simply never has these called.
@@ -456,7 +464,7 @@ ChatFontNormal = NewFontString()
 mock.KNOWN_EVENTS = {}
 for _, event in ipairs({
     "ADDON_LOADED", "PLAYER_LOGIN", "PLAYER_ENTERING_WORLD",
-    "PLAYER_REGEN_DISABLED", "PLAYER_REGEN_ENABLED",
+    "PLAYER_REGEN_DISABLED", "PLAYER_REGEN_ENABLED", "ZONE_CHANGED_NEW_AREA",
     "COMBAT_LOG_EVENT_UNFILTERED",
     "UNIT_STATS", "UNIT_AURA", "UNIT_MAXHEALTH", "UNIT_ATTACK_POWER",
     "COMBAT_RATING_UPDATE", "MASTERY_UPDATE", "SPEED_UPDATE",

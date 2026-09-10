@@ -121,7 +121,14 @@ end
 -- on failure; this just holds the shared cooldown and the one-time notice.
 --------------------------------------------------------------------------------
 
+-- Out of combat the wait doubles on every consecutive refusal, 5s up to a
+-- minute: a Mythic+ run keeps auras secret between pulls too, and a flat 5s
+-- retry logged "Auras cannot be accessed" 164 times in one evening
+-- (BugSack, 2026-09-10). Leaving combat, or changing zone, starts over at
+-- 5s so tracking still comes back promptly once the content allows it.
 local AURA_RETRY_INTERVAL = 5
+local AURA_RETRY_MAX = 60
+local auraRetryInterval = AURA_RETRY_INTERVAL
 local auraBlockedUntil = 0
 local auraNoticeShown = false
 -- Set when the refusal came in combat: auras stay secret for the whole
@@ -137,7 +144,8 @@ function ns.AurasReadable()
 end
 
 function ns.NoteAurasBlocked()
-    auraBlockedUntil = GetTime() + AURA_RETRY_INTERVAL
+    auraBlockedUntil = GetTime() + auraRetryInterval
+    auraRetryInterval = math.min(auraRetryInterval * 2, AURA_RETRY_MAX)
     if InCombatLockdown and InCombatLockdown() then auraBlockedForCombat = true end
 
     -- Said once per session, not once per refusal: the player should know
@@ -156,12 +164,18 @@ function ns.AurasBlocked()
 end
 
 -- Leaving combat lifts a combat-long block; the next read is a fresh try.
-ns:RegisterEvent("PLAYER_REGEN_ENABLED", function()
-    if auraBlockedForCombat then
-        auraBlockedForCombat = false
-        auraBlockedUntil = 0
-    end
-end)
+-- Leaving combat or changing zone also resets the doubling wait.
+local function ResetAuraBackoff()
+    auraRetryInterval = AURA_RETRY_INTERVAL
+    auraBlockedForCombat = false
+    auraBlockedUntil = 0
+end
+ns:RegisterEvent("PLAYER_REGEN_ENABLED", ResetAuraBackoff)
+ns:RegisterEvent("ZONE_CHANGED_NEW_AREA", ResetAuraBackoff)
+ns:RegisterEvent("PLAYER_ENTERING_WORLD", ResetAuraBackoff)
+
+-- The wait the next refusal will impose, for tests.
+function ns.AuraRetryInterval() return auraRetryInterval end
 
 --------------------------------------------------------------------------------
 -- Number / text helpers

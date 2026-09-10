@@ -538,6 +538,32 @@ What it adds, alongside Icy Veins on every spec (never replacing it):
   like Icy Veins'. Each build now carries `site`, and the Loadouts row and
   vault name use it.
 
+## Taint: the Tome stays out of UISpecialFrames (2026-09-10)
+
+A BugSack full of Blizzard errors "tainted by 'SpecSage'" - Edit Mode's
+enter, exit and layout pick, and under its UpdateSystems the raid frames
+(CompactUnitFrame), CooldownViewer, EncounterWarnings and TableUtil, each
+failing on a secret value - traced to one line: `tinsert(UISpecialFrames,
+"SpecSageTomeFrame")`. Writing into that table taints it, the client's ESC
+handler reads it on every press (TOGGLEGAMEMENU → GameMenuEsc →
+CloseSpecialWindows), and everything that runs after the key inherits the
+taint. The Tome now handles ESC itself: `OnKeyDown` hides the frame on
+ESCAPE and sets `SetPropagateKeyboardInput(false)`, and passes every other
+key through with `true`. That call is protected in combat, so
+`Tome:UpdateKeyboard()` (from the frame's OnShow and both PLAYER_REGEN
+events) keeps `EnableKeyboard` on only while the Tome is shown and the
+player is out of combat; mid-fight, ESC opens the game menu over the Tome.
+The Notes edit box's own `OnEscapePressed` still clears focus first, so a
+stray ESC while typing does not close the window. A test asserts the name
+never returns to UISpecialFrames.
+
+The same report showed the aura refusal warning 164 times: out of combat
+the shared back-off in Core/Init.lua retried every 5s, and a Mythic+ run
+keeps auras secret between pulls too. The wait now doubles on each
+consecutive refusal, 5s up to 60s, and resets to 5s on PLAYER_REGEN_ENABLED,
+ZONE_CHANGED_NEW_AREA and PLAYER_ENTERING_WORLD (all three also clear the
+pending block), so leaving the content still restores tracking at once.
+
 ## The Tome yields to the character sheet (2026-09-09, UI/CharacterPanel.lua)
 
 `SpecSageDB.characterPanel.hideTome` ("Hide the Tome while the character

@@ -16,6 +16,8 @@
 - The BiS header names the site of the list you are looking at.
 
 **Fixed**
+- ESC closes the Tome without going through the game's own ESC list. Registering there tainted every ESC press, and Edit Mode, the raid frames, the cooldown viewer and encounter warnings then threw errors blamed on SpecSage. In combat, ESC opens the game menu over the Tome instead.
+- The aura refusal warning no longer repeats every 5 seconds between pulls: the wait doubles on each refusal up to a minute, and resets when combat ends or the zone changes.
 - When the game hides auras in combat, proc and buff tracking waits for the fight to end instead of retrying every 5 seconds and logging a warning each time.
 
 ## 1.3.1 (2026-09-05)
