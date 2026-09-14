@@ -1,13 +1,21 @@
 # Changelog
 
+## 1.3.3 (2026-09-14)
+
+**New**
+- **Hide the Tome while the character sheet is open** (option, default on). Opening the sheet hides an open Tome and closing it brings the Tome back. A Tome you reopen and close yourself while the sheet is up stays closed.
+- **The gearing panel moves anywhere.** Drag its title, or the grip in its top-left corner, to put it wherever you like; it used to allow only right or down from the sheet. Right-click the grip to dock it back.
+
+**Fixed**
+- ESC closes the Tome without going through the game's own ESC list. Registering there tainted every ESC press, and Edit Mode, the raid frames, the cooldown viewer and encounter warnings then threw errors blamed on SpecSage. In combat, ESC opens the game menu over the Tome instead.
+- The aura refusal warning no longer repeats every 5 seconds between pulls: the wait doubles on each refusal up to a minute, and resets when combat ends or the zone changes.
+
 ## 1.3.2 (2026-09-08)
 
 **New**
 - **The Tome.** The guide window goes by its own name everywhere now: the window, its title, the slash-command help, the options, the key binding and the source file. Rebind **Toggle the Tome** if you had the old binding set; the window's saved position resets to centre once.
 - **Old trinkets, current copies.** Returning dungeons put years-old trinkets (Merektha's Fang, Ruby Whelp Shell, Algeth'ar Puzzle Box) in this season's tier lists. Trinket rows on the Tome's BiS tab now carry the current copy's bonus IDs wherever a BiS guide links them (25 trinkets), so hovering the row shows this season's item level and numbers, not the base item from its original expansion.
 - **Hover Tome trinkets at their simmed item level** (option, default on). For a trinket no guide links, the row projects the base item to the level the sims ranked it at, only when the client confirms the level, and the tooltip says it is a projection, not a drop.
-- **Hide the Tome while the character sheet is open** (option, default on). Opening the sheet hides an open Tome and closing it brings the Tome back. A Tome you reopen and close yourself while the sheet is up stays closed.
-- **The gearing panel moves anywhere.** Drag its title, or the grip in its top-left corner, to put it wherever you like; it used to allow only right or down from the sheet. Right-click the grip to dock it back.
 - **Label the gearing panel's tabs** option. The character sheet panel's side tabs carry their section names beside the icons; the option turns the names off.
 
 **Improved**
@@ -17,8 +25,6 @@
 - The BiS header names the site of the list you are looking at.
 
 **Fixed**
-- ESC closes the Tome without going through the game's own ESC list. Registering there tainted every ESC press, and Edit Mode, the raid frames, the cooldown viewer and encounter warnings then threw errors blamed on SpecSage. In combat, ESC opens the game menu over the Tome instead.
-- The aura refusal warning no longer repeats every 5 seconds between pulls: the wait doubles on each refusal up to a minute, and resets when combat ends or the zone changes.
 - When the game hides auras in combat, proc and buff tracking waits for the fight to end instead of retrying every 5 seconds and logging a warning each time.
 
 ## 1.3.1 (2026-09-05)
