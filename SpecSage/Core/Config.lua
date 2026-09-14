@@ -374,8 +374,8 @@ local DEFAULTS = {
         -- every other value is one of the Tome's tabs, rendered by the
         -- Tome's own methods against the panel's surface.
         section = "Gear",
-        -- How far the grip has dragged the panel right (>= 0) and down
-        -- (<= 0) from its docked spot beside the sheet.
+        -- How far the panel has been dragged (any direction) from its
+        -- docked spot beside the sheet.
         offsetX = 0,
         offsetY = 0,
         -- Set once the bottom-right grip has resized the panel; nil means

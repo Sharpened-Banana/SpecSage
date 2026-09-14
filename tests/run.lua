@@ -4184,15 +4184,29 @@ do
         "the offset is saved", tostring(ns.db.characterPanel.offsetX) .. "," .. tostring(ns.db.characterPanel.offsetY))
     check(#Panel.frame.points == 2 and Panel.frame.points[2][1] == "BOTTOMLEFT",
         "both left corners stay anchored so the height keeps tracking the sheet")
-    -- Left or up of the docked spot is clamped: the panel may not cover
-    -- the sheet.
+    -- Left or up of the docked spot is allowed too (freely movable,
+    -- 2026-09-14): the panel can sit on the sheet's other side.
     mock.cursor = { x = 0, y = 0 }
     grip:GetScript("OnMouseDown")(grip, "LeftButton")
-    mock.cursor = { x = -200, y = 200 }
+    mock.cursor = { x = -400, y = 50 }
     grip:GetScript("OnUpdate")(grip)
     grip:GetScript("OnMouseUp")(grip, "LeftButton")
     _, ax, ay = Anchor()
-    check(ax == 16 and ay == 0, "dragging left or up stops at the docked spot", ax .. "," .. ay)
+    check(ax == 16 + 40 - 400 and ay == -30 + 50, "dragging left or up moves the panel there", ax .. "," .. ay)
+    check(ns.db.characterPanel.offsetX == -360 and ns.db.characterPanel.offsetY == 20,
+        "a negative x and positive y offset are saved as they are")
+    check(Panel.frame.clampedToScreen == true, "the panel is clamped to the screen")
+    -- The title strip drags too, so the handle is where a window's would be.
+    local titleHandle = Panel.frame.titleHandle
+    check(titleHandle ~= nil and titleHandle.mouseEnabled == true, "the title strip is a mouse-enabled drag handle")
+    mock.cursor = { x = 0, y = 0 }
+    titleHandle:GetScript("OnMouseDown")(titleHandle, "LeftButton")
+    mock.cursor = { x = 10, y = -5 }
+    titleHandle:GetScript("OnUpdate")(titleHandle)
+    titleHandle:GetScript("OnMouseUp")(titleHandle, "LeftButton")
+    check(ns.db.characterPanel.offsetX == -350 and ns.db.characterPanel.offsetY == 15,
+        "dragging the title moves the panel by the cursor delta", ns.db.characterPanel.offsetX .. "," .. ns.db.characterPanel.offsetY)
+    check(titleHandle:GetScript("OnUpdate") == nil, "releasing the title stops tracking")
     Panel:SetDockOffset(25, -10)
     grip:GetScript("OnMouseUp")(grip, "RightButton")
     _, ax, ay = Anchor()

@@ -50,10 +50,12 @@ local FALLBACK_WIDTH = 338
 -- overlap the sheet by 2px to read as one window; the owner wanted it set
 -- off to the right instead, clear of the sheet's own side tabs.
 local DOCK_GAP = 16
--- The grip in the panel's top-left corner. Dragging it moves the panel
--- right or down from its docked spot (never left or up, so it cannot cover
--- the sheet or its side tabs); the offset is saved and the panel keeps
--- following the sheet from there. Right-click puts it back.
+-- The grip in the panel's top-left corner, and the title strip beside it,
+-- drag the panel anywhere from its docked spot; the offset is saved and the
+-- panel keeps following the sheet from there. It used to be clamped to
+-- right-or-down so it could never cover the sheet; the owner asked for it
+-- to be freely movable (2026-09-14), so the clamp is gone and the frame is
+-- clamped to the screen instead. Right-click on the grip puts it back.
 local GRIP_SIZE = 16
 -- Drawn as a 2x3 dot grid from plain colour textures rather than a client
 -- texture file: the first cut pointed at a cursor texture that this client
@@ -303,6 +305,8 @@ function CharacterPanel:BuildFrame()
     if not CharacterFrame then return nil end
 
     local frame = CreateFrame("Frame", "SpecSageCharacterPanel", CharacterFrame, "BackdropTemplate")
+    -- Freely movable since 2026-09-14, so the screen edge is the only limit.
+    pcall(frame.SetClampedToScreen, frame, true)
     -- Anchoring both left corners to the sheet's right corners is what makes
     -- the height match exactly and keep matching; only the width has to be
     -- pushed across by hand (SyncSize, called on every Update).
@@ -393,14 +397,12 @@ function CharacterPanel:BuildFrame()
 end
 
 -- Where the panel sits relative to the sheet: DOCK_GAP to the right of its
--- right edge, plus whatever the grip has been dragged. Both left corners
--- are anchored so the height keeps tracking the sheet's.
+-- right edge, plus whatever it has been dragged, in any direction. Both
+-- left corners are anchored so the height keeps tracking the sheet's.
 function CharacterPanel:DockOffset()
     local settings = Settings()
     local x = tonumber(settings.offsetX) or 0
     local y = tonumber(settings.offsetY) or 0
-    if x < 0 then x = 0 end
-    if y > 0 then y = 0 end
     return x, y
 end
 
@@ -439,10 +441,11 @@ end
 
 function CharacterPanel:SetDockOffset(x, y)
     local settings = Settings()
-    settings.offsetX = math.max(0, math.floor((tonumber(x) or 0) + 0.5))
-    settings.offsetY = math.min(0, math.floor((tonumber(y) or 0) + 0.5))
+    settings.offsetX = math.floor((tonumber(x) or 0) + 0.5)
+    settings.offsetY = math.floor((tonumber(y) or 0) + 0.5)
     self:ApplyDockOffset()
 end
+
 
 -- Cursor position in the sheet's coordinate space, so a drag delta can be
 -- added straight onto the anchor offset.
@@ -456,6 +459,30 @@ local function CursorPosition()
         if ok2 and type(s) == "number" and s > 0 then scale = s end
     end
     return cx / scale, cy / scale
+end
+
+-- Makes `handle` drag the panel: the panel is anchored to the sheet, so it
+-- cannot use StartMoving; the handle tracks the cursor itself and feeds the
+-- delta into the anchor offset while the left button is held. Shared by
+-- the top-left grip and the title strip.
+function CharacterPanel:AttachMoveHandle(handle)
+    handle:SetScript("OnMouseDown", function(button, mouseButton)
+        if mouseButton ~= "LeftButton" then return end
+        local cx, cy = CursorPosition()
+        if not cx then return end
+        local ox, oy = self:DockOffset()
+        button.drag = { cx = cx, cy = cy, ox = ox, oy = oy }
+        button:SetScript("OnUpdate", function(b)
+            local d = b.drag
+            local nx, ny = CursorPosition()
+            if not (d and nx) then return end
+            self:SetDockOffset(d.ox + (nx - d.cx), d.oy + (ny - d.cy))
+        end)
+    end)
+    handle:SetScript("OnMouseUp", function(button)
+        button:SetScript("OnUpdate", nil)
+        button.drag = nil
+    end)
 end
 
 function CharacterPanel:BuildGrip(frame)
@@ -481,38 +508,36 @@ function CharacterPanel:BuildGrip(frame)
     end
     pcall(grip.SetHighlightTexture, grip, "Interface\\Buttons\\UI-Common-MouseHilight", "ADD")
 
-    -- The panel is anchored to the sheet, so it cannot use StartMoving;
-    -- the grip tracks the cursor itself and feeds the delta into the
-    -- anchor offset while the button is held.
-    grip:SetScript("OnMouseDown", function(button, mouseButton)
-        if mouseButton ~= "LeftButton" then return end
-        local cx, cy = CursorPosition()
-        if not cx then return end
-        local ox, oy = self:DockOffset()
-        button.drag = { cx = cx, cy = cy, ox = ox, oy = oy }
-        button:SetScript("OnUpdate", function(b)
-            local d = b.drag
-            local nx, ny = CursorPosition()
-            if not (d and nx) then return end
-            self:SetDockOffset(d.ox + (nx - d.cx), d.oy + (ny - d.cy))
-        end)
-    end)
+    self:AttachMoveHandle(grip)
+    local release = grip:GetScript("OnMouseUp")
     grip:SetScript("OnMouseUp", function(button, mouseButton)
-        button:SetScript("OnUpdate", nil)
-        button.drag = nil
+        release(button, mouseButton)
         if mouseButton == "RightButton" then self:SetDockOffset(0, 0) end
     end)
     grip:SetScript("OnEnter", function(button)
         pcall(function()
             GameTooltip:SetOwner(button, "ANCHOR_RIGHT")
             GameTooltip:SetText("Move panel")
-            GameTooltip:AddLine("Drag to move it right or down. Right-click to put it back.", 1, 1, 1, true)
+            GameTooltip:AddLine("Drag here or on the title to move it anywhere. "
+                .. "Right-click to put it back beside the sheet.", 1, 1, 1, true)
             GameTooltip:Show()
         end)
     end)
     grip:SetScript("OnLeave", function() pcall(function() GameTooltip:Hide() end) end)
 
     frame.grip = grip
+
+    -- The title strip is the discoverable handle: the whole band from the
+    -- grip to the section label, the height of the title. A plain frame
+    -- under the text (the title and section label take no mouse), so
+    -- clicks on it move the panel and nothing else.
+    local titleHandle = CreateFrame("Frame", nil, frame)
+    titleHandle:SetPoint("TOPLEFT", frame, "TOPLEFT", PADDING + GRIP_SIZE + 4, -PADDING)
+    titleHandle:SetPoint("TOPRIGHT", frame, "TOPRIGHT", -PADDING, -PADDING)
+    titleHandle:SetHeight(TITLE_HEIGHT)
+    titleHandle:EnableMouse(true)
+    self:AttachMoveHandle(titleHandle)
+    frame.titleHandle = titleHandle
 end
 
 -- The resize grip in the bottom-right corner: three dots on the diagonal.

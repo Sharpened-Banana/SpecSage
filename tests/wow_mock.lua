@@ -219,7 +219,7 @@ function CreateFrame(frameType, name, parent, template)
     function frame:UnregisterEvent(event) self.events[event] = nil end
     function frame:RegisterForDrag() end
     function frame:SetMovable() end
-    function frame:SetClampedToScreen() end
+    function frame:SetClampedToScreen(value) self.clampedToScreen = value and true or false end
     function frame:SetResizable() end
     function frame:EnableMouse(value) self.mouseEnabled = value end
     function frame:EnableKeyboard(value) self.keyboardEnabled = value and true or false end

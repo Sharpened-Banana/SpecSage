@@ -1043,11 +1043,15 @@ now points at `github.com/Sharpened-Banana/SpecSage`, read from the TOC's
 ### Docked panel grip
 
 The panel sits `DOCK_GAP` (16px) right of the sheet. A grip in its top-left
-corner drags it further right or down (`characterPanel.offsetX >= 0`,
-`offsetY <= 0`, clamped so it can never cover the sheet or its side tabs);
-right-click resets. The panel is anchored to the sheet on both left corners
-so `StartMoving` is out - the grip tracks `GetCursorPosition` itself in an
-`OnUpdate` while held and feeds the delta into the anchor offset.
+corner, and the title strip beside it (`frame.titleHandle`, a mouse-enabled
+frame under the title text), drag it anywhere from there
+(`characterPanel.offsetX` / `offsetY`, either sign); right-click on the grip
+resets. It was clamped to right-or-down until 2026-09-14, when the owner
+asked for it to be freely movable; `SetClampedToScreen(true)` is now the
+only limit. The panel is anchored to the sheet on both left corners so
+`StartMoving` is out - `CharacterPanel:AttachMoveHandle` makes a handle
+track `GetCursorPosition` itself in an `OnUpdate` while held and feed the
+delta into the anchor offset.
 
 A second grip in the bottom-right corner resizes it (`characterPanel.width`
 / `height`, nil = follow the sheet; floor 260 x 398 so the ten side tabs
