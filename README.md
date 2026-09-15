@@ -189,6 +189,15 @@ to override or extend what ships here.
 
 ## Development
 
+**Releasing.** Bump `## Version` in the TOC, add the CHANGELOG section,
+commit, then `git tag vX.Y.Z && git push origin vX.Y.Z`. The tag runs
+`.github/workflows/release-addon.yml` (the BigWigs packager, laid out by
+`.pkgmeta`), which zips `SpecSage/` and publishes it to CurseForge
+(project 1675737, via the TOC's `X-Curse-Project-ID`) and as a GitHub
+Release, with the CHANGELOG as the notes. It needs the `CF_API_KEY`
+repository secret; without it the GitHub Release is still made and the
+CurseForge upload is skipped.
+
 Plain Lua 5.1 (WoW's dialect), no build step. Layout, module lifecycle, and
 the guide data schema are documented in [DESIGN.md](DESIGN.md).
 

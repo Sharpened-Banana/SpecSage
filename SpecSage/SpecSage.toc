@@ -7,6 +7,7 @@
 ## SavedVariablesPerCharacter: SpecSageCharDB
 ## IconTexture: Interface\Icons\INV_Misc_Book_11
 ## X-Website: https://github.com/Sharpened-Banana/SpecSage
+## X-Curse-Project-ID: 1675737
 ## Category-enUS: Combat
 
 Core\Init.lua

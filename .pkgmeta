@@ -1,0 +1,27 @@
+package-as: SpecSage
+
+# The hand-written changelog is the release body and the CurseForge file
+# notes. Without this the packager generates one from every commit since
+# the previous tag.
+manual-changelog:
+  filename: CHANGELOG.md
+  markup-type: markdown
+
+# The addon lives in SpecSage/, not the repo root (tests, tools and the
+# design notes live beside it). move-folders relocates it to become the
+# package root - the source path is package-as + the repo-relative path,
+# the same mechanism Postmortem's .pkgmeta uses.
+move-folders:
+  SpecSage/SpecSage: SpecSage
+
+# Repo plumbing that must not end up in the addon zip.
+ignore:
+  - tests
+  - tools
+  - .claude
+  - .github
+  - .luacheckrc
+  - .gitignore
+  - DESIGN.md
+  - README.md
+  - CHANGELOG.md

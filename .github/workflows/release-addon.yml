@@ -1,0 +1,47 @@
+name: Package and release WoW addon
+
+# Fires on a version tag push (`git tag v1.3.4 && git push origin v1.3.4`);
+# the packager uses the tag name as the addon's release version and
+# publishes the zip to CurseForge (project 1675737, from the .toc's
+# X-Curse-Project-ID) and as a GitHub Release. A tag containing "alpha" or
+# "beta" is uploaded as that file type, which the CurseForge app does not
+# install unless a user opts in. workflow_dispatch re-runs it for an
+# existing tag (`gh workflow run release-addon.yml --ref v1.3.3`).
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+# The auto-provided GITHUB_TOKEN needs write access to create a GitHub
+# Release for the packaged zip.
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone project
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4.4.0
+        with:
+          fetch-depth: 0 # full history: the packager reads git tags
+
+      - name: Package and release
+        # Pinned by commit, not by the movable v2 tag: this step receives
+        # the CurseForge publishing token and a write-scoped repository
+        # token. Same SHA Postmortem pinned on 2026-09-11. To upgrade,
+        # resolve the new tag deliberately with
+        #   gh api repos/BigWigsMods/packager/git/ref/tags/<tag> --jq .object.sha
+        uses: BigWigsMods/packager@5abb6e1ddbd98c818ac5ee3692613cd372619dc9  # v2
+        env:
+          # Repository secrets (Settings -> Secrets and variables ->
+          # Actions). Any left unset are skipped. CF_API_KEY: CurseForge,
+          # Settings -> API Tokens. These variable NAMES are what the
+          # pinned packager reads (release.sh: cf_token=$CF_API_KEY,
+          # github_token=$GITHUB_OAUTH); the newer README's CF_API_TOKEN /
+          # GITHUB_API_TOKEN silently upload nowhere on this version.
+          CF_API_KEY: ${{ secrets.CF_API_KEY }}
+          WOWI_API_TOKEN: ${{ secrets.WOWI_API_TOKEN }}
+          WAGO_API_TOKEN: ${{ secrets.WAGO_API_TOKEN }}
+          GITHUB_OAUTH: ${{ secrets.GITHUB_TOKEN }}
