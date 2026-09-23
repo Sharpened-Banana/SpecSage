@@ -339,6 +339,9 @@ end
 function UI:Toggle()
     ns.db.hidden = not ns.db.hidden
     self:UpdateVisibility()
+    -- The feeding modules stop polling while the overlay is off
+    -- (ns.OverlayActive); bring every section up to date as it reappears.
+    if not ns.db.hidden then ns.RefreshAll() end
     return not ns.db.hidden
 end
 

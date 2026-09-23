@@ -163,6 +163,7 @@ section*, *Missing raid buffs* (on by default, only while grouped) and
 | `/sage scan` | List your current buffs with their spell IDs |
 | `/sage reset dps` | Clear combat totals |
 | `/sage reset pos` | Move the overlay back to the centre |
+| `/sage reset tome` | Move the Tome window back to the centre |
 | `/sage reset all` | Restore every setting to default |
 
 `/specsage` works everywhere `/sage` does. Everything is also available under

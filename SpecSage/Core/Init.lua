@@ -59,28 +59,114 @@ function ns:RegisterEvent(event, callback)
     return true
 end
 
+-- Each handler runs isolated: one that throws is reported through the
+-- client's error handler (BugSack and friends) and the rest still run. A
+-- plain loop let one module's error cancel every later handler for that
+-- event - a throw in Stats' UNIT_AURA meant Procs and Buffs never saw it.
+local function ReportError(err)
+    local handler = geterrorhandler and geterrorhandler()
+    if handler then handler(err) end
+    return err
+end
+
+-- Runs fn(...) isolated the same way; true when it returned normally.
+function ns.Protected(fn, ...)
+    return (xpcall(fn, ReportError, ...))
+end
+
+-- fn wrapped for a C_Timer callback, so a throwing ticker body is reported
+-- once per tick instead of propagating out of the timer.
+function ns.ProtectedCallback(fn)
+    return function(...) ns.Protected(fn, ...) end
+end
+
 eventFrame:SetScript("OnEvent", function(_, event, ...)
     local list = handlers[event]
     if not list then return end
     for i = 1, #list do
-        list[i](event, ...)
+        xpcall(list[i], ReportError, event, ...)
     end
 end)
+
+-- Unit events (UNIT_AURA, UNIT_STATS, ...) registered for one unit only.
+-- Through the shared frame they arrive for every raid member and nameplate
+-- and each handler has to discard all but the player's; RegisterUnitEvent
+-- filters in the client instead, so the handler never runs for another
+-- unit (and never sees another unit's possibly secret token). One frame per
+-- event/unit pair; a client without RegisterUnitEvent falls back to the
+-- shared frame, where handlers still check the unit themselves.
+local unitEventFrames = {}
+
+function ns:RegisterUnitEvent(event, unit, callback)
+    local key = event .. ":" .. unit
+    local entry = unitEventFrames[key]
+    if not entry then
+        local frame = CreateFrame("Frame")
+        if not (frame.RegisterUnitEvent and pcall(frame.RegisterUnitEvent, frame, event, unit)) then
+            return self:RegisterEvent(event, callback)
+        end
+        entry = { list = {} }
+        frame:SetScript("OnEvent", function(_, firedEvent, ...)
+            for i = 1, #entry.list do
+                xpcall(entry.list[i], ReportError, firedEvent, ...)
+            end
+        end)
+        unitEventFrames[key] = entry
+    end
+    entry.list[#entry.list + 1] = callback
+    return true
+end
+
+-- Whether the stat overlay is switched on. The modules that exist only to
+-- feed it (Stats, Procs, Combat, Buffs) skip their polling while it is off -
+-- the default on a fresh install - and UI:Toggle pushes a refresh when it
+-- comes back. "Hide out of combat" does not count as off: the overlay needs
+-- current rows the moment combat starts.
+function ns.OverlayActive()
+    return ns.db ~= nil and not ns.db.hidden
+end
 
 --------------------------------------------------------------------------------
 -- Secret-value helpers
 --
--- Midnight's secret values error on comparison, arithmetic and string
--- formatting rather than returning something useless, so any expression that
--- touches unit/aura/combat data has to be able to fail without taking its
--- caller down. ns.SafeCall runs one such expression and reports "could not
--- read that" as nil.
+-- Midnight's secret values error on comparison and arithmetic when addon
+-- code touches them; formatting, concatenation, SetText, type() and a plain
+-- truthiness test on a non-boolean secret are allowed (warcraft.wiki.gg
+-- Secret_Values). Any expression that touches unit/aura/combat data has to
+-- be able to fail without taking its caller down. ns.SafeCall runs one such
+-- expression and reports "could not read that" as nil; ns.IsSecret lets a
+-- caller choose a display-only path up front instead.
 --------------------------------------------------------------------------------
 
 function ns.SafeCall(fn)
     local ok, result = pcall(fn)
     if ok then return result end
     return nil
+end
+
+-- The specialization ID the player is on, or nil (no spec yet, very low
+-- level). C_SpecializationInfo first: in 12.x the globals GetSpecialization /
+-- GetSpecializationInfo exist only as Blizzard_DeprecatedSpecialization
+-- shims, which load only while the loadDeprecationFallbacks CVar is on and
+-- "will be removed at the next expansion". Every current-spec lookup in the
+-- addon goes through here (Loadouts:GetCurrentSpecID wraps it for callers
+-- that tests steer).
+function ns.PlayerSpecID()
+    local getSpec = (C_SpecializationInfo and C_SpecializationInfo.GetSpecialization) or GetSpecialization
+    local getInfo = (C_SpecializationInfo and C_SpecializationInfo.GetSpecializationInfo) or GetSpecializationInfo
+    if not (getSpec and getInfo) then return nil end
+    local ok, index = pcall(getSpec)
+    if not ok or not index then return nil end
+    local ok2, specID = pcall(getInfo, index)
+    if ok2 and type(specID) == "number" then return specID end
+    return nil
+end
+
+-- True when the client marks value secret (never errors, even on nil).
+function ns.IsSecret(value)
+    if not issecretvalue then return false end
+    local ok, secret = pcall(issecretvalue, value)
+    return ok and secret == true
 end
 
 -- True only when value is known to be past threshold in the given
@@ -204,6 +290,14 @@ function ns.FormatNumber(value)
     value = value or 0
     local ok, result = pcall(FormatNumberRaw, value)
     if ok then return result end
+
+    -- A secret cannot be compared, so FormatNumberRaw fails on one; the
+    -- client's own abbreviator accepts secrets from addon code
+    -- (SecretArguments = AllowedWhenTainted) and keeps the K/M suffix.
+    if AbbreviateNumbers then
+        ok, result = pcall(AbbreviateNumbers, value)
+        if ok and result ~= nil then return result end
+    end
 
     ok, result = pcall(format, "%d", value)
     if ok then return result end

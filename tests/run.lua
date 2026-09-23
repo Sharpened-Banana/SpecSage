@@ -1,7 +1,10 @@
 -- tests/run.lua
 -- Loads SpecSage against the mock API and drives it through a session.
 --
--- Run with:  lua5.1 tests/run.lua
+-- Run from the repo root:  lua tests/run.lua
+-- CI runs it on Lua 5.1, WoW's dialect (.github/workflows/release-addon.yml);
+-- tests/wow_mock.lua makes the 5.1 behaviours that matter most hold on a
+-- newer local Lua too.
 
 package.path = "tests/?.lua;" .. package.path
 
@@ -31,46 +34,21 @@ end
 -- Load the addon exactly as the TOC lists it
 --------------------------------------------------------------------------------
 
-local FILES = {
-    "Core\\Init.lua",
-    "Core\\Config.lua",
-    "Core\\Theme.lua",
-    "Data\\API.lua",
-    "Data\\Guides_Warrior.lua",
-    "Data\\Guides_Paladin.lua",
-    "Data\\Guides_Hunter.lua",
-    "Data\\Guides_Rogue.lua",
-    "Data\\Guides_Priest.lua",
-    "Data\\Guides_DeathKnight.lua",
-    "Data\\Guides_Shaman.lua",
-    "Data\\Guides_Mage.lua",
-    "Data\\Guides_Warlock.lua",
-    "Data\\Guides_Monk.lua",
-    "Data\\Guides_Druid.lua",
-    "Data\\Guides_DemonHunter.lua",
-    "Data\\Guides_Evoker.lua",
-    "Data\\Trinkets.lua",
-    "Data\\BiS.lua",
-    "Data\\SiteLoadouts.lua",
-    "Data\\StatPriority.lua",
-    "Data\\Consumables.lua",
-    "UI\\Overlay.lua",
-    "UI\\Tooltips.lua",
-    "UI\\Tome.lua",
-    "UI\\CharacterPanel.lua",
-    "Modules\\Stats.lua",
-    "Modules\\Combat.lua",
-    "Modules\\Procs.lua",
-    "Modules\\Buffs.lua",
-    "Modules\\Loadouts.lua",
-    "Modules\\TalentButton.lua",
-    "Modules\\BiS.lua",
-    "Modules\\ItemRanks.lua",
-    "Modules\\Notes.lua",
-    "Modules\\MinimapButton.lua",
-    "Core\\Options.lua",
-    "Core\\Commands.lua",
-}
+-- Read from SpecSage.toc itself, so a file the TOC gains (a regenerated
+-- data file, a new module) is loaded here too instead of silently skipped;
+-- the list used to be a hand-kept copy.
+local FILES = {}
+do
+    local toc = assert(io.open("SpecSage/SpecSage.toc", "r"), "run from the repo root: SpecSage/SpecSage.toc not found")
+    for rawLine in toc:lines() do
+        local line = rawLine:gsub("\r$", ""):match("^%s*(.-)%s*$")
+        if line ~= "" and not line:find("^#") and line:find("%.lua$") then
+            FILES[#FILES + 1] = line
+        end
+    end
+    toc:close()
+    assert(#FILES > 0, "SpecSage.toc lists no Lua files")
+end
 
 -- Keep addon chat output from drowning the test log.
 local realPrint = print
@@ -136,8 +114,17 @@ ns.chardb.statsShow.crit = false
 check(ns.DEFAULTS.stats.enabled == true, "defaults are deep-copied, not referenced")
 ns.chardb.statsShow.crit = true
 
+-- A fresh install starts with the overlay off, and the modules that feed it
+-- do no work until it is on (ns.OverlayActive).
+check(ns.db.hidden == true, "the overlay starts off on a fresh install")
 mock.Fire("PLAYER_LOGIN")
 check(ns.playerGUID == "Player-1234-ABCDEF", "player GUID cached on login")
+check(rendered.stats == nil and rendered.procs == nil and rendered.combat == nil,
+    "no overlay section is built while the overlay is off")
+
+-- Turning it on (the /sage overlay path) rebuilds every section at once.
+ns.UI:Toggle()
+check(ns.db.hidden == false, "toggling turns the overlay on")
 
 --------------------------------------------------------------------------------
 section("Stats module")
@@ -807,7 +794,38 @@ check(activeRow and activeRow.label == "Combustion (3)", "stack count shown", ac
 
 local unwatched = ns:GetModule("Procs"):Unwatch(190319)
 check(unwatched, "unwatching removes the spell")
-check(#ns.chardb.watch == 0, "watch list empty after unwatch")
+check(#ns:GetModule("Procs"):WatchList() == 0, "watch list empty after unwatch")
+
+do
+    local ProcsModule = ns:GetModule("Procs")
+
+    -- Restricted content makes a cooldown's start and duration secret; the
+    -- spell is still on cooldown (isActive is never secret), and it must
+    -- not read "ready".
+    mock.ClearAuras()
+    ProcsModule:Watch(190319)
+    mock.cooldowns[190319] = { start = mock.Secret(mock.now), duration = mock.Secret(120), isActive = true }
+    ProcsModule:Update()
+    local row = findRow("procs", "Combustion")
+    check(row and row.value == "cooldown" and row.desaturate == true,
+        "a cooldown whose timing is secret reads as on cooldown, not ready", row and row.value)
+    mock.cooldowns[190319] = { start = mock.Secret(mock.now), duration = mock.Secret(1.5), isActive = true, isOnGCD = true }
+    ProcsModule:Update()
+    row = findRow("procs", "Combustion")
+    check(row and row.value == "ready", "a secret global cooldown still reads as ready", row and row.value)
+    mock.cooldowns[190319] = nil
+
+    -- Watch lists are per spec: another spec's watches do not follow a swap.
+    local Loadouts = ns:GetModule("Loadouts")
+    local savedSpec = ns.PlayerSpecID
+    ns.PlayerSpecID = function() return 63 end
+    check(#ProcsModule:WatchList() == 0, "a spec seen for the first time starts with an empty watch list")
+    ProcsModule:Update()
+    check(findRow("procs", "Combustion") == nil, "the other spec's watched spell is not shown after a swap")
+    ns.PlayerSpecID = savedSpec
+    check(ProcsModule:WatchList()[1] == 190319, "switching back finds that spec's own watch list")
+    ProcsModule:Unwatch(190319)
+end
 
 local badWatch, reason = ns:GetModule("Procs"):Watch(999999)
 check(not badWatch, "watching an unknown spell ID is rejected", reason)
@@ -964,21 +982,11 @@ section("Stat tooltips: secret values")
 -- returns a ratio or a percentage. Comparing a secret errors, so the guard
 -- returned nil and the line disappeared.
 --
--- Midnight's rules, which this models: arithmetic and formatting propagate a
--- secret, comparing one errors.
-local function SecretNumber(value)
-    local secret
-    secret = setmetatable({}, {
-        __lt = function() error("attempt to compare a secret value") end,
-        __le = function() error("attempt to compare a secret value") end,
-        __eq = function() error("attempt to compare a secret value") end,
-        __add = function(a, b) return SecretNumber(value + (type(a) == "number" and a or b)) end,
-        -- Arithmetic yields another secret; the test resolves it to the real
-        -- product so the formatted output can be asserted.
-        __mul = function(a, b) return value * (type(a) == "number" and a or b) end,
-    })
-    return secret
-end
+-- Midnight's rules for addon code, which this models (warcraft.wiki.gg
+-- Secret_Values): comparing a secret or doing arithmetic on one errors;
+-- formatting, truthiness and issecretvalue() are fine. (An earlier version
+-- of this model let arithmetic through, which is not how the client works.)
+local SecretNumber = mock.Secret
 
 do
     local provider = ns.UI:GetSectionProvider("stats")
@@ -1000,15 +1008,19 @@ do
     local ok, data = pcall(provider, "armor")
     check(ok, "a secret armor value does not break the tooltip", not ok and tostring(data) or "")
 
-    local reduction
+    -- GetArmorEffectiveness answers with a 0-1 ratio, and a secret ratio
+    -- cannot be scaled to a percentage (arithmetic on a secret throws), so
+    -- the honest result is the "unavailable" line - never a wrong number,
+    -- and never the whole tooltip lost.
+    local reduction, unavailable
     for _, line in ipairs((data and data.lines) or {}) do
         if line.left and line.left:find("Physical damage reduction", 1, true) then
             reduction = line.right
         end
+        if line.left and line.left:find("unavailable right now", 1, true) then unavailable = true end
     end
-    check(reduction == "56.62%",
-        "the reduction line survives a secret armor value (the reported bug)",
-        tostring(reduction))
+    check(reduction == nil and unavailable,
+        "a secret armor ratio reads as unavailable rather than a computed number", tostring(reduction))
 
     UnitArmor = savedArmor
     C_PaperDollInfo.GetArmorEffectiveness = savedEffectiveness
@@ -1211,6 +1223,21 @@ mock.RunTickers()
 check(dumpOf(pinned):find("Effective=7777") ~= nil, "pinned tooltip refreshes from its provider",
     dumpOf(pinned))
 mock.armor.effective = 4500
+
+-- An unchanged pin is not rebuilt on every tick: each rebuild re-runs every
+-- tooltip post-call in the client.
+mock.RunTickers()
+local clears, realClear = 0, pinned.ClearLines
+pinned.ClearLines = function(...) clears = clears + 1; return realClear(...) end
+mock.RunTickers()
+mock.RunTickers()
+check(clears == 0, "an unchanged pin is not rebuilt on the refresh ticker", clears)
+mock.armor.effective = 4600
+mock.RunTickers()
+check(clears == 1, "a changed value rebuilds it once", clears)
+pinned.ClearLines = realClear
+mock.armor.effective = 4500
+mock.RunTickers()
 
 -- Hovering an already-pinned row should not double up.
 armorFrame.scripts.OnEnter(armorFrame)
@@ -2493,6 +2520,26 @@ check(#LoadoutsModule:GetForSpec(72) == countBeforeDelete, "the first Delete cli
 deleteButton:GetScript("OnClick")(deleteButton)
 check(#LoadoutsModule:GetForSpec(72) == countBeforeDelete - 1, "the second Delete click removes the loadout")
 
+-- A row deletes the build it shows, even after the list shifted under it
+-- (the other window deleted a row above). An index captured at render time
+-- removed the wrong build.
+LoadoutsModule:Add(72, "First", "Raid", "C0First")
+LoadoutsModule:Add(72, "Second", "Raid", "C0Second")
+Tome:RenderActiveTab()
+local secondRow
+for _, row in ipairs(Tome.loadoutRowPool) do
+    if row:IsShown() and row.name and (row.name:GetText() or ""):find("Second", 1, true) then secondRow = row end
+end
+check(secondRow ~= nil, "sanity: the second build has a row")
+local list72 = LoadoutsModule:GetForSpec(72)
+LoadoutsModule:Delete(72, #list72 - 1) -- "First", removed behind the Tome's back
+secondRow.deleteButton:GetScript("OnClick")(secondRow.deleteButton)
+secondRow.deleteButton:GetScript("OnClick")(secondRow.deleteButton)
+local names72 = {}
+for _, entry in ipairs(LoadoutsModule:GetForSpec(72)) do names72[entry.name] = true end
+check(not names72["Second"], "a stale row still deletes the build it showed", table.concat((function()
+    local t = {} for k in pairs(names72) do t[#t + 1] = k end return t end)(), ","))
+
 -- "Save current" is only offered for the player's own spec.
 Tome:Open("DEATHKNIGHT", 252) -- the player's own spec, per the mock
 Tome:SelectTab("Loadouts")
@@ -2672,9 +2719,13 @@ PlayerSpellsFrame = { TalentsFrame = {
         return stream.text ~= "garbage", 2, specID, "hash"
     end,
     GetTalentTreeID = function() return 1 end,
-    ReadLoadoutContent = function(_, stream) return { from = stream.text } end,
-    ConvertToImportLoadoutEntryInfo = function(_, configID, content) return { configID = configID, content = content } end,
-    ViewLoadout = function(_, entries) viewed = entries end,
+    -- 12.1's ClassTalentImportExportMixin:ViewLoadout(importText, level):
+    -- it parses the string itself and returns success, specID.
+    ViewLoadout = function(_, importText, level)
+        assert(type(importText) == "string", "ViewLoadout takes the import string, not parsed entries")
+        viewed = { text = importText, level = level }
+        return true, 252
+    end,
 } }
 local vaultBefore = #LoadoutsModule:GetForSpec(9201)
 printed = {}
@@ -2687,8 +2738,8 @@ check(#printed == 1 and printed[1]:find("open your talent window", 1, true) ~= n
     "the player is told to open it", printed[1])
 talentsVisible = true
 mplusRow.viewButton:GetScript("OnClick")(mplusRow.viewButton)
-check(viewed ~= nil and viewed.content.from == "C0EAy0kSampleExportStringFromSimC",
-    "and shows the row's build in it via ViewLoadout", viewed and viewed.content.from)
+check(viewed ~= nil and viewed.text == "C0EAy0kSampleExportStringFromSimC" and viewed.level == UnitLevel("player"),
+    "and shows the row's build in it via ViewLoadout(importText, level)", viewed and viewed.text)
 check(#LoadoutsModule:GetForSpec(9201) == vaultBefore, "viewing saves nothing to the vault")
 check(mplusRow.viewButton:GetText() == "Shown", "the button confirms")
 mock.RunAfter()
@@ -2708,21 +2759,24 @@ local ok4, err4 = LoadoutsModule:OpenInTalentUI("C0EAy0kSampleExportStringFromSi
 check(ok4 == nil and err4:find("combat", 1, true) ~= nil, "View is refused in combat", err4)
 mock.inCombat = false
 
--- A client whose talent frame has no view mode gets Blizzard's import
--- dialog, pre-filled with the string and a name.
-PlayerSpellsFrame.TalentsFrame.ViewLoadout = nil
-local importText, importName
-ClassTalentLoadoutImportDialog = {
-    ImportControl = { GetEditBox = function() return { SetText = function(_, t) importText = t end } end },
-    NameControl = { GetEditBox = function() return { SetText = function(_, t) importName = t end } end },
-}
+-- A view the client refuses, or a frame with no view mode: the addon does
+-- not open Blizzard's import popup (showing it from addon code writes into
+-- StaticPopup_DisplayedFrames, a taint vector); the Tome offers the string
+-- in its own copy box instead.
 local shownPopup
 StaticPopupSpecial_Show = function(d) shownPopup = d end
-local result = LoadoutsModule:OpenInTalentUI("C0EAy0kSampleExportStringFromSimC", "Suggested Mythic+ (SimC)")
-check(result == "dialog" and shownPopup == ClassTalentLoadoutImportDialog,
-    "without a view mode the import dialog opens", result)
-check(importText == "C0EAy0kSampleExportStringFromSimC" and importName == "Suggested Mythic+ (SimC)",
-    "pre-filled with the string and a name", importText)
+PlayerSpellsFrame.TalentsFrame.ViewLoadout = function() return false end
+local result, reason = LoadoutsModule:OpenInTalentUI("C0EAy0kSampleExportStringFromSimC", "x")
+check(result == nil and reason ~= nil and shownPopup == nil,
+    "a refused view reports why and opens no Blizzard popup", reason)
+PlayerSpellsFrame.TalentsFrame.ViewLoadout = nil
+printed = {}
+ns.Print = function(...) printed[#printed + 1] = table.concat({ ... }, " ") end
+mplusRow.viewButton:GetScript("OnClick")(mplusRow.viewButton)
+ns.Print = realPrint
+check(shownPopup == nil and Tome.copyDialog:IsShown() and Tome.copyBox:GetText() == "C0EAy0kSampleExportStringFromSimC",
+    "without a view mode the Tome's own copy box offers the string", Tome.copyBox and Tome.copyBox:GetText())
+Tome.copyDialog:Hide()
 
 -- Saved vault rows carry the same button.
 LoadoutsModule:Add(9201, "A saved build", "Raid", "C0EAy0kSampleExportStringFromSimC")
@@ -2753,10 +2807,11 @@ do
     PlayerSpellsFrame.TalentsFrame = talents
     talents.IsVisible = function() return true end
     talents.ReadLoadoutHeader = function(_, stream) return true, 2, 252, "hash" end
-    talents.GetTalentTreeID = function() return 1 end
-    talents.ReadLoadoutContent = function(_, stream) return { from = stream.text } end
-    talents.ConvertToImportLoadoutEntryInfo = function(_, configID, content) return { configID = configID, content = content } end
-    talents.ViewLoadout = function(_, entries) viewed = entries end
+    -- 12.1's ViewLoadout(importText, level), returning success, specID.
+    talents.ViewLoadout = function(_, importText, level)
+        viewed = { text = importText, level = level }
+        return true, 252
+    end
 
     -- Blizzard_PlayerSpells loading is what attaches it.
     mock.Fire("ADDON_LOADED", "Blizzard_PlayerSpells")
@@ -2798,7 +2853,7 @@ do
     -- closes the menu. Nothing is saved.
     local vaultBefore = #LoadoutsModule:GetForSpec(252)
     savedRow:GetScript("OnClick")(savedRow)
-    check(viewed ~= nil and viewed.content.from == "C0EAy0kSavedFrost", "picking a build shows it via ViewLoadout", viewed and viewed.content.from)
+    check(viewed ~= nil and viewed.text == "C0EAy0kSavedFrost", "picking a build shows it via ViewLoadout", viewed and viewed.text)
     check(not menu:IsShown(), "the menu closes after a pick")
     check(#LoadoutsModule:GetForSpec(252) == vaultBefore, "picking saves nothing")
 
@@ -3023,13 +3078,31 @@ Tome:SelectTab("Notes")
 check(Tome.notesBox ~= nil, "the Notes tab builds an editbox")
 check(Tome.notesBox:GetText() == NotesModule:Get(72), "the Notes tab loads the spec's saved note")
 
-Tome.notesBox:SetText("Watch for the add-phase trinket swap.")
+Tome.notesBox:Type("Watch for the add-phase trinket swap.")
 Tome.notesBox:GetScript("OnEditFocusLost")(Tome.notesBox)
 check(NotesModule:Get(72) == "Watch for the add-phase trinket swap.", "losing focus saves the note")
 
-Tome.notesBox:SetText("Saved on window close.")
+Tome.notesBox:Type("Saved on window close.")
 Tome.frame:GetScript("OnHide")(Tome.frame)
 check(NotesModule:Get(72) == "Saved on window close.", "the Tome frame's OnHide also saves the open note")
+
+-- A box the player did not type in never writes: the docked panel can have
+-- saved a newer note for the same spec meanwhile.
+NotesModule:Set(72, "Edited in the gearing panel.")
+Tome.frame:GetScript("OnHide")(Tome.frame)
+check(NotesModule:Get(72) == "Edited in the gearing panel.",
+    "closing the Tome with a stale, untouched box does not overwrite a newer note")
+Tome:SelectTab("Notes")
+check(Tome.notesBox:GetText() == "Edited in the gearing panel.", "reopening Notes shows the newer note")
+
+-- A redraw while the player is typing keeps the unsaved text.
+Tome.notesBox:SetFocus()
+Tome.notesBox:Type("Half-typed thought")
+Tome:RenderActiveTab()
+check(Tome.notesBox:GetText() == "Half-typed thought", "a redraw mid-typing keeps the unsaved buffer")
+Tome.notesBox:GetScript("OnEditFocusLost")(Tome.notesBox)
+Tome.notesBox:ClearFocus()
+check(NotesModule:Get(72) == "Half-typed thought", "and the text is saved when focus leaves")
 
 --------------------------------------------------------------------------------
 section("Tome: notes survive a spec switch")
@@ -3040,7 +3113,7 @@ section("Tome: notes survive a spec switch")
 -- overwrites the buffer with the newly selected spec's saved text.
 Tome:Open("WARRIOR", 72)
 Tome:SelectTab("Notes")
-Tome.notesBox:SetText("Typed but not yet saved for 72.")
+Tome.notesBox:Type("Typed but not yet saved for 72.")
 Tome:SelectSpec(71) -- Arms: a different real spec, same class, Notes tab stays open
 check(NotesModule:Get(72) == "Typed but not yet saved for 72.",
     "switching spec flushes the previously open note for its own spec")
@@ -4122,6 +4195,23 @@ do
     check(Panel.surface.frame == Panel.frame and Panel.surface.frame ~= Tome.frame,
         "the surface hosts widgets in the panel, not the Tome window")
     check(Panel.surface.notesBox ~= Tome.notesBox, "the Notes box is the panel's own, not the Tome's")
+    -- The Loadouts dialogs too: the Tome builds its own on first use, and
+    -- the panel's Copy / Save current must never reach them.
+    local tomeWasShown = Tome.frame:IsShown()
+    Tome.frame:Show()
+    Tome:ShowCopyDialog("tome string")
+    Tome.copyDialog:Hide()
+    if not tomeWasShown then Tome.frame:Hide() end
+    Panel.surface:ShowCopyDialog("panel string")
+    check(Panel.surface.copyDialog and Panel.surface.copyDialog ~= Tome.copyDialog
+        and Panel.surface.copyDialog.parent == Panel.frame, "the panel's copy dialog is its own, on the panel")
+    check(Panel.surface.copyBox:GetText() == "panel string" and Tome.copyBox:GetText() == "tome string",
+        "each window's copy box keeps its own text")
+    Panel.surface.copyDialog:Hide()
+    Panel.surface:ShowAddDialog("C0xyz")
+    check(Panel.surface.addDialog and Panel.surface.addDialog ~= Tome.addDialog,
+        "the panel's add dialog is its own")
+    Panel.surface.addDialog:Hide()
     check(Panel.surface.optionPools ~= Tome.optionPools, "as are the Options widgets")
     check(Panel.surface.bisListToggle ~= Tome.bisListToggle, "and the BiS list toggle")
     check(Panel.surface.suggestedLoadoutRows ~= Tome.suggestedLoadoutRows,
@@ -4206,12 +4296,26 @@ do
     check(renders == 1, "and exactly one redraw once the throttle elapses", renders)
     mock.RunAfter()
     check(renders == 1, "with nothing left queued after it", renders)
-    -- Hovering a paper doll slot goes through the same throttle.
+    -- Hovering a paper doll slot matters only to the Gear section: on any
+    -- other section it draws nothing (a redraw there wiped a Notes buffer
+    -- mid-typing and disarmed a Loadouts "Confirm?").
+    Panel:SetHoveredSlot("Legs")
+    mock.RunAfter()
+    check(renders == 1, "a slot hover off the Gear section queues no redraw", renders)
+    ns.db.characterPanel.section = "Gear"
+    -- On Gear it goes through the same throttle.
     Panel:SetHoveredSlot("Head")
     Panel:SetHoveredSlot("Neck")
     check(renders == 1, "hovering slots queues rather than draws", renders)
     mock.RunAfter()
     check(renders == 2 and Panel.hoveredSlot == "Neck", "and draws once for the last hovered slot", renders)
+    -- Item events skip the sections they cannot change.
+    ns.db.characterPanel.section = "Notes"
+    mock.Fire("GET_ITEM_INFO_RECEIVED", 700002)
+    mock.Fire("PLAYER_EQUIPMENT_CHANGED", 1)
+    mock.RunAfter()
+    check(renders == 2, "item and gear events do not redraw the Notes section", renders)
+    ns.db.characterPanel.section = "BiS"
     -- With the sheet closed nothing is queued at all.
     mock.ShowCharacterFrame(false)
     mock.Fire("GET_ITEM_INFO_RECEIVED", 700001)
@@ -4267,6 +4371,35 @@ do
     check(ns.db.characterPanel.offsetX == -350 and ns.db.characterPanel.offsetY == 15,
         "dragging the title moves the panel by the cursor delta", ns.db.characterPanel.offsetX .. "," .. ns.db.characterPanel.offsetY)
     check(titleHandle:GetScript("OnUpdate") == nil, "releasing the title stops tracking")
+
+    -- A drag ends when the button is found released or the handle hides:
+    -- closing the sheet mid-drag never delivers OnMouseUp, and the panel
+    -- used to follow the cursor the next time the sheet opened.
+    titleHandle:GetScript("OnMouseDown")(titleHandle, "LeftButton")
+    titleHandle:GetScript("OnHide")(titleHandle)
+    check(titleHandle:GetScript("OnUpdate") == nil and titleHandle.drag == nil,
+        "hiding the handle mid-drag ends the drag")
+    titleHandle:GetScript("OnMouseDown")(titleHandle, "LeftButton")
+    local before = ns.db.characterPanel.offsetX
+    mock.mouseDown = false
+    mock.cursor = { x = 500, y = 0 }
+    titleHandle:GetScript("OnUpdate")(titleHandle)
+    mock.mouseDown = true
+    check(titleHandle:GetScript("OnUpdate") == nil and ns.db.characterPanel.offsetX == before,
+        "a released button ends the drag without moving the panel")
+
+    -- Cursor deltas are in the panel's own scale: at half scale the anchor
+    -- moves twice the cursor distance, which keeps it under the cursor.
+    CharacterFrame:SetScale(0.5)
+    mock.cursor = { x = 0, y = 0 }
+    titleHandle:GetScript("OnMouseDown")(titleHandle, "LeftButton")
+    before = ns.db.characterPanel.offsetX
+    mock.cursor = { x = 10, y = 0 }
+    titleHandle:GetScript("OnUpdate")(titleHandle)
+    titleHandle:GetScript("OnMouseUp")(titleHandle, "LeftButton")
+    check(ns.db.characterPanel.offsetX == before + 20, "a scaled character sheet drags at cursor speed",
+        ns.db.characterPanel.offsetX - before)
+    CharacterFrame:SetScale(1)
     Panel:SetDockOffset(25, -10)
     grip:GetScript("OnMouseUp")(grip, "RightButton")
     _, ax, ay = Anchor()
@@ -4784,6 +4917,10 @@ end
 section("Buffs module (Modules/Buffs.lua, brought across from Upkeep, 2026-09-05)")
 --------------------------------------------------------------------------------
 
+-- These checks read overlay rows, which are only built while the overlay
+-- is on (ns.OverlayActive); the options tests above leave it off.
+ns.db.hidden = false
+
 do
     local BuffsModule = ns:GetModule("Buffs")
     check(BuffsModule ~= nil, "Buffs module registered")
@@ -4800,14 +4937,33 @@ do
     BuffsModule:Update()
     check(#(rendered.buffs or {}) == 0, "solo, the buffs section has no rows and stays hidden", #(rendered.buffs or {}))
 
-    -- Grouped with no raid buffs: every raid buff is flagged.
+    -- Grouped with no raid buffs: every raid buff a groupmate can cast is
+    -- flagged.
     mock.inGroup = true
+    mock.groupClasses = { "WARRIOR", "MAGE", "PRIEST", "DRUID", "SHAMAN" }
     BuffsModule:Update()
     local shout = findRow("buffs", "Battle Shout")
     check(shout ~= nil and shout.value == "missing", "a missing raid buff shows a 'missing' row while grouped",
         shout and shout.value)
     check(shout ~= nil and shout.valueColor == ns.Colors.bad, "the missing row is coloured ns.Colors.bad")
     check(#rendered.buffs == 5, "all five raid buffs are flagged when none is present", #rendered.buffs)
+
+    -- A buff nobody in the group can cast is not flagged: a Mythic+ group
+    -- with no Mage or Shaman is not "missing" Arcane Intellect or Skyfury.
+    mock.groupClasses = { "WARRIOR", "PRIEST", "DRUID", "ROGUE" }
+    BuffsModule:Update()
+    check(findRow("buffs", "Arcane Intellect") == nil and findRow("buffs", "Skyfury") == nil,
+        "a raid buff no groupmate provides is not flagged")
+    check(findRow("buffs", "Battle Shout") ~= nil and #rendered.buffs == 3,
+        "the buffs the group can provide still are", #rendered.buffs)
+    mock.inRaid = true
+    mock.groupClasses = { "MAGE", "ROGUE" }
+    BuffsModule:Update()
+    check(findRow("buffs", "Arcane Intellect") ~= nil and #rendered.buffs == 1,
+        "in a raid the roster is read from the raid units", #rendered.buffs)
+    mock.inRaid = false
+    mock.groupClasses = { "WARRIOR", "MAGE", "PRIEST", "DRUID", "SHAMAN" }
+    BuffsModule:Update()
 
     -- The buff appearing clears its row.
     mock.AddAura(6673, 3600)
@@ -4914,6 +5070,10 @@ end
 --------------------------------------------------------------------------------
 section("Second Upkeep pass: Stagger, armor and mastery tooltips (2026-09-05)")
 --------------------------------------------------------------------------------
+
+-- These checks read overlay rows, which are only built while the overlay
+-- is on (ns.OverlayActive); the options tests above leave it off.
+ns.db.hidden = false
 
 do
     local provider = ns.UI:GetSectionProvider("stats")
@@ -5303,6 +5463,39 @@ do
     mock.Fire("PLAYER_REGEN_ENABLED")
     check(frame.keyboardEnabled == false, "a hidden Tome holds no keyboard")
 
+    -- ESC closes an open dialog before the window.
+    frame:Show()
+    Tome:ShowCopyDialog("abc")
+    onKey(frame, "ESCAPE")
+    check(frame:IsShown() and not Tome.copyDialog:IsShown(), "ESC closes an open dialog first and keeps the Tome")
+    onKey(frame, "ESCAPE")
+    check(not frame:IsShown(), "the next ESC closes the Tome")
+
+    -- A window hidden mid-drag still saves where it was dragged to.
+    frame:Show()
+    frame:GetScript("OnDragStart")(frame)
+    frame:ClearAllPoints()
+    frame:SetPoint("TOPLEFT", UIParent, "TOPLEFT", 123, -45)
+    onKey(frame, "ESCAPE")
+    frame:GetScript("OnHide")(frame) -- the client fires OnHide as the frame hides
+    check(ns.db.tomePosition.x == 123 and ns.db.tomePosition.y == -45 and not frame.dragging,
+        "closing the Tome mid-drag finishes the drag and saves the position", ns.db.tomePosition.x)
+
+    -- /sage reset tome puts it back.
+    SlashCmdList.SPECSAGE("reset tome")
+    check(ns.db.tomePosition.x == ns.DEFAULTS.tomePosition.x and ns.db.tomePosition.point == ns.DEFAULTS.tomePosition.point,
+        "/sage reset tome restores the default position")
+    check(frame.clampedToScreen == true, "the Tome is clamped to the screen")
+
+    -- It shrinks to fit a narrow screen and never grows past full size.
+    mock.screen.width, mock.screen.height = 1024, 768
+    mock.Fire("DISPLAY_SIZE_CHANGED")
+    check(frame:GetScale() < 1 and frame:GetScale() * 1100 <= 1024, "on a 4:3 screen the Tome scales down to fit",
+        frame:GetScale())
+    mock.screen.width, mock.screen.height = 1920, 1080
+    mock.Fire("UI_SCALE_CHANGED")
+    check(frame:GetScale() == 1, "on a wide screen it is full size again", frame:GetScale())
+
     -- Opening in combat: no keyboard, and nothing protected is called.
     mock.inCombat = true
     check(pcall(function() Tome:Toggle() end) and frame:IsShown() and frame.keyboardEnabled == false,
@@ -5339,6 +5532,182 @@ Tome:Toggle()
 check(Tome:IsShown() == false, "Toggle closes the Tome")
 
 --------------------------------------------------------------------------------
+
+section("Review fixes: spec lookup, tooltip hook, overlay command, options (2026-09-23)")
+--------------------------------------------------------------------------------
+
+do
+    -- The spec globals are deprecation shims in 12.x, loaded only while the
+    -- loadDeprecationFallbacks CVar is on. Without them the docked panel,
+    -- the trinket tooltip and the hero-tree stat lists all lost the spec.
+    local savedSpec, savedInfo = GetSpecialization, GetSpecializationInfo
+    local cSpec, cInfo = C_SpecializationInfo.GetSpecialization, C_SpecializationInfo.GetSpecializationInfo
+    C_SpecializationInfo.GetSpecialization = function() return savedSpec() end
+    C_SpecializationInfo.GetSpecializationInfo = function(i) return savedInfo(i) end
+    GetSpecialization, GetSpecializationInfo = nil, nil
+    check(ns.PlayerSpecID() == 252 and ns:GetModule("Loadouts"):GetCurrentSpecID() == 252,
+        "the player's spec is found with the deprecated globals gone")
+    GetSpecialization, GetSpecializationInfo = savedSpec, savedInfo
+    C_SpecializationInfo.GetSpecialization, C_SpecializationInfo.GetSpecializationInfo = cSpec, cInfo
+
+    -- A spec registered as unavailable has no trinket opinion to state.
+    local ItemRanks = ns:GetModule("ItemRanks")
+    ns.GuideStore:RegisterTrinkets(9791, { unavailable = "no sims for this spec" })
+    local Loadouts = ns:GetModule("Loadouts")
+    local savedCurrent = Loadouts.GetCurrentSpecID
+    Loadouts.GetCurrentSpecID = function() return 9791 end
+    mock.items[880091] = { name = "Some Trinket", quality = 3, equipLoc = "INVTYPE_TRINKET" }
+    GameTooltip:SetOwner(nil, "ANCHOR_NONE")
+    mock.FireTooltipItem(GameTooltip, 880091)
+    check(table.concat(GameTooltip:Dump(), "\n"):find("not in this spec's trinket lists", 1, true) == nil,
+        "a spec with no trinket lists does not claim a trinket is missing from them")
+    mock.items[880091] = nil
+    Loadouts.GetCurrentSpecID = savedCurrent
+
+    -- /sage overlay under "Hide out of combat" says why nothing appeared.
+    local printed, realPrint = {}, ns.Print
+    ns.Print = function(...) printed[#printed + 1] = table.concat({ ... }, " ") end
+    local wasHidden, wasHideOOC = ns.db.hidden, ns.db.hideOutOfCombat
+    ns.db.hidden, ns.db.hideOutOfCombat = true, true
+    SlashCmdList.SPECSAGE("overlay")
+    check(printed[1] and printed[1]:find("appears in combat", 1, true) ~= nil,
+        "/sage overlay explains an overlay hidden until combat", printed[1])
+
+    -- The options panel refuses cleanly in combat (OpenSettingsPanel is
+    -- restricted there).
+    printed = {}
+    mock.inCombat = true
+    ns.OpenOptions()
+    mock.inCombat = false
+    check(printed[1] and printed[1]:find("cannot open in combat", 1, true) ~= nil,
+        "opening options in combat explains itself", printed[1])
+    ns.Print = realPrint
+    ns.db.hidden, ns.db.hideOutOfCombat = wasHidden, wasHideOOC
+    ns.UI:UpdateVisibility()
+end
+
+--------------------------------------------------------------------------------
+section("GuideStore validation gaps (2026-09-23)")
+--------------------------------------------------------------------------------
+
+do
+    local store = ns.GuideStore
+    local realPrint = ns.Print
+    local warnings = {}
+    ns.Print = function(...) warnings[#warnings + 1] = table.concat({ ... }, " ") end
+
+    -- Text fields the Tome iterates or concatenates must be the right type:
+    -- each of these registered before and crashed a Tome tab.
+    local function rejects(guide, label)
+        local before = #warnings
+        check(store:RegisterSpec("MAGE", 9931, guide) == false and #warnings == before + 1, label)
+    end
+    rejects({ specName = "x", overview = "text" }, "a string overview is rejected")
+    rejects({ specName = "x", tips = "text" }, "a string tips list is rejected")
+    rejects({ specName = "x", rotation = { { title = "a", steps = "text" } } }, "string rotation steps are rejected")
+    rejects({ specName = "x", cooldowns = "text" }, "a string cooldowns list is rejected")
+    rejects({ specName = "x", cooldowns = { { text = {} } } }, "a non-string step text is rejected")
+    rejects({ specName = "x", statPriority = { { stat = "haste", note = {} } } }, "a non-string stat note is rejected")
+    rejects({ specName = "x", consumables = { { slot = "Flask", items = { "potion" } } } }, "a non-numeric consumable item is rejected")
+    check(store:RegisterSpec("MAGE", 9931, { specName = "x", overview = { "fine" }, tips = { "fine" },
+        rotation = { { title = "a", steps = { { text = "t", spellID = 1, condition = "c" } } } },
+        cooldowns = { { text = "t" } } }) == true, "a well-formed guide still registers")
+
+    -- A spec belongs to one class.
+    check(store:RegisterSpec("WARRIOR", 9931, { specName = "x" }) == false,
+        "re-registering a spec under another class is refused")
+    local listed = 0
+    for _, specID in ipairs(store:GetClassSpecs("WARRIOR")) do if specID == 9931 then listed = listed + 1 end end
+    check(listed == 0, "so it is not listed on the second class's rail")
+
+    -- A NaN or fractional spec ID warns rather than throwing.
+    local nan = 0 / 0
+    check(pcall(function() return store:RegisterSpec("MAGE", nan, { specName = "x" }) end)
+        and store:RegisterSpec("MAGE", nan, { specName = "x" }) == false, "a NaN spec ID is rejected, not thrown")
+    check(store:RegisterTrinkets(1.5, { unavailable = "x" }) == false, "a fractional spec ID is rejected")
+
+    -- Trinket data is either unavailable or lists, never both.
+    check(store:RegisterTrinkets(9932, { unavailable = "x", lists = {} }) == false,
+        "trinket data with both an unavailable reason and lists is rejected")
+
+    -- BiS rows: a non-string source text would crash the row renderer.
+    check(store:RegisterBiS(9933, { lists = { { title = "t", list = {
+        { slot = "Neck", itemID = 1, name = "N", from = {} } } } } }) == false,
+        "a BiS row whose from is not a string is rejected")
+
+    ns.Print = realPrint
+end
+
+--------------------------------------------------------------------------------
+section("Tome: live Stats values and button widths (2026-09-23)")
+--------------------------------------------------------------------------------
+
+do
+    -- An open Stats tab redraws (once, throttled) when gear or ratings change.
+    Tome:Open("DEATHKNIGHT", 252)
+    Tome:SelectTab("Stats")
+    mock.RunAfter()
+    local renders, realRender = 0, Tome.RenderActiveTab
+    Tome.RenderActiveTab = function(...) renders = renders + 1; return realRender(...) end
+    mock.Fire("PLAYER_EQUIPMENT_CHANGED", 1)
+    mock.Fire("COMBAT_RATING_UPDATE")
+    mock.Fire("UNIT_STATS", "player")
+    mock.Fire("UNIT_STATS", "party1")
+    check(renders == 0, "a burst of stat events draws nothing synchronously", renders)
+    mock.RunAfter()
+    check(renders == 1, "and redraws the open Stats tab once", renders)
+    Tome:SelectTab("Overview")
+    renders = 0
+    mock.Fire("PLAYER_EQUIPMENT_CHANGED", 1)
+    mock.RunAfter()
+    check(renders == 0, "another tab is not redrawn for stat changes", renders)
+    Tome.RenderActiveTab = realRender
+
+    -- A skinned button shrinks back after a long label.
+    local button = CreateFrame("Button", nil, Tome.frame, "UIPanelButtonTemplate")
+    button:SetSize(50, 18)
+    button:SetText("Delete")
+    ns.SkinButton(button)
+    local base = button:GetWidth()
+    button:SetText("A much longer confirmation label")
+    check(button:GetWidth() > base, "a long label widens the button", button:GetWidth())
+    button:SetText("Delete")
+    check(button:GetWidth() == base, "and a short one returns it to its designed width", button:GetWidth())
+    Tome:Toggle()
+end
+
+--------------------------------------------------------------------------------
+section("Namespaced APIs the addon calls exist in the 12.1 client")
+--------------------------------------------------------------------------------
+
+do
+    -- The mock has no C_DamageMeter, so the meter paths never run here. A
+    -- wrong name there fails silently in the client (every call is
+    -- existence-guarded): "Reset session" called a ResetCombatSessions that
+    -- does not exist until 2026-09-23. This pins every C_DamageMeter call to
+    -- the functions Blizzard's 12.1.0 API documentation lists.
+    local known = {
+        GetAvailableCombatSessions = true, GetCombatSessionFromID = true, GetCombatSessionFromType = true,
+        GetCombatSessionSourceFromID = true, GetCombatSessionSourceFromType = true,
+        GetSessionDurationSeconds = true, IsDamageMeterAvailable = true, ResetAllCombatSessions = true,
+    }
+    local unknown = {}
+    local handle = io.open("SpecSage/Modules/Combat.lua", "r")
+    local source = handle and handle:read("*a") or ""
+    if handle then handle:close() end
+    for name in source:gmatch("C_DamageMeter%.([%a]+)") do
+        if not known[name] then unknown[#unknown + 1] = name end
+    end
+    check(source ~= "" and #unknown == 0, "every C_DamageMeter function Combat.lua calls exists in 12.1",
+        table.concat(unknown, ", "))
+end
+
+--------------------------------------------------------------------------------
+section("No errors routed to the client's error handler")
+--------------------------------------------------------------------------------
+
+check(#mock.handlerErrors == 0, "no isolated event handler or timer body raised an error during the run",
+    mock.handlerErrors[1])
 
 print(string.format("\n%d passed, %d failed", passed, failed))
 os.exit(failed == 0 and 0 or 1)

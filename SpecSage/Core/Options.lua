@@ -291,25 +291,28 @@ function Options:OnEnable()
     end
 end
 
--- Opens the panel. OpenToCategory takes a category ID (category:GetID()),
--- but GetID has not always existed on the returned category, and passing the
--- category object itself is accepted by some revisions - so try the ID and
--- fall back to the object rather than erroring out of the slash command.
+-- Opens the panel. In 12.1 Settings.OpenToCategory(categoryID) forwards to
+-- C_SettingsUtil.OpenSettingsPanel, which takes a number only and is
+-- restricted (HasRestrictions), so the old fallback of passing the category
+-- object could never work, and a call in combat is refused - say so rather
+-- than failing silently.
 function ns.OpenOptions()
     local category = Options.category
     if not category or not Settings or not Settings.OpenToCategory then
         ns.Print("options panel unavailable; use /sage help for commands.")
         return
     end
+    if InCombatLockdown and InCombatLockdown() then
+        ns.Print("the options panel cannot open in combat; try again after the fight, or use the Tome's Options tab.")
+        return
+    end
 
     local categoryID
     if type(category.GetID) == "function" then
         local ok, id = pcall(category.GetID, category)
-        if ok then categoryID = id end
+        if ok and type(id) == "number" then categoryID = id end
     end
-
     if categoryID ~= nil and pcall(Settings.OpenToCategory, categoryID) then return end
-    if pcall(Settings.OpenToCategory, category) then return end
 
     ns.Print("could not open the options panel; use /sage help for commands.")
 end

@@ -450,8 +450,13 @@ local DEFAULTS = {
 -- Anything class- or spec-specific belongs here rather than in the shared DB:
 -- a tank and a healer want different rows on screen.
 local CHAR_DEFAULTS = {
-    -- Spell IDs the player explicitly asked to track, in display order.
+    -- Spell IDs the player explicitly asked to track, in display order, per
+    -- spec (watchBySpec[specID]); see Procs:WatchList. `watch` is the list
+    -- used while no spec can be read, and the one the first spec adopted
+    -- when watch lists became per-spec (watchMigrated).
     watch = {},
+    watchBySpec = {},
+    watchMigrated = false,
 
     -- Which stat rows this character shows. Defaults suit a damage dealer;
     -- tanks will want armor and avoidance on.

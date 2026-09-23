@@ -206,14 +206,7 @@ end
 -- own character - unlike the Tome, there is nothing here to browse - so a
 -- failed lookup means "draw nothing" rather than falling back to a default.
 local function PlayerSpecID()
-    local getSpec = GetSpecialization
-    local getInfo = GetSpecializationInfo
-    if not (getSpec and getInfo) then return nil end
-    local ok, index = pcall(getSpec)
-    if not ok or not index then return nil end
-    local ok2, specID = pcall(getInfo, index)
-    if not ok2 then return nil end
-    return specID
+    return ns.PlayerSpecID()
 end
 
 local function Settings()
@@ -447,18 +440,38 @@ function CharacterPanel:SetDockOffset(x, y)
 end
 
 
--- Cursor position in the sheet's coordinate space, so a drag delta can be
--- added straight onto the anchor offset.
-local function CursorPosition()
+-- Cursor position in `frame`'s own coordinate space, so a drag delta can
+-- be added straight onto its anchor offset. The panel inherits the
+-- character sheet's scale, which need not be UIParent's (Blizzard shrinks
+-- the sheet to fit small screens; UI-scale and mover addons change it), so
+-- dividing by UIParent's scale made the panel run ahead of or lag the
+-- cursor there.
+local function CursorPosition(frame)
     if not GetCursorPosition then return nil end
     local ok, cx, cy = pcall(GetCursorPosition)
     if not ok or type(cx) ~= "number" then return nil end
     local scale = 1
-    if UIParent and UIParent.GetEffectiveScale then
-        local ok2, s = pcall(UIParent.GetEffectiveScale, UIParent)
+    local scaleFrame = (frame and frame.GetEffectiveScale) and frame or UIParent
+    if scaleFrame and scaleFrame.GetEffectiveScale then
+        local ok2, s = pcall(scaleFrame.GetEffectiveScale, scaleFrame)
         if ok2 and type(s) == "number" and s > 0 then scale = s end
     end
     return cx / scale, cy / scale
+end
+
+-- Ends a handle's drag. Also run when the button is found released and
+-- when the handle hides: a handle hidden mid-drag (closing the sheet with
+-- the button held) never gets OnMouseUp, and its OnUpdate used to resume
+-- next time the sheet opened with the panel glued to the cursor.
+local function StopDrag(handle)
+    handle:SetScript("OnUpdate", nil)
+    handle.drag = nil
+end
+
+local function ButtonReleased()
+    if not IsMouseButtonDown then return false end
+    local ok, down = pcall(IsMouseButtonDown, "LeftButton")
+    return ok and not down
 end
 
 -- Makes `handle` drag the panel: the panel is anchored to the sheet, so it
@@ -468,21 +481,20 @@ end
 function CharacterPanel:AttachMoveHandle(handle)
     handle:SetScript("OnMouseDown", function(button, mouseButton)
         if mouseButton ~= "LeftButton" then return end
-        local cx, cy = CursorPosition()
+        local cx, cy = CursorPosition(self.frame)
         if not cx then return end
         local ox, oy = self:DockOffset()
         button.drag = { cx = cx, cy = cy, ox = ox, oy = oy }
         button:SetScript("OnUpdate", function(b)
+            if ButtonReleased() then StopDrag(b) return end
             local d = b.drag
-            local nx, ny = CursorPosition()
+            local nx, ny = CursorPosition(self.frame)
             if not (d and nx) then return end
             self:SetDockOffset(d.ox + (nx - d.cx), d.oy + (ny - d.cy))
         end)
     end)
-    handle:SetScript("OnMouseUp", function(button)
-        button:SetScript("OnUpdate", nil)
-        button.drag = nil
-    end)
+    handle:SetScript("OnMouseUp", function(button) StopDrag(button) end)
+    handle:SetScript("OnHide", function(button) StopDrag(button) end)
 end
 
 function CharacterPanel:BuildGrip(frame)
@@ -569,20 +581,21 @@ function CharacterPanel:BuildResizeGrip(frame)
 
     grip:SetScript("OnMouseDown", function(button, mouseButton)
         if mouseButton ~= "LeftButton" then return end
-        local cx, cy = CursorPosition()
+        local cx, cy = CursorPosition(frame)
         if not cx then return end
         button.drag = { cx = cx, cy = cy, w = frame:GetWidth() or FALLBACK_WIDTH, h = frame:GetHeight() or MIN_HEIGHT }
         button:SetScript("OnUpdate", function(b)
+            if ButtonReleased() then StopDrag(b) return end
             local d = b.drag
-            local nx, ny = CursorPosition()
+            local nx, ny = CursorPosition(frame)
             if not (d and nx) then return end
             self:SetSize(d.w + (nx - d.cx), d.h - (ny - d.cy))
             self:QueueRender()
         end)
     end)
+    grip:SetScript("OnHide", function(button) StopDrag(button) end)
     grip:SetScript("OnMouseUp", function(button, mouseButton)
-        button:SetScript("OnUpdate", nil)
-        button.drag = nil
+        StopDrag(button)
         if mouseButton == "RightButton" then self:SetSize(nil, nil) end
         if self.frame and self.frame:IsShown() then self:Render() end
     end)
@@ -757,7 +770,12 @@ local function PlaceRow(pool, index, parent, width, y, text, opts)
     row:SetPoint("TOPLEFT", parent, "TOPLEFT", indent, y)
     row:SetSize(width - indent, ROW_HEIGHT)
 
-    local valueWidth = (opts.value and opts.value ~= "") and 62 or 0
+    -- The value can be a secret stat string in restricted content, and
+    -- comparing a secret throws (inside the sheet's OnShow, before the panel
+    -- is shown); truthiness and IsSecret are safe, so a secret short-circuits
+    -- ahead of the comparison.
+    local hasValue = opts.value and (ns.IsSecret(opts.value) or opts.value ~= "")
+    local valueWidth = hasValue and 62 or 0
     row.text:SetWidth(width - indent - valueWidth)
     row.text:SetText(text or "")
     local color = opts.color or TEXT_PRIMARY_COLOR
@@ -1068,8 +1086,23 @@ end
 function CharacterPanel:SetHoveredSlot(slot)
     if self.hoveredSlot == slot then return end
     self.hoveredSlot = slot
-    -- Only redraw when the panel is actually up; hovering gear with the
-    -- panel off should cost nothing.
+    -- Only the Gear section shows the hovered slot. Redrawing any other
+    -- section on a slot hover wiped a Notes buffer mid-typing and disarmed
+    -- a Loadouts "Confirm?" delete.
+    self:QueueRenderFor("hover")
+end
+
+-- Sections an item or gear event has nothing to add to, and where a
+-- redraw costs the player something (typing, a pending confirm).
+local QUIET_SECTIONS = { Notes = true, Loadouts = true, Options = true }
+
+-- QueueRender, filtered by what changed: "hover" matters only to Gear,
+-- "items" (item info arriving, equipment changing) to every section that
+-- shows items or stats.
+function CharacterPanel:QueueRenderFor(kind)
+    local section = self:ActiveSection()
+    if kind == "hover" and section ~= GEAR_SECTION then return end
+    if kind == "items" and QUIET_SECTIONS[section] then return end
     self:QueueRender()
 end
 
@@ -1155,10 +1188,10 @@ end
 -- Equipping something changes both the live stat values and the
 -- equipped/owned tags, so the panel redraws with the character sheet open.
 function CharacterPanel:OnInit()
-    ns:RegisterEvent("PLAYER_EQUIPMENT_CHANGED", function() self:QueueRender() end)
+    ns:RegisterEvent("PLAYER_EQUIPMENT_CHANGED", function() self:QueueRenderFor("items") end)
     ns:RegisterEvent("PLAYER_SPECIALIZATION_CHANGED", function() self:QueueRender() end)
     -- A hero tree swap changes which stat order is the player's.
     ns:RegisterEvent("TRAIT_CONFIG_UPDATED", function() self:QueueRender() end)
     ns:RegisterEvent("PLAYER_TALENT_UPDATE", function() self:QueueRender() end)
-    ns:RegisterEvent("GET_ITEM_INFO_RECEIVED", function() self:QueueRender() end)
+    ns:RegisterEvent("GET_ITEM_INFO_RECEIVED", function() self:QueueRenderFor("items") end)
 end

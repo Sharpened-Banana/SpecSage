@@ -74,6 +74,90 @@ local specClass = {}        -- specID -> classToken, for cross-checking
 -- RegisterSpec can print one useful line and move on.
 --------------------------------------------------------------------------------
 
+-- A spec ID is a positive whole number. type() alone let NaN through, and a
+-- NaN table key throws ("table index is NaN") instead of warn-and-skip.
+local function IsSpecID(specID)
+    return type(specID) == "number" and specID == specID and specID > 0 and specID == math.floor(specID)
+end
+
+-- Optional free-text fields the Tome concatenates or iterates. The rest of
+-- a guide is laissez-faire by design (DESIGN.md), but these crash rather
+-- than render oddly when mistyped: ipairs over a string raises in WoW's Lua
+-- 5.1, and "(" .. {} .. ")" raises anywhere.
+local function OptionalString(value, where)
+    if value ~= nil and type(value) ~= "string" then
+        return false, where .. " must be a string when present"
+    end
+    return true
+end
+
+local function ValidateStringList(list, where)
+    if list == nil then return true end
+    if type(list) ~= "table" then return false, where .. " must be an array of strings" end
+    for index, value in ipairs(list) do
+        if type(value) ~= "string" then return false, format("%s[%d] must be a string", where, index) end
+    end
+    return true
+end
+
+local function ValidateStep(step, where)
+    if type(step) ~= "table" then return false, where .. " must be a table" end
+    local ok, err = OptionalString(step.text, where .. ".text")
+    if not ok then return false, err end
+    ok, err = OptionalString(step.condition, where .. ".condition")
+    if not ok then return false, err end
+    if step.spellID ~= nil and type(step.spellID) ~= "number" then
+        return false, where .. ".spellID must be a number when present"
+    end
+    return true
+end
+
+local function ValidateSteps(steps, where)
+    if steps == nil then return true end
+    if type(steps) ~= "table" then return false, where .. " must be an array" end
+    for index, step in ipairs(steps) do
+        local ok, err = ValidateStep(step, format("%s[%d]", where, index))
+        if not ok then return false, err end
+    end
+    return true
+end
+
+local function ValidateRotation(rotation)
+    if rotation == nil then return true end
+    if type(rotation) ~= "table" then return false, "rotation must be an array" end
+    for index, block in ipairs(rotation) do
+        local where = format("rotation[%d]", index)
+        if type(block) ~= "table" then return false, where .. " must be a table" end
+        local ok, err = OptionalString(block.title, where .. ".title")
+        if not ok then return false, err end
+        ok, err = ValidateSteps(block.steps, where .. ".steps")
+        if not ok then return false, err end
+    end
+    return true
+end
+
+local function ValidateConsumables(consumables)
+    if consumables == nil then return true end
+    if type(consumables) ~= "table" then return false, "consumables must be an array" end
+    for index, entry in ipairs(consumables) do
+        local where = format("consumables[%d]", index)
+        if type(entry) ~= "table" then return false, where .. " must be a table" end
+        local ok, err = OptionalString(entry.slot, where .. ".slot")
+        if not ok then return false, err end
+        ok, err = OptionalString(entry.text, where .. ".text")
+        if not ok then return false, err end
+        if entry.items ~= nil then
+            if type(entry.items) ~= "table" then return false, where .. ".items must be an array of item IDs" end
+            for itemIndex, itemID in ipairs(entry.items) do
+                if type(itemID) ~= "number" then
+                    return false, format("%s.items[%d] must be an item ID", where, itemIndex)
+                end
+            end
+        end
+    end
+    return true
+end
+
 local function ValidateStatPriority(statPriority)
     if statPriority == nil then return true end
     if type(statPriority) ~= "table" then
@@ -87,6 +171,8 @@ local function ValidateStatPriority(statPriority)
         if type(entry.stat) ~= "string" or not VALID_STAT_KEYS[entry.stat] then
             return false, format("statPriority[%d] has an invalid stat key '%s'", index, tostring(entry.stat))
         end
+        local ok, err = OptionalString(entry.note, format("statPriority[%d].note", index))
+        if not ok then return false, err end
     end
 
     return true
@@ -151,6 +237,12 @@ local function ValidateTrinkets(data)
         if type(data.unavailable) ~= "string" or data.unavailable == "" then
             return false, "trinkets.unavailable must be a non-empty string"
         end
+        -- Either shape, never both: returning early here used to accept
+        -- unvalidated lists alongside the reason, and the Tome (which
+        -- checks lists first) then indexed an empty or malformed list.
+        if data.lists ~= nil then
+            return false, "trinkets has both unavailable and lists; use one"
+        end
         return true
     end
 
@@ -189,6 +281,11 @@ local function ValidateTrinkets(data)
             if row.whTier ~= nil and (type(row.whTier) ~= "string" or not VALID_TIERS[row.whTier]) then
                 return false, where .. ".whTier must be a tier letter when present"
             end
+            if row.ilvl ~= nil and type(row.ilvl) ~= "number" then
+                return false, where .. ".ilvl must be a number when present"
+            end
+            local okSource, sourceErr = OptionalString(row.source, where .. ".source")
+            if not okSource then return false, sourceErr end
             local bonusOK, bonusErr = ValidateBonus(row.bonus, where)
             if not bonusOK then return false, bonusErr end
         end
@@ -238,8 +335,14 @@ local function ValidateGuide(classToken, specID, guide)
         return false, format("unknown class token '%s'", tostring(classToken))
     end
 
-    if type(specID) ~= "number" then
-        return false, "specID must be a number"
+    if not IsSpecID(specID) then
+        return false, "specID must be a positive whole number"
+    end
+
+    -- A spec belongs to one class; re-registering it under another left it
+    -- listed on both class rails.
+    if specClass[specID] and specClass[specID] ~= classToken then
+        return false, format("spec %d is already registered under %s", specID, specClass[specID])
     end
 
     if type(guide) ~= "table" then
@@ -263,6 +366,17 @@ local function ValidateGuide(classToken, specID, guide)
     if not ok then
         return false, "guide." .. err
     end
+
+    ok, err = ValidateStringList(guide.overview, "overview")
+    if not ok then return false, "guide." .. err end
+    ok, err = ValidateStringList(guide.tips, "tips")
+    if not ok then return false, "guide." .. err end
+    ok, err = ValidateRotation(guide.rotation)
+    if not ok then return false, "guide." .. err end
+    ok, err = ValidateSteps(guide.cooldowns, "cooldowns")
+    if not ok then return false, "guide." .. err end
+    ok, err = ValidateConsumables(guide.consumables)
+    if not ok then return false, "guide." .. err end
 
     ok, err = ValidateLoadoutSuggestion(guide.mplusLoadout, "mplusLoadout")
     if not ok then
@@ -328,8 +442,8 @@ local trinkets = {}   -- specID -> trinkets table
 -- skip contract as RegisterSpec: returns true, or prints one warning and
 -- returns false. The spec does not need a guide registered first.
 function GuideStore:RegisterTrinkets(specID, data)
-    if type(specID) ~= "number" then
-        ns.Print(format("|cffff4444trinkets rejected|r (spec=%s): specID must be a number", tostring(specID)))
+    if not IsSpecID(specID) then
+        ns.Print(format("|cffff4444trinkets rejected|r (spec=%s): specID must be a positive whole number", tostring(specID)))
         return false
     end
     local ok, err = ValidateTrinkets(data)
@@ -376,6 +490,8 @@ local function ValidateBiS(data)
             if type(row.name) ~= "string" or row.name == "" then
                 return false, where .. ".name must be a non-empty string"
             end
+            local fromOK, fromErr = OptionalString(row.from, where .. ".from")
+            if not fromOK then return false, fromErr end
             local bonusOK, bonusErr = ValidateBonus(row.bonus, where)
             if not bonusOK then return false, bonusErr end
         end
@@ -384,8 +500,8 @@ local function ValidateBiS(data)
 end
 
 function GuideStore:RegisterBiS(specID, data)
-    if type(specID) ~= "number" then
-        ns.Print(format("|cffff4444bis rejected|r (spec=%s): specID must be a number", tostring(specID)))
+    if not IsSpecID(specID) then
+        ns.Print(format("|cffff4444bis rejected|r (spec=%s): specID must be a positive whole number", tostring(specID)))
         return false
     end
     local ok, err = ValidateBiS(data)
@@ -437,8 +553,8 @@ local function ValidateStatPriorityData(data)
 end
 
 function GuideStore:RegisterStatPriority(specID, data)
-    if type(specID) ~= "number" then
-        ns.Print(format("|cffff4444stat priority rejected|r (spec=%s): specID must be a number", tostring(specID)))
+    if not IsSpecID(specID) then
+        ns.Print(format("|cffff4444stat priority rejected|r (spec=%s): specID must be a positive whole number", tostring(specID)))
         return false
     end
     local ok, err = ValidateStatPriorityData(data)
@@ -474,12 +590,7 @@ function GuideStore:GetActiveHeroTree()
 end
 
 local function PlayerSpecIDForHero()
-    if not (GetSpecialization and GetSpecializationInfo) then return nil end
-    local ok, index = pcall(GetSpecialization)
-    if not ok or not index then return nil end
-    local ok2, specID = pcall(GetSpecializationInfo, index)
-    if ok2 then return specID end
-    return nil
+    return ns.PlayerSpecID and ns.PlayerSpecID() or nil
 end
 
 -- The stat-priority list for a hero tree by name: the list titled exactly
@@ -555,8 +666,8 @@ local function ValidateSiteLoadouts(data)
 end
 
 function GuideStore:RegisterSiteLoadouts(specID, data)
-    if type(specID) ~= "number" then
-        ns.Print(format("|cffff4444site loadouts rejected|r (spec=%s): specID must be a number", tostring(specID)))
+    if not IsSpecID(specID) then
+        ns.Print(format("|cffff4444site loadouts rejected|r (spec=%s): specID must be a positive whole number", tostring(specID)))
         return false
     end
     local ok, err = ValidateSiteLoadouts(data)

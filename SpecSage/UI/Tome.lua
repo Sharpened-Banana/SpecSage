@@ -31,6 +31,8 @@ end
 -- as GET_ITEM_INFO_RECEIVED, and the row that was showing an "Item 12345"
 -- placeholder redraws with the real name and quality colour.
 function Tome:OnEnable()
+    ns:RegisterEvent("UI_SCALE_CHANGED", function() self:FitToScreen() end)
+    ns:RegisterEvent("DISPLAY_SIZE_CHANGED", function() self:FitToScreen() end)
     ns:RegisterEvent("PLAYER_REGEN_DISABLED", function() self:UpdateKeyboard() end)
     ns:RegisterEvent("PLAYER_REGEN_ENABLED", function() self:UpdateKeyboard() end)
     ns:RegisterEvent("GET_ITEM_INFO_RECEIVED", function(_, itemID)
@@ -47,6 +49,25 @@ function Tome:OnEnable()
     ns:RegisterEvent("TRAIT_CONFIG_UPDATED", OnTalentsChanged)
     ns:RegisterEvent("PLAYER_TALENT_UPDATE", OnTalentsChanged)
     ns:RegisterEvent("PLAYER_SPECIALIZATION_CHANGED", OnTalentsChanged)
+
+    -- The Stats tab shows live values beside each stat; changing gear or a
+    -- buff changing a rating left them stale until the tab was reopened.
+    -- Throttled: equipping a set fires a burst of these.
+    local statRedrawQueued = false
+    local function OnStatsChanged()
+        if statRedrawQueued then return end
+        if not (self.frame and self.frame:IsShown() and self.activeTab == "Stats") then return end
+        statRedrawQueued = true
+        C_Timer.After(0.25, function()
+            statRedrawQueued = false
+            if self.frame and self.frame:IsShown() and self.activeTab == "Stats" then
+                self:RenderActiveTab()
+            end
+        end)
+    end
+    ns:RegisterEvent("PLAYER_EQUIPMENT_CHANGED", OnStatsChanged)
+    ns:RegisterEvent("COMBAT_RATING_UPDATE", OnStatsChanged)
+    ns:RegisterUnitEvent("UNIT_STATS", "player", OnStatsChanged)
 end
 
 -- Retail has been moving specialization lookups into C_SpecializationInfo;
@@ -529,8 +550,14 @@ local function FitButtonToText(button)
     local ok, measured = pcall(function() return fontString:GetStringWidth() end)
     if not ok or type(measured) ~= "number" or measured <= 0 then return end
     local wanted = math.ceil(measured) + BUTTON_TEXT_PAD * 2
-    if wanted > button:GetWidth() then
-        button:SetWidth(wanted)
+    -- Grows for a long label and shrinks back for a short one, never below
+    -- the width the button was designed at. It used to only ever grow, so
+    -- "Confirm?" left Delete wide for good and a list toggle kept the width
+    -- of the longest title it had ever shown.
+    button.baseWidth = button.baseWidth or button:GetWidth()
+    local width = math.max(button.baseWidth, wanted)
+    if width ~= button:GetWidth() then
+        button:SetWidth(width)
     end
 end
 
@@ -941,6 +968,18 @@ function Tome:NewSurface(host, scrollFrame, scrollChild, contentWidth)
         notesBox = false,
         notesBoxFrame = false,
         optionPools = false,
+        -- The Loadouts dialogs. Missing from this list, the docked panel's
+        -- Copy / Add from string / Save current fell through to the Tome
+        -- window's own dialogs: parented to a Tome that may be hidden, and
+        -- with Save bound to whatever spec the Tome was showing.
+        addDialog = false,
+        addNameBox = false,
+        addImportBox = false,
+        addCategoryButton = false,
+        addCategory = false,
+        copyDialog = false,
+        copyBox = false,
+        copyLabel = false,
 
         -- UpdateTabHighlight iterates this; a surface with no tab strip of
         -- its own gets an empty table rather than falling through to the
@@ -1451,7 +1490,9 @@ function Tome:RenderBiSLinkSection(pool, index, parent, width, y, specID)
     local data = specID and ns.GuideStore:GetBiS(specID)
     local rowPool = self.bisLinkRowPool
     local toggle = self.bisListToggle
-    if not data or not data.lists then
+    -- An unavailable reason wins, and an empty list counts as none: the
+    -- lookups below index data.lists[1] and would otherwise hit nil.
+    if not data or data.unavailable or type(data.lists) ~= "table" or #data.lists == 0 then
         toggle:Hide()
         HidePoolFrom(rowPool, 1)
         return index, y
@@ -1871,8 +1912,6 @@ function Tome:OnViewLoadoutClicked(button, exportString, label)
     if result == "viewed" then
         button:SetText("Shown")
         C_Timer.After(2, function() pcall(button.SetText, button, "View") end)
-    elseif result == "dialog" then
-        button:SetText("View")
     elseif type(err) == "string" and err:find("open your talent window", 1, true) then
         ns.Print(err)
     else
@@ -1887,12 +1926,27 @@ end
 -- loadout now occupies this pooled row back to its idle label, which is
 -- always the correct state for it to be in, so a row recycled mid-countdown
 -- is not left showing a stale "Confirm?".
-function Tome:OnDeleteLoadoutClicked(button, specID, index)
+-- Both windows can show the same spec's vault; after a change in one, the
+-- other redraws its Loadouts view so its rows (and their entries) are
+-- current.
+function Tome.RefreshLoadoutViews()
+    local real = ns:GetModule("Tome")
+    if real and real.frame and real:IsShown() and real.activeTab == "Loadouts" then
+        real:RenderActiveTab()
+    end
+    local panel = ns:GetModule("CharacterPanel")
+    if panel and panel.frame and panel.ActiveSection and panel:ActiveSection() == "Loadouts" then
+        panel:QueueRender()
+    end
+end
+
+function Tome:OnDeleteLoadoutClicked(button, specID, entry)
     if button.armed then
         local Loadouts = ns:GetModule("Loadouts")
-        Loadouts:Delete(specID, index)
+        Loadouts:DeleteEntry(specID, entry)
         button.armed = false
         if self.activeTab == "Loadouts" then self:RenderActiveTab() end
+        self.RefreshLoadoutViews()
         return
     end
 
@@ -2041,7 +2095,7 @@ function Tome:RenderLoadouts(specID, guide)
             row.deleteButton:SetText("Delete")
             row.deleteButton:Show()
             row.deleteButton:SetScript("OnClick", function(btn)
-                self:OnDeleteLoadoutClicked(btn, specID, i)
+                self:OnDeleteLoadoutClicked(btn, specID, loadout)
             end)
 
             row:Show()
@@ -2163,6 +2217,7 @@ function Tome:OnAddDialogSave()
     if ok then
         self:HideAddDialog()
         if self.activeTab == "Loadouts" then self:RenderActiveTab() end
+        self.RefreshLoadoutViews()
     else
         ns.Print("could not save loadout: " .. tostring(err))
     end
@@ -2237,11 +2292,17 @@ end
 -- Notes tab
 --------------------------------------------------------------------------------
 
+-- Writes the box's text back only when the player typed in it since it
+-- was last loaded or saved (box.dirty, set from OnTextChanged's userInput).
+-- Saving unconditionally meant a stale box - the Tome's, shown again after
+-- the note was edited in the docked panel - wrote its old text over the
+-- newer note the moment it closed or changed tab.
 function Tome:SaveNotes(box)
     box = box or self.notesBox
-    if not box or not box.specID then return end
+    if not box or not box.specID or not box.dirty then return end
     local Notes = ns:GetModule("Notes")
     if Notes then Notes:Set(box.specID, box:GetText()) end
+    box.dirty = false
 end
 
 function Tome:EnsureNotesBox()
@@ -2250,6 +2311,9 @@ function Tome:EnsureNotesBox()
     local backdrop, box = NewBackdropEditBox(self.scrollChild, self.contentWidth, 400)
     pcall(box.SetJustifyH, box, "LEFT")
     box:SetScript("OnEditFocusLost", function(self2) self:SaveNotes(self2) end)
+    box:SetScript("OnTextChanged", function(self2, userInput)
+        if userInput then self2.dirty = true end
+    end)
 
     self.notesBoxFrame = backdrop
     self.notesBox = box
@@ -2262,10 +2326,16 @@ function Tome:RenderNotes(specID)
     backdrop:ClearAllPoints()
     backdrop:SetPoint("TOPLEFT", self.scrollChild, "TOPLEFT", 0, -PADDING)
     backdrop:SetSize(self.contentWidth, 400)
+    -- A redraw while the player is typing into this spec's note must not
+    -- replace the unsaved buffer (the docked panel redraws on every slot
+    -- hover and item-info event). Otherwise load the saved note fresh.
+    local typing = box.specID == specID and box.dirty and box.HasFocus and box:HasFocus()
     box.specID = specID
-
-    local Notes = ns:GetModule("Notes")
-    box:SetText((Notes and specID) and Notes:Get(specID) or "")
+    if not typing then
+        local Notes = ns:GetModule("Notes")
+        box:SetText((Notes and specID) and Notes:Get(specID) or "")
+        box.dirty = false
+    end
     backdrop:Show()
     box:Show()
 
@@ -3055,18 +3125,23 @@ function Tome:BuildFrame()
     frame:SetBackdropBorderColor(unpack(PANEL_BORDER_COLOR))
     ApplyTomeChrome(frame)
 
-    frame:SetScript("OnDragStart", function(self2) self2:StartMoving() end)
-    frame:SetScript("OnDragStop", function(self2)
-        self2:StopMovingOrSizing()
-        local point, _, relPoint, x, y = self2:GetPoint()
-        local saved = ns.db and ns.db.tomePosition
-        if saved then
-            saved.point, saved.relPoint, saved.x, saved.y = point, relPoint, x, y
-        end
+    -- Kept on screen: at 1100px the window is wider than a 4:3 or 5:4
+    -- display's UI space, and a drag could leave its close button off screen.
+    pcall(frame.SetClampedToScreen, frame, true)
+
+    frame:SetScript("OnDragStart", function(self2)
+        self2.dragging = true
+        self2:StartMoving()
     end)
+    frame:SetScript("OnDragStop", function() self:FinishDrag() end)
     -- Notes save on window close as well as on focus-lost, so a note typed
-    -- and then closed without tabbing away is never lost.
-    frame:SetScript("OnHide", function() self:SaveNotes() end)
+    -- and then closed without tabbing away is never lost. A window hidden
+    -- mid-drag (ESC, a keybind) never gets OnDragStop, so the drag is
+    -- finished here too and the new position kept.
+    frame:SetScript("OnHide", function()
+        self:FinishDrag()
+        self:SaveNotes()
+    end)
 
     -- Left page header: the title in the heading face, the class and spec
     -- under it in the class colour (UpdateSubtitle).
@@ -3150,7 +3225,9 @@ function Tome:BuildFrame()
     frame:SetScript("OnKeyDown", function(self2, key)
         if key == "ESCAPE" then
             self2:SetPropagateKeyboardInput(false)
-            self2:Hide()
+            -- An open dialog closes first, the way ESC works in Blizzard's
+            -- own windows; the next ESC closes the Tome.
+            if not self:CloseTopDialog() then self2:Hide() end
         else
             self2:SetPropagateKeyboardInput(true)
         end
@@ -3158,6 +3235,7 @@ function Tome:BuildFrame()
     frame:SetScript("OnShow", function() self:UpdateKeyboard() end)
 
     self.frame = frame
+    self:FitToScreen()
     self:BuildClassRail()
     self:BuildSpecRail()
     self:BuildTabStrip()
@@ -3176,6 +3254,59 @@ end
 function Tome:EnsureFrame()
     if not self.frame then
         self:BuildFrame()
+    end
+end
+
+-- Ends a window drag and saves where it landed. Safe to call when no drag
+-- is in progress.
+function Tome:FinishDrag()
+    local frame = self.frame
+    if not (frame and frame.dragging) then return end
+    frame.dragging = false
+    frame:StopMovingOrSizing()
+    local point, _, relPoint, x, y = frame:GetPoint()
+    local saved = ns.db and ns.db.tomePosition
+    if saved and point then
+        saved.point, saved.relPoint, saved.x, saved.y = point, relPoint, x, y
+    end
+end
+
+-- Hides whichever of the Tome's dialogs is open; true when one was.
+function Tome:CloseTopDialog()
+    for _, key in ipairs({ "copyDialog", "addDialog" }) do
+        local dialog = self[key]
+        if dialog and dialog:IsShown() then
+            dialog:Hide()
+            return true
+        end
+    end
+    return false
+end
+
+-- Scales the window down to fit a screen narrower or shorter than it (4:3
+-- and 5:4 displays give UIParent only 1024 or 960 units across), never up.
+-- Run when the frame is built and when the UI scale or resolution changes.
+local SCREEN_MARGIN = 40
+function Tome:FitToScreen()
+    local frame = self.frame
+    if not (frame and UIParent and UIParent.GetWidth) then return end
+    local okW, width = pcall(UIParent.GetWidth, UIParent)
+    local okH, height = pcall(UIParent.GetHeight, UIParent)
+    if not (okW and okH and type(width) == "number" and type(height) == "number") then return end
+    if width <= 0 or height <= 0 then return end
+    local scale = math.min(1, (width - SCREEN_MARGIN) / FRAME_WIDTH, (height - SCREEN_MARGIN) / FRAME_HEIGHT)
+    frame:SetScale(math.max(0.5, scale))
+end
+
+-- Puts the window back at its default spot (/sage reset tome).
+function Tome:ResetPosition()
+    local defaults = ns.DEFAULTS.tomePosition
+    if ns.db then
+        ns.db.tomePosition = { point = defaults.point, relPoint = defaults.relPoint, x = defaults.x, y = defaults.y }
+    end
+    if self.frame then
+        self.frame:ClearAllPoints()
+        self.frame:SetPoint(defaults.point, UIParent, defaults.relPoint, defaults.x, defaults.y)
     end
 end
 

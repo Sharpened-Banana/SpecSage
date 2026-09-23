@@ -301,6 +301,13 @@ end
 -- Tooltip hook
 --------------------------------------------------------------------------------
 
+-- A spec registered as { unavailable = "..." } has no lists at all, so it
+-- has no opinion to report on any trinket.
+local function SpecHasTrinketLists(specID)
+    local data = specID and ns.GuideStore:GetTrinkets(specID)
+    return type(data) == "table" and type(data.lists) == "table" and #data.lists > 0
+end
+
 local function PlayerSpecID()
     local Loadouts = ns:GetModule("Loadouts")
     return Loadouts and Loadouts:GetCurrentSpecID() or nil
@@ -361,7 +368,7 @@ function ItemRanks:Annotate(tooltip, link)
                 tierParts[#tierParts + 1] = format("%s %s%s|r%s", entry.title, ColorCode(color), entry.tier, gainText)
             end
         end
-    elseif IsTrinket(itemID) and ns.GuideStore and ns.GuideStore:GetTrinkets(specID) then
+    elseif IsTrinket(itemID) and ns.GuideStore and SpecHasTrinketLists(specID) then
         tierParts = { "not in this spec's trinket lists" }
     end
 
@@ -418,10 +425,14 @@ local function LinkFromTooltip(tooltip, data)
     return nil
 end
 
+-- The whole annotation runs protected: this is a TooltipDataProcessor
+-- post-call, and an error escaping one breaks every item tooltip in the
+-- client, not just ours. Annotate guards its own tooltip writes, but not
+-- the data lookups and string work around them.
 local function OnTooltipItem(tooltip, data)
     local link = LinkFromTooltip(tooltip, data)
     if not link then return end
-    ItemRanks:Annotate(tooltip, link)
+    pcall(ItemRanks.Annotate, ItemRanks, tooltip, link)
 end
 
 function ItemRanks:OnEnable()

@@ -48,6 +48,10 @@ read_globals = {
 
     -- Unit and character info
     "UnitGUID", "UnitStat", "UnitArmor", "UnitHealth", "UnitHealthMax", "UnitClass", "InCombatLockdown",
+    -- 12.x secret values, error reporting, group roster and mouse state
+    -- (2026-09-23 review fixes).
+    "issecretvalue", "geterrorhandler", "AbbreviateNumbers", "Enum",
+    "IsInRaid", "GetNumGroupMembers", "IsMouseButtonDown",
     "GetAverageItemLevel", "GetCritChance", "GetSpellCritChance", "GetRangedCritChance",
     "GetHaste", "GetMasteryEffect", "GetMastery",
     "GetCombatRating", "GetCombatRatingBonus", "GetVersatilityBonus",

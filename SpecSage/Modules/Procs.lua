@@ -41,28 +41,36 @@ end
 -- guard for those expressions.
 local SafeCall = ns.SafeCall
 
--- Returns remaining cooldown in seconds, or 0 when ready. Protected cooldown
--- data reads as ready rather than erroring: better to underreport a state we
--- are not allowed to inspect than to spam.
+-- Returns remaining cooldown in seconds, 0 when ready, or true when the
+-- spell is on cooldown but the time left cannot be read. In restricted
+-- content C_Spell.GetSpellCooldown's startTime and duration are secret
+-- (SecretWhenCooldownsRestricted, 12.0.5), and treating an unreadable
+-- cooldown as ready showed a spell that was on cooldown as "ready".
+-- SpellCooldownInfo.isActive and isOnGCD are NeverSecret, so the on/off
+-- state survives even when the timing does not.
 local function GetCooldownRemaining(spellID)
-    local start, duration
+    local start, duration, info
     if C_Spell and C_Spell.GetSpellCooldown then
-        local info = C_Spell.GetSpellCooldown(spellID)
+        info = C_Spell.GetSpellCooldown(spellID)
         if not info then return 0 end
         start, duration = info.startTime, info.duration
     else
         start, duration = GetSpellCooldown(spellID)
     end
 
-    return SafeCall(function()
+    local remaining = SafeCall(function()
         if not start or not duration or duration <= 0 then return 0 end
 
         -- The 1.5s global cooldown is not worth reporting as "on cooldown".
         if duration <= 1.5 then return 0 end
 
-        local remaining = start + duration - GetTime()
-        return remaining > 0 and remaining or 0
-    end) or 0
+        local left = start + duration - GetTime()
+        return left > 0 and left or 0
+    end)
+    if remaining ~= nil then return remaining end
+
+    if info and info.isActive == true and info.isOnGCD ~= true then return true end
+    return 0
 end
 
 --------------------------------------------------------------------------------
@@ -204,10 +212,10 @@ local function BuildWatchedRow(spellID)
     end
 
     local cooldown = GetCooldownRemaining(spellID)
-    if cooldown > 0 then
+    if cooldown == true or cooldown > 0 then
         return {
             label = name,
-            value = ns.FormatTime(cooldown),
+            value = cooldown == true and "cooldown" or ns.FormatTime(cooldown),
             icon = icon,
             desaturate = true,
             valueColor = COLOR_COOLDOWN,
@@ -229,17 +237,42 @@ local function BuildWatchedRow(spellID)
     }
 end
 
+-- The watch list for the spec the player is on. It used to be one list per
+-- character, so after a spec swap the other spec's spells sat in the
+-- overlay as "ready" forever. The first spec seen after the change adopts
+-- the old shared list (chardb.watch), so nobody loses their watches;
+-- every other spec starts empty. chardb.watch stays the list used while no
+-- spec can be read (a fresh character).
+function Procs:WatchList()
+    local chardb = ns.chardb
+    local specID = ns.PlayerSpecID()
+    if not specID then return chardb.watch end
+    chardb.watchBySpec = chardb.watchBySpec or {}
+    local list = chardb.watchBySpec[specID]
+    if not list then
+        list = {}
+        if not chardb.watchMigrated then
+            for i, id in ipairs(chardb.watch or {}) do list[i] = id end
+            chardb.watchMigrated = true
+        end
+        chardb.watchBySpec[specID] = list
+    end
+    return list
+end
+
 function Procs:Update()
     local db = ns.db
     if not db.procs.enabled then
         ns.UI:SetSection("procs", nil)
         return
     end
+    -- Aura scans ten times a second only feed the overlay.
+    if not ns.OverlayActive() then return end
 
     local rows = {}
     local watchedSet = {}
 
-    for _, spellID in ipairs(ns.chardb.watch) do
+    for _, spellID in ipairs(self:WatchList()) do
         watchedSet[spellID] = true
         -- One watched spell's row failing to build (an unexpected secret
         -- value, say) must not cost every other row - this loop has no
@@ -278,7 +311,8 @@ end
 --------------------------------------------------------------------------------
 
 function Procs:Watch(spellID)
-    for _, existing in ipairs(ns.chardb.watch) do
+    local list = self:WatchList()
+    for _, existing in ipairs(list) do
         if existing == spellID then
             return false, "already watched"
         end
@@ -289,15 +323,16 @@ function Procs:Watch(spellID)
         return false, "no spell with that ID"
     end
 
-    table.insert(ns.chardb.watch, spellID)
+    table.insert(list, spellID)
     self:Update()
     return true, name
 end
 
 function Procs:Unwatch(spellID)
-    for index, existing in ipairs(ns.chardb.watch) do
+    local list = self:WatchList()
+    for index, existing in ipairs(list) do
         if existing == spellID then
-            table.remove(ns.chardb.watch, index)
+            table.remove(list, index)
             self:Update()
             return true, GetSpellName(spellID) or tostring(spellID)
         end
@@ -307,7 +342,7 @@ end
 
 function Procs:ListWatched()
     local list = {}
-    for _, spellID in ipairs(ns.chardb.watch) do
+    for _, spellID in ipairs(self:WatchList()) do
         list[#list + 1] = format("%s |cff888888(%d)|r", GetSpellName(spellID) or "?", spellID)
     end
     return list
@@ -347,18 +382,20 @@ function Procs:OnEnable()
     -- so even the unit token can be a secret value - comparing one errors.
     -- An unreadable unit is treated as "might be us" and updates anyway;
     -- Update itself is cheap and fully guarded.
-    ns:RegisterEvent("UNIT_AURA", function(_, unit)
+    ns:RegisterUnitEvent("UNIT_AURA", "player", function(_, unit)
         local isPlayer = SafeCall(function() return unit == "player" end)
         if isPlayer ~= false then
             Procs:Update()
         end
     end)
+    -- A spec swap changes which watch list applies.
+    ns:RegisterEvent("PLAYER_SPECIALIZATION_CHANGED", function() Procs:Update() end)
 
-    self.ticker = C_Timer.NewTicker(UPDATE_INTERVAL, function()
+    self.ticker = C_Timer.NewTicker(UPDATE_INTERVAL, ns.ProtectedCallback(function()
         if ns.db.procs.enabled then
             Procs:Update()
         end
-    end)
+    end))
 
     self:Update()
 end

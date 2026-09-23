@@ -229,14 +229,41 @@ local function RestackPins()
     end
 end
 
+-- The text a pin would show, as one string, so a refresh can tell whether
+-- anything changed. tostring and concatenation are allowed on secrets; the
+-- comparison of the result is not, which RefreshPin pcalls.
+local function Signature(data)
+    local parts = { tostring(data.title), tostring(data.value), tostring(data.description) }
+    for _, line in ipairs(data.lines or {}) do
+        parts[#parts + 1] = tostring(line.left)
+        parts[#parts + 1] = tostring(line.right)
+    end
+    return table.concat(parts, "\31")
+end
+
+-- Re-renders a pin only when its content changed. Every pin used to be
+-- cleared and rebuilt twice a second, and each rebuild runs every tooltip
+-- post-call hooked into the client (Blizzard's and other addons') again,
+-- for up to MAX_PINS pins. A spell pin's text never changes once shown; a
+-- stat pin re-renders when its lines differ, or when they cannot be
+-- compared because a value is secret.
 local function RefreshPin(pin)
     local provider = ns.UI:GetSectionProvider(pin.sectionID)
     if not provider then return end
 
     local data = provider(pin.key)
-    if data then
-        Render(pin, data, false)
+    if not data then return end
+
+    if data.spellID then
+        if pin.shownSpell == data.spellID then return end
+        pin.shownSpell = data.spellID
+    else
+        local signature = Signature(data)
+        local ok, same = pcall(function() return signature == pin.shownSignature end)
+        if ok and same then return end
+        pin.shownSignature = signature
     end
+    Render(pin, data, false)
 end
 
 function Tooltips:Pin(sectionID, key)
@@ -256,6 +283,8 @@ function Tooltips:Pin(sectionID, key)
 
     local frame = AcquirePin()
     frame.pinID, frame.sectionID, frame.key = id, sectionID, key
+    -- A pooled frame may carry a previous pin's content markers.
+    frame.shownSpell, frame.shownSignature = nil, nil
 
     pins[id] = frame
     pinOrder[#pinOrder + 1] = id
@@ -376,12 +405,12 @@ function Tooltips:OnEnable()
     -- Providers only exist after the modules have rendered once.
     C_Timer.After(1, function() Tooltips:RestoreSaved() end)
 
-    self.ticker = C_Timer.NewTicker(PIN_REFRESH, function()
+    self.ticker = C_Timer.NewTicker(PIN_REFRESH, ns.ProtectedCallback(function()
         for _, id in ipairs(pinOrder) do
             local pin = pins[id]
             if pin then RefreshPin(pin) end
         end
-    end)
+    end))
 end
 
 function Tooltips:OnConfigChanged()

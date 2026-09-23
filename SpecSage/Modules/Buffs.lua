@@ -19,12 +19,35 @@ local UPDATE_INTERVAL = 1
 -- keep tracking them; if that ever changes, GetPlayerAuraBySpellID failing
 -- reads as "can't tell" (see IsBuffActive), not "missing".
 local RAID_BUFFS = {
-    { spellID = 6673,   label = "Battle Shout" },
-    { spellID = 1459,   label = "Arcane Intellect" },
-    { spellID = 21562,  label = "Fortitude" },
-    { spellID = 1126,   label = "Mark of the Wild" },
-    { spellID = 462854, label = "Skyfury" },
+    { spellID = 6673,   label = "Battle Shout",     class = "WARRIOR" },
+    { spellID = 1459,   label = "Arcane Intellect", class = "MAGE" },
+    { spellID = 21562,  label = "Fortitude",        class = "PRIEST" },
+    { spellID = 1126,   label = "Mark of the Wild", class = "DRUID" },
+    { spellID = 462854, label = "Skyfury",          class = "SHAMAN" },
 }
+
+-- The class tokens present in the player's group, the player included, or
+-- nil when any member's class cannot be read (the caller then flags every
+-- buff, as before). A buff nobody in the group can cast is not "missing" in
+-- any sense the player can act on: a Mythic+ group with no Mage used to
+-- show "Arcane Intellect missing" for the whole run.
+local function GroupClasses()
+    local classes = {}
+    local ok, _, token = pcall(UnitClass, "player")
+    if not ok or type(token) ~= "string" then return nil end
+    classes[token] = true
+
+    local inRaid = IsInRaid and IsInRaid()
+    local count = (GetNumGroupMembers and GetNumGroupMembers()) or 0
+    local prefix, last = "party", count - 1
+    if inRaid then prefix, last = "raid", count end
+    for i = 1, last do
+        local okMember, _, memberToken = pcall(UnitClass, prefix .. i)
+        if not okMember then return nil end
+        if type(memberToken) == "string" then classes[memberToken] = true end
+    end
+    return classes
+end
 
 -- Personal consumables, matched by name rather than spell ID: every food
 -- item's buff is named "Well Fed" regardless of which one was eaten, and
@@ -90,14 +113,19 @@ function Buffs:Update()
         return
     end
 
+    -- The section exists only on the overlay.
+    if not ns.OverlayActive() then return end
+
     local rows = {}
 
     -- Solo, nobody else can hand these out, and several of them cannot be
     -- self-cast either; asking about them would just nag a player who has no
     -- way to fix it.
     if db.showRaidBuffs and IsInGroup and IsInGroup() then
+        local classes = GroupClasses()
         for _, buff in ipairs(RAID_BUFFS) do
-            if IsBuffActive(buff.spellID) == false then
+            local provided = classes == nil or classes[buff.class]
+            if provided and IsBuffActive(buff.spellID) == false then
                 rows[#rows + 1] = { label = buff.label, value = "missing", valueColor = COLOR_MISSING }
             end
         end
@@ -122,7 +150,7 @@ function Buffs:OnEnable()
     -- secret, and comparing one errors (see Modules/Procs.lua). An
     -- unreadable unit is treated as "might be us"; Update is cheap and
     -- fully guarded, so the spurious refresh costs nothing.
-    ns:RegisterEvent("UNIT_AURA", function(_, unit)
+    ns:RegisterUnitEvent("UNIT_AURA", "player", function(_, unit)
         local isPlayer = ns.SafeCall(function() return unit == "player" end)
         if isPlayer ~= false then
             Buffs:Update()
@@ -136,11 +164,11 @@ function Buffs:OnEnable()
     -- A slow ticker, not Procs' 0.1s one: nothing here has a countdown to
     -- keep smooth, it only needs to notice a buff falling off between
     -- UNIT_AURA deliveries.
-    self.ticker = C_Timer.NewTicker(UPDATE_INTERVAL, function()
+    self.ticker = C_Timer.NewTicker(UPDATE_INTERVAL, ns.ProtectedCallback(function()
         if ns.db.buffs.enabled then
             Buffs:Update()
         end
-    end)
+    end))
 
     self:Update()
 end

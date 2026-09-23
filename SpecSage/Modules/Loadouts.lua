@@ -89,6 +89,22 @@ function Loadouts:Delete(specID, index)
     return true
 end
 
+-- Deletes `entry` (a table GetForSpec returned) from the spec's list,
+-- wherever it sits now. A row captures its entry at render time; an index
+-- captured then goes stale as soon as the other window (the Tome or the
+-- docked panel) deletes a row above it, and would remove a different build.
+function Loadouts:DeleteEntry(specID, entry)
+    local list = ns.db.loadouts[specID]
+    if type(list) ~= "table" or type(entry) ~= "table" then return false end
+    for index, existing in ipairs(list) do
+        if rawequal(existing, entry) then
+            table.remove(list, index)
+            return true
+        end
+    end
+    return false
+end
+
 --------------------------------------------------------------------------------
 -- Current character / talents
 --------------------------------------------------------------------------------
@@ -97,12 +113,7 @@ end
 -- (e.g. no spec chosen yet, very low level). Shared by the Tome to decide
 -- whether "Save current" / live stat values apply to the spec being viewed.
 function Loadouts:GetCurrentSpecID()
-    local spec = GetSpecialization and GetSpecialization()
-    if not spec then return nil end
-
-    local ok, specID = pcall(GetSpecializationInfo, spec)
-    if not ok then return nil end
-    return specID
+    return ns.PlayerSpecID()
 end
 
 -- Reads an export string for the player's active talent loadout. Retail's
@@ -149,8 +160,9 @@ end
 -- Blizzard addon first, since it is load-on-demand.
 local function TalentsFrame()
     if C_AddOns and C_AddOns.LoadAddOn then
+        -- Blizzard_ClassTalentUI was merged into Blizzard_PlayerSpells in
+        -- 11.0 and no longer exists; loading it only returned "MISSING".
         pcall(C_AddOns.LoadAddOn, "Blizzard_PlayerSpells")
-        pcall(C_AddOns.LoadAddOn, "Blizzard_ClassTalentUI")
     end
     if PlayerSpellsFrame and PlayerSpellsFrame.TalentsFrame then return PlayerSpellsFrame.TalentsFrame end
     if ClassTalentFrame and ClassTalentFrame.TalentsTab then return ClassTalentFrame.TalentsTab end
@@ -171,22 +183,27 @@ local function TalentsFrameVisible(frame)
 end
 
 -- Puts `exportString` in front of the player in the talent window. Returns
--- one of:
 --   "viewed" - the window is showing the build (Blizzard's own
 --              view-a-loadout mode: nothing is saved or applied until the
 --              player chooses to), or
---   "dialog" - this client has no view mode the addon can drive, so
---              Blizzard's import dialog is open with the string and a name
---              already filled in; Import there saves it as a loadout, or
---   nil, reason - could not do either (the talent window is not open - see
+--   nil, reason - could not (the talent window is not open - see
 --              TalentsFrameVisible for why the addon will not open it -
---              in combat, a string for another spec, no talent UI).
+--              in combat, a string for another spec, or no view mode). The
+--              Tome then offers the string in its own copy box for the
+--              talent window's Import button.
 --
--- The view path is the same sequence Blizzard's import dialog runs
--- (ReadLoadoutHeader / ReadLoadoutContent / ConvertToImportLoadoutEntryInfo
--- on the talent frame, then ViewLoadout instead of ImportLoadout). Every
--- step is pcall'd because those are Blizzard mixin methods, not API, and
--- move between patches; any failure drops through to the dialog.
+-- The view is one call, the same one Blizzard's inspect path makes
+-- (PlayerSpellsFrame: TalentsFrame:ViewLoadout(inspectString, level)): in
+-- 12.1 ClassTalentImportExportMixin:ViewLoadout(importText, level) reads the
+-- header and content and converts the entries itself, and returns success,
+-- specID. The addon used to run those steps by hand and call
+-- ViewLoadout(entries) with the pre-12 argument shape, which failed inside
+-- its pcall every time, so View always fell back.
+--
+-- There is deliberately no StaticPopupSpecial_Show fallback any more: showing
+-- Blizzard's import dialog from addon code writes into
+-- StaticPopup_DisplayedFrames, the same kind of addon write into a Blizzard
+-- table that tainted every ESC press through UISpecialFrames.
 function Loadouts:OpenInTalentUI(exportString, label)
     if type(exportString) ~= "string" or exportString == "" then return nil, "no talent string" end
     if InCombatLockdown and InCombatLockdown() then return nil, "cannot open the talent window in combat" end
@@ -213,39 +230,10 @@ function Loadouts:OpenInTalentUI(exportString, label)
         end
     end
 
-    if frame.ViewLoadout and frame.ReadLoadoutHeader and frame.ReadLoadoutContent
-        and frame.ConvertToImportLoadoutEntryInfo and ExportUtil and ExportUtil.MakeImportDataStream
-        and C_ClassTalents and C_ClassTalents.GetActiveConfigID then
-        local ok = pcall(function()
-            local stream = ExportUtil.MakeImportDataStream(exportString)
-            local headerValid, _, specID, treeHash = frame:ReadLoadoutHeader(stream)
-            if not headerValid then error("invalid header") end
-            local configID = C_ClassTalents.GetActiveConfigID()
-            local treeID = frame.GetTalentTreeID and frame:GetTalentTreeID()
-            if not treeID and C_Traits and C_Traits.GetConfigInfo then
-                local info = C_Traits.GetConfigInfo(configID)
-                treeID = info and info.treeIDs and info.treeIDs[1]
-            end
-            local content = frame:ReadLoadoutContent(stream, treeID)
-            local entries = frame:ConvertToImportLoadoutEntryInfo(configID, content)
-            frame:ViewLoadout(entries)
-        end)
-        if ok then return "viewed" end
-    end
-
-    -- No view mode: hand the string to Blizzard's import dialog instead.
-    local dialog = ClassTalentLoadoutImportDialog
-    if dialog and StaticPopupSpecial_Show then
-        local ok = pcall(function()
-            StaticPopupSpecial_Show(dialog)
-            if dialog.ImportControl and dialog.ImportControl.GetEditBox then
-                dialog.ImportControl:GetEditBox():SetText(exportString)
-            end
-            if dialog.NameControl and dialog.NameControl.GetEditBox and label then
-                dialog.NameControl:GetEditBox():SetText(label)
-            end
-        end)
-        if ok then return "dialog" end
+    if frame.ViewLoadout then
+        local level = UnitLevel and UnitLevel("player") or nil
+        local ok, success = pcall(frame.ViewLoadout, frame, exportString, level)
+        if ok and success then return "viewed" end
     end
 
     return nil, "this client's talent window cannot show a build from an addon"

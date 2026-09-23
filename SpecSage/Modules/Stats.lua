@@ -20,6 +20,7 @@ local RequestLoadSpellData = C_Spell and C_Spell.RequestLoadSpellData
 -- so one bad comparison would otherwise cost the whole tooltip body.
 local SafeCall = ns.SafeCall
 local KnownPast = ns.KnownPast
+local IsSecret = ns.IsSecret
 
 local STAT_STRENGTH, STAT_AGILITY, STAT_STAMINA, STAT_INTELLECT = 1, 2, 3, 4
 
@@ -35,9 +36,9 @@ local RATING = {
     lifesteal = CR_LIFESTEAL or 17,
     avoidance = CR_AVOIDANCE or 21,
     speed = CR_SPEED or 14,
-    dodge = CR_DODGE or 12,
-    parry = CR_PARRY or 13,
-    block = CR_BLOCK or 15,
+    dodge = CR_DODGE or 3,
+    parry = CR_PARRY or 4,
+    block = CR_BLOCK or 5,
 }
 
 local STAT_NAMES = {
@@ -47,11 +48,15 @@ local STAT_NAMES = {
     [STAT_INTELLECT] = "Intellect",
 }
 
-local UPDATE_EVENTS = {
+-- Registered for the player only (ns:RegisterUnitEvent).
+local UNIT_EVENTS = {
     "UNIT_STATS",
     "UNIT_AURA",
     "UNIT_MAXHEALTH",
     "UNIT_ATTACK_POWER",
+}
+
+local UPDATE_EVENTS = {
     "COMBAT_RATING_UPDATE",
     "MASTERY_UPDATE",
     "SPEED_UPDATE",
@@ -85,13 +90,32 @@ local function GetPrimaryStatIndex()
         if primaryStat then return primaryStat end
     end
 
-    -- No spec yet (low level characters): fall back to the largest of the three.
+    -- No spec yet (low level characters): fall back to the largest of the
+    -- three. KnownPast rather than `>`: a secret stat cannot be compared,
+    -- and this runs unguarded at the top of every Update.
     local best, bestValue = STAT_STRENGTH, -1
     for _, index in ipairs({ STAT_STRENGTH, STAT_AGILITY, STAT_INTELLECT }) do
         local _, value = UnitStat("player", index)
-        if value > bestValue then
+        if KnownPast(value, bestValue, true) then
             best, bestValue = index, value
         end
+    end
+    return best
+end
+
+-- The largest of read(school) over the spell schools, the way the paper
+-- doll picks a caster's crit and spell power. When stats are restricted the
+-- values come back secret and cannot be compared, so the first secret is
+-- returned as-is: the schools share the same value in practice, and
+-- showing one beats the row vanishing (a comparison would throw inside
+-- ReadStat's pcall and drop it).
+local function BestOverSchools(read)
+    local best = 0
+    for school = 2, 7 do
+        local value = read(school)
+        if IsSecret(value) then return value end
+        value = value or 0
+        if value > best then best = value end
     end
     return best
 end
@@ -99,12 +123,7 @@ end
 -- Casters care about spell crit, everyone else about melee crit. Spell crit is
 -- per-school, so take the best school the way the paper doll does.
 local function GetBestSpellCrit()
-    local best = 0
-    for school = 2, 7 do
-        local crit = GetSpellCritChance(school) or 0
-        if crit > best then best = crit end
-    end
-    return best
+    return BestOverSchools(GetSpellCritChance)
 end
 
 local function GetCrit(primaryStat)
@@ -114,9 +133,18 @@ local function GetCrit(primaryStat)
     return GetCritChance() or 0
 end
 
+-- Rating bonus plus any flat bonus, for one versatility rating index.
+-- Adding two secrets throws, so a restricted read shows the rating part
+-- alone - by far the larger term, and the flat bonus is usually 0.
+local function VersatilityFor(rating)
+    local fromRating = GetCombatRatingBonus(rating)
+    local flat = GetVersatilityBonus(rating)
+    if IsSecret(fromRating) or IsSecret(flat) then return fromRating end
+    return (fromRating or 0) + (flat or 0)
+end
+
 local function GetVersatility()
-    local rating = CR_VERSATILITY_DAMAGE_DONE or 29
-    return (GetCombatRatingBonus(rating) or 0) + (GetVersatilityBonus(rating) or 0)
+    return VersatilityFor(CR_VERSATILITY_DAMAGE_DONE or 29)
 end
 
 local readers = {}
@@ -214,18 +242,17 @@ end
 -- own summation of UnitAttackPower's three return values.
 local function GetAttackPower()
     local base, posBuff, negBuff = UnitAttackPower("player")
+    -- Restricted stats are secret and cannot be summed; show the base.
+    if IsSecret(base) or IsSecret(posBuff) or IsSecret(negBuff) then
+        return base, base, posBuff, negBuff
+    end
     return (base or 0) + (posBuff or 0) + (negBuff or 0), base, posBuff, negBuff
 end
 
 -- Casters care about spell power, everyone else about attack power. Best
 -- school follows the same pattern as GetBestSpellCrit above.
 local function GetBestSpellPower()
-    local best = 0
-    for school = 2, 7 do
-        local power = GetSpellBonusDamage(school) or 0
-        if power > best then best = power end
-    end
-    return best
+    return BestOverSchools(GetSpellBonusDamage)
 end
 
 readers.power = function(primaryStat)
@@ -303,14 +330,16 @@ end
 -- and then cached as a multiplier.
 --
 -- The probe exists because of how secret values behave. Armor is secret in
--- restricted content, a secret argument yields a secret result, and the
--- three rules that follow from Midnight's design are:
+-- restricted content, and for addon (tainted) code the rules are:
 --
---   arithmetic on a secret  -> allowed, produces another secret
---   formatting a secret     -> allowed, produces a secret string to display
+--   arithmetic on a secret  -> errors
 --   COMPARING a secret      -> errors
+--   formatting a secret     -> allowed, produces a secret string to display
+--   truthiness of a secret  -> allowed for a non-boolean secret
 --
--- (Displaying is permitted; branching on the value is what Blizzard blocks.)
+-- (warcraft.wiki.gg Secret_Values. An earlier version of this comment said
+-- arithmetic was allowed; it is not, which is why the reduction lines fall
+-- back to "unavailable" on a secret rather than computing one.)
 -- Deciding ratio-vs-percentage per call meant comparing the live value, so
 -- the moment a buff made armor secret the comparison threw, the guard
 -- returned nil, and the reduction line silently vanished from the tooltip.
@@ -344,7 +373,8 @@ local function ReadLevel(unit)
     if not level and UnitLevel then
         level = SafeCall(function() return UnitLevel(unit) end)
     end
-    if type(level) ~= "number" or level <= 0 then return nil end
+    -- KnownPast, not `<=`: a secret level would throw here, outside any guard.
+    if type(level) ~= "number" or not KnownPast(level, 0, true) then return nil end
     return level
 end
 
@@ -374,10 +404,14 @@ local function GetArmorReductionPercent(effectiveArmor)
     local level = ReadLevel("player")
     if not level then return nil end
 
+    -- `not x`, never `x == nil`: truthiness is allowed on a non-boolean
+    -- secret, comparing one with anything throws.
     local ok, effectiveness = pcall(getEffectiveness, effectiveArmor, level)
-    if not ok then return nil end
+    if not ok or not effectiveness then return nil end
 
-    -- Arithmetic only: a secret in yields a secret out, which still displays.
+    -- A percentage already needs no arithmetic, so even a secret one shows.
+    -- A 0-1 ratio has to be scaled, which a secret cannot be.
+    if scale == 1 then return effectiveness end
     return SafeCall(function() return effectiveness * scale end)
 end
 
@@ -397,8 +431,10 @@ local function GetArmorReductionAgainstTarget(effectiveArmor)
     if not (UnitExists("target") and UnitCanAttack("player", "target")) then return nil end
 
     local ok, effectiveness = pcall(againstTarget, effectiveArmor)
-    if not ok or effectiveness == nil then return nil end
+    -- `not x`, not `== nil`: comparing a secret with anything throws.
+    if not ok or not effectiveness then return nil end
 
+    if scale == 1 then return effectiveness end
     return SafeCall(function() return effectiveness * scale end)
 end
 
@@ -575,12 +611,17 @@ local function GetMasterySpellDescription()
     local spec = GetSpecialization()
     if not spec then return nil end
 
-    local ok, spell1, spell2 = pcall(GetSpecializationMasterySpells, spec)
+    -- C_SpecializationInfo.GetSpecializationMasterySpells returns one table
+    -- of spell IDs; only the deprecated global shim unpacks it into two
+    -- values. Treating the table as a number threw and cost the tooltip
+    -- every line, not just this description.
+    local ok, first, second = pcall(GetSpecializationMasterySpells, spec)
     if not ok then return nil end
+    local spellIDs = type(first) == "table" and first or { first, second }
 
     local lines = {}
-    for _, spellID in ipairs({ spell1 or 0, spell2 or 0 }) do
-        if spellID > 0 then
+    for _, spellID in ipairs(spellIDs) do
+        if type(spellID) == "number" and spellID > 0 then
             local descOk, desc = pcall(GetSpellDescription, spellID)
             if descOk and desc and desc ~= "" then
                 lines[#lines + 1] = desc
@@ -612,8 +653,7 @@ tooltipBuilders.vers = function()
         lines = {
             { left = "Rating", right = ns.FormatNumber(Rating(RATING.versDone)) },
             { left = "Damage and healing done", right = ns.FormatPercent(GetVersatility()) },
-            { left = "Damage taken reduced by", right = ns.FormatPercent(
-                (GetCombatRatingBonus(RATING.versTaken) or 0) + (GetVersatilityBonus(RATING.versTaken) or 0)) },
+            { left = "Damage taken reduced by", right = ns.FormatPercent(VersatilityFor(RATING.versTaken)) },
         },
     }
 end
@@ -780,6 +820,9 @@ function Stats:Update()
         ns.UI:SetSection("stats", nil)
         return
     end
+    -- Nothing reads these rows while the overlay is off; GetStatValue (the
+    -- Tome and the gearing panel) reads stats directly and is unaffected.
+    if not ns.OverlayActive() then return end
 
     local shown = ns.StatsShown()
     local primaryStat = GetPrimaryStatIndex()
@@ -822,6 +865,9 @@ function Stats:OnEnable()
         self:Update()
     end
 
+    for _, event in ipairs(UNIT_EVENTS) do
+        ns:RegisterUnitEvent(event, "player", OnStatEvent)
+    end
     for _, event in ipairs(UPDATE_EVENTS) do
         ns:RegisterEvent(event, OnStatEvent)
     end

@@ -10,6 +10,11 @@ regenerated:
 
     python3 tools/fetch_bis.py && python3 tools/strip_sites.py
 
+Full order (DESIGN.md "Regenerating the data: script order"): fetch_bis.py
+first (it writes tools/item_bonus.json, which fetch_trinkets.py reads), then
+fetch_trinkets.py, fetch_talents.py and fetch_stats.py, then this script.
+It exits non-zero if a site name survives or a registration is emptied.
+
 What it does, per file under SpecSage/Data/:
   BiS.lua          - removes every "Icy Veins ..." list, retitles the
                      remaining list "Guide", neutralises `source`.
@@ -69,12 +74,24 @@ def strip_site_loadouts(src):
 
 
 def neutral_notes(src):
-    """'note = "Wowhead ranks ..."' -> 'note = "The guide ranks ..."'."""
+    """'note = "Wowhead ranks ..."' -> 'note = "The guide ranks ...".
+
+    A sentence about the Icy Veins ranking describes a list this pass
+    removes, so it is dropped rather than renamed; any other mention of
+    either site becomes "the guide". `unavailable` text gets the same."""
+    def fix_text(text):
+        text = re.sub(r"Icy Veins also rates [^.]*\.\s*", "", text)
+        text = (text.replace("Wowhead's", "the guide's").replace("Wowhead", "the guide")
+                    .replace("Icy Veins'", "the guide's").replace("Icy Veins", "the guide")).strip()
+        return text[:1].upper() + text[1:] if text else text
+
     def fix(m):
-        note = m.group(1).replace("Wowhead's", "the guide's").replace("Wowhead", "the guide")
-        note = note[0].upper() + note[1:]
-        return 'note = "' + note + '"'
-    return re.sub(r'note = "([^"]*)"', fix, src)
+        note = fix_text(m.group(2))
+        if not note:
+            return ""
+        return '%s = "%s"' % (m.group(1), note)
+    src = re.sub(r'(note|unavailable) = "([^"]*)"', fix, src)
+    return re.sub(r"\n  ,\n", "\n", src)   # a dropped note line leaves an empty field behind
 
 
 def neutral_comments(src):
@@ -93,7 +110,14 @@ def strip_stat_priority(src):
     return neutral_notes(neutral_source(src, "stat priority"))
 
 
+# A registration whose lists or builds this pass emptied: the spec had only
+# Icy Veins data (a failed harvest, or a guide page that moved). Shipping
+# `lists = {}` would be rejected at load with a chat warning every login.
+EMPTIED = re.compile(r"(lists|builds) = \{\s*\}")
+
+
 def main():
+    problems = []
     for name, fn in (("BiS.lua", strip_bis), ("Trinkets.lua", strip_trinkets),
                      ("SiteLoadouts.lua", strip_site_loadouts), ("StatPriority.lua", strip_stat_priority)):
         path = DATA / name
@@ -101,6 +125,12 @@ def main():
         after = neutral_comments(fn(before))
         path.write_text(after)
         print(f"{name}: {len(before)} -> {len(after)} bytes; icy={after.count('Icy Veins')} wowhead={after.count('Wowhead')}")
+        if after.count("Icy Veins") or after.count("Wowhead"):
+            problems.append(f"{name} still names a site")
+        if EMPTIED.search(after):
+            problems.append(f"{name} has a registration with no guide data left - re-run the harvest")
+    if problems:
+        raise SystemExit("strip_sites: " + "; ".join(problems))
 
 
 if __name__ == "__main__":

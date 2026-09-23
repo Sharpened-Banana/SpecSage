@@ -31,6 +31,7 @@ local HELP = {
     "  |cffffff00/sage dps|r - report the last fight",
     "  |cffffff00/sage reset dps|r - clear combat totals",
     "  |cffffff00/sage reset pos|r - move the overlay back to centre",
+    "  |cffffff00/sage reset tome|r - move the Tome window back to centre",
     "  |cffffff00/sage reset all|r - restore every setting to default",
     "  |cffffff00/sage watch <spellID>|r - track a spell's proc and cooldown",
     "  |cffffff00/sage unwatch <spellID>|r - stop tracking a spell",
@@ -158,6 +159,10 @@ end
 handlers.overlay = function()
     if not ns.UI:Toggle() then
         ns.Print("overlay hidden. |cffffff00/sage overlay|r to show it again.")
+    elseif ns.db.hideOutOfCombat and not (InCombatLockdown and InCombatLockdown()) then
+        -- Otherwise the command looks like it did nothing: the overlay is on
+        -- but stays hidden until combat starts.
+        ns.Print("overlay enabled; it appears in combat (\"Hide out of combat\" is on).")
     end
 end
 
@@ -345,11 +350,15 @@ handlers.reset = function(argument)
     elseif argument == "pos" or argument == "position" then
         ns.UI:ResetPosition()
         ns.Print("position reset.")
+    elseif argument == "tome" then
+        local Tome = ns:GetModule("Tome")
+        if Tome then Tome:ResetPosition() end
+        ns.Print("Tome position reset.")
     elseif argument == "all" then
         ns.ResetConfig()
         ns.Print("all settings restored to defaults.")
     else
-        ns.Print("usage: /sage reset <dps|pos|all>")
+        ns.Print("usage: /sage reset <dps|pos|tome|all>")
     end
 end
 

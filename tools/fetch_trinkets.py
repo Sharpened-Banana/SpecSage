@@ -42,49 +42,9 @@ import wowhead  # noqa: E402
 TOP_N = 15
 UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 14_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0 Safari/537.36"
 
-# (classToken, specID, bloodmallet slug, icy-veins slug, icy-veins role)
-SPECS = [
-    ("WARRIOR", 71, "warrior/arms", "arms-warrior", "dps"),
-    ("WARRIOR", 72, "warrior/fury", "fury-warrior", "dps"),
-    ("WARRIOR", 73, "warrior/protection", "protection-warrior", "tank"),
-    ("PALADIN", 65, "paladin/holy", "holy-paladin", "healing"),
-    ("PALADIN", 66, "paladin/protection", "protection-paladin", "tank"),
-    ("PALADIN", 70, "paladin/retribution", "retribution-paladin", "dps"),
-    ("HUNTER", 253, "hunter/beast_mastery", "beast-mastery-hunter", "dps"),
-    ("HUNTER", 254, "hunter/marksmanship", "marksmanship-hunter", "dps"),
-    ("HUNTER", 255, "hunter/survival", "survival-hunter", "dps"),
-    ("ROGUE", 259, "rogue/assassination", "assassination-rogue", "dps"),
-    ("ROGUE", 260, "rogue/outlaw", "outlaw-rogue", "dps"),
-    ("ROGUE", 261, "rogue/subtlety", "subtlety-rogue", "dps"),
-    ("PRIEST", 256, "priest/discipline", "discipline-priest", "healing"),
-    ("PRIEST", 257, "priest/holy", "holy-priest", "healing"),
-    ("PRIEST", 258, "priest/shadow", "shadow-priest", "dps"),
-    ("DEATHKNIGHT", 250, "death_knight/blood", "blood-death-knight", "tank"),
-    ("DEATHKNIGHT", 251, "death_knight/frost", "frost-death-knight", "dps"),
-    ("DEATHKNIGHT", 252, "death_knight/unholy", "unholy-death-knight", "dps"),
-    ("SHAMAN", 262, "shaman/elemental", "elemental-shaman", "dps"),
-    ("SHAMAN", 263, "shaman/enhancement", "enhancement-shaman", "dps"),
-    ("SHAMAN", 264, "shaman/restoration", "restoration-shaman", "healing"),
-    ("MAGE", 62, "mage/arcane", "arcane-mage", "dps"),
-    ("MAGE", 63, "mage/fire", "fire-mage", "dps"),
-    ("MAGE", 64, "mage/frost", "frost-mage", "dps"),
-    ("WARLOCK", 265, "warlock/affliction", "affliction-warlock", "dps"),
-    ("WARLOCK", 266, "warlock/demonology", "demonology-warlock", "dps"),
-    ("WARLOCK", 267, "warlock/destruction", "destruction-warlock", "dps"),
-    ("MONK", 268, "monk/brewmaster", "brewmaster-monk", "tank"),
-    ("MONK", 270, "monk/mistweaver", "mistweaver-monk", "healing"),
-    ("MONK", 269, "monk/windwalker", "windwalker-monk", "dps"),
-    ("DRUID", 102, "druid/balance", "balance-druid", "dps"),
-    ("DRUID", 103, "druid/feral", "feral-druid", "dps"),
-    ("DRUID", 104, "druid/guardian", "guardian-druid", "tank"),
-    ("DRUID", 105, "druid/restoration", "restoration-druid", "healing"),
-    ("DEMONHUNTER", 577, "demon_hunter/havoc", "havoc-demon-hunter", "dps"),
-    ("DEMONHUNTER", 581, "demon_hunter/vengeance", "vengeance-demon-hunter", "tank"),
-    ("DEMONHUNTER", 1480, "demon_hunter/devourer", "devourer-demon-hunter", "dps"),
-    ("EVOKER", 1467, "evoker/devastation", "devastation-evoker", "dps"),
-    ("EVOKER", 1468, "evoker/preservation", "preservation-evoker", "healing"),
-    ("EVOKER", 1473, "evoker/augmentation", "augmentation-evoker", "dps"),
-]
+# The spec table lives in tools/specs.py, shared with every generator; a
+# second copy here could drift out of step with the others.
+from specs import SPECS  # noqa: E402
 
 # Sim fight styles, in the order the Tome's list toggle cycles through them;
 # the Icy Veins list comes last.
@@ -308,8 +268,8 @@ def main():
         out.append("-- %s %d (%s | %s)" % (classToken, specID, bmSlug, ivSlug))
         if not charts and not ivTiers and not whTiers:
             out.append("ns.GuideStore:RegisterTrinkets(%d, { unavailable = %s })" % (
-                specID, lua_str("neither bloodmallet nor Icy Veins had a trinket list for this spec when "
-                                "tools/fetch_trinkets.py last ran")))
+                specID, lua_str("neither the sims nor the guide had a trinket list for this spec when "
+                                "the data was last refreshed")))
             out.append("")
             print("%-12s %5d %-24s NOTHING" % (classToken, specID, bmSlug))
             continue
@@ -363,7 +323,9 @@ def main():
         out.append("  },")
 
         if charts:
-            for siteName, siteTiers in (("Icy Veins", ivTiers or []), ("Wowhead", whTiers)):
+            # Only the guide that ships (strip_sites.py removes the Icy Veins
+            # list), so a note never points at a ranking the player cannot see.
+            for siteName, siteTiers in (("Wowhead", whTiers),):
                 missing = [it["name"] for t in siteTiers if t["tier"] == "S"
                            for it in t["items"] if it["itemID"] not in simIDs]
                 if missing:

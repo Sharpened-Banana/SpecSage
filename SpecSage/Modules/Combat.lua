@@ -36,6 +36,7 @@ local SESSION_TYPE = {
 local METER_TYPE = {
     damage = (Enum and Enum.DamageMeterType and Enum.DamageMeterType.DamageDone) or 0,
     dps = (Enum and Enum.DamageMeterType and Enum.DamageMeterType.Dps) or 1,
+    healing = (Enum and Enum.DamageMeterType and Enum.DamageMeterType.HealingDone) or 2,
     hps = (Enum and Enum.DamageMeterType and Enum.DamageMeterType.Hps) or 3,
     taken = (Enum and Enum.DamageMeterType and Enum.DamageMeterType.DamageTaken) or 7,
 }
@@ -220,6 +221,9 @@ function Combat:Update()
         ns.UI:SetSection("combat", nil)
         return
     end
+    -- Pulling several meter sessions four times a second only feeds the
+    -- overlay; /sage report reads the meter itself.
+    if not ns.OverlayActive() then return end
 
     local dps, hps, taken = CurrentThroughput()
     local rows = {}
@@ -295,13 +299,13 @@ function Combat:ResetSession()
     if inCombat then
         combatStart = GetTime()
     end
-    -- The game's own meter keeps the 12.x session data; ask it to clear too
-    -- when it offers a way, so "Reset session" means the same thing on every
-    -- client. Existence-guarded: the exact reset entry point may vary (or be
-    -- absent) across builds, and a missing one just leaves Blizzard's
-    -- overall tally alone.
-    if HAS_DAMAGE_METER and C_DamageMeter.ResetCombatSessions then
-        pcall(C_DamageMeter.ResetCombatSessions)
+    -- The game's own meter keeps the 12.x session data; clear it too, so
+    -- "Reset session" also resets Session DPS / Session Dmg. The 12.1 entry
+    -- point is ResetAllCombatSessions (DamageMeterDocumentation.lua); this
+    -- used to call a ResetCombatSessions that does not exist, so the guard
+    -- quietly skipped it and the overall tally never cleared.
+    if HAS_DAMAGE_METER and C_DamageMeter.ResetAllCombatSessions then
+        pcall(C_DamageMeter.ResetAllCombatSessions)
     end
     self:Update()
 end
@@ -319,7 +323,8 @@ function Combat:GetReport()
     local damage, healing, taken
     if HAS_DAMAGE_METER then
         damage = GetLocalPlayerAmount(SESSION_TYPE.current, METER_TYPE.damage) or 0
-        healing = GetLocalPlayerAmount(SESSION_TYPE.current, METER_TYPE.hps) or 0
+        -- The total, from the HealingDone meter (Hps is the per-second one).
+        healing = GetLocalPlayerAmount(SESSION_TYPE.current, METER_TYPE.healing) or 0
         taken = GetLocalPlayerAmount(SESSION_TYPE.current, METER_TYPE.taken) or 0
     else
         damage, healing, taken = current.damage, current.healing, current.taken
@@ -367,11 +372,11 @@ function Combat:OnEnable()
         self:Update()
     end)
 
-    self.ticker = C_Timer.NewTicker(UPDATE_INTERVAL, function()
+    self.ticker = C_Timer.NewTicker(UPDATE_INTERVAL, ns.ProtectedCallback(function()
         if ns.db.combat.enabled then
             Combat:Update()
         end
-    end)
+    end))
 
     self:Update()
 end

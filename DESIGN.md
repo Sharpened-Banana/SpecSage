@@ -154,8 +154,8 @@ warning, guide skipped) so a third-party guide pack cannot take the addon
 down. Guide data files contain **data only** — no logic beyond the
 `RegisterSpec` calls.
 
-Data files carry a header comment noting content targets The War Within and
-is community-maintained; each entry is a sensible, conventional guideline
+Data files carry a header comment noting the patch their content targets
+(Midnight, 12.1 at the time of writing) and that it is community-maintained; each entry is a sensible, conventional guideline
 (stat priorities and rotations that match the spec's long-standing design),
 not a claim of being bleeding-edge optimal.
 
@@ -576,6 +576,94 @@ The trinket count test now asserts the invariant (every spec has a sim
 list or a note) rather than bloodmallet's current coverage, which grew from
 27 to 29 specs with Retribution and Feral.
 
+## Review fixes (2026-09-23)
+
+A four-part review (core and modules, UI, data layer, and every Blizzard
+API call checked against the 12.1.0 UI source) turned up the following;
+each has a test.
+
+**Secret values.** Blizzard's rules for addon code are stricter than this
+file used to say: arithmetic *and* comparison on a secret both error;
+formatting, concatenation, `SetText`, `type()`, a truthiness test on a
+non-boolean secret and `issecretvalue()` are fine. `ns.IsSecret` wraps the
+last. Stat readers that combined values (best spell crit and spell power
+over schools, rating plus flat versatility, attack power's three terms) now
+return one uncombined secret for display instead of throwing and dropping
+the row. A 0-1 armor ratio that is secret cannot be scaled, so the armor
+tooltip says "unavailable" rather than computing a number; a percentage
+needs no arithmetic and shows as-is. `ns.FormatNumber` falls back to
+`AbbreviateNumbers`, which accepts secrets from addon code. Cooldowns use
+`SpellCooldownInfo.isActive` (never secret) to show "cooldown" when the
+timing is secret, instead of "ready". `tests/wow_mock.lua`'s `mock.Secret`
+models the real rules (the old test double let arithmetic through).
+
+**Deprecated globals.** `GetSpecialization` / `GetSpecializationInfo` are
+`Blizzard_DeprecatedSpecialization` shims in 12.x, loaded only while the
+`loadDeprecationFallbacks` CVar is on. Every current-spec lookup now goes
+through `ns.PlayerSpecID()` (C_SpecializationInfo first); without it the
+docked panel, trinket tooltips and hero-tree stats went blank.
+`C_SpecializationInfo.GetSpecializationMasterySpells` returns one table,
+which the mastery tooltip now reads. `C_DamageMeter.ResetAllCombatSessions`
+is the real reset (a test pins every `C_DamageMeter` call to the 12.1 list);
+the healing total reads the `HealingDone` meter. `Settings.OpenToCategory`
+takes a number only and is restricted in combat.
+
+**Robustness.** Event handlers and ticker bodies run isolated
+(`xpcall` to the client's error handler; `ns.Protected`,
+`ns.ProtectedCallback`), so one module's error no longer cancels the rest;
+the mock records those errors and the suite fails on any. Unit events
+register for the player only (`ns:RegisterUnitEvent`). Stats, Procs,
+Combat and Buffs skip their polling while the overlay is off
+(`ns.OverlayActive`, the default) and `UI:Toggle` refreshes them when it
+comes back. The item-tooltip post-call runs under one pcall.
+
+**Behaviour.** Raid buffs are flagged only when a groupmate's class can
+provide them. Proc watch lists are per spec (`Procs:WatchList`; the first
+spec seen adopts the old shared list). Notes save only when typed in
+(`box.dirty` from `OnTextChanged`'s userInput) and a redraw never replaces
+a focused, typed buffer, so a stale Tome box can no longer overwrite a note
+edited in the docked panel. The panel's surface has its own copy and add
+dialogs. Loadout rows delete the entry they show, looked up at click time,
+and a change in either window redraws the other's Loadouts view. The
+docked panel redraws on a slot hover only in Gear and on item events not
+in Notes, Loadouts or Options; its drags stop when the button is released
+or the handle hides and use the panel's own scale. The Tome is clamped to
+the screen, scales down to fit a narrow one, closes an open dialog on ESC
+before itself, saves a position dragged just before it hid, redraws an open
+Stats tab when gear or ratings change, and `/sage reset tome` re-centres it.
+Skinned buttons shrink back after a long label. Pinned tooltips re-render
+only when their content changes.
+
+**Data layer.** `RegisterSpec` checks the fields the Tome iterates or
+concatenates (overview, tips, rotation steps, cooldowns, consumables, stat
+notes) and refuses a spec already registered to another class; every
+`Register*` rejects a NaN or fractional spec ID; trinket data is either
+`unavailable` or `lists`, never both; BiS `from` and trinket `source` /
+`ilvl` are type-checked.
+
+**Tests and CI.** `tests/run.lua` loads files from `SpecSage.toc` rather
+than a copied list. The mock restores Lua 5.1's `ipairs` error on a
+non-table and WoW's argument-passing `xpcall` on a real 5.1, and the suite
+passes on both 5.1.5 and the local 5.5. `.github/workflows/tests.yml` runs
+it on Lua 5.1 with luacheck on every push, and the release workflow needs
+it to pass before it packages anything.
+
+### Regenerating the data: script order
+
+The generators depend on each other's output, so they run in this order,
+from the repo root:
+
+1. Harvest in a browser on any light wowhead.com page with
+   `tools/wowhead_harvest.js`, and save `tools/wowhead_dump.json` (and, for
+   stat pages that moved, update `tools/wowhead_stats.json` by hand).
+2. `python3 tools/fetch_bis.py` - writes `Data/BiS.lua` and the bonus-ID map
+   `tools/item_bonus.json` the trinket generator reads.
+3. `python3 tools/fetch_trinkets.py`, `python3 tools/fetch_talents.py`,
+   `python3 tools/fetch_stats.py`, in any order.
+4. `python3 tools/strip_sites.py` - last, every time. It exits non-zero if a
+   site name survives or a spec is left with no guide data.
+5. `lua tests/run.lua`.
+
 ## Taint: the Tome stays out of UISpecialFrames (2026-09-10)
 
 A BugSack full of Blizzard errors "tainted by 'SpecSage'" - Edit Mode's
@@ -873,13 +961,16 @@ above) - only exercised by `tests/run.lua`'s fixtures.
   `C_Traits`/`C_ClassTalents` export string when available), **Add from
   string** (editbox dialog), **Copy** (read-only editbox with the string
   selected for Ctrl+C), **View** (2026-09-04: the build in Blizzard's
-  talent window — `Loadouts:OpenInTalentUI` runs the same decode Blizzard's
-  import dialog does on the talent frame, `ReadLoadoutHeader` /
-  `ReadLoadoutContent` / `ConvertToImportLoadoutEntryInfo`, then
-  `ViewLoadout` instead of `ImportLoadout`, so nothing is saved or applied;
-  a client without that view mode gets the import dialog pre-filled; a
-  string for another spec, combat, or no talent UI is refused with the
-  reason in chat and the copy dialog as the fallback. The addon never
+  talent window — `Loadouts:OpenInTalentUI` calls the talent frame's
+  `ViewLoadout(importText, level)`, the 12.1 signature Blizzard's own
+  inspect path uses (it parses the string itself and returns success,
+  specID), so nothing is saved or applied. Until 2026-09-23 it ran the
+  decode steps by hand and called `ViewLoadout(entries)`, the pre-12 shape,
+  which failed every time; and its fallback opened Blizzard's import popup
+  via `StaticPopupSpecial_Show`, which writes into
+  `StaticPopup_DisplayedFrames` from addon code and is gone for that reason.
+  A refused view, a string for another spec, combat, or no talent UI is
+  reported in chat with the copy dialog as the fallback. The addon never
   opens the talent window itself - showing `PlayerSpellsFrame` runs
   Blizzard's `ShowAllActionButtonGrids`, a protected `SetAttribute` on
   every action button, blocked from addon code; the 2026-09-05 BugSack

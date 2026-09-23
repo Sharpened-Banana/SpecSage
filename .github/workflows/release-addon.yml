@@ -19,7 +19,13 @@ permissions:
   contents: write
 
 jobs:
+  # The release publishes to CurseForge; a regeneration or a code change
+  # that breaks the suite must not reach players.
+  test:
+    uses: ./.github/workflows/tests.yml
+
   release:
+    needs: test
     runs-on: ubuntu-latest
     steps:
       - name: Clone project

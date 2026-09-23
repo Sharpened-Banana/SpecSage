@@ -7,6 +7,38 @@
 
 local mock = {}
 
+
+--------------------------------------------------------------------------------
+-- Lua 5.1 behaviour on a newer interpreter
+--
+-- WoW runs Lua 5.1, where ipairs() on anything but a table raises. From 5.3
+-- on it quietly iterates a string's metatable instead, so a guide field
+-- registered as a string where the Tome expects a list ("tips = 'text'")
+-- passed here and crashed in the game. The shim restores the 5.1 error.
+--------------------------------------------------------------------------------
+
+-- The other way round: WoW's xpcall passes extra arguments on to the
+-- function (xpcall(f, handler, ...)), which stock Lua 5.1's does not. The
+-- addon relies on it (Core/Init.lua's event dispatch), so on a real 5.1
+-- interpreter the mock provides WoW's form.
+if _VERSION == "Lua 5.1" then
+    local rawXpcall = xpcall
+    function xpcall(fn, handler, ...)
+        local count, args = select("#", ...), { ... }
+        return rawXpcall(function() return fn(unpack(args, 1, count)) end, handler)
+    end
+end
+
+do
+    local rawIpairs = ipairs
+    function ipairs(value)
+        if type(value) ~= "table" then
+            error("bad argument #1 to 'ipairs' (table expected, got " .. type(value) .. ")", 2)
+        end
+        return rawIpairs(value)
+    end
+end
+
 --------------------------------------------------------------------------------
 -- Clock
 --------------------------------------------------------------------------------
@@ -89,7 +121,12 @@ local function NewRegion(kind)
     function region:SetAllPoints(relativeTo)
         table.insert(self.points, { "ALL", relativeTo })
     end
-    function region:GetPoint() return "CENTER", nil, "CENTER", 0, 0 end
+    -- The first anchor, as set: point, relativeTo, relativePoint, x, y.
+    function region:GetPoint()
+        local p = self.points and self.points[1]
+        if p and #p >= 5 then return p[1], p[2], p[3], p[4], p[5] end
+        return "CENTER", nil, "CENTER", 0, 0
+    end
     function region:SetSize(w, h) self.width, self.height = w, h end
     function region:SetWidth(w) self.width = w end
     function region:SetHeight(h) self.height = h end
@@ -217,6 +254,15 @@ function CreateFrame(frameType, name, parent, template)
         self.events[event] = true
     end
     function frame:UnregisterEvent(event) self.events[event] = nil end
+    -- The client filters a unit event to the registered units before any
+    -- Lua runs; the mock does the same in mock.Fire (rawequal, so a secret
+    -- payload table is simply not a match rather than an error).
+    function frame:RegisterUnitEvent(event, ...)
+        assert(type(event) == "string" and mock.KNOWN_EVENTS[event], "unknown event: " .. tostring(event))
+        self.events[event] = true
+        self.unitFilter = self.unitFilter or {}
+        self.unitFilter[event] = { ... }
+    end
     function frame:RegisterForDrag() end
     function frame:SetMovable() end
     function frame:SetClampedToScreen(value) self.clampedToScreen = value and true or false end
@@ -241,6 +287,12 @@ function CreateFrame(frameType, name, parent, template)
     function frame:StopMovingOrSizing() end
     function frame:SetScale(value) self.scale = value end
     function frame:GetScale() return self.scale or 1 end
+    -- Own scale times every ancestor's, as the client computes it.
+    function frame:GetEffectiveScale()
+        local parent = self.parent
+        local inherited = (parent and parent.GetEffectiveScale) and parent:GetEffectiveScale() or 1
+        return (self.scale or 1) * inherited
+    end
     function frame:SetBackdrop(value) self.backdrop = value end
     function frame:SetBackdropColor(r, g, b, a) self.backdropColor = { r, g, b, a } end
     function frame:SetBackdropBorderColor(r, g, b, a) self.backdropBorderColor = { r, g, b, a } end
@@ -320,12 +372,24 @@ function CreateFrame(frameType, name, parent, template)
             self.focused = true
         end
         function frame:ClearFocus() self.focused = false end
+        function frame:HasFocus() return self.focused == true end
+        -- The client fires OnTextChanged for a programmatic SetText too, with
+        -- userInput false; typing fires it with userInput true (mock Type).
         function frame:SetText(text)
             assert(hasFont,
                 "EditBox:SetText called with no font set - call SetFontObject or use "
                 .. "a font-providing template (e.g. InputBoxTemplate) first, or this "
                 .. "cannot render text in the real client")
             self.text = text
+            local changed = self.scripts.OnTextChanged
+            if changed then changed(self, false) end
+        end
+        -- The player typing: the text changes and OnTextChanged sees
+        -- userInput = true.
+        function frame:Type(text)
+            self.text = text
+            local changed = self.scripts.OnTextChanged
+            if changed then changed(self, true) end
         end
         function frame:GetText() return self.text or "" end
         -- Highlighting only actually selects anything once the box is
@@ -390,6 +454,11 @@ end
 
 UIParent = CreateFrame("Frame", "UIParent")
 function UIParent:GetEffectiveScale() return 1 end
+-- UI units across and down (1080p at scale 1 reads as about 1920x1080);
+-- tests shrink it to exercise Tome:FitToScreen.
+mock.screen = { width = 1920, height = 1080 }
+function UIParent:GetWidth() return mock.screen.width end
+function UIParent:GetHeight() return mock.screen.height end
 
 -- The minimap, for Modules/MinimapButton.lua: 140px across, centred at a
 -- known spot so a drag test can aim the cursor at an angle from it.
@@ -402,6 +471,9 @@ function Minimap:GetEffectiveScale() return 1 end
 -- widget's own OnMouseDown / OnUpdate / OnMouseUp scripts.
 mock.cursor = { x = 0, y = 0 }
 function GetCursorPosition() return mock.cursor.x, mock.cursor.y end
+-- Whether a mouse button is held; drags in the tests hold it by default.
+mock.mouseDown = true
+function IsMouseButtonDown() return mock.mouseDown end
 
 -- Blizzard's character sheet and its paper doll slot buttons, which
 -- UI/CharacterPanel.lua docks to and hooks. Only the surface the panel
@@ -465,6 +537,7 @@ mock.KNOWN_EVENTS = {}
 for _, event in ipairs({
     "ADDON_LOADED", "PLAYER_LOGIN", "PLAYER_ENTERING_WORLD",
     "PLAYER_REGEN_DISABLED", "PLAYER_REGEN_ENABLED", "ZONE_CHANGED_NEW_AREA",
+    "UI_SCALE_CHANGED", "DISPLAY_SIZE_CHANGED",
     "COMBAT_LOG_EVENT_UNFILTERED",
     "UNIT_STATS", "UNIT_AURA", "UNIT_MAXHEALTH", "UNIT_ATTACK_POWER",
     "COMBAT_RATING_UPDATE", "MASTERY_UPDATE", "SPEED_UPDATE",
@@ -483,9 +556,18 @@ for _, event in ipairs({
     mock.KNOWN_EVENTS[event] = true
 end
 
+local function UnitMatches(frame, event, unit)
+    local units = frame.unitFilter and frame.unitFilter[event]
+    if not units then return true end
+    for _, wanted in ipairs(units) do
+        if rawequal(unit, wanted) then return true end
+    end
+    return false
+end
+
 function mock.Fire(event, ...)
     for _, frame in ipairs(mock.frames) do
-        if frame.events[event] and frame.scripts.OnEvent then
+        if frame.events[event] and frame.scripts.OnEvent and UnitMatches(frame, event, (...)) then
             frame.scripts.OnEvent(frame, event, ...)
         end
     end
@@ -506,6 +588,38 @@ end
 --------------------------------------------------------------------------------
 
 mock.tickers = {}
+
+-- The client's error handler. Errors the addon routes through it (isolated
+-- event handlers, protected timer bodies) are recorded here; tests/run.lua
+-- asserts the list is empty at the end, so an isolated error still fails
+-- the suite instead of vanishing.
+mock.handlerErrors = {}
+
+-- A stand-in for a secret number, following the client's rules for addon
+-- code (warcraft.wiki.gg Secret_Values): comparing it or doing arithmetic
+-- on it errors; formatting, truthiness and issecretvalue() work.
+function mock.Secret(value)
+    local function refuse() error("attempt to perform arithmetic or compare a secret value") end
+    return setmetatable({}, {
+        __secret = true,
+        __lt = refuse, __le = refuse, __eq = refuse,
+        __add = refuse, __sub = refuse, __mul = refuse, __div = refuse, __unm = refuse,
+        __tostring = function() return tostring(value) end,
+    })
+end
+
+-- The client's secret check. Test secrets are tables whose metatable
+-- carries __secret (mock.Secret).
+function issecretvalue(value)
+    local mt = type(value) == "table" and getmetatable(value)
+    return mt and mt.__secret == true or false
+end
+function geterrorhandler()
+    return function(err)
+        mock.handlerErrors[#mock.handlerErrors + 1] = tostring(err) .. "\n" .. debug.traceback()
+        return err
+    end
+end
 
 C_Timer = {
     NewTicker = function(interval, callback)
@@ -703,6 +817,20 @@ function GetSpecializationMasterySpells(_)
     return mock.masterySpells[1], mock.masterySpells[2]
 end
 
+-- The 12.x namespaced forms the addon prefers, with their real shapes: the
+-- same two lookups (delegating, so a test that swaps the global still
+-- steers them), and GetSpecializationMasterySpells returning ONE table of
+-- spell IDs - only the deprecated global shim unpacks it into two values.
+C_SpecializationInfo = {
+    GetSpecialization = function(...) return GetSpecialization(...) end,
+    GetSpecializationInfo = function(...) return GetSpecializationInfo(...) end,
+    GetSpecializationMasterySpells = function(_)
+        local copy = {}
+        for i, id in ipairs(mock.masterySpells) do copy[i] = id end
+        return copy
+    end,
+}
+
 --------------------------------------------------------------------------------
 -- Classes and specializations
 --
@@ -738,9 +866,22 @@ end
 -- The Tome defaults to the player's own class/spec on first open. Kept in
 -- sync with mock.specializations[252] below (Death Knight) so that default
 -- lands on a spec the mock actually knows about.
+-- Group members for Modules/Buffs.lua's provider check: class tokens for
+-- party1..N (or raid1..N with mock.inRaid). A test sets mock.groupClasses.
+mock.groupClasses = {}
+mock.inRaid = false
+function IsInRaid() return mock.inRaid end
+function GetNumGroupMembers()
+    if not mock.inGroup then return 0 end
+    return #mock.groupClasses + (mock.inRaid and 0 or 1)
+end
+
 function UnitClass(unit)
-    if unit ~= "player" then return nil end
-    return "Death Knight", "DEATHKNIGHT", 6
+    if unit == "player" then return "Death Knight", "DEATHKNIGHT", 6 end
+    local index = type(unit) == "string" and tonumber(unit:match("^party(%d+)$") or unit:match("^raid(%d+)$"))
+    local token = index and mock.groupClasses[index]
+    if token then return token, token, 0 end
+    return nil
 end
 
 -- Real client globals the Tome's class rail reads directly (not wrapped in
@@ -882,7 +1023,12 @@ C_Spell = {
         if not cooldown then
             return { startTime = 0, duration = 0, isEnabled = true, modRate = 1 }
         end
-        return { startTime = cooldown.start, duration = cooldown.duration, isEnabled = true, modRate = 1 }
+        -- isActive / isOnGCD are NeverSecret in 12.1; a test can set them
+        -- directly when start and duration are secret.
+        local isActive = cooldown.isActive
+        if isActive == nil then isActive = (tonumber(cooldown.duration) or 0) > 0 end
+        return { startTime = cooldown.start, duration = cooldown.duration, isEnabled = true, modRate = 1,
+                 isActive = isActive, isOnGCD = cooldown.isOnGCD }
     end,
 }
 

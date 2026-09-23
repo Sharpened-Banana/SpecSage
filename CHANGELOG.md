@@ -6,8 +6,26 @@
 - Guide data refreshed from the guide site on 2026-09-23: new talent builds for 11 specs, BiS changes for 7, trinket tier changes for 3, and fresh trinket sims for every spec. Retribution Paladin and Feral Druid now have sim-ranked trinket lists.
 - Holy Priest's stat priority now follows the guide's separate Raid and Mythic+ orders for each hero tree. Windwalker's now ranks Haste, Crit and Mastery equal for both hero trees.
 - BiS alternatives keep their label, so "Trinket (Raid)" and "Trinket (M+)" read as two options rather than a third and fourth trinket. Brewmaster's one-hand and two-hand weapons are labelled the same way.
+- The stat, proc, combat and buff trackers do no work while the overlay is turned off.
+- One addon error no longer stops the rest of SpecSage's event handling.
+- The Tome stays on screen, shrinks to fit narrow screens, closes an open dialog on ESC before closing itself, and keeps a position you dragged it to right before closing. `/sage reset tome` brings it back to the centre.
+- The Tome's Stats tab updates its live values when you change gear.
+- `/sage overlay` says so when the overlay is on but hidden until combat, and opening options in combat explains why it can't.
+- Pinned tooltips no longer rebuild twice a second when nothing changed.
+- Releases now run the full test suite on WoW's Lua version before anything is published.
 
 **Fixed**
+- The talent window **View** button works again. It had been calling Blizzard's view function the way it worked before Midnight and failing every time.
+- **Reset session** now also clears Blizzard's own damage meter, so Session DPS and Session Dmg start from zero.
+- The Mastery tooltip keeps its rating lines and shows your spec's mastery text again.
+- The docked gearing panel, trinket tooltips and hero-tree stat priorities no longer depend on functions Blizzard is removing next expansion.
+- Notes edited in the gearing panel are no longer overwritten by the Tome, and typing in the panel's notes is no longer wiped by background redraws.
+- The gearing panel's Copy, Add from string and Save current open their own dialogs instead of the Tome's, which could be hidden or bound to another spec.
+- Deleting a loadout always deletes the one you clicked, even after the list changed in the other window.
+- In restricted content, a watched spell on cooldown now reads "cooldown" instead of "ready", and stat rows no longer vanish.
+- Raid buffs only show as missing when someone in your group can cast them.
+- Watched spells are now per spec, so another spec's watches no longer sit in the overlay as "ready".
+- A drag of the gearing panel can no longer get stuck to the cursor after the character sheet closes mid-drag, and it follows the cursor at any UI scale.
 - Restoration Druid's Mythic+ BiS list was missing; it ships again alongside the overall list.
 - Ten guide talent builds that the site shared with another source were silently dropped; all harvested builds now ship.
 - Some BiS source text carried characters the game reads as formatting codes (a stray "|" or "]"), which could garble the row.
