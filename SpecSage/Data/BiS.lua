@@ -13,9 +13,9 @@
 -- it. It is what puts the item on its current-season upgrade track: without
 -- it the client resolves the bare itemID to the item's base form, which for
 -- a current dungeon piece can be a level-48 rare rather than the item level
--- 334 epic the guide means. Rows the guide site lists carry the bonus list Icy
--- Veins states for the same item, since the guide site's markup has none.
--- Generated: 2026-09-03 20:18 UTC
+-- 334 epic the guide means. Rows the guide site lists carry the bonus list
+-- the guide site states for the same item, since the guide site's markup has none.
+-- Generated: 2026-09-23 22:55 UTC
 
 local ADDON, ns = ...
 if not ns.GuideStore then return end
@@ -176,7 +176,7 @@ ns.GuideStore:RegisterBiS(70, {
 
 -- HUNTER 253 (beast-mastery-hunter)
 ns.GuideStore:RegisterBiS(253, {
-  source = "Gear guide, updated 2026/08/30",
+  source = "Gear guide, updated 2026/09/09",
   patch = "12.1",
   lists = {
     { title = "Guide", list = {
@@ -195,14 +195,14 @@ ns.GuideStore:RegisterBiS(253, {
       { slot = "Ring", itemID = 252258, name = "Sickening Signet of Atroxus", from = "Voidscar Arena", bonus = "12854" },
       { slot = "Trinket", itemID = 270173, name = "Zul'jin's Guillotine Technique", from = "The Coiled Altar", bonus = "13848" },
       { slot = "Trinket", itemID = 270175, name = "Voracious Heart of Ula'tek", from = "Ula'tek", bonus = "13848" },
-      { slot = "Trinket", itemID = 270165, name = "Keeper's Seething Core", from = "Entombed Sentinels", bonus = "12854" },
+      { slot = "Trinket", itemID = 270168, name = "Font of Venomous Rage", from = "Situationally · Ula'tek", bonus = "13848" },
     }},
   },
 })
 
 -- HUNTER 254 (marksmanship-hunter)
 ns.GuideStore:RegisterBiS(254, {
-  source = "Gear guide, updated 2026/09/02",
+  source = "Gear guide, updated 2026/09/09",
   patch = "12.1",
   lists = {
     { title = "Guide", list = {
@@ -216,9 +216,9 @@ ns.GuideStore:RegisterBiS(254, {
       { slot = "Hands", itemID = 271493, name = "Skulking Viper's Hidepiercers", from = "Catalyst the Ruby Life Pools Gloves", bonus = "12854" },
       { slot = "Waist", itemID = 244581, name = "Farstrider's Trophy Belt", from = "Crafting/Misc", bonus = "13751:12497:13836:12384:8791:8960:1808" },
       { slot = "Legs", itemID = 271491, name = "Skulking Viper's Coiled Legwraps", from = "Catalyst the The Coiled Altar Legs", bonus = "13848" },
-      { slot = "Feet", itemID = 268233, name = "Ferocious Scaleboots", from = "Sszorak", bonus = "12854" },
+      { slot = "Feet", itemID = 268258, name = "Boots of the Reckless Wayfarer", from = "The Lost Explorers", bonus = "12854" },
       { slot = "Ring", itemID = 251136, name = "Signet of Snarling Servitude", from = "Murder Row", bonus = "12854" },
-      { slot = "Ring", itemID = 268249, name = "Vile Alchemist's Band", from = "Vashnik the Malignant", bonus = "12854" },
+      { slot = "Ring", itemID = 158366, name = "Charged Sandstone Band", from = "Temple of Sethraliss", bonus = "12854" },
       { slot = "Trinket", itemID = 270175, name = "Voracious Heart of Ula'tek", from = "Ula'tek", bonus = "13848" },
       { slot = "Trinket", itemID = 270168, name = "Font of Venomous Rage", from = "Ula'tek", bonus = "13848" },
     }},
@@ -232,15 +232,15 @@ ns.GuideStore:RegisterBiS(255, {
   lists = {
     { title = "Guide", list = {
       { slot = "Weapon", itemID = 268215, name = "Abyssal Broodfiend's Bardiche", from = "Ula'tek", bonus = "13848:13846" },
-      { slot = "Head", itemID = 271492, name = "Skulking Viper's Weeping Fangs", from = "Tier Set|Voidscar Arena", bonus = "12854" },
+      { slot = "Head", itemID = 271492, name = "Skulking Viper's Weeping Fangs", from = "Tier Set / Voidscar Arena", bonus = "12854" },
       { slot = "Neck", itemID = 268265, name = "Aqirbane Reliquary", from = "Ula'tek", bonus = "13848" },
-      { slot = "Shoulder", itemID = 271490, name = "Jaws of the Skulking Viper", from = "Tier Set|The Coiled Altar", bonus = "13848" },
+      { slot = "Shoulder", itemID = 271490, name = "Jaws of the Skulking Viper", from = "Tier Set / The Coiled Altar", bonus = "13848" },
       { slot = "Back", itemID = 268253, name = "Silken Voodoo Drape", from = "The Coiled Altar", bonus = "13848" },
       { slot = "Chest", itemID = 271876, name = "Awoken Dreadfang Cuirass", from = "Ula'tek" },
       { slot = "Wrist", itemID = 244584, name = "Farstrider's Plated Bracers", from = "Crafting", bonus = "13751:12497:13836:12384:8791:8960:1808" },
-      { slot = "Hands", itemID = 271493, name = "Skulking Viper's Hidepiercers", from = "Tier Set|King's Rest", bonus = "12854" },
+      { slot = "Hands", itemID = 271493, name = "Skulking Viper's Hidepiercers", from = "Tier Set / King's Rest", bonus = "12854" },
       { slot = "Waist", itemID = 244581, name = "Farstrider's Trophy Belt", from = "Crafting", bonus = "13751:12497:13836:12384:8791:8960:1808" },
-      { slot = "Legs", itemID = 271491, name = "Skulking Viper's Coiled Legwraps", from = "Tier Set|The Coiled Altar", bonus = "13848" },
+      { slot = "Legs", itemID = 271491, name = "Skulking Viper's Coiled Legwraps", from = "Tier Set / The Coiled Altar", bonus = "13848" },
       { slot = "Feet", itemID = 268233, name = "Ferocious Scaleboots", from = "Sszorak", bonus = "12854" },
       { slot = "Ring", itemID = 273792, name = "Band of the Amani Warlord", from = "Altar of Fangs", bonus = "12854" },
       { slot = "Ring", itemID = 252258, name = "Sickening Signet of Atroxus", from = "Voidscar Arena", bonus = "12854" },
@@ -252,12 +252,12 @@ ns.GuideStore:RegisterBiS(255, {
 
 -- ROGUE 259 (assassination-rogue)
 ns.GuideStore:RegisterBiS(259, {
-  source = "Gear guide, updated 2026/08/29",
+  source = "Gear guide, updated 2026/09/06",
   patch = "12.1",
   lists = {
     { title = "Guide", list = {
       { slot = "Weapon", itemID = 271093, name = "Zatha'tek, Breath of Corruption", from = "Ula'tek", bonus = "13848" },
-      { slot = "Off-hand", itemID = 237837, name = "Farstrider's Mercy", from = "Crafting/Misc", bonus = "13751:12497:13836:8790" },
+      { slot = "Off-hand", itemID = 275070, name = "Sharpened Lightwood Slasher", from = "Altar of Fangs", bonus = "12854" },
       { slot = "Head", itemID = 271510, name = "Chosen Bloodslayer's Spirit Shroud", from = "Ula'tek", bonus = "13848:13847" },
       { slot = "Neck", itemID = 268265, name = "Aqirbane Reliquary", from = "Ula'tek", bonus = "13848" },
       { slot = "Shoulder", itemID = 271508, name = "Chosen Bloodslayer's Voodoo Guards", from = "Voidscar Arena", bonus = "12854" },
@@ -267,7 +267,7 @@ ns.GuideStore:RegisterBiS(259, {
       { slot = "Hands", itemID = 271511, name = "Chosen Bloodslayer's Fanged Grips", from = "Entombed Sentinels", bonus = "12854" },
       { slot = "Waist", itemID = 268256, name = "Sash of the Forlorn Vessel", from = "The Coiled Altar", bonus = "12854" },
       { slot = "Legs", itemID = 271509, name = "Chosen Bloodslayer's Reinforced Pants", from = "The Coiled Altar", bonus = "13848" },
-      { slot = "Feet", itemID = 251153, name = "Arctic Explorer's Legwraps", from = "Den of Nalorakk", bonus = "12854" },
+      { slot = "Feet", itemID = 244569, name = "Silvermoon Agent's Sneakers", from = "Crafted", bonus = "13751:12497:13836:8790" },
       { slot = "Ring", itemID = 273792, name = "Band of the Amani Warlord", from = "Altar of Fangs", bonus = "12854" },
       { slot = "Ring", itemID = 268249, name = "Vile Alchemist's Band", from = "Vashnik the Malignant", bonus = "12854" },
       { slot = "Trinket", itemID = 270175, name = "Voracious Heart of Ula'tek", from = "Ula'tek", bonus = "13848" },
@@ -304,7 +304,7 @@ ns.GuideStore:RegisterBiS(260, {
 
 -- ROGUE 261 (subtlety-rogue)
 ns.GuideStore:RegisterBiS(261, {
-  source = "Gear guide, updated 2026/08/24",
+  source = "Gear guide, updated 2026/09/02",
   patch = "12.1",
   lists = {
     { title = "Guide", list = {
@@ -478,7 +478,7 @@ ns.GuideStore:RegisterBiS(251, {
 
 -- DEATHKNIGHT 252 (unholy-death-knight)
 ns.GuideStore:RegisterBiS(252, {
-  source = "Gear guide, updated 2026/09/02",
+  source = "Gear guide, updated 2026/09/08",
   patch = "12.1",
   lists = {
     { title = "Guide", list = {
@@ -493,8 +493,8 @@ ns.GuideStore:RegisterBiS(252, {
       { slot = "Waist", itemID = 268259, name = "Girdle of Toxic Regret", from = "The Coiled Altar", bonus = "13848" },
       { slot = "Legs", itemID = 271878, name = "Chausses of Unbound Rancor", from = "Ula'tek", bonus = "4786:13335:13708:13848" },
       { slot = "Feet", itemID = 237828, name = "Spellbreaker's March", from = "Crafting", bonus = "13751:12497:13836" },
-      { slot = "Ring", itemID = 273792, name = "Band of the Amani Warlord", from = "Altar of Fangs", bonus = "12854" },
-      { slot = "Ring", itemID = 252258, name = "Sickening Signet of Atroxus", from = "Voidscar Arena]", bonus = "12854" },
+      { slot = "Ring", itemID = 268249, name = "Vile Alchemist's Band", from = "Vashnik", bonus = "12854" },
+      { slot = "Ring", itemID = 252258, name = "Sickening Signet of Atroxus", from = "Voidscar Arena", bonus = "12854" },
       { slot = "Trinket", itemID = 270175, name = "Voracious Heart of Ula'tek", from = "Ula'tek", bonus = "13848" },
       { slot = "Trinket", itemID = 270173, name = "Zul'jin's Guillotine Technique", from = "The Coiled Altar", bonus = "13848" },
     }},
@@ -559,7 +559,7 @@ ns.GuideStore:RegisterBiS(264, {
   patch = "12.1",
   lists = {
     { title = "Guide", list = {
-      { slot = "Head", itemID = 271483, name = "Serpent Crown of the Ophidian Oracle", from = "Raid | Vault", bonus = "12854" },
+      { slot = "Head", itemID = 271483, name = "Serpent Crown of the Ophidian Oracle", from = "Raid / Vault", bonus = "12854" },
       { slot = "Neck", itemID = 268265, name = "Aqirbane Reliquary", from = "Ula'tek (Raid)", bonus = "13848" },
       { slot = "Shoulder", itemID = 271481, name = "Hissing Mantle of the Ophidian Oracle", from = "The Coiled Altar (Raid) & Catalyst", bonus = "13848" },
       { slot = "Back", itemID = 268248, name = "Amani Summoning Shawl", from = "Nek'zali the Soulcoiler (Raid)", bonus = "12854" },
@@ -685,7 +685,7 @@ ns.GuideStore:RegisterBiS(265, {
 
 -- WARLOCK 266 (demonology-warlock)
 ns.GuideStore:RegisterBiS(266, {
-  source = "Gear guide, updated 2026/08/24",
+  source = "Gear guide, updated 2026/09/08",
   patch = "12.1",
   lists = {
     { title = "Guide", list = {
@@ -741,34 +741,34 @@ ns.GuideStore:RegisterBiS(268, {
   patch = "12.1",
   lists = {
     { title = "Guide", list = {
-      { slot = "Weapon", itemID = 268215, name = "Abyssal Broodfiend's Bardiche", from = "Ula'tek", bonus = "13848:13846" },
-      { slot = "Weapon", itemID = 268209, name = "Aman'muso, Warlord's Vengeance", from = "The Coiled Altar Sszorak", bonus = "13848" },
-      { slot = "Head", itemID = 271519, name = "Monkey King's Unyielding Visage", from = "Catalyst|Raid|Vault", bonus = "13848:13847:10835" },
+      { slot = "Weapon", itemID = 268215, name = "Abyssal Broodfiend's Bardiche", from = "2h · Ula'tek", bonus = "13848:13846" },
+      { slot = "Weapon", itemID = 268209, name = "Aman'muso, Warlord's Vengeance", from = "1h · The Coiled Altar Sszorak", bonus = "13848" },
+      { slot = "Head", itemID = 271519, name = "Monkey King's Unyielding Visage", from = "Catalyst / Raid / Vault", bonus = "13848:13847:10835" },
       { slot = "Neck", itemID = 268265, name = "Aqirbane Reliquary", from = "Ula'tek", bonus = "13848" },
-      { slot = "Shoulder", itemID = 271517, name = "Tassels of the Monkey King", from = "Catalyst|Mythic+|Vault", bonus = "12854" },
+      { slot = "Shoulder", itemID = 271517, name = "Tassels of the Monkey King", from = "Catalyst / Mythic+ / Vault", bonus = "12854" },
       { slot = "Back", itemID = 268253, name = "Silken Voodoo Drape", from = "The Coiled Altar", bonus = "13848" },
-      { slot = "Chest", itemID = 271522, name = "Battle Gi of the Monkey King", from = "Catalyst|Mythic+|Vault", bonus = "12854" },
+      { slot = "Chest", itemID = 271522, name = "Battle Gi of the Monkey King", from = "Catalyst / Mythic+ / Vault", bonus = "12854" },
       { slot = "Wrist", itemID = 244576, name = "Silvermoon Agent's Deflectors", from = "Leatherworking", bonus = "13751:12497:13836:8790" },
-      { slot = "Hands", itemID = 271520, name = "Monkey King's Fighting Fists", from = "Catalyst|Mythic+|Vault", bonus = "12854" },
+      { slot = "Hands", itemID = 271520, name = "Monkey King's Fighting Fists", from = "Catalyst / Mythic+ / Vault", bonus = "12854" },
       { slot = "Waist", itemID = 268256, name = "Sash of the Forlorn Vessel", from = "The Coiled Altar", bonus = "12854" },
-      { slot = "Legs", itemID = 271518, name = "Pantaloons of the Monkey King", from = "Catalyst|Raid|Vault", bonus = "13848" },
+      { slot = "Legs", itemID = 271518, name = "Pantaloons of the Monkey King", from = "Catalyst / Raid / Vault", bonus = "13848" },
       { slot = "Feet", itemID = 159304, name = "Goldfeather Boots", from = "Kings' Rest", bonus = "12854" },
       { slot = "Ring", itemID = 251148, name = "Pilfered Precious Band", from = "Den of Nalorakk", bonus = "12854" },
       { slot = "Ring", itemID = 251513, name = "Loa Worshiper's Band", from = "Jewelcrafting", bonus = "13751:12497:13836" },
-      { slot = "Trinket", itemID = 270175, name = "Voracious Heart of Ula'tek", from = "Ula'tek", bonus = "13848" },
-      { slot = "Trinket", itemID = 270173, name = "Zul'jin's Guillotine Technique", from = "The Coiled Altar", bonus = "13848" },
-      { slot = "Trinket", itemID = 270160, name = "First Mate's Shellward", from = "The Lost Explorers" },
-      { slot = "Trinket", itemID = 159617, name = "Lustrous Golden Plumage", from = "Kings' Rest", bonus = "12854" },
+      { slot = "Trinket", itemID = 270175, name = "Voracious Heart of Ula'tek", from = "Damage · Ula'tek", bonus = "13848" },
+      { slot = "Trinket", itemID = 270173, name = "Zul'jin's Guillotine Technique", from = "Damage · The Coiled Altar", bonus = "13848" },
+      { slot = "Trinket", itemID = 270160, name = "First Mate's Shellward", from = "Defense · The Lost Explorers" },
+      { slot = "Trinket", itemID = 159617, name = "Lustrous Golden Plumage", from = "Defense · Kings' Rest", bonus = "12854" },
     }},
   },
 })
 
 -- MONK 270 (mistweaver-monk)
 ns.GuideStore:RegisterBiS(270, {
-  source = "Gear guide, updated 2026/09/01",
+  source = "Gear guide, updated 2026/09/15",
   patch = "12.1",
   lists = {
-    { title = "Guide (for Raid)", list = {
+    { title = "Guide (Raid)", list = {
       { slot = "Head", itemID = 271519, name = "Monkey King's Unyielding Visage", from = "Ula'tek & Catalyst", bonus = "13848:13847:10835" },
       { slot = "Neck", itemID = 268265, name = "Aqirbane Reliquary", from = "Ula'tek", bonus = "13848" },
       { slot = "Shoulder", itemID = 271517, name = "Tassels of the Monkey King", from = "Den of Nalorakk & Catalyst", bonus = "12854" },
@@ -786,7 +786,7 @@ ns.GuideStore:RegisterBiS(270, {
       { slot = "Weapon", itemID = 268211, name = "Baleful Hexblade", from = "The Coiled Altar", bonus = "13848" },
       { slot = "Off-hand", itemID = 159667, name = "Vessel of Last Rites", from = "Kings' Rest", bonus = "12854" },
     }},
-    { title = "Guide (for Mythic+)", list = {
+    { title = "Guide (Mythic+)", list = {
       { slot = "Head", itemID = 271519, name = "Monkey King's Unyielding Visage", from = "Ula'tek & Catalyst", bonus = "13848:13847:10835" },
       { slot = "Neck", itemID = 268265, name = "Aqirbane Reliquary", from = "Ula'tek", bonus = "13848" },
       { slot = "Shoulder", itemID = 271517, name = "Tassels of the Monkey King", from = "The Lost Explorers", bonus = "12854" },
@@ -834,7 +834,7 @@ ns.GuideStore:RegisterBiS(269, {
 
 -- DRUID 102 (balance-druid)
 ns.GuideStore:RegisterBiS(102, {
-  source = "Gear guide, updated 2026/09/01",
+  source = "Gear guide, updated 2026/09/14",
   patch = "12.1",
   lists = {
     { title = "Guide", list = {
@@ -910,12 +910,12 @@ ns.GuideStore:RegisterBiS(104, {
 
 -- DRUID 105 (restoration-druid)
 ns.GuideStore:RegisterBiS(105, {
-  source = "Gear guide, updated 2026/09/02",
+  source = "Gear guide, updated 2026/09/22",
   patch = "12.1",
   lists = {
     { title = "Guide", list = {
       { slot = "Head", itemID = 271528, name = "Enigmatic Dreamwatcher's Somnolent Stare", from = "Ula'tek (Raid) & Catalyst", bonus = "13848" },
-      { slot = "Neck", itemID = 268251, name = "Amulet of the Twin Fangs", from = "The Twin Fangs (Raid)" },
+      { slot = "Neck", itemID = 268265, name = "Aqirbane Reliquary", from = "Ula'tek (Raid)", bonus = "13848" },
       { slot = "Shoulder", itemID = 244572, name = "Silvermoon Agent's Mantle", from = "", bonus = "13836:13751:12497" },
       { slot = "Back", itemID = 268253, name = "Silken Voodoo Drape", from = "The Coiled Alter (Raid)", bonus = "13848" },
       { slot = "Chest", itemID = 271531, name = "Enigmatic Dreamwatcher's Lunar Raiment", from = "Nek'zali the Soulcoiler (Raid) & Catalyst", bonus = "12854" },
@@ -924,12 +924,29 @@ ns.GuideStore:RegisterBiS(105, {
       { slot = "Waist", itemID = 268256, name = "Sash of the Forlorn Vessel", from = "The Coiled Alter (Raid)", bonus = "12854" },
       { slot = "Legs", itemID = 271527, name = "Enigmatic Dreamwatcher's Leggings", from = "The Coiled Alter (Raid) & Catalyst", bonus = "13848" },
       { slot = "Feet", itemID = 244569, name = "Silvermoon Agent's Sneakers", from = "", bonus = "13751:12497:13836:8790" },
-      { slot = "Ring", itemID = 268266, name = "Alluring Bubbleband", from = "Nymrissa Wavebinder (Raid)", bonus = "12854" },
+      { slot = "Ring", itemID = 240949, name = "Masterwork Sin'dorei Band", from = "Jewelcrafting (Crafted)", bonus = "1221413836:13751:9627:13768:8960" },
       { slot = "Ring", itemID = 252258, name = "Sickening Signet of Atroxus", from = "Voidscar Arena", bonus = "12854" },
       { slot = "Trinket", itemID = 270167, name = "Wavecaller's Seastone", from = "Nymrissa Wavebinder (Raid)", bonus = "12854" },
       { slot = "Trinket", itemID = 270162, name = "Soulcoiler Ritual Vessel", from = "Nek'zali the Soulcoiler (Raid)", bonus = "12854" },
       { slot = "Weapon", itemID = 271092, name = "Jan'thrazet, the Soul Fang", from = "Ula'tek (Raid)", bonus = "13848" },
       { slot = "Off-hand", itemID = 268197, name = "Spine of the Hissing Abyss", from = "Entomed Sentinels (Raid)", bonus = "12854" },
+    }},
+    { title = "Guide (Mythic+-Only)", list = {
+      { slot = "Head", itemID = 271528, name = "Enigmatic Dreamwatcher's Somnolent Stare", from = "Murder Row & Catalyst", bonus = "13848" },
+      { slot = "Neck", itemID = 251142, name = "Pendant of Malefic Fury", from = "Murder Row", bonus = "12854" },
+      { slot = "Shoulder", itemID = 244572, name = "Silvermoon Agent's Mantle", from = "", bonus = "13836:13751:12497" },
+      { slot = "Back", itemID = 251190, name = "Bloodthorn Burnous", from = "The Blinding Vale", bonus = "12854" },
+      { slot = "Chest", itemID = 271531, name = "Enigmatic Dreamwatcher's Lunar Raiment", from = "Den of Nalorakk & Catalyst", bonus = "12854" },
+      { slot = "Wrist", itemID = 244576, name = "Silvermoon Agent's Deflectors", from = "", bonus = "13751:12497:13836:8790" },
+      { slot = "Hands", itemID = 271529, name = "Enigmatic Dreamwatcher's Gauntlets", from = "Temple of Sethraliss & Catalyst", bonus = "12854" },
+      { slot = "Waist", itemID = 159317, name = "Whirling Dervish Sash", from = "Temple of Sethraliss", bonus = "12854" },
+      { slot = "Legs", itemID = 271527, name = "Enigmatic Dreamwatcher's Leggings", from = "Kings Rest & Catalyst", bonus = "13848" },
+      { slot = "Feet", itemID = 251153, name = "Arctic Explorer's Legwraps", from = "Den of Nalorakk", bonus = "12854" },
+      { slot = "Ring", itemID = 159459, name = "Ritual Binder's Ring", from = "Kings Rest", bonus = "4786:12854" },
+      { slot = "Ring", itemID = 252258, name = "Sickening Signet of Atroxus", from = "Voidscar Arena", bonus = "12854" },
+      { slot = "Trinket", itemID = 250214, name = "Lightspire Core", from = "The Blinding Vale", bonus = "12854" },
+      { slot = "Trinket", itemID = 250255, name = "Unstable Felheart Crystal", from = "Murder Row" },
+      { slot = "Weapon", itemID = 159636, name = "Staff of the Lightning Serpent", from = "Temple of Sethraliss", bonus = "12854" },
     }},
   },
 })
@@ -962,7 +979,7 @@ ns.GuideStore:RegisterBiS(577, {
 
 -- DEMONHUNTER 581 (vengeance-demon-hunter)
 ns.GuideStore:RegisterBiS(581, {
-  source = "Gear guide, updated 2026/08/25",
+  source = "Gear guide, updated 2026/09/05",
   patch = "12.1",
   lists = {
     { title = "Guide", list = {
@@ -982,7 +999,7 @@ ns.GuideStore:RegisterBiS(581, {
       { slot = "Ring", itemID = 159459, name = "Ritual Binder's Ring", from = "King's Rest", bonus = "4786:12854" },
       { slot = "Trinket", itemID = 270164, name = "Gebbo's Bottomless Bag", from = "The Lost Explorers", bonus = "12854" },
       { slot = "Trinket", itemID = 270175, name = "Voracious Heart of Ula'tek", from = "Ula'tek", bonus = "13848" },
-      { slot = "Trinket", itemID = 270173, name = "Zul'jin's Guillotine Technique", from = "The Coiled Altar", bonus = "13848" },
+      { slot = "Trinket", itemID = 270173, name = "Zul'jin's Guillotine Technique", from = "Raw Damage · The Coiled Altar", bonus = "13848" },
     }},
   },
 })
@@ -1008,8 +1025,8 @@ ns.GuideStore:RegisterBiS(1480, {
       { slot = "Ring", itemID = 268249, name = "Vile Alchemist's Band", from = "Vashnik the Malignant", bonus = "12854" },
       { slot = "Ring", itemID = 158366, name = "Charged Sandstone Band", from = "Temple of Sethraliss", bonus = "12854" },
       { slot = "Trinket", itemID = 250215, name = "Freightrunner's Flask", from = "Murder Row", bonus = "12854" },
-      { slot = "Trinket", itemID = 270167, name = "Wavecaller's Seastone", from = "Nymrissa Wavecaller", bonus = "12854" },
-      { slot = "Trinket", itemID = 270164, name = "Gebbo's Bottomless Bag", from = "The Lost Explorers", bonus = "12854" },
+      { slot = "Trinket", itemID = 270167, name = "Wavecaller's Seastone", from = "Raid · Nymrissa Wavecaller", bonus = "12854" },
+      { slot = "Trinket", itemID = 270164, name = "Gebbo's Bottomless Bag", from = "M+ · The Lost Explorers", bonus = "12854" },
     }},
   },
 })
@@ -1068,7 +1085,7 @@ ns.GuideStore:RegisterBiS(1468, {
 
 -- EVOKER 1473 (augmentation-evoker)
 ns.GuideStore:RegisterBiS(1473, {
-  source = "Gear guide, updated 2026/09/02",
+  source = "Gear guide, updated 2026/09/19",
   patch = "12.1",
   lists = {
     { title = "Guide", list = {

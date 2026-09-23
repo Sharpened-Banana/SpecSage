@@ -538,6 +538,44 @@ What it adds, alongside Icy Veins on every spec (never replacing it):
   like Icy Veins'. Each build now carries `site`, and the Loadouts row and
   vault name use it.
 
+## Data refresh and generator fixes (2026-09-23)
+
+A fresh harvest (all 40 specs, no fetch errors) changed 18 specs' records;
+the rest only moved their "updated" dates. Only the changed records were
+carried out of the browser and each was checked by SHA-256 against the live
+page object before merging, since the transfer is a transcription.
+
+The refresh surfaced generator bugs that had been shipping bad data:
+
+- **BiS titles** (`tools/wowhead.py`): a guide's tables are titled by the
+  words that tell their headings apart (`_title_words`), wherever they sit.
+  The old rule read only the words after "for", so Restoration Druid's
+  "Mythic+-Only" table titled the same as its overall one and was dropped
+  as a duplicate. A title collision now numbers the list instead.
+- **Slot qualifiers**: "Trinket (Raid)" / "Trinket (M+)", "Weapon (2h)" /
+  "Weapons (1h)" kept only the slot, so alternatives read as a third
+  trinket or two weapons. The bracketed text is now prefixed to the row's
+  `from` ("Raid · Nymrissa Wavecaller").
+- **Source text** is HTML-unescaped and `|` becomes " / " (`_clean_from`):
+  a lone `|` is the client's escape character. A test scans every shipped
+  BiS string for a lone `|` or a stray bracket.
+- **Talent builds** (`tools/fetch_talents.py`): Wowhead builds were
+  de-duplicated against Icy Veins' strings, and `strip_sites.py` then
+  deletes the Icy Veins copy, so a build both sites published vanished (10
+  on this run). The Wowhead list now de-duplicates only within itself.
+- **Bonus map** (`tools/fetch_bis.py`): merged over the previous
+  `tools/item_bonus.json` rather than replacing it, so an unreachable Icy
+  Veins cannot strip every row back to the item's base form.
+- **Trinket sims** (`tools/fetch_trinkets.py`): bloodmallet's stat variants
+  of one item ("[Haste]" / "[Crit]") keep only the best row.
+- **Tooltip cache** (`tools/wowhead_items.py`) retries cached failures;
+  `wowhead.load()` raises on a missing dump; the harvester records a
+  non-200 page as an error.
+
+The trinket count test now asserts the invariant (every spec has a sim
+list or a note) rather than bloodmallet's current coverage, which grew from
+27 to 29 specs with Retribution and Feral.
+
 ## Taint: the Tome stays out of UISpecialFrames (2026-09-10)
 
 A BugSack full of Blizzard errors "tainted by 'SpecSage'" - Edit Mode's

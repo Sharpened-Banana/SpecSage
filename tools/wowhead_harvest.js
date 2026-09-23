@@ -62,7 +62,10 @@ window.__harvest = async function (from, to) {
     const [spec, cls, sp, role] = window.__specs[k];
     const rec = { bis: [], tiers: [], builds: [], err: [] };
     try {
-      const raw = un(await (await fetch(`/guide/classes/${cls}/${sp}/bis-gear`, { credentials: 'same-origin' })).text());
+      const bisResp = await fetch(`/guide/classes/${cls}/${sp}/bis-gear`, { credentials: 'same-origin' });
+      // A 403/404 page parses as "no tables" without any error; say so.
+      if (!bisResp.ok) rec.err.push('bis:HTTP ' + bisResp.status);
+      const raw = un(await bisResp.text());
       rec.updated = (raw.match(/Updated:\s*(?:<[^>]*>\s*)?([\d\/]+)/) || [])[1] || null;
       // BiS tables: every [table] whose first row mentions Slot or Item.
       for (const tbl of raw.split(/\[table[^\]]*\]/).slice(1)) {
@@ -108,6 +111,7 @@ window.__harvest = async function (from, to) {
         resp = await fetch(`/guide/classes/${cls}/${sp}/talent-builds-pve-${r}`, { credentials: 'same-origin' });
         if (resp.status === 200) break;
       }
+      if (!resp.ok) rec.err.push('talents:HTTP ' + resp.status);
       const raw = un(await resp.text());
       rec.talentUpdated = (raw.match(/Updated:\s*(?:<[^>]*>\s*)?([\d\/]+)/) || [])[1] || null;
       // Import-code tables: [copy="Label"]CODE[/copy], grouped under the

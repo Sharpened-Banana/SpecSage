@@ -127,7 +127,7 @@
 [
 "Elune's Chosen",
 "Mythic+",
-"CYGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWoMbNMmZgxsMzMzMLMgxMLzsYmZswyMLjxMjNMAYstNzgxsNCMBAAAYhZmZGsZMjxAAwMDWGA"
+"CYGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWoMbNMmZgxsMzMzMLMgZZmlZWYmxGLzsMGzM2wAgx22MDGz2IwEAAAgFmZmZwmxMGDAAzMYZA"
 ],
 [
 "Elune's Chosen",
@@ -232,7 +232,7 @@
 "tier": "D"
 }
 ],
-"updated": "2026/09/01"
+"updated": "2026/09/14"
 },
 "103": {
 "bis": [
@@ -701,9 +701,9 @@
 ],
 [
 "Neck",
-268251,
+268265,
 "",
-"The Twin Fangs (Raid)"
+"Ula'tek (Raid)"
 ],
 [
 "Shoulders",
@@ -755,9 +755,9 @@
 ],
 [
 "Ring",
-268266,
+240949,
 "",
-"Nymrissa Wavebinder (Raid)"
+"Jewelcrafting (Crafted)"
 ],
 [
 "Ring",
@@ -912,7 +912,7 @@
 [
 "Wildstalker",
 "Mythic+",
-"CkGAAAAAAAAAAAAAAAAAAAAAAMMmZZMjZmxsNMMmlZsZbGAAAAAAAAAAsMoZzw0MjZwsYmZmZZGGDAAAAAAAGAACAAYWmZrZbmFbMmZgZ2ANDAwMDADA"
+"CkGAAAAAAAAAAAAAAAAAAAAAAMMmZZMjZmxsNMMmlZsZbGAAAAAAAAAAsMoZzw0MjZwsYmZmZZGGDAAAAAAAGAACAAYWmZrZbmFbMmZgZWANDAwMDADA"
 ]
 ],
 "err": [],
@@ -1032,7 +1032,7 @@
 "tier": "F"
 }
 ],
-"updated": "2026/09/02"
+"updated": "2026/09/22"
 },
 "1467": {
 "bis": [
@@ -1153,12 +1153,12 @@
 [
 "Scalecommander",
 "Raid",
-"CsbBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAjZgZYGzMgBjZamZmpZM2mxMzMzMzMzAmxMGzMLzMDMwYwGsMGN2GQmBBbYgZGMMA"
+"CsbBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAjZwMDzwMgBjZaMzMNzM2mZmZmZmZmZGwMmZGzMLzMDMwYwGsMGN2GQmBBbYgZGMjHA"
 ],
 [
 "Scalecommander",
 "Mythic+",
-"CsbBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAjZAMzwMwAjZaMzMNjZ2mxMzMzMzMzAmZmZGzMLzMDMwYwGsMGN2GQmBBbYGMzghB"
+"CsbBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAjZwgZGmBGYMTjZmpZmZ2mZmZmZmZmZGwMzMzYmZZmZgBGD2glxox2AyMIYDzgZGM8AA"
 ],
 [
 "Scalecommander",
@@ -1182,7 +1182,7 @@
 ]
 ],
 "err": [],
-"talentUpdated": "2026/08/12",
+"talentUpdated": "2026/09/23",
 "tiers": [
 {
 "items": [
@@ -1791,6 +1791,10 @@
 [
 250214,
 "dungeon"
+],
+[
+270169,
+"raid"
 ]
 ],
 "tier": "A"
@@ -1799,10 +1803,6 @@
 "items": [
 [
 273796,
-"raid"
-],
-[
-270169,
 "raid"
 ],
 [
@@ -1903,7 +1903,7 @@
 "tier": "D"
 }
 ],
-"updated": "2026/09/02"
+"updated": "2026/09/19"
 },
 "1480": {
 "bis": [
@@ -2058,7 +2058,7 @@
 ]
 ],
 "err": [],
-"talentUpdated": "2026/08/17",
+"talentUpdated": "2026/09/18",
 "tiers": [
 {
 "items": [
@@ -2437,7 +2437,7 @@
 [
 "San'layn",
 "Mythic+",
-"CoPAAAAAAAAAAAAAAAAAAAAAAwYWmZmxMmZmhZZmZmmZxYMmxAAAAAmxMzMzMDzYMAYMzMzAAAYgBmxiGLLgsMgNAzYmBAAmZghB"
+"CoPAAAAAAAAAAAAAAAAAAAAAAwMzyMzMmxMzMMLzMz0MLGjxMGAAAAwMmZmZmZYGDAYmZmZGAAADMwMW0YZBklBsBYGzAAAmZghB"
 ],
 [
 "San'layn",
@@ -2446,7 +2446,7 @@
 ]
 ],
 "err": [],
-"talentUpdated": "2026/08/20",
+"talentUpdated": "2026/09/21",
 "tiers": [
 {
 "items": [
@@ -2689,7 +2689,7 @@
 ]
 ],
 "err": [],
-"talentUpdated": "2026/08/12",
+"talentUpdated": "2026/09/05",
 "tiers": [
 {
 "items": [
@@ -2855,9 +2855,9 @@
 ],
 [
 "Ring",
-273792,
+268249,
 "",
-"Altar of Fangs"
+"Vashnik"
 ],
 [
 "Ring",
@@ -2900,16 +2900,16 @@
 [
 "San'layn",
 "San ST",
-"CwPAAAAAAAAAAAAAAAAAAAAAAAwMjZMDDz2MzMTjZmxYGDAAAAAAAAzDMMGAsMDzsZmxMzYgBmxiGLbA2mYDAzAYmZmZMDmZwMzYA"
+"CwPAAAAAAAAAAAAAAAAAAAAAAAwMjZMDDz2MzMTjZmxYGDAAAAAAAAzDMMGAsMDzsNzMGzYgBmxiGLbA2mYDAzAYmZmZMDmZwMzYA"
 ],
 [
 "San'layn",
 "San AoE",
-"CwPAAAAAAAAAAAAAAAAAAAAAAAwMjZMDDz2MzMTzmZmZMjBAAAAAAAg5BGDDAWmhZ2MzYMjBGYGbassAYZiNMgZAMzMzMmBzMYGjB"
+"CwPAAAAAAAAAAAAAAAAAAAAAAAYmhZMGDz2MzMTjZmxMzYAAAAAAAAYegxwAglZwsZmxMzYgBmxmGLLA2mYDDYGAzMzMjZwMDGzYA"
 ]
 ],
 "err": [],
-"talentUpdated": "2026/08/12",
+"talentUpdated": "2026/09/05",
 "tiers": [
 {
 "items": [
@@ -3061,7 +3061,7 @@
 "tier": "D"
 }
 ],
-"updated": "2026/09/02"
+"updated": "2026/09/08"
 },
 "253": {
 "bis": [
@@ -3158,10 +3158,10 @@
 "Ula'tek"
 ],
 [
-"Trinket (Raid only)",
-270165,
+"Trinket (Situationally)",
+270168,
 "",
-"Entombed Sentinels"
+"Ula'tek"
 ]
 ],
 "title": "Best in Slot Gear for Beast Mastery Hunter"
@@ -3213,7 +3213,7 @@
 "raid"
 ],
 [
-270165,
+270168,
 "raid"
 ]
 ],
@@ -3222,7 +3222,7 @@
 {
 "items": [
 [
-270168,
+270165,
 "raid"
 ],
 [
@@ -3328,7 +3328,7 @@
 "tier": "D"
 }
 ],
-"updated": "2026/08/30"
+"updated": "2026/09/09"
 },
 "254": {
 "bis": [
@@ -3396,9 +3396,9 @@
 ],
 [
 "Boots",
-268233,
+268258,
 "",
-"Sszorak"
+"The Lost Explorers"
 ],
 [
 "Ring",
@@ -3408,9 +3408,9 @@
 ],
 [
 "Ring",
-268249,
+158366,
 "",
-"Vashnik the Malignant"
+"Temple of Sethraliss"
 ],
 [
 "Trinket",
@@ -3585,7 +3585,7 @@
 "tier": "D"
 }
 ],
-"updated": "2026/09/02"
+"updated": "2026/09/09"
 },
 "255": {
 "bis": [
@@ -3709,7 +3709,7 @@
 [
 "Sentinel",
 "Mythic+",
-"C8PAAAAAAAAAAAAAAAAAAAAAAMWgBmxoxyAYmgtZmZmxMz2MAAAAAAmxMzMMjxMmBjpZAAAAGAgltZGLzYmxYMzAwM2wixwMLGAA"
+"C8PAAAAAAAAAAAAAAAAAAAAAAMWgBmxoxyAYmgtZmZmxMz28AAAAAAAmxMzMMjxMmBjpZAAAAGAgltZGLzYmZGjZGAmxGWMGmZxAA"
 ],
 [
 "Sentinel",
@@ -3944,7 +3944,7 @@
 ]
 ],
 "err": [],
-"talentUpdated": "2026/08/12",
+"talentUpdated": "2026/09/22",
 "tiers": [
 {
 "items": [
@@ -4149,7 +4149,7 @@
 [
 "Oracle",
 "Mythic+",
-"CEQAAAAAAAAAAAAAAAAAAAAAAADAAAAAAgZmxsMmZMzYYGYZmZmBAAAwYmlZwMzM2mxMDgZKAmZDDhxsMAjBWMzMLAaGzMGDmBYmZAD"
+"CEQAAAAAAAAAAAAAAAAAAAAAAwYAAAAAAAMzMmlxMjZGDzALzMzMAAAAGzsMDmZmxmxMD2wMFAzshhwYWGgxALGzsAoZMzYMYGgZmBMA"
 ]
 ],
 "err": [],
@@ -4469,9 +4469,9 @@
 ],
 [
 "Offhand",
-237837,
+275070,
 "",
-"Crafting/Misc"
+"Altar of Fangs"
 ],
 [
 "Head",
@@ -4529,9 +4529,9 @@
 ],
 [
 "Boots",
-251153,
+244569,
 "",
-"Den of Nalorakk"
+"Crafted"
 ],
 [
 "Ring",
@@ -4605,7 +4605,7 @@
 ]
 ],
 "err": [],
-"talentUpdated": "2026/09/01",
+"talentUpdated": "2026/09/06",
 "tiers": [
 {
 "items": [
@@ -4753,7 +4753,7 @@
 "tier": "D"
 }
 ],
-"updated": "2026/08/29"
+"updated": "2026/09/06"
 },
 "260": {
 "bis": [
@@ -5203,11 +5203,11 @@
 {
 "items": [
 [
-270164,
+270165,
 "raid"
 ],
 [
-270165,
+270164,
 "raid"
 ],
 [
@@ -5329,7 +5329,7 @@
 "tier": "D"
 }
 ],
-"updated": "2026/08/24"
+"updated": "2026/09/02"
 },
 "262": {
 "bis": [
@@ -5584,7 +5584,7 @@
 "Head",
 271483,
 "",
-"Catalyst \u2013 Voidscar Arena"
+"Catalyst &ndash; Voidscar Arena"
 ],
 [
 "Neck",
@@ -5596,7 +5596,7 @@
 "Shoulders",
 271481,
 "",
-"Catalyst \u2013 The Coiled Altar"
+"Catalyst &ndash; The Coiled Altar"
 ],
 [
 "Cloak",
@@ -5608,7 +5608,7 @@
 "Chest",
 271486,
 "",
-"Catalyst \u2013 Ula'tek"
+"Catalyst &ndash; Ula'tek"
 ],
 [
 "Wrist",
@@ -5620,7 +5620,7 @@
 "Gloves",
 271484,
 "",
-"Token \u2013 Entombed Sentinels"
+"Token &ndash; Entombed Sentinels"
 ],
 [
 "Belt",
@@ -5632,7 +5632,7 @@
 "Legs",
 271482,
 "",
-"Catalyst \u2013 The Coiled Altar"
+"Catalyst &ndash; The Coiled Altar"
 ],
 [
 "Boots",
@@ -6054,16 +6054,21 @@
 [
 "Totemic",
 "Raid",
-"CgQAAAAAAAAAAAAAAAAAAAAAAAAAAgBAAAAzMzsssNjZGjZGzMDjFYDmxiGbDIzAbmhZw2YMTz2yMzmZMLsYegZGzwsMAAAwMzgZGAYwM"
+"CgQAAAAAAAAAAAAAAAAAAAAAAAAAAgBAAAAzMzsssNjZGjZGzMDjFYDmxmGbDIzAbmhZw2YMTz2yMzmZMLsYegZGzwsMAAAwMzgZGAYwM"
 ],
 [
 "Totemic",
 "Mythic+",
+"CgQAAAAAAAAAAAAAAAAAAAAAAAAAAgBAAAAzMzsstMzMzMjZGjZgFYDmxmGbDIzAbMzMY2mZMa2WmZ2MjZhFjZGDLzyAAAAzMDmZAgBzA"
+],
+[
+"Totemic",
+"Delves",
 "CgQAAAAAAAAAAAAAAAAAAAAAAAAAAgBAAAAzMzsstMzMzMjZGjZgFYDmxiGbDIzAbMzMY2mZMa2WmZ2MjZhFjZGDLzyAAAAzMDmZAgBzA"
 ]
 ],
 "err": [],
-"talentUpdated": "2026/08/27",
+"talentUpdated": "2026/09/05",
 "tiers": [
 {
 "items": [
@@ -6288,7 +6293,7 @@
 [
 "Hellcaller",
 "Mythic+",
-"CkQAAAAAAAAAAAAAAAAAAAAAAwMegZGNbzM2mZGz2AAAmZmlZxMzyYAALwAziRjZAZ2ALDAAAzAAAzMYMjxsNGzYmZmZYYmZGAgBMA"
+"CkQAAAAAAAAAAAAAAAAAAAAAAwMmZGNbM2mZmZWGAAwMmlZZmZWGDAYBGYWMaMDIzCYZAAAYAAAzMYMjxsxwMzYmZMDzMzAAMDMA"
 ],
 [
 "Soul Harvester",
@@ -6303,7 +6308,7 @@
 [
 "Soul Harvester",
 "Mythic+",
-"CkQAAAAAAAAAAAAAAAAAAAAAAwMjZGNbmx2MzYWGAAwMzsMLmZ2GDAM2WGYATwMsFYYbAAAYGAAAzMjZMzsNGzYMzMzYYmZGAgBMA"
+"CkQAAAAAAAAAAAAAAAAAAAAAAwMMzoZzMz2MzYWGAAwMmlZZmZWGDAM22GYATwMsFYYbAAAYAAAYmZMjZmNGmZmZmhZYmZGAgZgB"
 ]
 ],
 "err": [],
@@ -6641,7 +6646,7 @@
 "tier": "D"
 }
 ],
-"updated": "2026/08/24"
+"updated": "2026/09/08"
 },
 "267": {
 "bis": [
@@ -7365,32 +7370,32 @@
 [
 "Shado-pan",
 "Raid - Single Target",
-"C0QAAAAAAAAAAAAAAAAAAAAAAMzYM2GmhlZGbzAAAAAAAAAAAAsMMCzwwAmZGmZmZY2GmhZZmAAWMz2MjZmZmBAwGAMLzSzMzsAgBmZAYsMQMgLA"
+"C0QAAAAAAAAAAAAAAAAAAAAAAMzYw2MmhlZGbzAAAAAAAAAAAAsMMaGzwwAmxwMzMDz2wMMLzEAwiZ2mZYmZmBAwGAMLzSzMzsAgBmZAglBiB8B"
 ],
 [
 "Shado-pan",
 "Raid - Cleave",
-"C0QAAAAAAAAAAAAAAAAAAAAAAMzYMYMYbmZ2mxAAAAAAAAAAAALDjwMMMgZMMzMzwsNMDzyMBAsYmtxwYmZAAsBAzys0MzMLADDMzAwYZMEDYA"
+"C0QAAAAAAAAAAAAAAAAAAAAAAMzYw2wMsNzYbGAAAAAAAAAAAglhRzYGGGwMGmZmZY2YmhZZmAAWMz2MzYMzMAA2AgZZWamZmFAMwMDAsMQMgB"
 ],
 [
 "Shado-pan",
 "Mythic+",
-"C0QAAAAAAAAAAAAAAAAAAAAAAMzYAMGbzMz2MAAAAAAAAAAAALDzEmhhBMjhZmZGmNMDzyMBAsYmtZmxMzMDAgNAYWmlmZmZBgZgZGAYZMEDYA"
+"C0QAAAAAAAAAAAAAAAAAAAAAAMzYAMGbzMz2MAAAAAAAAAAAALDzEmxywAmxwMzMDz2wMMLzEAwiZ2mZGzMzMAA2AgZZWamZmFAMwMDAswQMgB"
 ],
 [
 "Conduit of the Celestials",
 "Raid - Single Target",
-"C0QAAAAAAAAAAAAAAAAAAAAAAMzYM2GmhlZmZbGAAAAAAAAAAAglhRYGGGwMzwMzMDz2wMMLzEAwiZ2mZMjZmBAwiZWmlxEEAAGAzAMWGImZmFXA"
+"C0QAAAAAAAAAAAAAAAAAAAAAAMzYM2GmhlZmZbGAAAAAAAAAAAglhRzYGGGwMGmZmZY2GmhZZmAAWMz2MzYmZmBAwiZWmlxEEAAGAzAwyAxMzs5BA"
 ],
 [
 "Conduit of the Celestials",
 "Raid - Cleave",
-"C0QAAAAAAAAAAAAAAAAAAAAAAMzYMgxYZmx2MDAAAAAAAAAAAYZYEmhhBMzMMzMzwsNMDzyMBAsYmtxMGzMDAgFzsMLjJIAghBwMAjlBiZmZzA"
+"C0QAAAAAAAAAAAAAAAAAAAAAAMzYM2GGjlZmZbGAAAAAAAAAAAglhRzYGGGwMGmZmZY2GmhZZmAAWMz2MzYMzMAAWMzysMmgAAMGAzAwyAxMzs5BA"
 ],
 [
 "Conduit of the Celestials",
 "Mythic+",
-"C0QAAAAAAAAAAAAAAAAAAAAAAMzYMgxYZmZ2mBAAAAAAAAAAAYZYEmhhBMjhZmZGmNMDzyMBAswsxMmZmZAAsYmlZZMBBAMzMAmBYsMGiZmZzA"
+"C0QAAAAAAAAAAAAAAAAAAAAAAMzYMgxYZmZ2mBAAAAAAAAAAAYZYEmhhBMjhZmZGmthZYWmJAgFmNmxMzMDAgFzsMLjJIAgZMAmBYsMYiZmZzA"
 ]
 ],
 "err": [],
@@ -7734,7 +7739,7 @@
 ]
 ],
 "err": [],
-"talentUpdated": "2026/08/28",
+"talentUpdated": "2026/09/05",
 "tiers": [
 {
 "items": [
@@ -7871,7 +7876,7 @@
 "tier": "F"
 }
 ],
-"updated": "2026/09/01"
+"updated": "2026/09/15"
 },
 "577": {
 "bis": [
@@ -8440,7 +8445,7 @@
 "tier": "D"
 }
 ],
-"updated": "2026/08/25"
+"updated": "2026/09/05"
 },
 "62": {
 "bis": [
@@ -9442,7 +9447,7 @@
 [
 "Lightsmith",
 "Raid",
-"CEEAAAAAAAAAAAAAAAAAAAAAAAAAAbAwMAAw2MzMjZMzYxYmZYZwMLmpJGGzMDjZLDADYYDsxyMGAEAwMzyyitZG2AgNDjZMDzAYmBgZMGNA"
+"CEEAAAAAAAAAAAAAAAAAAAAAAAAAAbAwMAAw2MzMjZ2mZsYMzMsMYmFz0EDjZmhxslBgBMsB2YZGDACAYmZZZx2MDbAwmhxMmhBgZGAmxY0A"
 ],
 [
 "Lightsmith",
@@ -9452,12 +9457,12 @@
 [
 "Lightsmith",
 "Mythic+",
-"CEEAAAAAAAAAAAAAAAAAAAAAAAAAAbAwMAAD2GzMzMjZmZBmZYZsZmFjmYYMzMMmtMAMAsB2YZmZAQAAzMLLL2mZYDYG2MwMmhZAMzAwMGjGA"
+"CEEAAAAAAAAAAAAAAAAAAAAAAAAAALAwMAAD2GwMz2MzsMjZmhFzmZWMTTMMmZGGzWGAGA2AbsYmBABAMzsssYZmhN2wMsZgZMDAYmBgZMGNA"
 ],
 [
 "Lightsmith",
 "Mythic+",
-"CEEAAAAAAAAAAAAAAAAAAAAAAAAAALAwMAADWGzMzMjZmZZwYYZsZmFz0EDjZmhxslBgBgNwGLzMDACAYmZZZx2MDbAzwmBmxMMAMzAwMGjGA"
+"CEEAAAAAAAAAAAAAAAAAAAAAAAAAALAwMAADWGwMz2MzsMjZMsMzmZWMTTMMmZGGzWGAGA2AbsYmBABAMzsssYZmhN2wMsZgZMDAYmBgZMGNA"
 ],
 [
 "Lightsmith",
@@ -9466,7 +9471,7 @@
 ]
 ],
 "err": [],
-"talentUpdated": "2026/08/12",
+"talentUpdated": "2026/09/20",
 "tiers": [
 {
 "items": [
@@ -9686,16 +9691,16 @@
 [
 "Lightsmith",
 "Raid",
-"CIEAAAAAAAAAAAAAAAAAAAAAAsNzYWmZYGzM2WGDLzithBAYAAAAAAQamZxMmZGjZrNAMgBMYbAAAEgZmttlWmZsYZjZMAGzwYAwMDAmZQGb"
+"CIEAAAAAAAAAAAAAAAAAAAAAAsNDzyYmHYmZmx2yYMLzithBAYAAAAAAQamZxMmZGjZrNAMgBMYbAAAEgZmttlWmZsYZjZMAGzwYAwMDAmZQGL"
 ],
 [
 "Lightsmith",
 "Mythic+",
-"CIEAAAAAAAAAAAAAAAAAAAAAAsZeAzyYGzYmZWWGjZZWmlZMAADAAAAAAaamhZMzwY2aDADMgZw2AAAIAzMbbLtMzYxyCGAwMMGAMzAwMzgMWA"
+"CIEAAAAAAAAAAAAAAAAAAAAAAsZsNLjZMjZmZZbMmlZZWmxAAMAAAAAAopZGmxMDjZrNAMwAmBbDAAgAMzstt0yMjFLLYAAzwYAwMDAzMDyYB"
 ]
 ],
 "err": [],
-"talentUpdated": "2026/08/12",
+"talentUpdated": "2026/09/14",
 "tiers": [
 {
 "items": [

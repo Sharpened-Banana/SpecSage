@@ -2004,6 +2004,63 @@ for _, tabName in ipairs(TAB_NAMES) do
 end
 
 --------------------------------------------------------------------------------
+section("Generated data hygiene (2026-09-23 refresh)")
+--------------------------------------------------------------------------------
+
+do
+    -- Strings shown in a FontString must not carry a lone "|" (the client's
+    -- escape character: "|T" opens a texture, "|K" a Kstring) or the
+    -- harvester's stray markup brackets. Survival's "Tier Set|King's Rest"
+    -- and Unholy's "Voidscar Arena]" shipped that way before the fix.
+    local bad = {}
+    local function scan(label, text)
+        if type(text) ~= "string" then return end
+        local stripped = text:gsub("||", "")
+        if stripped:find("|", 1, true) or text:find("[%[%]]") then bad[#bad + 1] = label .. ": " .. text end
+    end
+    local bisSpecs, dupLists = 0, {}
+    for _, class in ipairs(ns.GuideStore:GetClasses()) do
+        for _, specID in ipairs(ns.GuideStore:GetClassSpecs(class.token)) do
+            -- Test fixtures register scratch specs at 9000 and up; only the
+            -- shipped data is under test here.
+            local bis = specID < 9000 and ns.GuideStore:GetBiS(specID)
+            if bis and bis.lists then
+                bisSpecs = bisSpecs + 1
+                for _, list in ipairs(bis.lists) do
+                    scan("bis title " .. specID, list.title)
+                    for _, row in ipairs(list.list or {}) do
+                        scan("bis " .. specID, row.from)
+                        scan("bis " .. specID, row.name)
+                    end
+                end
+            end
+            local trinkets = specID < 9000 and ns.GuideStore:GetTrinkets(specID)
+            for _, list in ipairs((trinkets and trinkets.lists) or {}) do
+                local seen = {}
+                for _, row in ipairs(list.list or {}) do
+                    if seen[row.itemID] then dupLists[#dupLists + 1] = specID .. " " .. tostring(list.title) end
+                    seen[row.itemID] = true
+                end
+            end
+        end
+    end
+    check(bisSpecs == 40, "the hygiene scan covered all 40 specs' BiS lists", bisSpecs)
+    check(#bad == 0, "no shipped BiS text carries a lone | or a stray bracket", table.concat(bad, "; "))
+    -- bloodmallet sims stat variants ("Ruby Whelp Shell [Haste]" / "[Crit]")
+    -- under one itemID; the Tome shows the client's name, so two rows would
+    -- read the same with different gains.
+    check(#dupLists == 0, "no trinket list ranks the same item twice", table.concat(dupLists, "; "))
+
+    -- Restoration Druid's guide has an overall and a Mythic+-only table; the
+    -- old titling read both as "Guide" and dropped the second.
+    local druid = ns.GuideStore:GetBiS(105)
+    local titles = {}
+    for _, list in ipairs((druid and druid.lists) or {}) do titles[#titles + 1] = list.title end
+    check(#titles == 2 and titles[1] ~= titles[2], "Restoration Druid ships both of its guide's BiS tables",
+        table.concat(titles, ", "))
+end
+
+--------------------------------------------------------------------------------
 section("BiS item bonus IDs (v1.6)")
 --------------------------------------------------------------------------------
 
@@ -3104,9 +3161,12 @@ do
     end
     check(total == 40, "all 40 shipped specs were checked", total)
     check(withLists == 40 and unavailable == 0, "every shipped spec has at least one trinket list", withLists)
-    check(withSim == 27, "27 specs ship a bloodmallet-derived sim list", withSim)
+    -- bloodmallet's coverage grows as SimC gains profiles (27 specs on
+    -- 2026-09-02, 29 on 2026-09-23 with Retribution and Feral), so the
+    -- invariant is that every spec has a sim list or a note, not a count.
+    check(withSim >= 27, "at least 27 specs ship a bloodmallet-derived sim list", withSim)
     check(withIcyVeins == 40, "all 40 specs ship a Guide list", withIcyVeins)
-    check(withNote == 13, "the 13 specs without sims (6 healers + 7 without a current SimC profile) carry a note", withNote)
+    check(withSim + withNote == 40, "every spec without a sim list carries a note saying why", withSim .. "+" .. withNote)
 end
 
 --------------------------------------------------------------------------------

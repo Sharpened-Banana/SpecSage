@@ -6,6 +6,7 @@ can replace that step); this module turns the raw per-spec records into the
 same shapes the Icy Veins parsers produce, resolving item names and equip
 slots through tools/wowhead_items.py where the harvested tables omit them.
 """
+import html
 import json
 import os
 import re
@@ -30,10 +31,10 @@ TRINKET_SOURCES = {"raid": "Raid", "dungeon": "Dungeon", "delves": "Delves", "cr
 
 
 def load():
-    try:
-        return {int(k): v for k, v in json.load(open(DUMP)).items()}
-    except (OSError, ValueError):
-        return {}
+    """The harvested dump. A missing or unreadable dump is an error, not an
+    empty result: an empty dump makes every generator emit guide-less data,
+    which strip_sites.py then empties out completely."""
+    return {int(k): v for k, v in json.load(open(DUMP)).items()}
 
 
 def _all_item_ids(dump):
@@ -60,9 +61,36 @@ def items(dump):
 
 
 def _slot(label, info):
-    key = re.sub(r"\s*\(.*\)$", "", label or "").strip().lower()   # "Trinket (Raid)" -> "trinket"
+    """(slot, qualifier) for a table's slot label. The qualifier is the text a
+    guide puts in brackets to tell alternatives apart - "Trinket (Raid)" /
+    "Trinket (M+)", "Weapon (2h)" / "Weapons (1h)" - and must survive, or two
+    alternatives for one slot read as an impossible third trinket."""
+    label = label or ""
+    m = re.search(r"\(([^)]*)\)\s*$", label)
+    qualifier = m.group(1).strip() if m else ""
+    key = re.sub(r"\s*\(.*\)$", "", label).strip().lower()          # "Trinket (Raid)" -> "trinket"
     key = re.sub(r"\s+\d$", "", key)                                 # "Ring 1" -> "ring"
-    return SLOT_LABELS.get(key) or (info or {}).get("slot")
+    return SLOT_LABELS.get(key) or (info or {}).get("slot"), qualifier
+
+
+def _clean_from(text):
+    """A row's drop-source text, safe to show in a WoW FontString: HTML
+    entities decoded, `|` (the client's escape character - "|T" starts a
+    texture) turned into a separator, stray markup brackets dropped."""
+    text = html.unescape(text or "")
+    text = re.sub(r"\s*\|\s*", " / ", text)
+    text = text.replace("[", "").replace("]", "")
+    return re.sub(r"\s+", " ", text).strip(" /-")
+
+
+# Words every BiS table heading shares, dropped when titling a guide's lists.
+_TITLE_FILLER = {"best", "in", "slot", "gear", "for", "bis", "the", "of"}
+
+
+def _title_words(title, spec_words):
+    spec = {w.lower() for w in spec_words}
+    words = re.findall(r"[\w'+-]+", title or "")
+    return " ".join(w for w in words if w.lower() not in _TITLE_FILLER and w.lower() not in spec)
 
 
 def bis_lists(dump, spec_id, spec_words):
@@ -81,23 +109,30 @@ def bis_lists(dump, spec_id, spec_words):
         rows = []
         for label, item_id, _, source in table["rows"]:
             meta = info.get(item_id) or {}
-            slot = _slot(label, meta)
+            slot, qualifier = _slot(label, meta)
             name = meta.get("name") or ""
             if not slot or not name:
                 continue
+            source = _clean_from(source)
+            if qualifier:
+                source = "%s · %s" % (qualifier, source) if source else qualifier
             rows.append({"slot": slot, "itemID": item_id, "name": name, "from": source})
         if not rows:
             continue
+        # Titled by what tells the guide's tables apart ("Deathbringer",
+        # "Mythic+-Only", "Raid"), wherever in the heading it sits. The old
+        # rule read only the words after "for", so Restoration Druid's
+        # "Best in Slot Mythic+-Only Gear for ..." titled the same as its
+        # overall table and was silently dropped as a duplicate.
         title = "Wowhead"
         if len(tables) > 1:
-            words = re.sub(r"^.*?\bfor\b", "", table["title"], flags=re.I)
-            for w in spec_words:
-                words = re.sub(r"\b%s\b" % re.escape(w), "", words, flags=re.I)
-            words = re.sub(r"\s+", " ", words).strip(" -")
+            words = _title_words(table["title"], spec_words)
             if words:
                 title = "Wowhead (%s)" % words
-        if any(t == title for t, _ in out):
-            continue
+        base, n = title, 1
+        while any(t == title for t, _ in out):
+            n += 1
+            title = "%s (%d)" % (base, n)
         out.append((title, rows))
     return out
 

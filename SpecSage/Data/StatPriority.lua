@@ -12,7 +12,7 @@
 -- being invented into the order. This is the guide site's editorial priority at
 -- the time each page was read - it goes stale every patch, and the Tome
 -- says so - not a sim of your character. See DESIGN.md's "Stat priority".
--- Generated: 2026-09-03 18:03 UTC
+-- Generated: 2026-09-23 22:59 UTC
 
 local ADDON, ns = ...
 if not ns.GuideStore then return end
@@ -238,16 +238,26 @@ ns.GuideStore:RegisterStatPriority(256, {
 
 -- PRIEST 257 (holy-priest)
 ns.GuideStore:RegisterStatPriority(257, {
-  source = "Stat priority guide, updated 2026/08/12",
+  source = "Stat priority guide, updated 2026/09/03",
   url = "https://www.wowhead.com/guide/classes/priest/holy/stat-priority-pve-healer",
   patch = "12.1",
   heroSplit = true,
   lists = {
-    { title = "Archon",
+    { title = "Archon - Raid",
+      note = "The guide now splits Holy by content as well as hero tree; in raid Versatility and Mastery are ranked equal, and item level upgrades usually beat chasing secondaries",
+      list = { { stat = "primary" }, { stat = "crit" }, { stat = "versatility" }, { stat = "mastery" }, { stat = "haste" } },
+    },
+    { title = "Oracle - Raid",
+      note = "Haste only to a comfortable level (about 20%), then Crit; past that Haste drops to last. Versatility and Mastery are ranked equal",
+      list = { { stat = "primary" }, { stat = "haste" }, { stat = "crit" }, { stat = "versatility" }, { stat = "mastery" } },
+    },
+    { title = "Archon - Mythic+",
+      note = "Mastery adds no damage, so it drops to last in Mythic+; Versatility also helps survive high keys",
       list = { { stat = "primary" }, { stat = "versatility" }, { stat = "crit" }, { stat = "haste" }, { stat = "mastery" } },
     },
-    { title = "Oracle",
-      list = { { stat = "primary" }, { stat = "versatility" }, { stat = "crit" }, { stat = "haste" }, { stat = "mastery" } },
+    { title = "Oracle - Mythic+",
+      note = "Haste only to a comfortable level (about 20%), then Versatility and Crit; past that Haste sits just above Mastery",
+      list = { { stat = "primary" }, { stat = "haste" }, { stat = "versatility" }, { stat = "crit" }, { stat = "mastery" } },
     },
   },
 })
@@ -492,7 +502,7 @@ ns.GuideStore:RegisterStatPriority(268, {
 
 -- MONK 270 (mistweaver-monk)
 ns.GuideStore:RegisterStatPriority(270, {
-  source = "Stat priority guide, updated 2026/08/12",
+  source = "Stat priority guide, updated 2026/09/05",
   url = "https://www.wowhead.com/guide/classes/monk/mistweaver/stat-priority-pve-healer",
   patch = "12.1",
   heroSplit = false,
@@ -510,16 +520,18 @@ ns.GuideStore:RegisterStatPriority(270, {
 
 -- MONK 269 (windwalker-monk)
 ns.GuideStore:RegisterStatPriority(269, {
-  source = "Stat priority guide, updated 2026/08/12",
+  source = "Stat priority guide, updated 2026/09/04",
   url = "https://www.wowhead.com/guide/classes/monk/windwalker/stat-priority-pve-dps",
   patch = "12.1",
   heroSplit = true,
   lists = {
     { title = "Shado-pan",
+      note = "Haste, Crit and Mastery are ranked equal, and the order is the same in AoE; the guide no longer distinguishes the two hero trees",
       list = { { stat = "primary" }, { stat = "haste" }, { stat = "crit" }, { stat = "mastery" }, { stat = "versatility" } },
     },
     { title = "Conduit of the Celestials",
-      list = { { stat = "primary" }, { stat = "haste" }, { stat = "mastery" }, { stat = "crit" }, { stat = "versatility" } },
+      note = "Haste, Crit and Mastery are ranked equal, and the order is the same in AoE; the guide no longer distinguishes the two hero trees",
+      list = { { stat = "primary" }, { stat = "haste" }, { stat = "crit" }, { stat = "mastery" }, { stat = "versatility" } },
     },
   },
 })

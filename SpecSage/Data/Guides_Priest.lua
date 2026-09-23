@@ -167,10 +167,10 @@ ns.GuideStore:RegisterSpec("PRIEST", 257, {
   },
   statPriority = {
     { stat = "primary" },
-    { stat = "versatility" },
     { stat = "crit" },
-    { stat = "haste" },
+    { stat = "versatility" },
     { stat = "mastery" },
+    { stat = "haste" },
   },
   rotation = {
     { title = "Priorities", steps = {

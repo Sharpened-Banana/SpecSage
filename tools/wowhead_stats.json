@@ -95,9 +95,11 @@
       { "title": "Oracle", "stats": ["primary", "haste", "mastery", "crit", "versatility"], "note": "Wowhead states neither hero tree changes the priority in raid or Mythic+; everything below Haste is close, so favour item level" },
       { "title": "Voidweaver", "stats": ["primary", "haste", "mastery", "crit", "versatility"], "note": "Wowhead's raid box lists Haste ahead of Intellect for Voidweaver; its Mythic+ box and its own text put Intellect first, which is the order used here" }
     ]},
-    "257": { "url": "https://www.wowhead.com/guide/classes/priest/holy/stat-priority-pve-healer", "updated": "2026/08/12", "heroSplit": true, "variants": [
-      { "title": "Archon", "stats": ["primary", "versatility", "crit", "haste", "mastery"] },
-      { "title": "Oracle", "stats": ["primary", "versatility", "crit", "haste", "mastery"] }
+    "257": { "url": "https://www.wowhead.com/guide/classes/priest/holy/stat-priority-pve-healer", "updated": "2026/09/03", "heroSplit": true, "variants": [
+      { "title": "Archon - Raid", "stats": ["primary", "crit", "versatility", "mastery", "haste"], "note": "Wowhead now splits Holy by content as well as hero tree; in raid Versatility and Mastery are ranked equal, and item level upgrades usually beat chasing secondaries" },
+      { "title": "Oracle - Raid", "stats": ["primary", "haste", "crit", "versatility", "mastery"], "note": "Haste only to a comfortable level (about 20%), then Crit; past that Haste drops to last. Versatility and Mastery are ranked equal" },
+      { "title": "Archon - Mythic+", "stats": ["primary", "versatility", "crit", "haste", "mastery"], "note": "Mastery adds no damage, so it drops to last in Mythic+; Versatility also helps survive high keys" },
+      { "title": "Oracle - Mythic+", "stats": ["primary", "haste", "versatility", "crit", "mastery"], "note": "Haste only to a comfortable level (about 20%), then Versatility and Crit; past that Haste sits just above Mastery" }
     ]},
     "258": { "url": "https://www.wowhead.com/guide/classes/priest/shadow/stat-priority-pve-dps", "updated": "2026/08/31", "heroSplit": true, "variants": [
       { "title": "Archon", "stats": ["primary", "haste", "mastery", "crit", "versatility"] },
@@ -143,11 +145,11 @@
       { "title": "Shado-pan / Master of Harmony - Defensive", "stats": ["primary", "armor", "stamina", "versatility", "crit", "mastery", "haste"], "note": "Wowhead splits Brewmaster by goal and states both hero trees share these orders; item level, Agility, Armor and Stamina are ranked together first, then Versatility, Crit and Mastery equal, then Haste" },
       { "title": "Shado-pan / Master of Harmony - Offensive", "stats": ["primary", "crit", "versatility", "mastery", "haste"], "note": "Item level and Agility first, then Crit, then Versatility and Mastery equal, then Haste" }
     ]},
-    "269": { "url": "https://www.wowhead.com/guide/classes/monk/windwalker/stat-priority-pve-dps", "updated": "2026/08/12", "heroSplit": true, "variants": [
-      { "title": "Shado-pan", "stats": ["primary", "haste", "crit", "mastery", "versatility"] },
-      { "title": "Conduit of the Celestials", "stats": ["primary", "haste", "mastery", "crit", "versatility"] }
+    "269": { "url": "https://www.wowhead.com/guide/classes/monk/windwalker/stat-priority-pve-dps", "updated": "2026/09/04", "heroSplit": true, "variants": [
+      { "title": "Shado-pan", "stats": ["primary", "haste", "crit", "mastery", "versatility"], "note": "Haste, Crit and Mastery are ranked equal, and the order is the same in AoE; Wowhead no longer distinguishes the two hero trees" },
+      { "title": "Conduit of the Celestials", "stats": ["primary", "haste", "crit", "mastery", "versatility"], "note": "Haste, Crit and Mastery are ranked equal, and the order is the same in AoE; Wowhead no longer distinguishes the two hero trees" }
     ]},
-    "270": { "url": "https://www.wowhead.com/guide/classes/monk/mistweaver/stat-priority-pve-healer", "updated": "2026/08/12", "heroSplit": false, "variants": [
+    "270": { "url": "https://www.wowhead.com/guide/classes/monk/mistweaver/stat-priority-pve-healer", "updated": "2026/09/05", "heroSplit": false, "variants": [
       { "title": "Conduit of the Celestials / Master of Harmony - Raid", "stats": ["primary", "haste", "crit", "versatility", "mastery"], "note": "Wowhead splits Mistweaver by the celestial the build centres on and the content each is run in, not by hero tree; Haste is first in all content" },
       { "title": "Conduit of the Celestials / Master of Harmony - Mythic+", "stats": ["primary", "haste", "mastery", "crit", "versatility"], "note": "Mastery moves ahead in Mythic+ for Yu'lon-centred builds" }
     ]},

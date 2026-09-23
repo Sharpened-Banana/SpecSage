@@ -293,7 +293,7 @@ ns.GuideStore:RegisterSpec("MONK", 269, {
   specName = "Windwalker",
   role = "DAMAGER",
   overview = {
-    "Windwalker Monk is a fast-paced melee spec built around generating and spending Chi to fuel a combo-point-like system through Rising Sun Kick, Fists of Fury, and the burst window granted by Zenith (which replaced Storm, Earth, and Fire) and Serenity/Invoke Xuen (build-dependent).",
+    "Windwalker Monk is a fast-paced melee spec built around generating and spending Chi to fuel a combo-point-like system through Rising Sun Kick, Fists of Fury, and the burst window granted by Zenith (which replaced Storm, Earth, and Fire) alongside Invoke Xuen, the White Tiger.",
     "The core resource loop is Energy generating Chi via Tiger Palm/Expel Harm-style builders, spent on Chi abilities like Rising Sun Kick and Fists of Fury, with combo strikes (never repeating the same ability twice) triggering Combo Breaker procs that increase damage and enable free casts.",
     "Bring Windwalker when you want a highly mobile, cooldown-driven melee spec with strong burst windows and good cleave through Zenith or Whirling Dragon Punch-style AoE tools.",
   },
@@ -337,8 +337,7 @@ ns.GuideStore:RegisterSpec("MONK", 269, {
   },
   cooldowns = {
     { text = "Sync Invoke Xuen, Celestial Conduit, Zenith, and Strike of the Windlord into the same window whenever their cooldowns line up — stack them together, and with external raid cooldowns/stuns, rather than spreading them out" },
-    { text = "Invoke Xuen the White Tiger / Invoke Yu'lon (build-dependent) — major burst cooldown, use with your opener or a planned window" },
-    { text = "Serenity (talent, mutually exclusive with Xuen build) — short, high-value burst window" },
+    { text = "Invoke Xuen, the White Tiger — major burst cooldown, use with your opener or a planned window" },
     { text = "Zenith — main burst-window cooldown (replaced Storm, Earth, and Fire), use aligned with other cooldowns" },
     { text = "Blackout Kick shaves 1 second off both Rising Sun Kick and Fists of Fury's cooldowns each cast — another reason not to skip it when it's available" },
     { spellID = 122470, text = "Touch of Karma — defensive that reflects damage back as healing/damage" },
@@ -362,7 +361,7 @@ ns.GuideStore:RegisterSpec("MONK", 269, {
     { slot = "Chest", text = "A large stat budget and often your other tier piece — push Critical Strike first for your Rising Sun Kick/Fists of Fury payoff" },
     { slot = "Neck", text = "Usually carries a socket — favor Critical Strike, then Mastery" },
     { slot = "Ring", text = "No set bonus attached — use rings to fill out Critical Strike and Mastery" },
-    { slot = "Trinket", text = "One on-use trinket timed to pop with Invoke Xuen/Serenity for a stacked burst window" },
+    { slot = "Trinket", text = "One on-use trinket timed to pop with Invoke Xuen and Zenith for a stacked burst window" },
     { slot = "Trinket", text = "A passive Agility or Critical Strike stat-stick trinket to keep pressure up between cooldowns" },
     { slot = "Weapon", text = "Fast one-handers (fist weapons or similar) are the natural fit for Windwalker's attack-speed-driven combo strikes" },
     { slot = "Off-hand", text = "Match your off-hand's secondary stats to your main-hand's Critical Strike lean rather than treating it as filler" },

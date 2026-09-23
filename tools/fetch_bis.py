@@ -153,8 +153,8 @@ def main():
         "-- it. It is what puts the item on its current-season upgrade track: without",
         "-- it the client resolves the bare itemID to the item's base form, which for",
         "-- a current dungeon piece can be a level-48 rare rather than the item level",
-        "-- 334 epic the guide means. Rows Wowhead lists carry the bonus list Icy",
-        "-- Veins states for the same item, since Wowhead's own markup has none.",
+        "-- 334 epic the guide means. Rows Wowhead lists carry the bonus list",
+        "-- Icy Veins states for the same item, since Wowhead's own markup has none.",
         "-- Generated: %s UTC" % datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d %H:%M"),
         "",
         "local ADDON, ns = ...",
@@ -183,6 +183,20 @@ def main():
             for r in tab["rows"]:
                 if r.get("bonus"):
                     bonus_by_item.setdefault(r["itemID"], r["bonus"])
+
+    # Merge over the previous map rather than replacing it: if Icy Veins is
+    # unreachable this run (403, network), bonus_by_item comes back empty and
+    # every row would silently fall back to the item's base form. A list
+    # scraped this run still wins for any item it names.
+    try:
+        previous = {int(k): v for k, v in json.load(open("tools/item_bonus.json")).items()}
+    except (OSError, ValueError):
+        previous = {}
+    scraped_count = len(bonus_by_item)
+    bonus_by_item = {**previous, **bonus_by_item}
+    if scraped_count < len(previous) // 2:
+        print("WARNING: only %d bonus lists scraped (previous map had %d); keeping the previous ones"
+              % (scraped_count, len(previous)), file=sys.stderr)
 
     # Pass 2: write the file.
     ok_count, borrowed, bare = 0, 0, 0

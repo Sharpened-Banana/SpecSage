@@ -36,7 +36,10 @@ def _load():
 def lookup(item_ids, delay=0.2):
     """Returns { itemID: { name, slot, quality } } for every id, fetching the unknown ones."""
     cache = _load()
-    missing = [i for i in item_ids if str(i) not in cache]
+    # A cached failure (a timeout, an empty name) is retried, not kept: one
+    # transient error would otherwise drop that item from every regeneration.
+    missing = [i for i in item_ids
+               if str(i) not in cache or cache[str(i)].get("error") or not cache[str(i)].get("name")]
     for n, item_id in enumerate(missing):
         try:
             d = json.loads(fetch("https://nether.wowhead.com/tooltip/item/%d?dataEnv=1&locale=0" % item_id))

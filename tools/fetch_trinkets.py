@@ -143,7 +143,17 @@ def build_sim_list(chart):
             "onUse": bool(chart.get("data_active", {}).get(name, False)),
         })
     rows.sort(key=lambda r: -r["gain"])
-    rows = rows[:TOP_N]
+    # bloodmallet sims a trinket's stat variants separately ("Ruby Whelp
+    # Shell [Haste]" / "[Crit]") under one itemID. The Tome shows the
+    # client's item name, so both would read "Ruby Whelp Shell" with
+    # different gains; keep the best variant only.
+    seen, unique = set(), []
+    for r in rows:
+        if r["itemID"] in seen:
+            continue
+        seen.add(r["itemID"])
+        unique.append(r)
+    rows = unique[:TOP_N]
     best = rows[0]["gain"] if rows else 0
     for r in rows:
         share = (r["gain"] / best) if best > 0 else 0
@@ -247,8 +257,8 @@ def main():
     out.append("--    the sims are SimC's): each row is the trinket's simulated DPS gain over")
     out.append("--    the spec's no-trinket baseline at the highest item level it was simmed")
     out.append("--    at, tiered S/A/B/C by share of the best trinket's gain in the same list")
-    out.append("--    (S >= 90%, A >= 78%, B >= 62%, C below). `siteTier` on a sim row is Icy")
-    out.append("--    Veins' tier for the same item, when they list it; `whTier` is Wowhead's.")
+    out.append("--    (S >= 90%, A >= 78%, B >= 62%, C below). `siteTier` on a sim row is")
+    out.append("--    Icy Veins' tier for the same item, when they list it; `whTier` is Wowhead's.")
     out.append("--  * icy-veins.com's per-spec \"Trinket Rankings\" table, an editorial S..D")
     out.append("--    tier list, as its own list on every spec (the only sim-free list for")
     out.append("--    healers and for specs SimC has no current-tier profile for yet).")

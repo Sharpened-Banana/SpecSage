@@ -1,5 +1,19 @@
 # Changelog
 
+## Unreleased
+
+**Improved**
+- Guide data refreshed from the guide site on 2026-09-23: new talent builds for 11 specs, BiS changes for 7, trinket tier changes for 3, and fresh trinket sims for every spec. Retribution Paladin and Feral Druid now have sim-ranked trinket lists.
+- Holy Priest's stat priority now follows the guide's separate Raid and Mythic+ orders for each hero tree. Windwalker's now ranks Haste, Crit and Mastery equal for both hero trees.
+- BiS alternatives keep their label, so "Trinket (Raid)" and "Trinket (M+)" read as two options rather than a third and fourth trinket. Brewmaster's one-hand and two-hand weapons are labelled the same way.
+
+**Fixed**
+- Restoration Druid's Mythic+ BiS list was missing; it ships again alongside the overall list.
+- Ten guide talent builds that the site shared with another source were silently dropped; all harvested builds now ship.
+- Some BiS source text carried characters the game reads as formatting codes (a stray "|" or "]"), which could garble the row.
+- Trinket lists no longer show the same trinket twice when the sims rank two stat variants of it.
+- Windwalker's cooldown notes no longer list Serenity or Invoke Yu'lon, neither of which is a Windwalker button in Midnight.
+
 ## 1.3.3 (2026-09-14)
 
 **New**

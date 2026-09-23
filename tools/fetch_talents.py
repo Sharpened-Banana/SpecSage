@@ -97,7 +97,11 @@ def main():
 
         for b in kept:
             b["site"] = "Icy Veins"
-        wh_kept = []
+        # De-duplicated within the Wowhead list only. Checking against the Icy
+        # Veins strings too dropped every Wowhead build Icy Veins also
+        # published, and strip_sites.py then removes the Icy Veins copy, so
+        # the build vanished from the shipped data (10 builds on 2026-09-23).
+        wh_kept, wh_seen = [], set()
         for b in wowhead.builds(dump, specID):
             try:
                 version, spec = decode_header(b["string"])
@@ -108,9 +112,9 @@ def main():
                 print("  wowhead %s: %r decodes to spec %d, expected %d - dropped" % (ivSlug, b["label"], spec, specID),
                       file=sys.stderr)
                 continue
-            if b["string"] in seen:
+            if b["string"] in wh_seen:
                 continue
-            seen.add(b["string"])
+            wh_seen.add(b["string"])
             b["site"] = "Wowhead"
             wh_kept.append(b)
 
