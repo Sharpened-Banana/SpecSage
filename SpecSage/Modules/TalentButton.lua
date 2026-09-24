@@ -17,7 +17,14 @@ local ADDON, ns = ...
 
 local TalentButton = ns:NewModule("TalentButton")
 
+-- The menu grows to fit its widest row (name, a gap, then the source),
+-- from MENU_WIDTH up to MENU_MAX_WIDTH; past that a name is cut short with
+-- an ellipsis rather than running under its source. A fixed 300px let
+-- "Druid of the Claw: Mythic+" slide under "Guide, patch 12.1" (2026-09-23).
 local MENU_WIDTH = 300
+local MENU_MAX_WIDTH = 620
+local ROW_INSET = 8
+local NAME_DETAIL_GAP = 20
 local ROW_HEIGHT = 22
 local MENU_PADDING = 10
 local HEADER_HEIGHT = 20
@@ -146,11 +153,13 @@ local function AcquireRow(menu, index, onClick)
         row.name = row:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
         if SpecSageBodyFontSmall then row.name:SetFontObject(SpecSageBodyFontSmall) end
         row.name:SetJustifyH("LEFT")
-        row.name:SetPoint("LEFT", row, "LEFT", 8, 0)
+        pcall(row.name.SetWordWrap, row.name, false)
+        row.name:SetPoint("LEFT", row, "LEFT", ROW_INSET, 0)
         row.detail = row:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
         if SpecSageItalicFont then row.detail:SetFontObject(SpecSageItalicFont) end
         row.detail:SetJustifyH("RIGHT")
-        row.detail:SetPoint("RIGHT", row, "RIGHT", -8, 0)
+        pcall(row.detail.SetWordWrap, row.detail, false)
+        row.detail:SetPoint("RIGHT", row, "RIGHT", -ROW_INSET, 0)
         -- A flat wax-red wash on hover, like the Tome's buttons.
         local highlight = row:CreateTexture(nil, "HIGHLIGHT")
         highlight:SetAllPoints(row)
@@ -159,6 +168,14 @@ local function AcquireRow(menu, index, onClick)
         menu.rows[index] = row
     end
     return row
+end
+
+-- The natural width of a FontString's text, whatever width it is set to.
+local function TextWidth(fontString)
+    local measure = fontString.GetUnboundedStringWidth or fontString.GetStringWidth
+    local ok, width = pcall(measure, fontString)
+    if ok and type(width) == "number" then return width end
+    return 0
 end
 
 -- Lays a build onto the tree; reports Loadouts' reason in chat when it
@@ -203,12 +220,32 @@ function TalentButton:FillMenu()
         row.detail:SetText(build.detail or "")
         row:ClearAllPoints()
         row:SetPoint("TOPLEFT", menu, "TOPLEFT", 2, y)
-        row:SetWidth(MENU_WIDTH - 4)
         row:Show()
         y = y - ROW_HEIGHT
     end
     for i = rowIndex + 1, #menu.rows do menu.rows[i]:Hide() end
     for i = headerIndex + 1, #menu.headers do menu.headers[i]:Hide() end
+
+    -- Width from the content: the widest name plus the widest source, with
+    -- the header and title as a floor.
+    local widestName, widestDetail, widestText = 0, 0, TextWidth(menu.title)
+    for i = 1, rowIndex do
+        widestName = math.max(widestName, TextWidth(menu.rows[i].name))
+        widestDetail = math.max(widestDetail, TextWidth(menu.rows[i].detail))
+    end
+    for i = 1, headerIndex do widestText = math.max(widestText, TextWidth(menu.headers[i])) end
+    local rowNeeds = 2 * ROW_INSET + widestName + NAME_DETAIL_GAP + widestDetail + 4
+    local width = math.max(MENU_WIDTH, rowNeeds, widestText + 2 * MENU_PADDING)
+    width = math.ceil(math.min(width, MENU_MAX_WIDTH))
+    menu:SetWidth(width)
+    -- Each name gets the room its own source leaves, so a cut-short name
+    -- ends in an ellipsis before the source instead of under it.
+    for i = 1, rowIndex do
+        local row = menu.rows[i]
+        row:SetWidth(width - 4)
+        local room = width - 4 - 2 * ROW_INSET - NAME_DETAIL_GAP - TextWidth(row.detail)
+        row.name:SetWidth(math.max(40, room))
+    end
 
     if #builds == 0 then
         headerIndex = 1

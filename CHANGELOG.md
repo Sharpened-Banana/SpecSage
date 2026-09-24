@@ -15,6 +15,7 @@
 - Releases now run the full test suite on WoW's Lua version before anything is published.
 
 **Fixed**
+- The build menu on the talent window sizes itself to its builds, so names no longer run underneath their source ("Guide, patch 12.1").
 - The talent window **View** button works again. It had been calling Blizzard's view function the way it worked before Midnight and failing every time.
 - **Reset session** now also clears Blizzard's own damage meter, so Session DPS and Session Dmg start from zero.
 - The Mastery tooltip keeps its rating lines and shows your spec's mastery text again.

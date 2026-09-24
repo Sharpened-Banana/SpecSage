@@ -2849,6 +2849,21 @@ do
     end
     check(shownRows == #builds and savedRow ~= nil, "one row per build, including the saved one", shownRows)
 
+    -- No name runs under its source: the menu is as wide as its widest
+    -- name plus its widest source (2026-09-23 screenshot, Guardian).
+    local overlaps = {}
+    for _, row in ipairs(menu.rows) do
+        if row:IsShown() then
+            local nameRight = 8 + row.name:GetStringWidth()
+            local detailLeft = row:GetWidth() - 8 - row.detail:GetStringWidth()
+            if nameRight > detailLeft or row.name:GetWidth() < row.name:GetStringWidth() then
+                overlaps[#overlaps + 1] = row.name:GetText()
+            end
+        end
+    end
+    check(#overlaps == 0 and menu:GetWidth() > 300, "every build name fits beside its source",
+        table.concat(overlaps, ", ") .. " / width " .. tostring(menu:GetWidth()))
+
     -- Picking a row lays it onto the tree via the same path as View, and
     -- closes the menu. Nothing is saved.
     local vaultBefore = #LoadoutsModule:GetForSpec(252)
