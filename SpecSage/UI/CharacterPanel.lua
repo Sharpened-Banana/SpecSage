@@ -57,6 +57,8 @@ local DOCK_GAP = 16
 -- to be freely movable (2026-09-14), so the clamp is gone and the frame is
 -- clamped to the screen instead. Right-click on the grip puts it back.
 local GRIP_SIZE = 16
+-- The close button in the top-right corner; the header text stops short of it.
+local CLOSE_SIZE = 22
 -- Drawn as a 2x3 dot grid from plain colour textures rather than a client
 -- texture file: the first cut pointed at a cursor texture that this client
 -- build does not ship, and the grip came out invisible.
@@ -337,9 +339,28 @@ function CharacterPanel:BuildFrame()
 
     -- Names the active section beside the spec name, since the side tabs
     -- are icons.
+    -- Close: hides the panel until the character sheet is next opened (or
+    -- its checkbox is ticked again). The checkbox on the sheet stays the
+    -- lasting on/off; this is for "not now" (owner's request, 2026-09-24).
+    local closeButton = CreateFrame("Button", nil, frame, "UIPanelCloseButton")
+    closeButton:SetSize(CLOSE_SIZE, CLOSE_SIZE)
+    closeButton:SetPoint("TOPRIGHT", frame, "TOPRIGHT", -2, -2)
+    closeButton:SetScript("OnClick", function() self:Close() end)
+    closeButton:SetScript("OnEnter", function(button)
+        pcall(function()
+            GameTooltip:SetOwner(button, "ANCHOR_RIGHT")
+            GameTooltip:SetText("Close")
+            GameTooltip:AddLine("Comes back the next time you open the character sheet. "
+                .. "Untick the SpecSage box on the sheet to turn it off for good.", 1, 1, 1, true)
+            GameTooltip:Show()
+        end)
+    end)
+    closeButton:SetScript("OnLeave", function() pcall(function() GameTooltip:Hide() end) end)
+    frame.closeButton = closeButton
+
     local sectionLabel = frame:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
     if SpecSageItalicFont then sectionLabel:SetFontObject(SpecSageItalicFont) end
-    sectionLabel:SetPoint("TOPRIGHT", frame, "TOPRIGHT", -PADDING, -(PADDING + 4))
+    sectionLabel:SetPoint("TOPRIGHT", frame, "TOPRIGHT", -(PADDING + CLOSE_SIZE), -(PADDING + 4))
     sectionLabel:SetJustifyH("RIGHT")
     sectionLabel:SetTextColor(unpack(CONDITION_COLOR))
     frame.sectionLabel = sectionLabel
@@ -545,7 +566,7 @@ function CharacterPanel:BuildGrip(frame)
     -- clicks on it move the panel and nothing else.
     local titleHandle = CreateFrame("Frame", nil, frame)
     titleHandle:SetPoint("TOPLEFT", frame, "TOPLEFT", PADDING + GRIP_SIZE + 4, -PADDING)
-    titleHandle:SetPoint("TOPRIGHT", frame, "TOPRIGHT", -PADDING, -PADDING)
+    titleHandle:SetPoint("TOPRIGHT", frame, "TOPRIGHT", -(PADDING + CLOSE_SIZE), -PADDING)
     titleHandle:SetHeight(TITLE_HEIGHT)
     titleHandle:EnableMouse(true)
     self:AttachMoveHandle(titleHandle)
@@ -742,6 +763,8 @@ function CharacterPanel:BuildToggle()
     toggle:SetScript("OnClick", function(button)
         local checked = button:GetChecked() and true or false
         Settings().enabled = checked
+        -- Ticking it brings back a panel closed with its X.
+        if checked then self.closedForSheet = nil end
         self:Update()
     end)
     toggle:SetScript("OnEnter", function(button)
@@ -1067,6 +1090,12 @@ end
 
 -- The single place visibility is decided: the panel is shown when the
 -- character sheet is open and the setting is on, and drawn only when shown.
+-- The close button: hide now, stay hidden while this sheet stays open.
+function CharacterPanel:Close()
+    self.closedForSheet = true
+    if self.frame then self.frame:Hide() end
+end
+
 function CharacterPanel:Update()
     local frame = self:BuildFrame()
     if not frame then return end
@@ -1075,7 +1104,7 @@ function CharacterPanel:Update()
     frame.footer:SetText(self:FooterText())
 
     local open = CharacterFrame and CharacterFrame:IsShown()
-    if open and self:IsEnabled() then
+    if open and self:IsEnabled() and not self.closedForSheet then
         self:Render()
         frame:Show()
     else
@@ -1159,6 +1188,8 @@ function CharacterPanel:HookBlizzardFrames()
     end)
     CharacterFrame:HookScript("OnHide", function()
         if self.frame then self.frame:Hide() end
+        -- A panel closed with its X comes back with the next sheet.
+        self.closedForSheet = nil
         self:RestoreTome()
     end)
 

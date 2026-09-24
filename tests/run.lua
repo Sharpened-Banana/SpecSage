@@ -4209,6 +4209,26 @@ do
     check(Panel.surface.scrollChild ~= Tome.scrollChild, "as is its scroll child")
     check(Panel.surface.frame == Panel.frame and Panel.surface.frame ~= Tome.frame,
         "the surface hosts widgets in the panel, not the Tome window")
+    -- The close button hides the panel until the sheet is next opened, or
+    -- until its checkbox is ticked again; the setting itself is untouched.
+    local close = Panel.frame.closeButton
+    check(close ~= nil, "the panel has a close button")
+    check(Panel.frame:IsShown(), "sanity: the panel is up before closing")
+    close:GetScript("OnClick")(close)
+    check(not Panel.frame:IsShown() and ns.db.characterPanel.enabled == true,
+        "closing hides the panel without turning it off")
+    Panel:QueueRender()
+    mock.RunAfter()
+    Panel:Update()
+    check(not Panel.frame:IsShown(), "it stays closed while the sheet stays open")
+    Panel.toggle:SetChecked(true)
+    Panel.toggle:GetScript("OnClick")(Panel.toggle)
+    check(Panel.frame:IsShown(), "ticking the sheet's checkbox brings it back")
+    close:GetScript("OnClick")(close)
+    mock.ShowCharacterFrame(false)
+    mock.ShowCharacterFrame(true)
+    check(Panel.frame:IsShown(), "reopening the character sheet brings it back")
+
     check(Panel.surface.notesBox ~= Tome.notesBox, "the Notes box is the panel's own, not the Tome's")
     -- The Loadouts dialogs too: the Tome builds its own on first use, and
     -- the panel's Copy / Save current must never reach them.

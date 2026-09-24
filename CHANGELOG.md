@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+**New**
+- **Close button on the gearing panel.** The X in its top-right corner closes it whenever you want. It comes back the next time you open the character sheet, or when you tick its box on the sheet; untick that box to turn it off for good.
+
 **Improved**
 - Guide data refreshed from the guide site on 2026-09-23: new talent builds for 11 specs, BiS changes for 7, trinket tier changes for 3, and fresh trinket sims for every spec. Retribution Paladin and Feral Druid now have sim-ranked trinket lists.
 - Holy Priest's stat priority now follows the guide's separate Raid and Mythic+ orders for each hero tree. Windwalker's now ranks Haste, Crit and Mastery equal for both hero trees.

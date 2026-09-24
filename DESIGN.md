@@ -1182,6 +1182,12 @@ only limit. The panel is anchored to the sheet on both left corners so
 track `GetCursorPosition` itself in an `OnUpdate` while held and feed the
 delta into the anchor offset.
 
+A close button (`frame.closeButton`, top-right, 2026-09-24) hides the panel
+for the rest of this sheet opening (`CharacterPanel.closedForSheet`, which
+`Update` honours); the sheet's `OnHide` clears it, and so does ticking the
+sheet's checkbox, which remains the lasting on/off (`characterPanel.enabled`).
+The header text and title drag strip stop `CLOSE_SIZE` short of it.
+
 A second grip in the bottom-right corner resizes it (`characterPanel.width`
 / `height`, nil = follow the sheet; floor 260 x 398 so the ten side tabs
 stay on the panel). A resized panel anchors only its top-left corner to the
