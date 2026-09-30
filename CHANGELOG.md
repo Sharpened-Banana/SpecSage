@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 1.3.4 (2026-09-30)
 
 **New**
 - **Close button on the gearing panel.** The X in its top-right corner closes it whenever you want. It comes back the next time you open the character sheet, or when you tick its box on the sheet; untick that box to turn it off for good.
