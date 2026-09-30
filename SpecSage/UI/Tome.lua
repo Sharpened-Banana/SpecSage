@@ -896,7 +896,7 @@ local function PlaceStatRow(pool, index, parent, y, width, label, value, muted)
         row.label:SetTextColor(TEXT_SECONDARY_COLOR[1], TEXT_SECONDARY_COLOR[2], TEXT_SECONDARY_COLOR[3])
     end
 
-    row.value:SetText(value or "")
+    row.value:SetText(ns.ScrollSafeText(value))
     row.value:SetTextColor(TEXT_PRIMARY_COLOR[1], TEXT_PRIMARY_COLOR[2], TEXT_PRIMARY_COLOR[3])
 
     row:Show()
@@ -3086,6 +3086,7 @@ function Tome:BuildContentArea()
     -- name when self.ScrollBar is not set by a parentKey; an anonymous frame
     -- makes that a concat-on-nil risk for no benefit.
     local scrollFrame = CreateFrame("ScrollFrame", "SpecSageTomeScrollFrame", self.frame, "UIPanelScrollFrameTemplate")
+    ns.GuardScrollRange(scrollFrame)
     scrollFrame:SetPoint("TOPLEFT", self.tabStrip, "BOTTOMLEFT", 0, -8)
     scrollFrame:SetPoint("BOTTOMRIGHT", self.frame.rightPage, "BOTTOMRIGHT", -30, PAGE_PADDING)
 

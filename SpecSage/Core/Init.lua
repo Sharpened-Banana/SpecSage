@@ -169,6 +169,34 @@ function ns.IsSecret(value)
     return ok and secret == true
 end
 
+-- The text a row inside a scroll frame (the Tome's Stats tab, the docked
+-- panel) shows for a stat value. In restricted content Stats:GetStatValue
+-- hands back a secret string; putting one into a FontString in a scroll
+-- child made the scroll frame's range secret, and Blizzard's scrollbar
+-- template then threw "attempt to perform numeric conversion on a secret
+-- number value (execution tainted by 'SpecSage')" on every redraw (521x,
+-- BugSack 2026-09-29). The overlay is not a scroll frame and keeps showing
+-- secrets as-is. `value` is a string, a secret string, or nil.
+function ns.ScrollSafeText(value)
+    -- IsSecret first: any other test on a secret (even == "") throws.
+    if ns.IsSecret(value) then return "-" end
+    if value == nil then return "" end
+    return tostring(value)
+end
+
+-- Guards a UIPanelScrollFrameTemplate frame's range handler: a secret range
+-- (see ns.ScrollSafeText) is skipped instead of reaching Blizzard's
+-- ScrollFrame_OnScrollRangeChanged, which does math.floor on it. Our own
+-- frame, so replacing its script taints nothing of Blizzard's.
+function ns.GuardScrollRange(scrollFrame)
+    if not (scrollFrame and scrollFrame.GetScript and scrollFrame.SetScript) then return end
+    local original = scrollFrame:GetScript("OnScrollRangeChanged")
+    scrollFrame:SetScript("OnScrollRangeChanged", function(frame, xrange, yrange)
+        if ns.IsSecret(xrange) or ns.IsSecret(yrange) then return end
+        if original then original(frame, xrange, yrange) end
+    end)
+end
+
 -- True only when value is known to be past threshold in the given
 -- direction (wantGreater true for >, false for <). A secret value cannot be
 -- compared at all, so this reports false rather than letting the comparison

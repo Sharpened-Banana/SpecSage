@@ -5712,6 +5712,47 @@ do
 end
 
 --------------------------------------------------------------------------------
+section("Secret stat values stay out of scroll frames (BugSack 2026-09-29)")
+--------------------------------------------------------------------------------
+
+do
+    -- A plain value passes through; nil shows as empty.
+    check(ns.ScrollSafeText("12.34%") == "12.34%", "a readable stat value is shown as-is")
+    check(ns.ScrollSafeText(nil) == "", "no value shows as an empty string")
+
+    -- A secret never reaches a FontString inside a scroll child: the result
+    -- is a plain, non-secret string.
+    local shown = ns.ScrollSafeText(mock.Secret("12.34%"))
+    check(type(shown) == "string" and not ns.IsSecret(shown), "a secret value becomes a plain placeholder string",
+        tostring(shown))
+
+    -- The Tome's Stats tab, with every stat read secret.
+    local Stats = ns:GetModule("Stats")
+    local realGet = Stats.GetStatValue
+    Stats.GetStatValue = function() return mock.Secret("9.99%") end
+    Tome:Open("DEATHKNIGHT", 252)
+    Tome:SelectTab("Stats")
+    local leaked = 0
+    for _, row in ipairs(Tome.pools.stats) do
+        if row:IsShown() and ns.IsSecret(row.value:GetText()) then leaked = leaked + 1 end
+    end
+    check(leaked == 0, "the Stats tab puts no secret text into its scroll area", leaked)
+    Stats.GetStatValue = realGet
+    Tome:Toggle()
+
+    -- And a secret range, however it arises, never reaches Blizzard's
+    -- scrollbar code.
+    local reached = 0
+    local frame = CreateFrame("ScrollFrame", nil, UIParent)
+    frame:SetScript("OnScrollRangeChanged", function() reached = reached + 1 end)
+    ns.GuardScrollRange(frame)
+    frame:GetScript("OnScrollRangeChanged")(frame, 0, mock.Secret(120))
+    check(reached == 0, "a secret scroll range is not passed on to the scrollbar template")
+    frame:GetScript("OnScrollRangeChanged")(frame, 0, 120)
+    check(reached == 1, "a readable range still is")
+end
+
+--------------------------------------------------------------------------------
 section("Namespaced APIs the addon calls exist in the 12.1 client")
 --------------------------------------------------------------------------------
 

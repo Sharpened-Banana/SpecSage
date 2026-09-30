@@ -372,6 +372,7 @@ function CharacterPanel:BuildFrame()
     -- reason the Tome's is (see UI/Tome.lua).
     local scrollFrame = CreateFrame("ScrollFrame", "SpecSageCharacterPanelScroll", frame,
         "UIPanelScrollFrameTemplate")
+    ns.GuardScrollRange(scrollFrame)
     scrollFrame:SetPoint("TOPLEFT", frame, "TOPLEFT", PADDING, -(PADDING + TITLE_HEIGHT + 8))
     scrollFrame:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -SCROLLBAR_INSET, FOOTER_HEIGHT)
 
@@ -815,7 +816,7 @@ local function PlaceRow(pool, index, parent, width, y, text, opts)
     end
     row.rule:SetShown(opts.isHeader == true)
 
-    row.value:SetText(opts.value or "")
+    row.value:SetText(ns.ScrollSafeText(opts.value))
     row.value:SetTextColor(TEXT_SECONDARY_COLOR[1], TEXT_SECONDARY_COLOR[2], TEXT_SECONDARY_COLOR[3])
 
     row.itemID = opts.itemID
