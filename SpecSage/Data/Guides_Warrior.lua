@@ -161,7 +161,7 @@ ns.GuideStore:RegisterSpec("WARRIOR", 71, {
   -- Refreshed this pass (see file header): superseded string from an
   -- earlier, now-stale pull of the same file.
   mplusLoadout = {
-    string = "CcEAAAAAAAAAAAAAAAAAAAAAAAzMzsMzMzMDAAAghphxYmxyMzMzgxMDAAAAgZWmZAZMWWGYBMgZYCZGsBMjNz2YwMGgZGAmxwA",
+    string = "CcEAAAAAAAAAAAAAAAAAAAAAAAzMzsMzMmZGAAAghphxYmxyMzMzgxMDAAAAgZWmZAhxyyALgBMDTIzgNwMjtx2ALzsMAzMAYGGA",
     source = "SimulationCraft default profile (credit, not endorsement of 'best')",
     patch = "12.1",
   },

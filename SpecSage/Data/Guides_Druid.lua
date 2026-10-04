@@ -250,9 +250,9 @@ ns.GuideStore:RegisterSpec("DRUID", 103, {
   -- for Feral, so this loadout is pulled from the MID1 (12.0) profile set
   -- instead. Swap to a MID2 profile once SimC publishes one.
   mplusLoadout = {
-    string = "CcGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAjZwMzMzMmtFPwyMbzYGzMDAAAALBzGMmZUzYWYmZGjZmZAAAAAAAGAAAABAz2MLNbzssBmZAWMDGAAzMAYA",
+    string = "CcGADBD3hSPCL9Y9gz68WcKvMAAAAAAwYMjHwYmZMmtFPwyYbmZGzMDAAAALBzmhxMjaGzyYmZmtxMAAAAAAwADAAAgmZZ2mZmZ2mZpZZmlNwMDwiZwAAYmBzshB",
     source = "SimulationCraft default profile (credit, not endorsement of 'best')",
-    patch = "12.0 (MID1, previous tier)",
+    patch = "12.1",
   },
   -- Live top-players pull (DESIGN.md's v1.4 section), NOT SimC - see this
   -- file's header for the full methodology. The plurality build among the

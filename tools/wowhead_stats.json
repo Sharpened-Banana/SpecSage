@@ -95,11 +95,11 @@
       { "title": "Oracle", "stats": ["primary", "haste", "mastery", "crit", "versatility"], "note": "Wowhead states neither hero tree changes the priority in raid or Mythic+; everything below Haste is close, so favour item level" },
       { "title": "Voidweaver", "stats": ["primary", "haste", "mastery", "crit", "versatility"], "note": "Wowhead's raid box lists Haste ahead of Intellect for Voidweaver; its Mythic+ box and its own text put Intellect first, which is the order used here" }
     ]},
-    "257": { "url": "https://www.wowhead.com/guide/classes/priest/holy/stat-priority-pve-healer", "updated": "2026/09/03", "heroSplit": true, "variants": [
+    "257": { "url": "https://www.wowhead.com/guide/classes/priest/holy/stat-priority-pve-healer", "updated": "2026/09/28", "heroSplit": true, "variants": [
       { "title": "Archon - Raid", "stats": ["primary", "crit", "versatility", "mastery", "haste"], "note": "Wowhead now splits Holy by content as well as hero tree; in raid Versatility and Mastery are ranked equal, and item level upgrades usually beat chasing secondaries" },
       { "title": "Oracle - Raid", "stats": ["primary", "haste", "crit", "versatility", "mastery"], "note": "Haste only to a comfortable level (about 20%), then Crit; past that Haste drops to last. Versatility and Mastery are ranked equal" },
       { "title": "Archon - Mythic+", "stats": ["primary", "versatility", "crit", "haste", "mastery"], "note": "Mastery adds no damage, so it drops to last in Mythic+; Versatility also helps survive high keys" },
-      { "title": "Oracle - Mythic+", "stats": ["primary", "haste", "versatility", "crit", "mastery"], "note": "Haste only to a comfortable level (about 20%), then Versatility and Crit; past that Haste sits just above Mastery" }
+      { "title": "Oracle - Mythic+", "stats": ["primary", "haste", "versatility", "crit", "mastery"], "note": "Haste only to a comfortable level (about 30% in Mythic+), then Versatility and Crit; past that Haste sits just above Mastery" }
     ]},
     "258": { "url": "https://www.wowhead.com/guide/classes/priest/shadow/stat-priority-pve-dps", "updated": "2026/08/31", "heroSplit": true, "variants": [
       { "title": "Archon", "stats": ["primary", "haste", "mastery", "crit", "versatility"] },

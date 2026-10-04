@@ -1738,16 +1738,16 @@
 [
 "Scalecommander",
 "Mythic+",
-"CEcBAAAAAAAAAAAAAAAAAAAAAMMzMbjZGMDzMLzYmZMzGAAAAAAAAmhZGYM1YmZGAAAAMzMjxMz2YmBmZzYwCsMGGbDgZiYDjZwMDgB"
+"CEcBAAAAAAAAAAAAAAAAAAAAAMMzMbzMzMzyAzsMjxMmBAAAAAAAAmhZGYM1YmZGAAAAMzMjxMz2YmBmZzYwCsMGGbDgZiYDjZwMDgB"
 ],
 [
 "Scalecommander",
 "Delves",
-"CEcBAAAAAAAAAAAAAAAAAAAAAMMzMbjZmxyMYmlZMzMmBAAAAAAAAmhZGYM1YmZGAAAAMzMjxMzyYmBmZzYwCsMGGbDgZiYDjZwMDgB"
+"CEcBAAAAAAAAAAAAAAAAAAAAAMMzMbzMzMzyAzsMjxMmBAAAAAAAAmhZGYM1YmZGAAAAMzMjxMzyYmBmZzYwCsMGGbDgZiYDjZwMDgB"
 ]
 ],
 "err": [],
-"talentUpdated": "2026/08/12",
+"talentUpdated": "2026/09/28",
 "tiers": [
 {
 "items": [
@@ -2900,7 +2900,7 @@
 [
 "San'layn",
 "San ST",
-"CwPAAAAAAAAAAAAAAAAAAAAAAAwMjZMDDz2MzMTjZmxYGDAAAAAAAAzDMMGAsMDzsNzMGzYgBmxiGLbA2mYDAzAYmZmZMDmZwMzYA"
+"CwPAAAAAAAAAAAAAAAAAAAAAAAwMjZMDDz2MzMTjZmxYGDAAAAAAAAzDMMGAsMDzsZmxMzYgBmxiGLbA2mYDAzAYmZmZMDmZwMzYA"
 ],
 [
 "San'layn",
@@ -3061,7 +3061,7 @@
 "tier": "D"
 }
 ],
-"updated": "2026/09/08"
+"updated": "2026/10/01"
 },
 "253": {
 "bis": [
@@ -4623,10 +4623,6 @@
 {
 "items": [
 [
-193701,
-"dungeon"
-],
-[
 270165,
 "raid"
 ],
@@ -4652,15 +4648,19 @@
 "dungeon"
 ],
 [
-250228,
-"dungeon"
-],
-[
 273796,
 "dungeon"
 ],
 [
 250225,
+"dungeon"
+],
+[
+250228,
+"dungeon"
+],
+[
+193701,
 "dungeon"
 ],
 [
@@ -4753,7 +4753,7 @@
 "tier": "D"
 }
 ],
-"updated": "2026/09/06"
+"updated": "2026/09/24"
 },
 "260": {
 "bis": [
@@ -4922,6 +4922,10 @@
 "dungeon"
 ],
 [
+270166,
+"raid"
+],
+[
 273796,
 "dungeon"
 ],
@@ -4966,10 +4970,6 @@
 [
 250245,
 "dungeon"
-],
-[
-270166,
-"raid"
 ]
 ],
 "tier": "C"
@@ -5056,7 +5056,7 @@
 "tier": "D"
 }
 ],
-"updated": "2026/09/01"
+"updated": "2026/09/30"
 },
 "261": {
 "bis": [
@@ -5185,7 +5185,7 @@
 ]
 ],
 "err": [],
-"talentUpdated": "2026/08/20",
+"talentUpdated": "2026/10/03",
 "tiers": [
 {
 "items": [
@@ -7395,7 +7395,7 @@
 [
 "Conduit of the Celestials",
 "Mythic+",
-"C0QAAAAAAAAAAAAAAAAAAAAAAMzYMgxYZmZ2mBAAAAAAAAAAAYZYEmhhBMjhZmZGmthZYWmJAgFmNmxMzMDAgFzsMLjJIAgZMAmBYsMYiZmZzA"
+"C0QAAAAAAAAAAAAAAAAAAAAAAMzYMgxYZmx2MAAAAAAAAAAAALDzEmhhBMjhZmZGmthZYWmJAgFmtxMmZmZAAsYmlZZMBBAMjBwMAjlBiZmZzA"
 ]
 ],
 "err": [],
@@ -7763,12 +7763,20 @@
 [
 270164,
 "raid"
+],
+[
+270171,
+"raid"
 ]
 ],
 "tier": "A"
 },
 {
 "items": [
+[
+250248,
+"dungeon"
+],
 [
 248583,
 "delves"
@@ -7782,7 +7790,7 @@
 "dungeon"
 ],
 [
-250248,
+250255,
 "dungeon"
 ]
 ],
@@ -7800,10 +7808,6 @@
 ],
 [
 193757,
-"dungeon"
-],
-[
-250255,
 "dungeon"
 ],
 [
@@ -7830,10 +7834,6 @@
 [
 251789,
 "delves"
-],
-[
-270171,
-"raid"
 ],
 [
 251788,
@@ -7876,7 +7876,7 @@
 "tier": "F"
 }
 ],
-"updated": "2026/09/15"
+"updated": "2026/10/02"
 },
 "577": {
 "bis": [
@@ -8001,11 +8001,11 @@
 [
 "Aldrachi Reaver",
 "Mythic+",
-"CEkAAAAAAAAAAAAAAAAAAAAAAYGMzMz2MmZmxYmMmZAAAAAAAzixsNDzMz2MzYZmxMMzwMLzsNDGGbbMJjZGzYBAAAAAAAMzAMAAAAM"
+"CEkAAAAAAAAAAAAAAAAAAAAAAYGMzMz2MmZmxYmMmZAAAAAAAzixsNDzMz2MzYZmxMWmZYsMz2MYYstxkMmZMjFAAAAAAAwMDwAAAAwA"
 ]
 ],
 "err": [],
-"talentUpdated": "2026/08/22",
+"talentUpdated": "2026/09/24",
 "tiers": [
 {
 "items": [
@@ -8588,8 +8588,12 @@
 {
 "items": [
 [
-250214,
-"dungeon"
+270170,
+"raid"
+],
+[
+270169,
+"raid"
 ],
 [
 273796,
@@ -8608,14 +8612,6 @@
 },
 {
 "items": [
-[
-270170,
-"raid"
-],
-[
-270169,
-"raid"
-],
 [
 273649,
 "dungeon"
@@ -8641,6 +8637,10 @@
 },
 {
 "items": [
+[
+250214,
+"dungeon"
+],
 [
 270603,
 "delves"
@@ -8669,10 +8669,6 @@
 [
 250462,
 "delves"
-],
-[
-270168,
-"raid"
 ],
 [
 251786,
@@ -8722,7 +8718,7 @@
 "tier": "F"
 }
 ],
-"updated": "2026/08/18"
+"updated": "2026/09/26"
 },
 "63": {
 "bis": [
@@ -9510,8 +9506,8 @@
 {
 "items": [
 [
-273796,
-"dungeon"
+270171,
+"raid"
 ],
 [
 248583,
@@ -9522,11 +9518,19 @@
 "delves"
 ],
 [
+273796,
+"dungeon"
+],
+[
 273649,
 "dungeon"
 ],
 [
 250248,
+"dungeon"
+],
+[
+250255,
 "dungeon"
 ],
 [
@@ -9549,20 +9553,12 @@
 [
 193757,
 "dungeon"
-],
-[
-250255,
-"dungeon"
 ]
 ],
 "tier": "C"
 },
 {
 "items": [
-[
-270171,
-"raid"
-],
 [
 193748,
 "dungeon"
@@ -9571,7 +9567,7 @@
 "tier": "D"
 }
 ],
-"updated": "2026/08/25"
+"updated": "2026/09/24"
 },
 "66": {
 "bis": [
@@ -10510,7 +10506,7 @@
 "tier": "C"
 }
 ],
-"updated": "2026/08/26"
+"updated": "2026/09/30"
 },
 "73": {
 "bis": [

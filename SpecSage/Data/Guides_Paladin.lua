@@ -340,9 +340,9 @@ ns.GuideStore:RegisterSpec("PALADIN", 70, {
   -- for Retribution, so this loadout is pulled from the MID1 (12.0) profile
   -- set instead. Swap to a MID2 profile once SimC publishes one.
   mplusLoadout = {
-    string = "CYEAAAAAAAAAAAAAAAAAAAAAAAAAAAAQz22MzsMMzAAAAAAwoMmhZGbDz2wMbzYMmZYGbsNMAAkZm2mZ2mBAsBYAwYGmBzYMbYZGMMmxgB",
+    string = "CYEAAAAAAAAAAAAAAAAAAAAAAAAAAAANbbzMzywMDAAAAAAjyYGmZsNmthZ2mxYMGmxCbDDYWmtZmZrBBAAsAYAwYGmBzYmZDYmZYMjBD",
     source = "SimulationCraft default profile (credit, not endorsement of 'best')",
-    patch = "12.0 (MID1, previous tier)",
+    patch = "12.1",
   },
   -- Live top-players pull (DESIGN.md's v1.4 section), NOT SimC - see this
   -- file's header for the full methodology. The plurality build among the

@@ -7,7 +7,7 @@
 -- under. One site's picks at the time the script ran, alongside (not
 -- replacing) the SimC-default and live-top-player builds the guides carry.
 -- See DESIGN.md's "Guide-site talent builds".
--- Generated: 2026-09-23 23:01 UTC
+-- Generated: 2026-10-04 09:52 UTC
 
 local ADDON, ns = ...
 if not ns.GuideStore then return end
@@ -170,7 +170,7 @@ ns.GuideStore:RegisterSiteLoadouts(260, {
 
 -- ROGUE 261 (subtlety-rogue)
 ns.GuideStore:RegisterSiteLoadouts(261, {
-  source = "Talent guide, updated 2026/08/20",
+  source = "Talent guide, updated 2026/10/03",
   patch = "12.1",
   builds = {
     { label = "Deathstalker: Raid", string = "CUQAAAAAAAAAAAAAAAAAAAAAAAgx2MAAAAAwsMGLTMbbjxMDDzMzMzw8AbzYGbbzMzMzMjBjZ2GAAAAGMmFzyADYBsMMhMLYGmZAmxA" },
@@ -255,7 +255,7 @@ ns.GuideStore:RegisterSiteLoadouts(252, {
     { label = "Rider of the Apocalypse: Rider ST", string = "CwPAAAAAAAAAAAAAAAAAAAAAAAwMjZMDDz2MzMTzmZmZMjBAAAAAAAgZGmZAwyMmZ2mZGzMDYzsYYIDMbM0YBAzAAzMjZAmZmxYA" },
     { label = "Rider of the Apocalypse: Rider M+/Delves", string = "CwPAAAAAAAAAAAAAAAAAAAAAAAYmhZMDDz2MzMTzmxMzMjBAAAAAAAgZGzYAwyMmZ2MzYMDYzsZYIDMbM0YBDYGAGzMjZAmZmxYA" },
     { label = "Rider of the Apocalypse: Open World", string = "CwPAAAAAAAAAAAAAAAAAAAAAAAwMjZMDDz2MzMTzmZmZMjBAAAAAAAgZGzYAw2MmZ2mZGjZAbmNDDZgZhhGLYAzAAzMjZAmZmxYA" },
-    { label = "San'layn: San ST", string = "CwPAAAAAAAAAAAAAAAAAAAAAAAwMjZMDDz2MzMTjZmxYGDAAAAAAAAzDMMGAsMDzsNzMGzYgBmxiGLbA2mYDAzAYmZmZMDmZwMzYA" },
+    { label = "San'layn: San ST", string = "CwPAAAAAAAAAAAAAAAAAAAAAAAwMjZMDDz2MzMTjZmxYGDAAAAAAAAzDMMGAsMDzsZmxMzYgBmxiGLbA2mYDAzAYmZmZMDmZwMzYA" },
     { label = "San'layn: San AoE", string = "CwPAAAAAAAAAAAAAAAAAAAAAAAYmhZMGDz2MzMTjZmxMzYAAAAAAAAYegxwAglZwsZmxMzYgBmxmGLLA2mYDDYGAzMzMjZwMDGzYA" },
   },
 })
@@ -420,7 +420,7 @@ ns.GuideStore:RegisterSiteLoadouts(269, {
     { label = "Shado-pan: Mythic+", string = "C0QAAAAAAAAAAAAAAAAAAAAAAMzYAMGbzMz2MAAAAAAAAAAAALDzEmxywAmxwMzMDz2wMMLzEAwiZ2mZGzMzMAA2AgZZWamZmFAMwMDAswQMgB" },
     { label = "Conduit of the Celestials: Raid - Single Target", string = "C0QAAAAAAAAAAAAAAAAAAAAAAMzYM2GmhlZmZbGAAAAAAAAAAAglhRzYGGGwMGmZmZY2GmhZZmAAWMz2MzYmZmBAwiZWmlxEEAAGAzAwyAxMzs5BA" },
     { label = "Conduit of the Celestials: Raid - Cleave", string = "C0QAAAAAAAAAAAAAAAAAAAAAAMzYM2GGjlZmZbGAAAAAAAAAAAglhRzYGGGwMGmZmZY2GmhZZmAAWMz2MzYMzMAAWMzysMmgAAMGAzAwyAxMzs5BA" },
-    { label = "Conduit of the Celestials: Mythic+", string = "C0QAAAAAAAAAAAAAAAAAAAAAAMzYMgxYZmZ2mBAAAAAAAAAAAYZYEmhhBMjhZmZGmthZYWmJAgFmNmxMzMDAgFzsMLjJIAgZMAmBYsMYiZmZzA" },
+    { label = "Conduit of the Celestials: Mythic+", string = "C0QAAAAAAAAAAAAAAAAAAAAAAMzYMgxYZmx2MAAAAAAAAAAAALDzEmhhBMjhZmZGmthZYWmJAgFmtxMmZmZAAsYmlZZMBBAMjBwMAjlBiZmZzA" },
   },
 })
 
@@ -478,13 +478,13 @@ ns.GuideStore:RegisterSiteLoadouts(105, {
 
 -- DEMONHUNTER 577 (havoc-demon-hunter)
 ns.GuideStore:RegisterSiteLoadouts(577, {
-  source = "Talent guide, updated 2026/08/22",
+  source = "Talent guide, updated 2026/09/24",
   patch = "12.1",
   builds = {
     { label = "Fel-Scarred: Raid", string = "CEkAAAAAAAAAAAAAAAAAAAAAAYmZGzMzmxMzMmZmMmZAAAAAAAzyDMmtZYmBzMWmZMDzMGzyALziZMMbaaMzMG2AAAAAAAAYmBDAAAAD" },
     { label = "Fel-Scarred: Mythic+", string = "CEkAAAAAAAAAAAAAAAAAAAAAAYmZGzMz2MmZmxYmMmZAAAAAAAzixsNDzMwMWmZmZYmBzyALzmZMMLaaMzMmxGAAAwAAAAYmBDAAAAD" },
     { label = "Aldrachi Reaver: Raid", string = "CEkAAAAAAAAAAAAAAAAAAAAAAYgZmZ2MmZmxMzkxMDAAAAAAYWegxsNDzMz2MzYZmxMWmZYmlZ2mBDjlNmkxMjhFAAAAAAAwMDwAAAAwA" },
-    { label = "Aldrachi Reaver: Mythic+", string = "CEkAAAAAAAAAAAAAAAAAAAAAAYGMzMz2MmZmxYmMmZAAAAAAAzixsNDzMz2MzYZmxMMzwMLzsNDGGbbMJjZGzYBAAAAAAAMzAMAAAAM" },
+    { label = "Aldrachi Reaver: Mythic+", string = "CEkAAAAAAAAAAAAAAAAAAAAAAYGMzMz2MmZmxYmMmZAAAAAAAzixsNDzMz2MzYZmxMWmZYsMz2MYYstxkMmZMjFAAAAAAAwMDwAAAAwA" },
   },
 })
 
@@ -549,14 +549,14 @@ ns.GuideStore:RegisterSiteLoadouts(1468, {
 
 -- EVOKER 1473 (augmentation-evoker)
 ns.GuideStore:RegisterSiteLoadouts(1473, {
-  source = "Talent guide, updated 2026/08/12",
+  source = "Talent guide, updated 2026/09/28",
   patch = "12.1",
   builds = {
     { label = "Chronowarden: Raid", string = "CEcBAAAAAAAAAAAAAAAAAAAAAMMzMbzMzgZYmZZGzMjZ2AAAAAAAAYmhxMYM1YmZGAAAAMjZMmZWGzMwMMwYGLsADMDDNiFMGzMAwA" },
     { label = "Chronowarden: Mythic+", string = "CEcBAAAAAAAAAAAAAAAAAAAAAMMzMbzMzgZYmZZGzMjZ2AAAAAAAAwMMzAjpGzMzAAAAgZmZMmZ2GzMwMMwYGLsADMDDNiFMmZmBAG" },
     { label = "Chronowarden: Delves", string = "CEcBAAAAAAAAAAAAAAAAAAAAAMMzMbjZmxyMYmlZMzMmBAAAAAAAAmhZGYM1YmZGAAAAMzMjxMzyYmBmZzAjZswCMwMM0IWwYmZGAYA" },
     { label = "Scalecommander: Raid", string = "CEcBAAAAAAAAAAAAAAAAAAAAAMMzMbzMzgZYmZZGzMjZ2AAAAAAAAYmhxMYM1YmZGAAAAMjZMmZWGzMwMMGsALjhx2AYmI2wYgZGAD" },
-    { label = "Scalecommander: Mythic+", string = "CEcBAAAAAAAAAAAAAAAAAAAAAMMzMbjZGMDzMLzYmZMzGAAAAAAAAmhZGYM1YmZGAAAAMzMjxMz2YmBmZzYwCsMGGbDgZiYDjZwMDgB" },
-    { label = "Scalecommander: Delves", string = "CEcBAAAAAAAAAAAAAAAAAAAAAMMzMbjZmxyMYmlZMzMmBAAAAAAAAmhZGYM1YmZGAAAAMzMjxMzyYmBmZzYwCsMGGbDgZiYDjZwMDgB" },
+    { label = "Scalecommander: Mythic+", string = "CEcBAAAAAAAAAAAAAAAAAAAAAMMzMbzMzMzyAzsMjxMmBAAAAAAAAmhZGYM1YmZGAAAAMzMjxMz2YmBmZzYwCsMGGbDgZiYDjZwMDgB" },
+    { label = "Scalecommander: Delves", string = "CEcBAAAAAAAAAAAAAAAAAAAAAMMzMbzMzMzyAzsMjxMmBAAAAAAAAmhZGYM1YmZGAAAAMzMjxMzyYmBmZzYwCsMGGbDgZiYDjZwMDgB" },
   },
 })

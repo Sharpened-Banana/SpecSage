@@ -15,7 +15,7 @@
 -- a current dungeon piece can be a level-48 rare rather than the item level
 -- 334 epic the guide means. Rows the guide site lists carry the bonus list
 -- the guide site states for the same item, since the guide site's markup has none.
--- Generated: 2026-09-23 22:55 UTC
+-- Generated: 2026-10-04 09:49 UTC
 
 local ADDON, ns = ...
 if not ns.GuideStore then return end
@@ -47,7 +47,7 @@ ns.GuideStore:RegisterBiS(71, {
 
 -- WARRIOR 72 (fury-warrior)
 ns.GuideStore:RegisterBiS(72, {
-  source = "Gear guide, updated 2026/08/26",
+  source = "Gear guide, updated 2026/09/30",
   patch = "12.1",
   lists = {
     { title = "Guide", list = {
@@ -99,7 +99,7 @@ ns.GuideStore:RegisterBiS(73, {
 
 -- PALADIN 65 (holy-paladin)
 ns.GuideStore:RegisterBiS(65, {
-  source = "Gear guide, updated 2026/08/25",
+  source = "Gear guide, updated 2026/09/24",
   patch = "12.1",
   lists = {
     { title = "Guide", list = {
@@ -185,7 +185,7 @@ ns.GuideStore:RegisterBiS(253, {
       { slot = "Neck", itemID = 268265, name = "Aqirbane Reliquary", from = "Ula'tek", bonus = "13848" },
       { slot = "Shoulder", itemID = 271490, name = "Jaws of the Skulking Viper", from = "The Coiled Altar", bonus = "13848" },
       { slot = "Back", itemID = 268253, name = "Silken Voodoo Drape", from = "The Coiled Altar", bonus = "13848" },
-      { slot = "Chest", itemID = 271495, name = "Skulking Viper's Scuteplate", from = "Ula'tek", bonus = "13848:13708" },
+      { slot = "Chest", itemID = 271495, name = "Skulking Viper's Scuteplate", from = "Ula'tek", bonus = "13848" },
       { slot = "Wrist", itemID = 244584, name = "Farstrider's Plated Bracers", from = "", bonus = "13751:12497:13836:12384:8791:8960:1808" },
       { slot = "Hands", itemID = 271493, name = "Skulking Viper's Hidepiercers", from = "King's Rest", bonus = "12854" },
       { slot = "Waist", itemID = 244581, name = "Farstrider's Trophy Belt", from = "", bonus = "13751:12497:13836:12384:8791:8960:1808" },
@@ -211,7 +211,7 @@ ns.GuideStore:RegisterBiS(254, {
       { slot = "Neck", itemID = 268265, name = "Aqirbane Reliquary", from = "Ula'tek", bonus = "13848" },
       { slot = "Shoulder", itemID = 271490, name = "Jaws of the Skulking Viper", from = "Catalyst the The Coiled Altar Shoulders", bonus = "13848" },
       { slot = "Back", itemID = 268253, name = "Silken Voodoo Drape", from = "The Coiled Altar", bonus = "13848" },
-      { slot = "Chest", itemID = 271495, name = "Skulking Viper's Scuteplate", from = "Catalyst the Ula'tek Chest", bonus = "13848:13708" },
+      { slot = "Chest", itemID = 271495, name = "Skulking Viper's Scuteplate", from = "Catalyst the Ula'tek Chest", bonus = "13848" },
       { slot = "Wrist", itemID = 244584, name = "Farstrider's Plated Bracers", from = "Crafting/Misc", bonus = "13751:12497:13836:12384:8791:8960:1808" },
       { slot = "Hands", itemID = 271493, name = "Skulking Viper's Hidepiercers", from = "Catalyst the Ruby Life Pools Gloves", bonus = "12854" },
       { slot = "Waist", itemID = 244581, name = "Farstrider's Trophy Belt", from = "Crafting/Misc", bonus = "13751:12497:13836:12384:8791:8960:1808" },
@@ -252,7 +252,7 @@ ns.GuideStore:RegisterBiS(255, {
 
 -- ROGUE 259 (assassination-rogue)
 ns.GuideStore:RegisterBiS(259, {
-  source = "Gear guide, updated 2026/09/06",
+  source = "Gear guide, updated 2026/09/24",
   patch = "12.1",
   lists = {
     { title = "Guide", list = {
@@ -278,7 +278,7 @@ ns.GuideStore:RegisterBiS(259, {
 
 -- ROGUE 260 (outlaw-rogue)
 ns.GuideStore:RegisterBiS(260, {
-  source = "Gear guide, updated 2026/09/01",
+  source = "Gear guide, updated 2026/09/30",
   patch = "12.1",
   lists = {
     { title = "Guide", list = {
@@ -478,7 +478,7 @@ ns.GuideStore:RegisterBiS(251, {
 
 -- DEATHKNIGHT 252 (unholy-death-knight)
 ns.GuideStore:RegisterBiS(252, {
-  source = "Gear guide, updated 2026/09/08",
+  source = "Gear guide, updated 2026/10/01",
   patch = "12.1",
   lists = {
     { title = "Guide", list = {
@@ -581,7 +581,7 @@ ns.GuideStore:RegisterBiS(264, {
 
 -- MAGE 62 (arcane-mage)
 ns.GuideStore:RegisterBiS(62, {
-  source = "Gear guide, updated 2026/08/18",
+  source = "Gear guide, updated 2026/09/26",
   patch = "12.1",
   lists = {
     { title = "Guide", list = {
@@ -765,7 +765,7 @@ ns.GuideStore:RegisterBiS(268, {
 
 -- MONK 270 (mistweaver-monk)
 ns.GuideStore:RegisterBiS(270, {
-  source = "Gear guide, updated 2026/09/15",
+  source = "Gear guide, updated 2026/10/02",
   patch = "12.1",
   lists = {
     { title = "Guide (Raid)", list = {

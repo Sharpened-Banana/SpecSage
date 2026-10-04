@@ -12,7 +12,7 @@
 -- being invented into the order. This is the guide site's editorial priority at
 -- the time each page was read - it goes stale every patch, and the Tome
 -- says so - not a sim of your character. See DESIGN.md's "Stat priority".
--- Generated: 2026-09-23 22:59 UTC
+-- Generated: 2026-10-04 09:52 UTC
 
 local ADDON, ns = ...
 if not ns.GuideStore then return end
@@ -238,7 +238,7 @@ ns.GuideStore:RegisterStatPriority(256, {
 
 -- PRIEST 257 (holy-priest)
 ns.GuideStore:RegisterStatPriority(257, {
-  source = "Stat priority guide, updated 2026/09/03",
+  source = "Stat priority guide, updated 2026/09/28",
   url = "https://www.wowhead.com/guide/classes/priest/holy/stat-priority-pve-healer",
   patch = "12.1",
   heroSplit = true,
@@ -256,7 +256,7 @@ ns.GuideStore:RegisterStatPriority(257, {
       list = { { stat = "primary" }, { stat = "versatility" }, { stat = "crit" }, { stat = "haste" }, { stat = "mastery" } },
     },
     { title = "Oracle - Mythic+",
-      note = "Haste only to a comfortable level (about 20%), then Versatility and Crit; past that Haste sits just above Mastery",
+      note = "Haste only to a comfortable level (about 30% in Mythic+), then Versatility and Crit; past that Haste sits just above Mastery",
       list = { { stat = "primary" }, { stat = "haste" }, { stat = "versatility" }, { stat = "crit" }, { stat = "mastery" } },
     },
   },
