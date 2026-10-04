@@ -126,25 +126,29 @@ local SECTION_GAP = 10
 -- The Tome skin (2026-09-05), matching UI/Tome.lua: a single chart page
 -- in a leather edge, ink text, wax red for emphasis. Side tabs are leather
 -- with the open one sealed in wax.
-local TEXTURE_PATH = "Interface\\AddOns\\SpecSage\\Textures\\"
-local LEATHER_COLOR = { 0.231, 0.165, 0.110, 1 }       -- #3B2A1C
-local PANEL_BORDER_COLOR = { 0.102, 0.071, 0.043, 1 }  -- #1A120B
+-- The live Tome skin palette (Core/Theme.lua), shared by reference with
+-- UI/Tome.lua so a skin change reaches both surfaces; values in comments
+-- are the default Tome skin's.
+local PALETTE = ns.TomePalette
+local LEATHER_COLOR = PALETTE.leather                  -- #3B2A1C
+local PANEL_BORDER_COLOR = PALETTE.edge                -- #1A120B
 local TAB_BACKDROP_COLOR = LEATHER_COLOR
-local TAB_ACTIVE_COLOR = { 0.478, 0.184, 0.122, 1 }    -- wax red
-local RULE_COLOR = { 0.431, 0.353, 0.227 }             -- #6E5A3A
-local GOLD_COLOR = { 0.851, 0.706, 0.416 }             -- #D9B46A
-local HEADER_COLOR = { 0.169, 0.122, 0.078 }           -- ink
-local MUTED_COLOR = { 0.169, 0.122, 0.078 }            -- ink; no grey text on the page
-local CONDITION_COLOR = { 0.478, 0.184, 0.122 }        -- wax red
-local TEXT_PRIMARY_COLOR = { 0.169, 0.122, 0.078 }
-local TEXT_SECONDARY_COLOR = { 0.169, 0.122, 0.078 }
+local TAB_ACTIVE_COLOR = PALETTE.accent                -- wax red
+local RULE_COLOR = PALETTE.rule                        -- #6E5A3A
+local GOLD_COLOR = PALETTE.gold                        -- #D9B46A
+local HEADER_COLOR = PALETTE.ink                       -- ink
+local MUTED_COLOR = PALETTE.ink                        -- ink; no grey text on the page
+local CONDITION_COLOR = PALETTE.accent                 -- wax red
+local TEXT_PRIMARY_COLOR = PALETTE.ink
+local TEXT_SECONDARY_COLOR = PALETTE.ink
 local DEFAULT_ITEM_COLOR = { 0.35, 0.35, 0.35 }
 
 -- Matches the Tome's BiS tab tags so the two surfaces read the same.
+-- From the live skin palette, so each stays readable on the skin's page.
 local STATUS_COLORS = {
-    equipped = { 0.25, 0.42, 0.23 },   -- ink green, readable on paper
-    owned    = { 0.478, 0.184, 0.122 }, -- wax red
-    missing  = { 0.169, 0.122, 0.078 }, -- ink
+    equipped = PALETTE.good,           -- ink green on parchment
+    owned    = PALETTE.accent,         -- wax red
+    missing  = PALETTE.ink,            -- ink
 }
 
 local STAT_LABELS = {
@@ -308,15 +312,10 @@ function CharacterPanel:BuildFrame()
     frame:SetWidth(FALLBACK_WIDTH)
     self.frame = frame
     self:ApplyDockOffset()
-    -- Parchment page, 4px leather edge, a hairline rule inside it.
-    pcall(frame.SetBackdrop, frame, {
-        bgFile = TEXTURE_PATH .. "parchment.png",
-        edgeFile = "Interface\\Buttons\\WHITE8X8",
-        edgeSize = 4,
-    })
-    pcall(frame.SetBackdropColor, frame, 1, 1, 1, 1)
-    pcall(frame.SetBackdropBorderColor, frame, unpack(LEATHER_COLOR))
+    -- The skin's page, 4px leather edge, a hairline rule inside it.
+    ns.ApplyPageBackdrop(frame, 4, LEATHER_COLOR)
     local rule = CreateFrame("Frame", nil, frame, "BackdropTemplate")
+    frame.pageRule = rule
     rule:SetPoint("TOPLEFT", frame, "TOPLEFT", 6, -6)
     rule:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -6, 6)
     pcall(rule.SetBackdrop, rule, { edgeFile = "Interface\\Buttons\\WHITE8X8", edgeSize = 1 })
@@ -726,6 +725,19 @@ end
 
 -- Options changed (the Tome's Options tab or the Settings panel): the
 -- tab labels and the panel's enabled state both take effect at once.
+-- Repaints what the panel drew once (its page, rule and side tabs) for
+-- the active Tome skin, then redraws the open section.
+function CharacterPanel:ApplySkin()
+    local frame = self.frame
+    if not frame then return end
+    ns.ApplyPageBackdrop(frame, 4, LEATHER_COLOR)
+    if frame.pageRule then
+        pcall(frame.pageRule.SetBackdropBorderColor, frame.pageRule, RULE_COLOR[1], RULE_COLOR[2], RULE_COLOR[3], 0.6)
+    end
+    self:UpdateTabHighlight(self:ActiveSection())
+    if frame:IsShown() then self:Render() end
+end
+
 function CharacterPanel:OnConfigChanged()
     self:ApplyTabLabels()
     self:Update()

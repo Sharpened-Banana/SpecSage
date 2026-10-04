@@ -104,6 +104,8 @@ function CreateFont(name)
     function font:GetFont() return self.font, self.fontSize, self.flags end
     function font:SetTextColor(r, g, b) self.color = { r, g, b } end
     mock.fonts[name] = font
+    -- The client registers a named font object as a global of that name.
+    if name then _G[name] = font end
     return font
 end
 

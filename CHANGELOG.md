@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+**New**
+- **Tome skins.** Pick how the Tome looks from its Options tab (or the Settings panel): **Tome** (the leather and parchment you know), **Midnight** (night-blue pages with pale text, easy on the eyes in the dark), **Vellum** (clean cream pages in a slate cover), or **Class-bound** (parchment bound in your class colour, with that colour as the accent). The gearing panel on the character sheet follows the same skin, and the change applies immediately.
+
 ## 1.3.4 (2026-09-30)
 
 **New**

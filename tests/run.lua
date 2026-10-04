@@ -4877,8 +4877,10 @@ do
     -- Tome Options tab: a select renders as a label plus a cycling button.
     ns.db.theme = "minimal"
     Tome:SelectTab("Options")
-    check(Tome.optionPools.select ~= nil and CountShownOptionRows(Tome.optionPools.select) == 1,
-        "the Options tab renders one select row", Tome.optionPools.select and CountShownOptionRows(Tome.optionPools.select))
+    -- Two selects since 2026-10-03: the overlay Theme (Display group, first)
+    -- and the Tome skin.
+    check(Tome.optionPools.select ~= nil and CountShownOptionRows(Tome.optionPools.select) == 2,
+        "the Options tab renders the overlay theme and Tome skin selects", Tome.optionPools.select and CountShownOptionRows(Tome.optionPools.select))
     local selectRow = Tome.optionPools.select[1]
     check(selectRow and selectRow.button:GetText() == "Minimal",
         "the select button shows the current choice's label", selectRow and selectRow.button:GetText())
@@ -5750,6 +5752,77 @@ do
     check(reached == 0, "a secret scroll range is not passed on to the scrollbar template")
     frame:GetScript("OnScrollRangeChanged")(frame, 0, 120)
     check(reached == 1, "a readable range still is")
+end
+
+--------------------------------------------------------------------------------
+section("Tome skins (2026-10-03)")
+--------------------------------------------------------------------------------
+
+do
+    -- The option exists, offers every skin, and defaults to the Tome look.
+    local skinEntry
+    for _, group in ipairs(ns.OPTION_GROUPS) do
+        for _, option in ipairs(group.options) do
+            if option.key == "tomeSkin" then skinEntry = option end
+        end
+    end
+    check(skinEntry ~= nil and skinEntry.kind == "select", "the options offer a Tome skin select")
+    check(ns.db.tomeSkin == "tome", "the default skin is the original Tome look")
+    local choices = skinEntry.choices()
+    check(#choices == #ns.TOME_SKIN_ORDER and #choices >= 4, "one choice per skin, at least four", #choices)
+
+    -- Every skin defines everything the palette needs.
+    local keys = { "ink", "accent", "rule", "leather", "edge", "card", "gold", "button", "good" }
+    for _, key in ipairs(ns.TOME_SKIN_ORDER) do
+        local resolved = ns.ResolveTomePalette(ns.GetTomeSkin(key))
+        local missing = {}
+        for _, name in ipairs(keys) do if type(resolved[name]) ~= "table" then missing[#missing + 1] = name end end
+        check(#missing == 0, "skin '" .. key .. "' defines every palette colour", table.concat(missing, ", "))
+    end
+
+    -- Switching repaints at once: the shared palette (read by every
+    -- renderer), the pages, the button plates and the docked panel.
+    Tome:Open("DEATHKNIGHT", 252)
+    Tome:SelectTab("Overview")
+    local ink = ns.TomePalette.ink
+    local tomeInk = ink[1]
+    local button = Tome.frame.feedbackButton
+    ns.SetOptionValue(skinEntry, "midnight")
+    ns.RefreshAll()
+    local midnight = ns.TOME_SKINS.midnight
+    check(ns.TomePalette.ink == ink and ink[1] == midnight.palette.ink[1] and ink[1] ~= tomeInk,
+        "switching to Midnight rewrites the shared palette in place")
+    local page = Tome.frame.rightPage
+    check(page.colorTexture and page.colorTexture[1] == midnight.page.color[1],
+        "the pages take Midnight's flat page colour", page.colorTexture and page.colorTexture[1])
+    check(button.specSageFill.colorTexture[1] == midnight.palette.leather[1],
+        "button plates take the skin's leather", button.specSageFill.colorTexture[1])
+    local shownRow
+    for _, row in ipairs(Tome.pools.overview) do if row:IsShown() then shownRow = row break end end
+    check(shownRow and shownRow.text.color and shownRow.text.color[1] == midnight.palette.ink[1],
+        "the open tab redraws in the skin's ink", shownRow and shownRow.text.color and shownRow.text.color[1])
+    check(SpecSageBodyFont.color[1] == midnight.palette.ink[1], "the shared fonts take the skin's ink")
+
+    -- Back to the Tome: the parchment texture returns.
+    ns.SetOptionValue(skinEntry, "tome")
+    ns.RefreshAll()
+    check(page.texture and page.texture:find("parchment", 1, true) ~= nil and ink[1] == tomeInk,
+        "switching back restores the parchment and the original ink")
+
+    -- Class-bound derives its accent from the player's class, darkened to
+    -- read on parchment (the mock player is a Death Knight).
+    ns.SetOptionValue(skinEntry, "classbound")
+    ns.RefreshAll()
+    local dk = RAID_CLASS_COLORS.DEATHKNIGHT
+    check(math.abs(ns.TomePalette.accent[1] - dk.r * 0.55) < 1e-6, "Class-bound's accent is the class colour, darkened")
+
+    -- An unknown key (a skin removed between versions) falls back safely.
+    ns.db.tomeSkin = "no-such-skin"
+    ns.RefreshAll()
+    check(ink[1] == tomeInk and Tome.appliedSkin == ns.TOME_SKINS.tome, "an unknown skin falls back to the Tome look")
+    ns.db.tomeSkin = "tome"
+    ns.RefreshAll()
+    Tome:Toggle()
 end
 
 --------------------------------------------------------------------------------

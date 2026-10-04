@@ -27,6 +27,10 @@ class guides, talent loadouts, and live character tracking in one place:
 - **Bound in leather** — the Tome is a book: parchment pages,
   serif type, a wax seal carrying your hero talent tree's own icon. The
   docked panel is a page of the same book.
+- **Tome skins** — four looks for the Tome and the docked panel, from the
+  Options tab: Tome (leather and parchment), Midnight (dark pages, pale
+  text), Vellum (clean cream pages) and Class-bound (parchment bound in
+  your class colour).
 - **Docked panel** — an optional panel attached to the character sheet,
   opening and closing with it, showing everything the Tome does: icon
   tabs down its right edge switch between Overview, Stats, Rotation,

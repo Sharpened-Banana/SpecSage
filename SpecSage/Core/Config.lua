@@ -217,6 +217,22 @@ local function BuildOptionGroups()
     }
 
     local tome = {
+        -- The Tome's look (Core/Theme.lua's TOME_SKINS); also skins the
+        -- docked gearing panel and the talent window's build menu. Lazy
+        -- choices for the same load-order reason as the overlay Theme.
+        { kind = "select", scope = "db", key = "tomeSkin",
+          variable = "SpecSage_tomeSkin", label = "Tome skin",
+          tooltip = "How the Tome and the gearing panel look: Tome (leather and parchment), Midnight "
+              .. "(dark pages, pale text), Vellum (clean cream pages), or Class-bound (parchment bound "
+              .. "in your class colour).",
+          choices = function()
+              local choices = {}
+              for index, key in ipairs(ns.TOME_SKIN_ORDER or {}) do
+                  local skin = ns.TOME_SKINS and ns.TOME_SKINS[key]
+                  choices[index] = { value = key, label = skin and skin.label or key }
+              end
+              return choices
+          end },
         { kind = "check", scope = "db", key = "itemStatRanks",
           variable = "SpecSage_itemStatRanks", label = "Tier and stat ranks on item tooltips",
           tooltip = "Add lines to every item tooltip: a trinket's tier in your current spec's trinket "
@@ -345,6 +361,10 @@ local DEFAULTS = {
     -- (minimal / bordered / classcolor). A key that no longer exists falls
     -- back to minimal in ns.GetTheme rather than breaking the frame.
     theme = "minimal",
+
+    -- UI/Tome.lua: the Tome's skin (Core/Theme.lua's TOME_SKINS). An unknown
+    -- key falls back to "tome".
+    tomeSkin = "tome",
 
     -- Modules/ItemRanks.lua: rank an item tooltip's secondary stats against
     -- the player's current spec's Tome stat priority.

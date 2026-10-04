@@ -25,6 +25,18 @@ ns.Tome = Tome
 -- fix.
 function Tome:OnInit()
     self.activeTab = self.activeTab or "Overview"
+    -- The palette has to hold the chosen skin before any frame is built, so
+    -- the first build already reads the right colours.
+    ns.LoadTomePalette(ns.db and ns.db.tomeSkin)
+end
+
+-- A changed Tome skin (Options tab or Settings panel) applies at once.
+function Tome:OnConfigChanged()
+    local key = ns.db and ns.db.tomeSkin
+    if key ~= self.appliedSkinKey then
+        self.appliedSkinKey = key
+        ns.ApplyTomeSkin(key)
+    end
 end
 
 -- The BiS tab asks the client for every item it shows; each answer arrives
@@ -173,19 +185,24 @@ local NO_DATA_TEXT = "no guide data yet - see SpecSage/Data/Guides_<Class>.lua t
 -- Owner's call (2026-09-05, first look in-game): no grey text on the page.
 -- Muted and secondary text are ink too; hierarchy comes from the heading
 -- face, the wax red and the rules, not from fading.
-local MUTED_COLOR = { 0.169, 0.122, 0.078 }          -- ink
-local HEADER_COLOR = { 0.169, 0.122, 0.078 }         -- #2B1F14 ink; headings set in Playfair
-local CONDITION_COLOR = { 0.478, 0.184, 0.122 }      -- #7A2F1F wax red
+-- Since 2026-10-03 these are the live skin palette (Core/Theme.lua's
+-- ns.TomePalette), aliased: a skin rewrites the shared tables in place, so
+-- every `unpack(...)` below reads the active skin's colours. The values in
+-- the comments are the default Tome skin's.
+local PALETTE = ns.TomePalette
+local MUTED_COLOR = PALETTE.ink              -- #2B1F14 ink
+local HEADER_COLOR = PALETTE.ink             -- ink; headings set in Playfair
+local CONDITION_COLOR = PALETTE.accent       -- #7A2F1F wax red
 local CONDITION_INDENT = 20
 
-local PANEL_BACKDROP_COLOR = { 0.231, 0.165, 0.110, 1 } -- #3B2A1C leather (under the tile)
-local PANEL_BORDER_COLOR = { 0.102, 0.071, 0.043, 1 }   -- #1A120B cover edge
-local CARD_BACKDROP_COLOR = { 0.804, 0.733, 0.573, 1 }  -- #CDBB92 darker paper: buttons, dialogs
-local BORDER_COLOR = { 0.431, 0.353, 0.227, 1 }         -- #6E5A3A rule
-local ACCENT_COLOR = { 0.478, 0.184, 0.122 }            -- #7A2F1F wax red
-local GOLD_COLOR = { 0.851, 0.706, 0.416 }              -- #D9B46A rivets
-local TEXT_PRIMARY_COLOR = { 0.169, 0.122, 0.078 }      -- #2B1F14 ink
-local TEXT_SECONDARY_COLOR = { 0.169, 0.122, 0.078 }    -- ink
+local PANEL_BACKDROP_COLOR = PALETTE.leather -- #3B2A1C leather (under the tile)
+local PANEL_BORDER_COLOR = PALETTE.edge      -- #1A120B cover edge
+local CARD_BACKDROP_COLOR = PALETTE.card     -- #CDBB92 darker paper: buttons, dialogs
+local BORDER_COLOR = PALETTE.rule            -- #6E5A3A rule
+local ACCENT_COLOR = PALETTE.accent          -- #7A2F1F wax red
+local GOLD_COLOR = PALETTE.gold              -- #D9B46A rivets
+local TEXT_PRIMARY_COLOR = PALETTE.ink       -- #2B1F14 ink
+local TEXT_SECONDARY_COLOR = PALETTE.ink     -- ink
 
 -- Type: Libre Baskerville for everything read (rows 14pt, paragraphs
 -- 15pt), Playfair Display for what is looked at - the title, chapter tabs
@@ -239,7 +256,7 @@ pcall(SpecSageClassItalicFont.SetShadowOffset, SpecSageClassItalicFont, 1, -1)
 
 -- Button faces: paper-coloured Baskerville for the ink-plate buttons
 -- (SkinButton). Disabled buttons keep the plate and dim the word.
-local BUTTON_TEXT_COLOR = { 0.941, 0.894, 0.784 }         -- #F0E4C8 paper
+local BUTTON_TEXT_COLOR = PALETTE.button                    -- #F0E4C8 paper
 local BUTTON_TEXT_DISABLED_COLOR = { 0.941, 0.894, 0.784, 0.45 }
 local SpecSageButtonFont = CreateFont("SpecSageButtonFont")
 SpecSageButtonFont:SetFont(BODY_FONT_PATH, 15, "")
@@ -429,18 +446,63 @@ local TIER_COLORS = {
 local TEXTURE_PATH = "Interface\\AddOns\\SpecSage\\Textures\\"
 local WHITE8X8 = "Interface\\Buttons\\WHITE8X8"
 
+-- What a skin change has to revisit: everything given a colour or texture
+-- once, at build time, rather than on every render. Weak-keyed, so a frame
+-- that goes away is not kept alive by the list.
+local skinned = {
+    pages = setmetatable({}, { __mode = "k" }),   -- frame -> true (SetParchmentBackdrop)
+    chrome = setmetatable({}, { __mode = "k" }),  -- frame -> true (ApplyPanelChrome)
+    buttons = setmetatable({}, { __mode = "k" }), -- button -> true (SkinButton)
+}
+
+-- Draws a skin surface (Core/Theme.lua: an image or a flat colour) onto a
+-- texture region.
+local function ApplySurface(texture, surface, vertex)
+    if not (texture and surface) then return end
+    if surface.texture then
+        if surface.tile then
+            texture:SetTexture(surface.texture, "REPEAT", "REPEAT")
+            pcall(texture.SetHorizTile, texture, true)
+            pcall(texture.SetVertTile, texture, true)
+        else
+            texture:SetTexture(surface.texture)
+        end
+        local v = vertex or surface.vertex or { 1, 1, 1 }
+        pcall(texture.SetVertexColor, texture, v[1], v[2], v[3], 1)
+    elseif surface.color then
+        -- Clear any tint first: a vertex colour left by a tinted skin
+        -- (Class-bound's cover) multiplies over a flat colour too.
+        pcall(texture.SetVertexColor, texture, 1, 1, 1, 1)
+        texture:SetColorTexture(surface.color[1], surface.color[2], surface.color[3], 1)
+    end
+end
+
+-- A backdrop whose fill is the active skin's page and whose edge is
+-- `edgeColor` (default: the rule). Shared with UI/CharacterPanel.lua.
+local function ApplyPageBackdrop(frame, edgeSize, edgeColor)
+    local page = ns.GetTomeSkin(ns.db and ns.db.tomeSkin).page
+    pcall(frame.SetBackdrop, frame, {
+        bgFile = page.texture or WHITE8X8,
+        edgeFile = WHITE8X8,
+        edgeSize = edgeSize or 1,
+    })
+    if page.texture then
+        pcall(frame.SetBackdropColor, frame, 1, 1, 1, 1)
+    else
+        pcall(frame.SetBackdropColor, frame, page.color[1], page.color[2], page.color[3], 1)
+    end
+    local edge = edgeColor or BORDER_COLOR
+    pcall(frame.SetBackdropBorderColor, frame, edge[1], edge[2], edge[3], edge[4] or 1)
+end
+ns.ApplyPageBackdrop = ApplyPageBackdrop
+
 -- A parchment card: dialogs and edit boxes. The page texture as the fill,
 -- a 1px rule as the edge, and a second hairline inset from it so the edge
 -- reads as a chart border drawn twice. Replaces the flat dark panel with a
 -- gradient and top seam that the Blizzard Modern pass used.
 local function SetParchmentBackdrop(frame)
-    pcall(frame.SetBackdrop, frame, {
-        bgFile = TEXTURE_PATH .. "parchment.png",
-        edgeFile = WHITE8X8,
-        edgeSize = 1,
-    })
-    pcall(frame.SetBackdropColor, frame, 1, 1, 1, 1)
-    pcall(frame.SetBackdropBorderColor, frame, unpack(BORDER_COLOR))
+    ApplyPageBackdrop(frame, 1)
+    skinned.pages[frame] = true
 end
 
 local function ApplyPanelChrome(frame)
@@ -453,6 +515,7 @@ local function ApplyPanelChrome(frame)
     pcall(rule.SetBackdrop, rule, { edgeFile = WHITE8X8, edgeSize = 1 })
     pcall(rule.SetBackdropBorderColor, rule, BORDER_COLOR[1], BORDER_COLOR[2], BORDER_COLOR[3], 0.55)
     frame.specSageRule = rule
+    skinned.chrome[frame] = true
 end
 
 -- One hairline rule inset `inset` px inside `region` (a page texture),
@@ -463,6 +526,9 @@ local function PageRule(parent, region, inset, alpha)
     rule:SetPoint("BOTTOMRIGHT", region, "BOTTOMRIGHT", -inset, inset)
     pcall(rule.SetBackdrop, rule, { edgeFile = WHITE8X8, edgeSize = 1 })
     pcall(rule.SetBackdropBorderColor, rule, BORDER_COLOR[1], BORDER_COLOR[2], BORDER_COLOR[3], alpha)
+    rule.ruleAlpha = alpha
+    parent.pageRules = parent.pageRules or {}
+    parent.pageRules[#parent.pageRules + 1] = rule
     return rule
 end
 
@@ -479,6 +545,7 @@ local function ApplyTomeChrome(frame)
     cover:SetTexture(TEXTURE_PATH .. "leather.png", "REPEAT", "REPEAT")
     pcall(cover.SetHorizTile, cover, true)
     pcall(cover.SetVertTile, cover, true)
+    frame.cover = cover
 
     local spine = frame:CreateTexture(nil, "BACKGROUND", nil, 1)
     spine:SetPoint("TOPLEFT", frame, "TOPLEFT", 0, 0)
@@ -613,6 +680,8 @@ local function SkinButton(button, opts)
     button.specSageFill = fill
     button.specSageShadow = shadow
     button.specSageSeam = seam
+    button.specSageRestBorder = restBorder
+    skinned.buttons[button] = true
 
     local function SetPressed(pressed)
         local dx = pressed and 2 or 0
@@ -3039,6 +3108,7 @@ function Tome:BuildTabStrip()
     rule:SetPoint("BOTTOMRIGHT", strip, "BOTTOMRIGHT", 0, 0)
     rule:SetHeight(1)
     rule:SetColorTexture(unpack(BORDER_COLOR))
+    self.tabRule = rule
 
     self.tabButtons = {}
     local x = 0
@@ -3102,6 +3172,79 @@ function Tome:BuildContentArea()
     -- Stats tab's second, wrapping pool: the per-hero-tree priorities and
     -- their notes, which are text rows rather than label/value stat rows.
     self.statLinePool = {}
+end
+
+--------------------------------------------------------------------------------
+-- Skins (2026-10-03)
+--
+-- ns.ApplyTomeSkin(key) loads the palette (Core/Theme.lua) and then has each
+-- surface revisit what it drew once: Tome:ApplySkin here, and
+-- CharacterPanel:ApplySkin for the docked panel. Text drawn by the
+-- renderers picks the palette up on the redraw at the end.
+--------------------------------------------------------------------------------
+
+-- The ink-coloured font objects (built near the top of this file).
+local FONT_INK = { SpecSageBodyFont, SpecSageBodyFontSmall, SpecSageBoldFontSmall, SpecSageHeadingFont,
+                   SpecSageChapterFont, SpecSageTitleFont, SpecSageItalicFont }
+
+-- A lighter shade of `color` for a button's lit top seam.
+local function Lighter(color, amount)
+    return math.min(1, color[1] + amount), math.min(1, color[2] + amount), math.min(1, color[3] + amount)
+end
+
+function Tome:ApplySkin(skin)
+    skin = skin or ns.GetTomeSkin(ns.db and ns.db.tomeSkin)
+
+    for _, font in ipairs(FONT_INK) do
+        if font.SetTextColor then font:SetTextColor(unpack(TEXT_PRIMARY_COLOR)) end
+    end
+    if SpecSageButtonFont then SpecSageButtonFont:SetTextColor(unpack(BUTTON_TEXT_COLOR)) end
+    if SpecSageButtonDisabledFont then
+        SpecSageButtonDisabledFont:SetTextColor(BUTTON_TEXT_COLOR[1], BUTTON_TEXT_COLOR[2], BUTTON_TEXT_COLOR[3], 0.45)
+    end
+
+    for frame in pairs(skinned.pages) do ApplyPageBackdrop(frame, 1) end
+    for frame in pairs(skinned.chrome) do
+        local rule = frame.specSageRule
+        if rule then
+            pcall(rule.SetBackdropBorderColor, rule, BORDER_COLOR[1], BORDER_COLOR[2], BORDER_COLOR[3], 0.55)
+        end
+    end
+    for button in pairs(skinned.buttons) do
+        button.specSageFill:SetColorTexture(unpack(PANEL_BACKDROP_COLOR))
+        button.specSageBorder:SetColorTexture(unpack(button.specSageRestBorder))
+        button.specSageSeam:SetColorTexture(Lighter(PANEL_BACKDROP_COLOR, 0.25))
+    end
+
+    local frame = self.frame
+    if frame then
+        frame:SetBackdropColor(unpack(PANEL_BACKDROP_COLOR))
+        frame:SetBackdropBorderColor(unpack(PANEL_BORDER_COLOR))
+        ApplySurface(frame.cover, skin.cover, ns.TomeCoverVertex(skin))
+        ApplySurface(frame.leftPage, skin.page)
+        ApplySurface(frame.rightPage, skin.page)
+        local spine = skin.spine or { 0.10, 0.07, 0.04, 0.55 }
+        if frame.spine then frame.spine:SetColorTexture(spine[1], spine[2], spine[3], spine[4] or 1) end
+        if frame.compassRose then frame.compassRose:SetAlpha(skin.roseAlpha or 0.45) end
+        for _, rule in ipairs(frame.pageRules or {}) do
+            pcall(rule.SetBackdropBorderColor, rule, BORDER_COLOR[1], BORDER_COLOR[2], BORDER_COLOR[3],
+                rule.ruleAlpha or 0.6)
+        end
+        if self.tabRule then self.tabRule:SetColorTexture(unpack(BORDER_COLOR)) end
+        if frame.versionText then frame.versionText:SetTextColor(unpack(MUTED_COLOR)) end
+        if self.UpdateTabHighlight then self:UpdateTabHighlight() end
+        if frame:IsShown() and self.selectedSpecID then self:RenderActiveTab() end
+    end
+    self.appliedSkin = skin
+end
+
+-- Loads skin `key` into the palette and repaints every surface that uses it.
+function ns.ApplyTomeSkin(key)
+    local skin = ns.LoadTomePalette(key)
+    Tome:ApplySkin(skin)
+    local panel = ns:GetModule("CharacterPanel")
+    if panel and panel.ApplySkin then panel:ApplySkin(skin) end
+    return skin
 end
 
 function Tome:BuildFrame()
@@ -3241,6 +3384,8 @@ function Tome:BuildFrame()
     self:BuildSpecRail()
     self:BuildTabStrip()
     self:BuildContentArea()
+    -- Build drew the default look; bring it to the chosen skin.
+    self:ApplySkin()
 
     -- CreateFrame hands back a frame that is already shown (both in the real
     -- client and in the test mock); the Tome should not pop up the instant

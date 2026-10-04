@@ -576,6 +576,42 @@ The trinket count test now asserts the invariant (every spec has a sim
 list or a note) rather than bloodmallet's current coverage, which grew from
 27 to 29 specs with Retribution and Feral.
 
+## Tome skins (2026-10-03)
+
+The Tome had one look (leather cover, parchment pages, ink, wax red); it
+now has four, picked by `SpecSageDB.tomeSkin` ("Tome skin" in the Codex
+option group): `tome` (default), `midnight`, `vellum`, `classbound`.
+
+**One shared palette.** `Core/Theme.lua` defines `ns.TOME_SKINS` (each a
+palette plus how the cover and pages are drawn: an image with optional
+tiling and tint, or a flat colour) and `ns.TomePalette`, the live palette.
+`UI/Tome.lua` and `UI/CharacterPanel.lua` alias their colour constants to
+`ns.TomePalette`'s tables (`TEXT_PRIMARY_COLOR = PALETTE.ink`, ...), and
+`ns.LoadTomePalette(key)` rewrites those tables *in place*. Every renderer
+already reads colours with `unpack(X)` at draw time, so the next redraw is
+in the new skin with no other change to the 3000 lines of rendering. The
+palette must therefore never be reassigned, only copied into.
+
+**What a redraw does not reach** is what was drawn once at build time, and
+`Tome:ApplySkin` revisits exactly that: the shared font objects' colour,
+the cover / pages / spine / compass rose (`ApplySurface`), the page rules,
+the tab-strip rule and version line, every `SetParchmentBackdrop` frame and
+`ApplyPanelChrome` rule, and every `SkinButton` plate. Those are recorded in
+weak-keyed registries (`skinned.pages`, `.chrome`, `.buttons`) as they are
+built. `CharacterPanel:ApplySkin` does the same for the panel's page, rule
+and side tabs (its BiS status colours come from the palette's `good` /
+`accent` / `ink`). `ns.ApplyTomeSkin(key)` runs both; `Tome:OnInit` loads
+the palette before any frame exists, `BuildFrame` ends by applying the
+skin, and `Tome:OnConfigChanged` applies a changed choice at once.
+
+**Class-bound** derives its accent and button leather from the player's
+class colour scaled toward black (`accentFromClass`, `leatherFromClass`),
+since Priest white or Rogue yellow have no contrast on parchment, and tints
+the leather cover (`vertexFromClass`). `ApplySurface` clears the tint before
+drawing a flat colour, or a later Midnight cover would keep it. Ink plates
+behind class names stay dark on every skin. Trinket tier colours are bright
+enough for every page and are not skinned.
+
 ## Review fixes (2026-09-23)
 
 A four-part review (core and modules, UI, data layer, and every Blizzard
