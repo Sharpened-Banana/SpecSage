@@ -579,8 +579,8 @@ list or a note) rather than bloodmallet's current coverage, which grew from
 ## Tome skins (2026-10-03)
 
 The Tome had one look (leather cover, parchment pages, ink, wax red); it
-now has four, picked by `SpecSageDB.tomeSkin` ("Tome skin" in the Codex
-option group): `tome` (default), `midnight`, `vellum`, `classbound`.
+now has four, picked by `SpecSageDB.tomeSkin` ("Tome skin" in the
+Tome's option group): `tome` (default), `midnight`, `vellum`, `classbound`.
 
 **One shared palette.** `Core/Theme.lua` defines `ns.TOME_SKINS` (each a
 palette plus how the cover and pages are drawn: an image with optional
