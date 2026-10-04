@@ -13,7 +13,9 @@ local ADDON, ns = ...
 -- pass: pulled live from Blizzard's own Battle.net Game Data API
 -- (client-credentials OAuth, US region) rather than SimC, on 2026-08-30.
 -- Methodology: every current-season Mythic+ leaderboard (8-dungeon pool,
--- period 1078) across all 83 US connected realms was scanned (top 20 groups
+-- period 1078; refreshed 2026-10-04 at
+-- period 1083 - a field whose `source` still says 2026-08-30 was kept
+-- because the newer sample had no repeated build) across all 83 US connected realms was scanned (top 20 groups
 -- per realm/dungeon) for each spec's group members; the top-observed-keystone
 -- characters (up to 50 per spec) had their live `specializations` looked up
 -- for their active loadout's `talent_loadout_code`. See each field's own
@@ -146,13 +148,13 @@ ns.GuideStore:RegisterSpec("ROGUE", 259, {
     patch = "12.1",
   },
   -- Live top-players pull (DESIGN.md's v1.4 section), NOT SimC - see this
-  -- file's header for the full methodology. The plurality build among the
-  -- sample: 2/50 (4%) ran this exact code, since flex-point choices vary - but
-  -- the bigger signal is that 34/50 (68%) ran Deathstalker overall. Reported
-  -- honestly rather than dressed up as more decisive than it is.
+  -- file's header for the methodology. The `source` line below carries the
+  -- pull's date, sample size, the plurality share and the hero-talent
+  -- split; one exact code rarely commands a majority, since flex-point
+  -- choices vary, so the share is reported as it is.
   mplusMetaLoadout = {
-    string = "CMQA5HmDzx68KWyrW/8Y781L7bmlZmFDGAAAAAYWGsNDAAAAAotlZmZmZmxYbmZmtZWmZmHwDMmZMzwMjxAsZWGYALBLDTghFDmZAGMA",
-    source = "Blizzard Battle.net API, US region, 2026-08-30: top 50 current-season Mythic+ Assassination Rogues by best keystone level, sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick (2/50, 4%); 34/50 (68%) ran Deathstalker overall.",
+    string = "CMQA5HmDzx68KWyrW/8Y781L7bmlZmFDGAAAAAYWGsNDAAAAAotlxMzMzMGbzMzsNzyMz8AmxMjxwMjxAsZWGYALBLDTghFDmZAGjB",
+    source = "Blizzard Battle.net API, US region, 2026-10-04: top 50 current-season Mythic+ Assassination Rogues by best keystone level, sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick (3/50, 6%); 30/50 (60%) ran Deathstalker overall.",
     patch = "12.1",
     sampleSize = 50,
   },
@@ -252,13 +254,13 @@ ns.GuideStore:RegisterSpec("ROGUE", 260, {
     patch = "12.1",
   },
   -- Live top-players pull (DESIGN.md's v1.4 section), NOT SimC - see this
-  -- file's header for the full methodology. The plurality build among the
-  -- sample: 11/50 (22%) ran this exact code, since flex-point choices vary -
-  -- but the bigger signal is that 50/50 (100%) ran Trickster overall. Reported
-  -- honestly rather than dressed up as more decisive than it is.
+  -- file's header for the methodology. The `source` line below carries the
+  -- pull's date, sample size, the plurality share and the hero-talent
+  -- split; one exact code rarely commands a majority, since flex-point
+  -- choices vary, so the share is reported as it is.
   mplusMetaLoadout = {
     string = "CQQA5HmDzx68KWyrW/8Y781L7Dgx2MMzMjZmtZmZMzMzsAmZbaZw2MAAAAAgZbZmZGmZmZWMzMbDAAAAjBAjZxwQGYWYhWYjBYmBDMA",
-    source = "Blizzard Battle.net API, US region, 2026-08-30: top 50 current-season Mythic+ Outlaw Rogues by best keystone level, sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick (11/50, 22%); 50/50 (100%) ran Trickster overall.",
+    source = "Blizzard Battle.net API, US region, 2026-10-04: top 50 current-season Mythic+ Outlaw Rogues by best keystone level, sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick (5/50, 10%); 50/50 (100%) ran Trickster overall.",
     patch = "12.1",
     sampleSize = 50,
   },
@@ -355,13 +357,13 @@ ns.GuideStore:RegisterSpec("ROGUE", 261, {
     patch = "12.1",
   },
   -- Live top-players pull (DESIGN.md's v1.4 section), NOT SimC - see this
-  -- file's header for the full methodology. The plurality build among the
-  -- sample: 4/50 (8%) ran this exact code, since flex-point choices vary - but
-  -- the bigger signal is that 46/50 (92%) ran Deathstalker overall. Reported
-  -- honestly rather than dressed up as more decisive than it is.
+  -- file's header for the methodology. The `source` line below carries the
+  -- pull's date, sample size, the plurality share and the hero-talent
+  -- split; one exact code rarely commands a majority, since flex-point
+  -- choices vary, so the share is reported as it is.
   mplusMetaLoadout = {
     string = "CUQA5HmDzx68KWyrW/8Y781L7Dgx2MAAAAAwsMGLTMbbjxMDjZmZmZGGbzYGbLzMzMzMjBjZ2GAAAAGMmNzyADYBsMMhMLYGmZAmxA",
-    source = "Blizzard Battle.net API, US region, 2026-08-30: top 50 current-season Mythic+ Subtlety Rogues by best keystone level, sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick (4/50, 8%); 46/50 (92%) ran Deathstalker overall.",
+    source = "Blizzard Battle.net API, US region, 2026-10-04: top 50 current-season Mythic+ Subtlety Rogues by best keystone level, sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick (6/50, 12%); 46/50 (92%) ran Deathstalker overall.",
     patch = "12.1",
     sampleSize = 50,
   },

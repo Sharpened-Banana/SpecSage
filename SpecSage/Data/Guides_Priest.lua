@@ -13,7 +13,9 @@ local ADDON, ns = ...
 -- pass: pulled live from Blizzard's own Battle.net Game Data API
 -- (client-credentials OAuth, US region) rather than SimC, on 2026-08-30.
 -- Methodology: every current-season Mythic+ leaderboard (8-dungeon pool,
--- period 1078) across all 83 US connected realms was scanned (top 20 groups
+-- period 1078; refreshed 2026-10-04 at
+-- period 1083 - a field whose `source` still says 2026-08-30 was kept
+-- because the newer sample had no repeated build) across all 83 US connected realms was scanned (top 20 groups
 -- per realm/dungeon) for each spec's group members; the top-observed-keystone
 -- characters (up to 50 per spec) had their live `specializations` looked up
 -- for their active loadout's `talent_loadout_code`. See each field's own
@@ -129,13 +131,13 @@ ns.GuideStore:RegisterSpec("PRIEST", 256, {
     { slot = "Off-hand", text = "An off-hand caster stat stick for extra Intellect and secondary stats" },
   },
   -- Live top-players pull (DESIGN.md's v1.4 section), NOT SimC - see this
-  -- file's header for the full methodology. The plurality build among the
-  -- sample: 2/50 (4%) ran this exact code, since flex-point choices vary - but
-  -- the bigger signal is that 38/50 (76%) ran Oracle overall. Reported honestly
-  -- rather than dressed up as more decisive than it is.
+  -- file's header for the methodology. The `source` line below carries the
+  -- pull's date, sample size, the plurality share and the hero-talent
+  -- split; one exact code rarely commands a majority, since flex-point
+  -- choices vary, so the share is reported as it is.
   mplusMetaLoadout = {
-    string = "CAQAR03Gt7xPmcDNOjs2Zlb3yCDsMDWmZMmBmZbmtZmZmxMDAAAAAAAAAgZYZGMzMzwYmBbmmJGgZWwQYMLDwYwCAAMmZmxgZAmZGBzA",
-    source = "Blizzard Battle.net API, US region, 2026-08-30: top 50 current-season Mythic+ Discipline Priests by best keystone level, sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick (2/50, 4%); 38/50 (76%) ran Oracle overall.",
+    string = "CAQAR03Gt7xPmcDNOjs2Zlb3yCDsMDWmZMmBmZbmtZmZmxMDAAAAAAAAAghZZGMzMDzYmBMNTMAzsghwYWGgxgFAAYMzMjBzAMzMTwM",
+    source = "Blizzard Battle.net API, US region, 2026-10-04: top 50 current-season Mythic+ Discipline Priests by best keystone level, sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick (4/50, 8%); 39/50 (78%) ran Oracle overall.",
     patch = "12.1",
     sampleSize = 50,
   },
@@ -228,13 +230,13 @@ ns.GuideStore:RegisterSpec("PRIEST", 257, {
     { slot = "Off-hand", text = "An off-hand caster stat stick for extra Intellect and secondary stats" },
   },
   -- Live top-players pull (DESIGN.md's v1.4 section), NOT SimC - see this
-  -- file's header for the full methodology. The plurality build among the
-  -- sample: 3/50 (6%) ran this exact code, since flex-point choices vary - but
-  -- the bigger signal is that 50/50 (100%) ran Oracle overall. Reported
-  -- honestly rather than dressed up as more decisive than it is.
+  -- file's header for the methodology. The `source` line below carries the
+  -- pull's date, sample size, the plurality share and the hero-talent
+  -- split; one exact code rarely commands a majority, since flex-point
+  -- choices vary, so the share is reported as it is.
   mplusMetaLoadout = {
-    string = "CEQAR03Gt7xPmcDNOjs2Zlb3yyYAAAAAAAMzMmlxMjZGDzALzMzMAAAAGzsMDmZmx2MmZAMTBwMLYIMmtBYMwiZmBgmxMjxgZAmZGwA",
-    source = "Blizzard Battle.net API, US region, 2026-08-30: top 50 current-season Mythic+ Holy Priests by best keystone level, sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick (3/50, 6%); 50/50 (100%) ran Oracle overall.",
+    string = "CEQAR03Gt7xPmcDNOjs2Zlb3yyYAAAAAAAMzMmlxMjZGDzALzMzMAAAAGzsMDmZmxmxMD2wMFAzshhwYWGgxALGzsAoZMzYMYGgZmBMA",
+    source = "Blizzard Battle.net API, US region, 2026-10-04: top 50 current-season Mythic+ Holy Priests by best keystone level, sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick (4/50, 8%); 50/50 (100%) ran Oracle overall.",
     patch = "12.1",
     sampleSize = 50,
   },
@@ -328,15 +330,15 @@ ns.GuideStore:RegisterSpec("PRIEST", 258, {
     patch = "12.1",
   },
   -- Live top-players pull (DESIGN.md's v1.4 section), NOT SimC - see this
-  -- file's header for the full methodology. The plurality build among the
-  -- sample: 2/49 (4%) ran this exact code, since flex-point choices vary - but
-  -- the bigger signal is that 29/49 (59%) ran Archon overall. Reported honestly
-  -- rather than dressed up as more decisive than it is.
+  -- file's header for the methodology. The `source` line below carries the
+  -- pull's date, sample size, the plurality share and the hero-talent
+  -- split; one exact code rarely commands a majority, since flex-point
+  -- choices vary, so the share is reported as it is.
   mplusMetaLoadout = {
-    string = "CIQAR03Gt7xPmcDNOjs2Zlb3yOjZMAAAAAAAAAAAAYMLzMGbzMmZ2mZGzw2MzYmZGbIzYxMNAzMzAABY2mtlgZjBAGMmZmxsNmBzMYGMA",
-    source = "Blizzard Battle.net API, US region, 2026-08-30: top 49 current-season Mythic+ Shadow Priests by best keystone level, sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick (2/49, 4%); 29/49 (59%) ran Archon overall.",
+    string = "CIQAR03Gt7xPmcDNOjs2Zlb3yOMDDAAAAAAAAAAAAmZxMmZbmxMz2MGzw2MzYmZGbMZgZaMwMAzsZGNbGAyYsAgZGwYmZGzGzstMAzgB",
+    source = "Blizzard Battle.net API, US region, 2026-10-04: top 50 current-season Mythic+ Shadow Priests by best keystone level, sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick (3/50, 6%); 43/50 (86%) ran Archon overall.",
     patch = "12.1",
-    sampleSize = 49,
+    sampleSize = 50,
   },
   tips = {
     "Never let Shadow Word: Pain or Vampiric Touch fall off a target you'll keep attacking.",

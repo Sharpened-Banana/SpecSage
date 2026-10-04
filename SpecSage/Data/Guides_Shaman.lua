@@ -13,7 +13,9 @@ local ADDON, ns = ...
 -- pass: pulled live from Blizzard's own Battle.net Game Data API
 -- (client-credentials OAuth, US region) rather than SimC, on 2026-08-30.
 -- Methodology: every current-season Mythic+ leaderboard (8-dungeon pool,
--- period 1078) across all 83 US connected realms was scanned (top 20 groups
+-- period 1078; refreshed 2026-10-04 at
+-- period 1083 - a field whose `source` still says 2026-08-30 was kept
+-- because the newer sample had no repeated build) across all 83 US connected realms was scanned (top 20 groups
 -- per realm/dungeon) for each spec's group members; the top-observed-keystone
 -- characters (up to 50 per spec) had their live `specializations` looked up
 -- for their active loadout's `talent_loadout_code`. See each field's own
@@ -150,10 +152,10 @@ ns.GuideStore:RegisterSpec("SHAMAN", 262, {
     patch = "12.1",
   },
   -- Live top-players pull (DESIGN.md's v1.4 section), NOT SimC - see this
-  -- file's header for the full methodology. The plurality build among the
-  -- sample: 2/50 (4%) ran this exact code, since flex-point choices vary - but
-  -- the bigger signal is that 50/50 (100%) ran Farseer overall. Reported
-  -- honestly rather than dressed up as more decisive than it is.
+  -- file's header for the methodology. The `source` line below carries the
+  -- pull's date, sample size, the plurality share and the hero-talent
+  -- split; one exact code rarely commands a majority, since flex-point
+  -- choices vary, so the share is reported as it is.
   mplusMetaLoadout = {
     string = "CYQALMl7AwW51MWzGneuHE3tPCAAAAzMbLzMGjZZbZMmhZAAAAgFzsBDYAzGTIzCAMbzMzYssYajZmtxyMzMjhFLzMLDjZmFAgBAmZMMMA",
     source = "Blizzard Battle.net API, US region, 2026-08-30: top 50 current-season Mythic+ Elemental Shamans by best keystone level, sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick (2/50, 4%); 50/50 (100%) ran Farseer overall.",
@@ -252,13 +254,13 @@ ns.GuideStore:RegisterSpec("SHAMAN", 263, {
     patch = "12.1",
   },
   -- Live top-players pull (DESIGN.md's v1.4 section), NOT SimC - see this
-  -- file's header for the full methodology. The plurality build among the
-  -- sample: 7/50 (14%) ran this exact code, since flex-point choices vary - but
-  -- the bigger signal is that 50/50 (100%) ran Stormbringer overall. Reported
-  -- honestly rather than dressed up as more decisive than it is.
+  -- file's header for the methodology. The `source` line below carries the
+  -- pull's date, sample size, the plurality share and the hero-talent
+  -- split; one exact code rarely commands a majority, since flex-point
+  -- choices vary, so the share is reported as it is.
   mplusMetaLoadout = {
     string = "CcQALMl7AwW51MWzGneuHE3tPOzMzgZmZmZmhZmZAAAAAAAAA2AsZGDbkFYGGawCAz2MmxYZZGbMzsNWmZmZYsMmBAYGGzMMCMzgBjB",
-    source = "Blizzard Battle.net API, US region, 2026-08-30: top 50 current-season Mythic+ Enhancement Shamans by best keystone level, sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick (7/50, 14%); 50/50 (100%) ran Stormbringer overall.",
+    source = "Blizzard Battle.net API, US region, 2026-10-04: top 50 current-season Mythic+ Enhancement Shamans by best keystone level, sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick (4/50, 8%); 50/50 (100%) ran Stormbringer overall.",
     patch = "12.1",
     sampleSize = 50,
   },
@@ -351,13 +353,13 @@ ns.GuideStore:RegisterSpec("SHAMAN", 264, {
     { slot = "Off-hand", text = "An off-hand caster stat stick for extra Intellect and secondary stats" },
   },
   -- Live top-players pull (DESIGN.md's v1.4 section), NOT SimC - see this
-  -- file's header for the full methodology. The plurality build among the
-  -- sample: 2/50 (4%) ran this exact code, since flex-point choices vary - but
-  -- the bigger signal is that 47/50 (94%) ran Totemic overall. Reported
-  -- honestly rather than dressed up as more decisive than it is.
+  -- file's header for the methodology. The `source` line below carries the
+  -- pull's date, sample size, the plurality share and the hero-talent
+  -- split; one exact code rarely commands a majority, since flex-point
+  -- choices vary, so the share is reported as it is.
   mplusMetaLoadout = {
-    string = "CgQALMl7AwW51MWzGneuHE3tPCAAAgBAAAAzMzsstMmZmZmZmZMjhFYDmxiGbDIzAbYmBzyMjRzyyMzmZMbsYMzYYZWGAAMAmZwMDAMYA",
-    source = "Blizzard Battle.net API, US region, 2026-08-30: top 50 current-season Mythic+ Restoration Shamans by best keystone level, sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick (2/50, 4%); 47/50 (94%) ran Totemic overall.",
+    string = "CgQALMl7AwW51MWzGneuHE3tPCAAAgBAAAAzMzsstMmZmZMzMjZMsAbwMW0YbAZGYDzMY2mZMaWWmZ2MjZjFjZGDLzyAAgBwMDmZAYMYA",
+    source = "Blizzard Battle.net API, US region, 2026-10-04: top 50 current-season Mythic+ Restoration Shamans by best keystone level, sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick (3/50, 6%); 49/50 (98%) ran Totemic overall.",
     patch = "12.1",
     sampleSize = 50,
   },

@@ -13,7 +13,9 @@ local ADDON, ns = ...
 -- pass: pulled live from Blizzard's own Battle.net Game Data API
 -- (client-credentials OAuth, US region) rather than SimC, on 2026-08-30.
 -- Methodology: every current-season Mythic+ leaderboard (8-dungeon pool,
--- period 1078) across all 83 US connected realms was scanned (top 20 groups
+-- period 1078; refreshed 2026-10-04 at
+-- period 1083 - a field whose `source` still says 2026-08-30 was kept
+-- because the newer sample had no repeated build) across all 83 US connected realms was scanned (top 20 groups
 -- per realm/dungeon) for each spec's group members; the top-observed-keystone
 -- characters (up to 50 per spec) had their live `specializations` looked up
 -- for their active loadout's `talent_loadout_code`. See each field's own
@@ -146,13 +148,13 @@ ns.GuideStore:RegisterSpec("DRUID", 102, {
     patch = "12.0 (MID1, previous tier)",
   },
   -- Live top-players pull (DESIGN.md's v1.4 section), NOT SimC - see this
-  -- file's header for the full methodology. The plurality build among the
-  -- sample: 4/50 (8%) ran this exact code, since flex-point choices vary - but
-  -- the bigger signal is that 49/50 (98%) ran Elune's Chosen overall. Reported
-  -- honestly rather than dressed up as more decisive than it is.
+  -- file's header for the methodology. The `source` line below carries the
+  -- pull's date, sample size, the plurality share and the hero-talent
+  -- split; one exact code rarely commands a majority, since flex-point
+  -- choices vary, so the share is reported as it is.
   mplusMetaLoadout = {
-    string = "CYGADBD3hSPCL9Y9gz68WcKvMAAAAAAAAAAAAAAAAAWoMbNjxMDwsMzMzMLMYMLzsMzCzM2YZmlxMjxGGGgx22MDGz2IwEAAAgFmZmZwmhxYAAYmBLDA",
-    source = "Blizzard Battle.net API, US region, 2026-08-30: top 50 current-season Mythic+ Balance Druids by best keystone level, sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick (4/50, 8%); 49/50 (98%) ran Elune's Chosen overall.",
+    string = "CYGADBD3hSPCL9Y9gz68WcKvMAAAAAAAAAAAAAAAAAWoMbNjxMDwsYmZmZhBjZZmlZWYmxGLzsMmZM2wwAM22mZwY2GBmAAAAsYmZmZwmhxYAAYmBLDA",
+    source = "Blizzard Battle.net API, US region, 2026-10-04: top 50 current-season Mythic+ Balance Druids by best keystone level, sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick (6/50, 12%); 50/50 (100%) ran Elune's Chosen overall.",
     patch = "12.1",
     sampleSize = 50,
   },
@@ -255,13 +257,13 @@ ns.GuideStore:RegisterSpec("DRUID", 103, {
     patch = "12.1",
   },
   -- Live top-players pull (DESIGN.md's v1.4 section), NOT SimC - see this
-  -- file's header for the full methodology. The plurality build among the
-  -- sample: 5/50 (10%) ran this exact code, since flex-point choices vary - but
-  -- the bigger signal is that 40/50 (80%) ran Druid of the Claw overall.
-  -- Reported honestly rather than dressed up as more decisive than it is.
+  -- file's header for the methodology. The `source` line below carries the
+  -- pull's date, sample size, the plurality share and the hero-talent
+  -- split; one exact code rarely commands a majority, since flex-point
+  -- choices vary, so the share is reported as it is.
   mplusMetaLoadout = {
-    string = "CcGADBD3hSPCL9Y9gz68WcKvMAAAAAAgZmZ2MzMzMGzmx2YbGzMmZAAAAYJY2M8AmZUzYWMzMzsMmhBAAAAAwADAAAgmZZWmZmBEYBmZGgFGMAAAmZDD",
-    source = "Blizzard Battle.net API, US region, 2026-08-30: top 50 current-season Mythic+ Feral Druids by best keystone level, sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick (5/50, 10%); 40/50 (80%) ran Druid of the Claw overall.",
+    string = "CcGADBD3hSPCL9Y9gz68WcKvMAAAAAAgZmZ2YmZmxY2M2mZZGzMmZAAAAYJY2M8AmZUzYWMzMzsMmhBAAAAAwADAAAgmZZWmZmBEYBmZGgFGMAAAmZDD",
+    source = "Blizzard Battle.net API, US region, 2026-10-04: top 50 current-season Mythic+ Feral Druids by best keystone level, sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick (12/50, 24%); 49/50 (98%) ran Druid of the Claw overall.",
     patch = "12.1",
     sampleSize = 50,
   },
@@ -365,13 +367,13 @@ ns.GuideStore:RegisterSpec("DRUID", 104, {
     patch = "12.0 (MID1, previous tier)",
   },
   -- Live top-players pull (DESIGN.md's v1.4 section), NOT SimC - see this
-  -- file's header for the full methodology. The plurality build among the
-  -- sample: 4/50 (8%) ran this exact code, since flex-point choices vary - but
-  -- the bigger signal is that 49/50 (98%) ran Elune's Chosen overall. Reported
-  -- honestly rather than dressed up as more decisive than it is.
+  -- file's header for the methodology. The `source` line below carries the
+  -- pull's date, sample size, the plurality share and the hero-talent
+  -- split; one exact code rarely commands a majority, since flex-point
+  -- choices vary, so the share is reported as it is.
   mplusMetaLoadout = {
-    string = "CgGADBD3hSPCL9Y9gz68WcKvMAAAAAAAAAAAAgZmxsYmZMziZxMmZZZgZzwoJamZWmZmZmlxMAAAAAAMzsZALbzMYMLDgpAAAAbYmHAYxYYALWAYmBwA",
-    source = "Blizzard Battle.net API, US region, 2026-08-30: top 50 current-season Mythic+ Guardian Druids by best keystone level, sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick (4/50, 8%); 49/50 (98%) ran Elune's Chosen overall.",
+    string = "CgGADBD3hSPCL9Y9gz68WcKvMAAAAAAAAAAAAgZmxsYmZMziZxMmZZZgZzwoJamZWmZmZmlxMAAAAAAMjNDYZbmBjZZAMFAAAYDzMALGDDYxCAzMAG",
+    source = "Blizzard Battle.net API, US region, 2026-10-04: top 50 current-season Mythic+ Guardian Druids by best keystone level, sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick (12/50, 24%); 50/50 (100%) ran Elune's Chosen overall.",
     patch = "12.1",
     sampleSize = 50,
   },
@@ -467,13 +469,13 @@ ns.GuideStore:RegisterSpec("DRUID", 105, {
     { slot = "Off-hand", text = "A caster off-hand leaning Haste keeps your HoT rolling and cast-heavy spot healing smooth" },
   },
   -- Live top-players pull (DESIGN.md's v1.4 section), NOT SimC - see this
-  -- file's header for the full methodology. The plurality build among the
-  -- sample: 2/50 (4%) ran this exact code, since flex-point choices vary - but
-  -- the bigger signal is that 42/50 (84%) ran Wildstalker overall. Reported
-  -- honestly rather than dressed up as more decisive than it is.
+  -- file's header for the methodology. The `source` line below carries the
+  -- pull's date, sample size, the plurality share and the hero-talent
+  -- split; one exact code rarely commands a majority, since flex-point
+  -- choices vary, so the share is reported as it is.
   mplusMetaLoadout = {
-    string = "CkGADBD3hSPCL9Y9gz68WcKvMMMmZZMjZmxsNMMzsMsZbGAAAAAAAAAAsMoZzw0MjZwsYmZmZZGegZAAAAAAAwAAQAAAz2MbNbzsYjxMDMzCoZAAmZAYA",
-    source = "Blizzard Battle.net API, US region, 2026-08-30: top 50 current-season Mythic+ Restoration Druids by best keystone level, sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick (2/50, 4%); 42/50 (84%) ran Wildstalker overall.",
+    string = "CkGADBD3hSPCL9Y9gz68WcKvMMMmZZMjZmxsNmHgxsxsZbGAAAAAAAAAAsZoZbmx0MDwsYmZGLGeADAAAAgBAMDAACAAY2mZpZbmNbMzMPwwMzGoZAAmZAYA",
+    source = "Blizzard Battle.net API, US region, 2026-10-04: top 50 current-season Mythic+ Restoration Druids by best keystone level, sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick (2/50, 4%); 48/50 (96%) ran Wildstalker overall.",
     patch = "12.1",
     sampleSize = 50,
   },

@@ -13,7 +13,9 @@ local ADDON, ns = ...
 -- pass: pulled live from Blizzard's own Battle.net Game Data API
 -- (client-credentials OAuth, US region) rather than SimC, on 2026-08-30.
 -- Methodology: every current-season Mythic+ leaderboard (8-dungeon pool,
--- period 1078) across all 83 US connected realms was scanned (top 20 groups
+-- period 1078; refreshed 2026-10-04 at
+-- period 1083 - a field whose `source` still says 2026-08-30 was kept
+-- because the newer sample had no repeated build) across all 83 US connected realms was scanned (top 20 groups
 -- per realm/dungeon) for each spec's group members; the top-observed-keystone
 -- characters (up to 50 per spec) had their live `specializations` looked up
 -- for their active loadout's `talent_loadout_code`. See each field's own
@@ -139,15 +141,15 @@ ns.GuideStore:RegisterSpec("HUNTER", 253, {
     patch = "12.1",
   },
   -- Live top-players pull (DESIGN.md's v1.4 section), NOT SimC - see this
-  -- file's header for the full methodology. The plurality build among the
-  -- sample: 6/50 (12%) ran this exact code, since flex-point choices vary - but
-  -- the bigger signal is that 50/50 (100%) ran Pack Leader overall. Reported
-  -- honestly rather than dressed up as more decisive than it is.
+  -- file's header for the methodology. The `source` line below carries the
+  -- pull's date, sample size, the plurality share and the hero-talent
+  -- split; one exact code rarely commands a majority, since flex-point
+  -- choices vary, so the share is reported as it is.
   mplusMetaLoadout = {
-    string = "C0PAD57yiELKEty14ekTDtZEqAMmxwCsAzwQDbAAYGzMzsYGzMzMjZGMzYmhZGzMzYbmZMjZYZMNDAAAAAAAA8AjxAmZjAmFw2AwA",
-    source = "Blizzard Battle.net API, US region, 2026-08-30: top 50 current-season Mythic+ Beast Mastery Hunters by best keystone level, sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick (6/50, 12%); 50/50 (100%) ran Pack Leader overall.",
+    string = "C0PAD57yiELKEty14ekTDtZEqAMmxwCsAzwQDbAAYGzMzsMzwMzMjZGMzYmhZGzMzYzMjZMDGTzAAAAAAAAAzYMgZ2IwMLgtBA",
+    source = "Blizzard Battle.net API, US region, 2026-10-04: top 48 current-season Mythic+ Beast Mastery Hunters by best keystone level, sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick (3/48, 6%); 48/48 (100%) ran Pack Leader overall.",
     patch = "12.1",
-    sampleSize = 50,
+    sampleSize = 48,
   },
   tips = {
     "Keep Barbed Shot's Frenzy buff active on your pet at essentially all times — this is the spec's core damage driver.",
@@ -236,13 +238,13 @@ ns.GuideStore:RegisterSpec("HUNTER", 254, {
     patch = "12.1",
   },
   -- Live top-players pull (DESIGN.md's v1.4 section), NOT SimC - see this
-  -- file's header for the full methodology. The plurality build among the
-  -- sample: 5/50 (10%) ran this exact code, since flex-point choices vary - but
-  -- the bigger signal is that 50/50 (100%) ran Sentinel overall. Reported
-  -- honestly rather than dressed up as more decisive than it is.
+  -- file's header for the methodology. The `source` line below carries the
+  -- pull's date, sample size, the plurality share and the hero-talent
+  -- split; one exact code rarely commands a majority, since flex-point
+  -- choices vary, so the share is reported as it is.
   mplusMetaLoadout = {
     string = "C4PAD57yiELKEty14ekTDtZEqwGMwMGNWGQmBbAAAAAAAAgZMzMjtZMzMmhlx0MGMLbLzMzMzMzMzCzsMMDAAgHYMGAmxGYA2YmtZMA",
-    source = "Blizzard Battle.net API, US region, 2026-08-30: top 50 current-season Mythic+ Marksmanship Hunters by best keystone level, sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick (5/50, 10%); 50/50 (100%) ran Sentinel overall.",
+    source = "Blizzard Battle.net API, US region, 2026-10-04: top 50 current-season Mythic+ Marksmanship Hunters by best keystone level, sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick (6/50, 12%); 50/50 (100%) ran Sentinel overall.",
     patch = "12.1",
     sampleSize = 50,
   },
@@ -335,13 +337,13 @@ ns.GuideStore:RegisterSpec("HUNTER", 255, {
     patch = "12.1",
   },
   -- Live top-players pull (DESIGN.md's v1.4 section), NOT SimC - see this
-  -- file's header for the full methodology. The plurality build among the
-  -- sample: 5/50 (10%) ran this exact code, since flex-point choices vary - but
-  -- the bigger signal is that 30/50 (60%) ran Sentinel overall. Reported
-  -- honestly rather than dressed up as more decisive than it is.
+  -- file's header for the methodology. The `source` line below carries the
+  -- pull's date, sample size, the plurality share and the hero-talent
+  -- split; one exact code rarely commands a majority, since flex-point
+  -- choices vary, so the share is reported as it is.
   mplusMetaLoadout = {
     string = "C8PAD57yiELKEty14ekTDtZEqMWgBmxoxyAYmgtZmZmZGz28AAAAAAAmxMzM2mxYGzwyYaGAAAgBAGLLzMWwMz4BGjBgZsBGjZmNDA",
-    source = "Blizzard Battle.net API, US region, 2026-08-30: top 50 current-season Mythic+ Survival Hunters by best keystone level, sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick (5/50, 10%); 30/50 (60%) ran Sentinel overall.",
+    source = "Blizzard Battle.net API, US region, 2026-10-04: top 50 current-season Mythic+ Survival Hunters by best keystone level, sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick (3/50, 6%); 40/50 (80%) ran Sentinel overall.",
     patch = "12.1",
     sampleSize = 50,
   },

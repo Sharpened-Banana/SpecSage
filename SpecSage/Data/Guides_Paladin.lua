@@ -13,7 +13,9 @@ local ADDON, ns = ...
 -- live from Blizzard's own Battle.net Game Data API (client-credentials
 -- OAuth, US region) rather than SimC (Protection first, on 2026-08-30; Holy
 -- and Retribution followed the same day in a second pass). Methodology:
--- every current-season Mythic+ leaderboard (8-dungeon pool, period 1078)
+-- every current-season Mythic+ leaderboard (8-dungeon pool, period 1078; refreshed 2026-10-04 at
+-- period 1083 - a field whose `source` still says 2026-08-30 was kept
+-- because the newer sample had no repeated build)
 -- across all 83 US connected realms was scanned (top 20 groups per
 -- realm/dungeon) for each spec's group members; the 50 distinct characters
 -- per spec with the highest observed keystone level had their live
@@ -122,13 +124,13 @@ ns.GuideStore:RegisterSpec("PALADIN", 65, {
     { slot = "Off-hand", text = "An off-hand caster stat stick for extra Intellect and secondary stats" },
   },
   -- Live top-players pull (DESIGN.md's v1.4 section), NOT SimC - see this
-  -- file's header for the full methodology. The plurality build among the
-  -- sample: 2/50 (4%) ran this exact code, since flex-point choices vary - but
-  -- the bigger signal is that 41/50 (82%) ran Herald of the Sun overall.
-  -- Reported honestly rather than dressed up as more decisive than it is.
+  -- file's header for the methodology. The `source` line below carries the
+  -- pull's date, sample size, the plurality share and the hero-talent
+  -- split; one exact code rarely commands a majority, since flex-point
+  -- choices vary, so the share is reported as it is.
   mplusMetaLoadout = {
-    string = "CEEAzbn3egSOtoSwvPw1U1vTLAAAALAwMAAD2mZGmZWmZsAzMsM2MziRTMMmZGGzWGAGA2AbsNzMzysNzMbNAAAALshBbmBzYwMAAmZYGjRDA",
-    source = "Blizzard Battle.net API, US region, 2026-08-30: top 50 current-season Mythic+ Holy Paladins by best keystone level, sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick (2/50, 4%); 41/50 (82%) ran Herald of the Sun overall.",
+    string = "CEEAzbn3egSOtoSwvPw1U1vTLAAAgZBAmBAAWGwMzyMzsMjZMsY2MziZaixMmZmxY2yAwAwGYjNzMAIAgZmllFLzMsx2YGsBMjBAYmBAjxoB",
+    source = "Blizzard Battle.net API, US region, 2026-10-04: top 50 current-season Mythic+ Holy Paladins by best keystone level, sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick, tied with 1 other build (2/50, 4% each); 36/50 (72%) ran Lightsmith overall.",
     patch = "12.1",
     sampleSize = 50,
   },
@@ -238,16 +240,13 @@ ns.GuideStore:RegisterSpec("PALADIN", 66, {
     patch = "12.1",
   },
   -- Live top-players pull (DESIGN.md's v1.4 section), NOT SimC - see this
-  -- file's header for the full methodology. The plurality build among the
-  -- sample: only 4/50 (8%) ran this exact code, since flex-point choices
-  -- vary - but the bigger signal is the hero talent behind it: 47/50 (94%)
-  -- of the sample chose Lightsmith over Templar, a real, strong consensus
-  -- this loadout reflects even though the literal byte-for-byte string does
-  -- not command anything close to majority agreement on its own. Reported
-  -- honestly rather than dressed up as more decisive than it is.
+  -- file's header for the methodology. The `source` line below carries the
+  -- pull's date, sample size, the plurality share and the hero-talent
+  -- split; one exact code rarely commands a majority, since flex-point
+  -- choices vary, so the share is reported as it is.
   mplusMetaLoadout = {
     string = "CIEAzbn3egSOtoSwvPw1U1vTLsZYWGzYmZmZW2GjZZWmlZMAADAAAAAAaamZZmxMDDbtBgBGwMYDAAgAMzsst0yMjFLLMDgBzshBAzMAYmBMWA",
-    source = "Blizzard Battle.net API, US region, 2026-08-30: top 50 current-season Mythic+ Protection Paladins by best keystone level, sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick (4/50, 8%); 94% of the sample (47/50) ran the Lightsmith hero talent overall.",
+    source = "Blizzard Battle.net API, US region, 2026-10-04: top 50 current-season Mythic+ Protection Paladins by best keystone level, sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick (4/50, 8%); 48/50 (96%) ran Lightsmith overall.",
     patch = "12.1",
     sampleSize = 50,
   },
@@ -345,13 +344,13 @@ ns.GuideStore:RegisterSpec("PALADIN", 70, {
     patch = "12.1",
   },
   -- Live top-players pull (DESIGN.md's v1.4 section), NOT SimC - see this
-  -- file's header for the full methodology. The plurality build among the
-  -- sample: 6/50 (12%) ran this exact code, since flex-point choices vary - but
-  -- the bigger signal is that 49/50 (98%) ran Herald of the Sun overall.
-  -- Reported honestly rather than dressed up as more decisive than it is.
+  -- file's header for the methodology. The `source` line below carries the
+  -- pull's date, sample size, the plurality share and the hero-talent
+  -- split; one exact code rarely commands a majority, since flex-point
+  -- choices vary, so the share is reported as it is.
   mplusMetaLoadout = {
-    string = "CYEAzbn3egSOtoSwvPw1U1vTLAAAAAwoZbbmZWGzMzAAAAAAYmyYGmZsNmthZ2mxYMGmxCbAYWmtZmZrBBAAsAYAwYGGYGzMbAzMDjZMYA",
-    source = "Blizzard Battle.net API, US region, 2026-08-30: top 50 current-season Mythic+ Retribution Paladins by best keystone level, sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick (6/50, 12%); 49/50 (98%) ran Herald of the Sun overall.",
+    string = "CYEAzbn3egSOtoSwvPw1U1vTLAAAAAwoZbbmZWGzYGAAAAAAzUmlZYmx2Y2GmZbGjxYYGLsBgZZ2mZmtGEAAwCgBAjZ2AmxMzGwMzwYGDG",
+    source = "Blizzard Battle.net API, US region, 2026-10-04: top 50 current-season Mythic+ Retribution Paladins by best keystone level, sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick (6/50, 12%); 50/50 (100%) ran Herald of the Sun overall.",
     patch = "12.1",
     sampleSize = 50,
   },

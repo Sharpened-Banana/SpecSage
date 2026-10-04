@@ -32,7 +32,9 @@ local ADDON, ns = ...
 --     Fury (72), and Protection (73): pulled live from Blizzard's own
 --     Battle.net Game Data API (client-credentials OAuth, US region) rather
 --     than SimC, on 2026-08-30. Methodology: every current-season Mythic+
---     leaderboard (8-dungeon pool, period 1078) across all 83 US connected
+--     leaderboard (8-dungeon pool, period 1078; refreshed 2026-10-04 at
+-- period 1083 - a field whose `source` still says 2026-08-30 was kept
+-- because the newer sample had no repeated build) across all 83 US connected
 --     realms was scanned (top 20 groups per realm/dungeon) for each spec's
 --     group members; the 50 distinct characters per spec with the highest
 --     observed keystone level had their live `specializations` looked up
@@ -166,13 +168,13 @@ ns.GuideStore:RegisterSpec("WARRIOR", 71, {
     patch = "12.1",
   },
   -- Live top-players pull (DESIGN.md's v1.4 section), NOT SimC - see this
-  -- file's header for the full methodology. The plurality build among the
-  -- sample: 8/50 (16%) ran this exact code, since flex-point choices vary - but
-  -- the bigger signal is that 50/50 (100%) ran Slayer overall. Reported
-  -- honestly rather than dressed up as more decisive than it is.
+  -- file's header for the methodology. The `source` line below carries the
+  -- pull's date, sample size, the plurality share and the hero-talent
+  -- split; one exact code rarely commands a majority, since flex-point
+  -- choices vary, so the share is reported as it is.
   mplusMetaLoadout = {
     string = "CcEASWsDSHNyPDXnbxuIhH3ZdjZmZmFzYmZGAAAghphxYmZzMzMzYmxMDAAAAgxyMDMhxy2ALgBMDTIzgNwMDDDmlZ2GgZGAMDDA",
-    source = "Blizzard Battle.net API, US region, 2026-08-30: top 50 current-season Mythic+ Arms Warriors by best keystone level, sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick (8/50, 16%); 50/50 (100%) ran Slayer overall.",
+    source = "Blizzard Battle.net API, US region, 2026-10-04: top 50 current-season Mythic+ Arms Warriors by best keystone level, sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick, tied with 1 other build (5/50, 10% each); 50/50 (100%) ran Slayer overall.",
     patch = "12.1",
     sampleSize = 50,
   },
@@ -270,13 +272,13 @@ ns.GuideStore:RegisterSpec("WARRIOR", 72, {
     patch = "12.1",
   },
   -- Live top-players pull (DESIGN.md's v1.4 section), NOT SimC - see this
-  -- file's header for the full methodology. The plurality build among the
-  -- sample: 6/50 (12%) ran this exact code, since flex-point choices vary - but
-  -- the bigger signal is that 46/50 (92%) ran Slayer overall. Reported honestly
-  -- rather than dressed up as more decisive than it is.
+  -- file's header for the methodology. The `source` line below carries the
+  -- pull's date, sample size, the plurality share and the hero-talent
+  -- split; one exact code rarely commands a majority, since flex-point
+  -- choices vary, so the share is reported as it is.
   mplusMetaLoadout = {
     string = "CgEASWsDSHNyPDXnbxuIhH3ZdDAAAAAAAjhxYmZzMzMzMzMmZmZmZm5BWmxYmxsZmZGAAAjltBWADYGGgZYDYmhBAAYmhxsMMGMG",
-    source = "Blizzard Battle.net API, US region, 2026-08-30: top 50 current-season Mythic+ Fury Warriors by best keystone level, sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick (6/50, 12%); 46/50 (92%) ran Slayer overall.",
+    source = "Blizzard Battle.net API, US region, 2026-10-04: top 50 current-season Mythic+ Fury Warriors by best keystone level, sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick, tied with 1 other build (3/50, 6% each); 30/50 (60%) ran Slayer overall.",
     patch = "12.1",
     sampleSize = 50,
   },
@@ -382,15 +384,15 @@ ns.GuideStore:RegisterSpec("WARRIOR", 73, {
     patch = "12.1",
   },
   -- Live top-players pull (DESIGN.md's v1.4 section), NOT SimC - see this
-  -- file's header for the full methodology. The plurality build among the
-  -- sample: 2/50 (4%) ran this exact code, since flex-point choices vary - but
-  -- the bigger signal is that 43/50 (86%) ran Mountain Thane overall. Reported
-  -- honestly rather than dressed up as more decisive than it is.
+  -- file's header for the methodology. The `source` line below carries the
+  -- pull's date, sample size, the plurality share and the hero-talent
+  -- split; one exact code rarely commands a majority, since flex-point
+  -- choices vary, so the share is reported as it is.
   mplusMetaLoadout = {
-    string = "CkEASWsDSHNyPDXnbxuIhH3ZdnBAAGzYmZmZmxsZmZZGjxoxMGWMzMzYGmZAAAAwyMDwMGgB2glFjGzAYWiZ2AmZGGbAwMDAAzAjB",
-    source = "Blizzard Battle.net API, US region, 2026-08-30: top 50 current-season Mythic+ Protection Warriors by best keystone level, sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick (2/50, 4%); 43/50 (86%) ran Mountain Thane overall.",
+    string = "CkEASWsDSHNyPDXnbxuIhH3ZdnBAAGzwMzMzMmNzMLzYMGNmxwiZmZGzwMDAAAAWmZAmxAMYbbGzyy2oZmhZYZWaMzGMmZGGbAwMzMDAYGYMA",
+    source = "Blizzard Battle.net API, US region, 2026-10-04: top 49 current-season Mythic+ Protection Warriors by best keystone level, sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick (2/49, 4%); 45/49 (92%) ran Mountain Thane overall.",
     patch = "12.1",
-    sampleSize = 50,
+    sampleSize = 49,
   },
   tips = {
     "Keep Shield Block active before big physical hits rather than reacting after the fact.",

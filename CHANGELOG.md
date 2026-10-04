@@ -5,6 +5,7 @@
 **Improved**
 - Data refreshed on 2026-10-04: new trinket sims from bloodmallet (re-run Sep 30; the S-tier picks changed for 23 specs), guide trinket tiers for Arcane, Holy Paladin, Assassination, Outlaw and Mistweaver, and guide talent builds for Unholy, Windwalker, Havoc and Augmentation.
 - The suggested Mythic+ builds for Retribution and Feral move from last tier's SimulationCraft profile to this tier's, and Arms gets SimulationCraft's updated build.
+- Top players' Mythic+ builds refreshed from Blizzard's leaderboards (US, 2026-10-04) for 37 specs. Elemental Shaman and Augmentation Evoker keep their August builds: every top player in the new sample ran a different build, so there was no real most-common pick.
 
 **New**
 - **Tome skins.** Pick how the Tome looks from its Options tab (or the Settings panel): **Tome** (the leather and parchment you know), **Midnight** (night-blue pages with pale text, easy on the eyes in the dark), **Vellum** (clean cream pages in a slate cover), or **Class-bound** (parchment bound in your class colour, with that colour as the accent). The gearing panel on the character sheet follows the same skin, and the change applies immediately.

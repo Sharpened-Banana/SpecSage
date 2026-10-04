@@ -13,7 +13,9 @@ local ADDON, ns = ...
 -- pass: pulled live from Blizzard's own Battle.net Game Data API
 -- (client-credentials OAuth, US region) rather than SimC, on 2026-08-30.
 -- Methodology: every current-season Mythic+ leaderboard (8-dungeon pool,
--- period 1078) across all 83 US connected realms was scanned (top 20 groups
+-- period 1078; refreshed 2026-10-04 at
+-- period 1083 - a field whose `source` still says 2026-08-30 was kept
+-- because the newer sample had no repeated build) across all 83 US connected realms was scanned (top 20 groups
 -- per realm/dungeon) for each spec's group members; the top-observed-keystone
 -- characters (up to 50 per spec) had their live `specializations` looked up
 -- for their active loadout's `talent_loadout_code`. See each field's own
@@ -161,13 +163,13 @@ ns.GuideStore:RegisterSpec("EVOKER", 1467, {
     patch = "12.0 (MID1, previous tier)",
   },
   -- Live top-players pull (DESIGN.md's v1.4 section), NOT SimC - see this
-  -- file's header for the full methodology. The plurality build among the
-  -- sample: 4/50 (8%) ran this exact code, since flex-point choices vary - but
-  -- the bigger signal is that 49/50 (98%) ran Scalecommander overall. Reported
-  -- honestly rather than dressed up as more decisive than it is.
+  -- file's header for the methodology. The `source` line below carries the
+  -- pull's date, sample size, the plurality share and the hero-talent
+  -- split; one exact code rarely commands a majority, since flex-point
+  -- choices vary, so the share is reported as it is.
   mplusMetaLoadout = {
-    string = "CsbBPJc41CfcseY0baneJ1IHrBAAAAAAAAAAAjZgZYGzMgBjZamZmpZM2mxMzMzMzMzAmxMGzMLzMDMwYwGsMGN2GQmJAbYgZGMMA",
-    source = "Blizzard Battle.net API, US region, 2026-08-30: top 50 current-season Mythic+ Devastation Evokers by best keystone level, sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick (4/50, 8%); 49/50 (98%) ran Scalecommander overall.",
+    string = "CsbBPJc41CfcseY0baneJ1IHrBAAAAAAAAAAAjZwgZGmBGzYMTjZmpZmZ2mZmZmZmZmZGgZmxYmZZmZgBGD2glxox2AyMBYDzgZGM8AA",
+    source = "Blizzard Battle.net API, US region, 2026-10-04: top 50 current-season Mythic+ Devastation Evokers by best keystone level, sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick (6/50, 12%); 47/50 (94%) ran Scalecommander overall.",
     patch = "12.1",
     sampleSize = 50,
   },
@@ -266,15 +268,15 @@ ns.GuideStore:RegisterSpec("EVOKER", 1468, {
     { slot = "Off-hand", text = "A caster off-hand leaning Haste keeps your empowered casts and Echo-based healing flowing smoothly" },
   },
   -- Live top-players pull (DESIGN.md's v1.4 section), NOT SimC - see this
-  -- file's header for the full methodology. The plurality build among the
-  -- sample: 1/49 (2%) ran this exact code, since flex-point choices vary - but
-  -- the bigger signal is that 46/49 (94%) ran Flameshaper overall. Reported
-  -- honestly rather than dressed up as more decisive than it is.
+  -- file's header for the methodology. The `source` line below carries the
+  -- pull's date, sample size, the plurality share and the hero-talent
+  -- split; one exact code rarely commands a majority, since flex-point
+  -- choices vary, so the share is reported as it is.
   mplusMetaLoadout = {
-    string = "CwbBPJc41CfcseY0baneJ1IHrBAAAAAmZmZ2MeAGmZmZzMeAmtBAAwMmxMzYYmYmZAAAAzMzkxMzMzyYGAYMzYmlFWswwMzMN0sBbGGzMYmhB",
-    source = "Blizzard Battle.net API, US region, 2026-08-30: top 49 current-season Mythic+ Preservation Evokers by best keystone level, sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick (1/49, 2%); 46/49 (94%) ran Flameshaper overall.",
+    string = "CwbBPJc41CfcseY0baneJ1IHrBAAAAAmZmZ2WmZGDjxsZGw2wAAAzYmZmZMMTMmBAAAMzMTGzMzMGzAAjZgFwGYGmQ2YsZYGgZGGA",
+    source = "Blizzard Battle.net API, US region, 2026-10-04: top 50 current-season Mythic+ Preservation Evokers by best keystone level, sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick (3/50, 6%); 47/50 (94%) ran Flameshaper overall.",
     patch = "12.1",
-    sampleSize = 49,
+    sampleSize = 50,
   },
   tips = {
     "Place Echo ahead of expected damage rather than reactively — it rewards planning over reacting.",
@@ -375,10 +377,10 @@ ns.GuideStore:RegisterSpec("EVOKER", 1473, {
     { slot = "Off-hand", text = "A caster off-hand leaning Critical Strike or Haste supports both your own damage and your buff uptime" },
   },
   -- Live top-players pull (DESIGN.md's v1.4 section), NOT SimC - see this
-  -- file's header for the full methodology. The plurality build among the
-  -- sample: 2/22 (9%) ran this exact code, since flex-point choices vary - but
-  -- the bigger signal is that 13/22 (59%) ran Chronowarden overall. Reported
-  -- honestly rather than dressed up as more decisive than it is.
+  -- file's header for the methodology. The `source` line below carries the
+  -- pull's date, sample size, the plurality share and the hero-talent
+  -- split; one exact code rarely commands a majority, since flex-point
+  -- choices vary, so the share is reported as it is.
   mplusMetaLoadout = {
     string = "CEcBPJc41CfcseY0baneJ1IHrNMzMbjZGMDzMLzYmZMzGAAAAAAAAmhZGYM1YmZGAAAAMzMjxMzyYmBmZzYwCsMGGbDgZiYDjZwMDgB",
     source = "Blizzard Battle.net API, US region, 2026-08-30: top 22 current-season Mythic+ Augmentation Evokers by best keystone level, sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick (2/22, 9%); 13/22 (59%) ran Chronowarden overall.",

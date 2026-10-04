@@ -13,7 +13,9 @@ local ADDON, ns = ...
 -- pass: pulled live from Blizzard's own Battle.net Game Data API
 -- (client-credentials OAuth, US region) rather than SimC, on 2026-08-30.
 -- Methodology: every current-season Mythic+ leaderboard (8-dungeon pool,
--- period 1078) across all 83 US connected realms was scanned (top 20 groups
+-- period 1078; refreshed 2026-10-04 at
+-- period 1083 - a field whose `source` still says 2026-08-30 was kept
+-- because the newer sample had no repeated build) across all 83 US connected realms was scanned (top 20 groups
 -- per realm/dungeon) for each spec's group members; the top-observed-keystone
 -- characters (up to 50 per spec) had their live `specializations` looked up
 -- for their active loadout's `talent_loadout_code`. See each field's own
@@ -135,13 +137,13 @@ ns.GuideStore:RegisterSpec("DEMONHUNTER", 577, {
     patch = "12.1",
   },
   -- Live top-players pull (DESIGN.md's v1.4 section), NOT SimC - see this
-  -- file's header for the full methodology. The plurality build among the
-  -- sample: 16/50 (32%) ran this exact code, since flex-point choices vary -
-  -- but the bigger signal is that 47/50 (94%) ran Fel-Scarred overall. Reported
-  -- honestly rather than dressed up as more decisive than it is.
+  -- file's header for the methodology. The `source` line below carries the
+  -- pull's date, sample size, the plurality share and the hero-talent
+  -- split; one exact code rarely commands a majority, since flex-point
+  -- choices vary, so the share is reported as it is.
   mplusMetaLoadout = {
     string = "CEkAp/epaxe7D0A403L+Tvk0iamZGzMz2MmZmxYmMmZAAAAAAAzixsNDzMwMWmZmZYmBzyALzmZMMLaaMzMmxGAAAwAAQAwMDGACAAM",
-    source = "Blizzard Battle.net API, US region, 2026-08-30: top 50 current-season Mythic+ Havoc Demon Hunters by best keystone level, sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick (16/50, 32%); 47/50 (94%) ran Fel-Scarred overall.",
+    source = "Blizzard Battle.net API, US region, 2026-10-04: top 50 current-season Mythic+ Havoc Demon Hunters by best keystone level, sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick, tied with 1 other build (4/50, 8% each); 32/50 (64%) ran Aldrachi Reaver overall.",
     patch = "12.1",
     sampleSize = 50,
   },
@@ -249,13 +251,13 @@ ns.GuideStore:RegisterSpec("DEMONHUNTER", 581, {
     patch = "12.1",
   },
   -- Live top-players pull (DESIGN.md's v1.4 section), NOT SimC - see this
-  -- file's header for the full methodology. The plurality build among the
-  -- sample: 3/50 (6%) ran this exact code, since flex-point choices vary - but
-  -- the bigger signal is that 50/50 (100%) ran Annihilator overall. Reported
-  -- honestly rather than dressed up as more decisive than it is.
+  -- file's header for the methodology. The `source` line below carries the
+  -- pull's date, sample size, the plurality share and the hero-talent
+  -- split; one exact code rarely commands a majority, since flex-point
+  -- choices vary, so the share is reported as it is.
   mplusMetaLoadout = {
-    string = "CUkAp/epaxe7D0A403L+Tvk0iCAYMzMjhZkZmBWMjZwMjZGz8AzMzYYmZmx2YGjxMAAAAAAACYmZsBAAAgBmZmZml2mZmBAzAAAAYA",
-    source = "Blizzard Battle.net API, US region, 2026-08-30: top 50 current-season Mythic+ Vengeance Demon Hunters by best keystone level, sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick (3/50, 6%); 50/50 (100%) ran Annihilator overall.",
+    string = "CUkAp/epaxe7D0A403L+Tvk0iCAMjZmZMMzkZmxwyMzMDMjZmZMzMzYwwM2MzsNGzAAAAAAAIgZM2AAAAwgZmZmZ2abmZGAAAAAgB",
+    source = "Blizzard Battle.net API, US region, 2026-10-04: top 50 current-season Mythic+ Vengeance Demon Hunters by best keystone level, sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick (4/50, 8%); 46/50 (92%) ran Annihilator overall.",
     patch = "12.1",
     sampleSize = 50,
   },
