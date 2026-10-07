@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 1.3.5 (2026-10-07)
 
 **Improved**
 - Data refreshed on 2026-10-04: new trinket sims from bloodmallet (re-run Sep 30; the S-tier picks changed for 23 specs), guide trinket tiers for Arcane, Holy Paladin, Assassination, Outlaw and Mistweaver, and guide talent builds for Unholy, Windwalker, Havoc and Augmentation.
