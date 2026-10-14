@@ -1,7 +1,15 @@
 local ADDON, ns = ...
 
 -- SpecSage guide data: Evoker
--- Content targets Midnight (patch 12.1). Specs below with an `mplusLoadout`
+-- 12.1.5 pass (2026-10-13): every spec's overview, rotation, cooldowns
+-- and tips here were re-checked against SimC's `midnight` branch (client
+-- data 12.1.5.70391: action priority lists, talent and spell tables),
+-- spell tooltips and the 12.1.5 patch notes, and corrected where they had
+-- drifted; every spellID resolves to the ability its step names. Where an
+-- older note further down disagrees with a spec block, the block is current.
+-- Preservation has no SimC action list, so its order rests on ability
+-- data and patch notes, not a simulated priority.
+-- Content targets Midnight (patch 12.1.5). Specs below with an `mplusLoadout`
 -- field have that talent string (only) cross-checked against
 -- SimulationCraft's public profiles (github.com/simulationcraft/simc,
 -- GPLv3) as of patch 12.1; specs without one have no such reference.
@@ -14,8 +22,9 @@ local ADDON, ns = ...
 -- (client-credentials OAuth, US region) rather than SimC, on 2026-08-30.
 -- Methodology: every current-season Mythic+ leaderboard (8-dungeon pool,
 -- period 1078; refreshed 2026-10-04 at
--- period 1083 - a field whose `source` still says 2026-08-30 was kept
--- because the newer sample had no repeated build) across all 83 US connected realms was scanned (top 20 groups
+-- period 1083, and 2026-10-13 at period 1085, 12.1.5's first day - a
+-- field whose `source` carries an older date was kept because the newer
+-- sample had no clear most-common build) across all 83 US connected realms was scanned (top 20 groups
 -- per realm/dungeon) for each spec's group members; the top-observed-keystone
 -- characters (up to 50 per spec) had their live `specializations` looked up
 -- for their active loadout's `talent_loadout_code`. See each field's own
@@ -84,8 +93,8 @@ ns.GuideStore:RegisterSpec("EVOKER", 1467, {
   role = "DAMAGER",
   overview = {
     "Devastation Evoker is a ranged caster spec that blends direct blue-dragonflight spellcasting with red-dragonflight breath attacks, managing Essence as its resource while empowered spells (channel-and-release casts with multiple power levels) add a layer of cast-time tactics.",
-    "The core mechanic is Essence, spent on Disintegrate and Pyre and regenerated over time, plus Empower spells (Fire Breath, Eternity Surge) that you can hold longer for a stronger effect at the cost of a longer cast. Dragonrage is the main burst window, dramatically increasing damage; if you're talented into Animosity, casting Fire Breath and Eternity Surge while it's active extends the window further, and Shattering Star adds a debuff that makes those casts hit harder.",
-    "Devastation's two hero trees genuinely change the priority list, not just the flavor: Scalecommander adds the Deep Breath cooldown and spreads Bombardments through the Mass Disintegrate talent, while Flameshaper leans into a second Fire Breath charge. Both still run the same Essence/empower core described above.",
+    "The core mechanic is Essence, spent on Disintegrate and Pyre and regenerated over time, plus Empower spells (Fire Breath, Eternity Surge) that you can hold longer for a stronger effect at the cost of a longer cast. Dragonrage is the main burst window: it fires Pyres at 3 enemies and makes Essence Burst proc 100% of the time for 18 seconds. With Animosity, each empower cast during it extends the window (by less each time). Shattering Star is no longer a button since Midnight: Shattering Stars makes Eternity Surge release one automatically.",
+    "Devastation's two hero trees genuinely change the priority list, not just the flavor: Scalecommander (the most-played tree in high keys) makes each empower spell turn your next Disintegrate into a 3-target Mass Disintegrate that spreads Bombardments, and builds around Deep Breath; Flameshaper gives Fire Breath a second charge through Legacy of the Lifebinder and leans on Pyre in AoE. Both still run the same Essence/empower core described above, and the Rising Fury apex talent turns Dragonrage into Unbound Flame after it ends.",
     "Bring Devastation when you want strong ranged burst damage with excellent AoE via Pyre/Fire Breath, good mobility via Hover, and a rotation that rewards judging empower levels correctly for the situation.",
   },
   statPriority = {
@@ -98,51 +107,60 @@ ns.GuideStore:RegisterSpec("EVOKER", 1467, {
   rotation = {
     { title = "Opener", steps = {
         { spellID = 361469, text = "Pre-cast Living Flame just before the pull to have some Essence banked" },
+        { spellID = 357210, text = "Deep Breath first, so Strafing Run's second cast is ready again soon",
+          condition = "Scalecommander hero talent only" },
         { spellID = 375087, text = "Dragonrage right on pull — delay it a beat if Bloodlust/Heroism is about to go out so the window lines up" },
-        { spellID = 370452, text = "Shattering Star to crack the target's defenses before your empowered spells land" },
-        { spellID = 357208, text = "Fire Breath, using Tip the Scales to fire it off instantly at full empower" },
-        { spellID = 359073, text = "Eternity Surge at rank 1 — tempo matters more than empower level this early" },
-        { spellID = 356995, text = "Disintegrate until Essence runs dry" },
+        { spellID = 359073, text = "Eternity Surge at rank 1 on a single target — it also releases a Shattering Star" },
+        { spellID = 357208, text = "Fire Breath at rank 1 on a single target, using Tip the Scales to fire it instantly" },
+        { spellID = 356995, text = "Disintegrate until Essence and Essence Burst run dry" },
         { spellID = 361469, text = "Living Flame as filler once you're out of other resources" },
         { text = "Opener Notes: Devastation splits along the Flameshaper and Scalecommander hero trees — Scalecommander's Mass Disintegrate talent turns your next Disintegrate into a multi-target strike, giving it a genuinely different priority list from Flameshaper, so check which one your loadout uses" },
     }},
     { title = "Single Target", steps = {
-        { spellID = 356995, text = "Disintegrate as your primary Essence spender — inside Dragonrage it's fine to clip the channel a few ticks early instead of always running it to completion, so you fit in more casts" },
-        { spellID = 357208, text = "Fire Breath on cooldown — with Animosity talented, this and Eternity Surge both extend Dragonrage, so don't skip them for filler" },
-        { spellID = 359073, text = "Eternity Surge on cooldown for the same Dragonrage-extension reason" },
-        { spellID = 370452, text = "Shattering Star on cooldown" },
+        { spellID = 357210, text = "Deep Breath whenever Strafing Run's window to recast it is about to run out",
+          condition = "Scalecommander hero talent only" },
+        { spellID = 375087, text = "Dragonrage on cooldown unless adds are about to spawn" },
+        { spellID = 359073, text = "Eternity Surge on cooldown — with Animosity, it and Fire Breath both extend Dragonrage, so don't skip them for filler" },
+        { spellID = 357208, text = "Fire Breath on cooldown, at rank 1 on a single target" },
+        { spellID = 370553, text = "Tip the Scales on Fire Breath (Scalecommander), or during Dragonrage (Flameshaper)" },
+        { spellID = 356995, text = "Disintegrate as your Essence spender — chain it into the next cast on its last tick instead of always running it to completion, and spend Mass Disintegrate charges first on Scalecommander" },
+        { spellID = 1292321, text = "Unbound Flame (Dragonrage's replacement after it ends, with the Rising Fury apex talent) while Essence Burst isn't capped" },
         { spellID = 361469, text = "Living Flame on Burnout procs, or as filler when nothing else is up" },
+        { spellID = 1265872, text = "Azure Sweep when you have it, then Azure Strike while moving" },
         { text = "Don't let Essence or Essence Burst sit capped — spend it before it overflows" },
     }},
     { title = "AoE", steps = {
-        { spellID = 357211, text = "Pyre replaces Disintegrate as your Essence spender once you're hitting 3+ targets, thanks to Volatility" },
-        { spellID = 362969, text = "Azure Strike replaces Living Flame as filler at the same target count" },
-        { spellID = 357208, text = "Fire Breath, empowered fully when stationary, to spread its damage-over-time across the pack" },
-        { spellID = 359073, text = "Eternity Surge, roughly matching the empower level to how many targets you're hitting" },
-        { spellID = 375087, text = "Time Dragonrage for when the full pack is engaged" },
-        { text = "Scalecommander spreads Bombardments through Mass Disintegrate — another reason that hero tree wants Disintegrate/Pyre uptime kept up" },
+        { spellID = 359073, text = "Eternity Surge, matching the empower level to the target count (rank 2 for 2 targets, 3 for 3, and so on; Eternity's Span doubles those counts)" },
+        { spellID = 357208, text = "Fire Breath ranked up for more targets, to spread its damage-over-time across the pack" },
+        { spellID = 357211, text = "Pyre replaces Disintegrate at about 5 targets (4 with two points in Volatility); Flameshaper with Legacy of the Lifebinder starts at 3 with full Volatility or Feed the Flames" },
+        { spellID = 356995, text = "Mass Disintegrate still beats Pyre while you have a charge of it",
+          condition = "Scalecommander hero talent only" },
+        { spellID = 357210, text = "Deep Breath on cooldown at 2+ targets",
+          condition = "Scalecommander hero talent only" },
+        { spellID = 1265872, text = "Azure Sweep / Azure Strike as filler" },
     }},
   },
   cooldowns = {
-    { spellID = 375087, text = "Dragonrage — main burst cooldown, open with it on pull (delaying slightly to catch Bloodlust) or just ahead of your next Fire Breath/Eternity Surge" },
-    { spellID = 357208, text = "Fire Breath — empowered breath, hold for a higher empower level when stationary and safe to do so; also extends Dragonrage if you're talented into Animosity" },
-    { spellID = 359073, text = "Eternity Surge — empowered burst spell, same empower-level tradeoff as Fire Breath and the same Dragonrage-extension value" },
-    { spellID = 357210, text = "Deep Breath — Scalecommander hero-tree cooldown, use it on cooldown rather than saving it" },
+    { spellID = 375087, text = "Dragonrage — main burst cooldown, open with it on pull (delaying slightly to catch Bloodlust); with the Rising Fury apex talent it becomes Unbound Flame for the rest of its cooldown" },
+    { spellID = 357208, text = "Fire Breath — empowered breath; on a single target rank 1 is fine, rank up for more targets; also extends Dragonrage if you're talented into Animosity" },
+    { spellID = 359073, text = "Eternity Surge — empowered burst spell that also launches a Shattering Star; match the empower level to the target count" },
+    { spellID = 370553, text = "Tip the Scales — makes your next empower spell instant at max rank; pair it with Fire Breath" },
+    { spellID = 357210, text = "Deep Breath — Scalecommander's cooldown; with Strafing Run it can be cast a second time within 18 seconds" },
     { spellID = 363916, text = "Obsidian Scales — defensive, reduces damage taken" },
     { text = "Zephyr / Renewing Blaze (talent-dependent) — situational defensive/mobility cooldowns" },
   },
   consumables = {
-    { slot = "Flask", items = { 241327, 241323 }, text = "Flask of the Shattered Sun for Critical Strike, this spec's top secondary; Flask of the Magisters if your gear already leans hard into Critical Strike and Mastery is the stat you're short on." },
-    { slot = "Food", items = { 275265, 275266, 255846, 275259, 242755 }, text = "Raid feasts: Loa's Gathering or Feast of Knowledge (Stamina plus your highest secondary, new in 12.1), or Harandar Celebration / Silvermoon Parade (Stamina plus 50 primary stat) - the two families sim within a fraction of a percent of each other, so eat whichever is down. Solo and Mythic+: Hearty Venom-Spiced Cutlets or Hearty Puffer Plate (highest secondary) or Hearty Sun-Seared Lumifin (Critical Strike); Hearty food persists through death." },
-    { slot = "Potion", items = { 241289, 241309, 271887, 271884 }, text = "Potion of Recklessness (+1585 Critical Strike for 30s, at the cost of 213 of your lowest secondary) is the burst potion; Light's Potential (+593 primary stat) if your lowest secondary is one you can't afford to lose. Liquid Luster (12.1) ramps Versatility over 30s and suits a pre-pot into a long opener. Always carry Concentrated Silvermoon Health Potions - 421k, the 12.1 upgrade." },
-    { slot = "Weapon Oil", items = { 243734 }, text = "Thalassian Phoenix Oil - the current tier's weapon oil (+16 Critical Strike and Haste for 2 hours, from Enchanting)." },
-    { slot = "Weapon Enchant", items = { 244029, 243971 }, text = "Acuity of the Ren'dorei procs +67 primary stat for 15s; Jan'alai's Precision procs +124 Critical Strike instead. The primary-stat proc is the usual default; take the secondary one if your stat weights put Critical Strike well clear of the rest." },
-    { slot = "Ring Enchants", items = { 243987, 243959 }, text = "Nature's Fury (+29 Critical Strike) on both rings; Zul'jin's Mastery (+29 Mastery) if you're topping up your second stat instead. Use the greater tier - the lesser one is +24." },
+    { slot = "Flask", items = { 241326, 241322 }, text = "Flask of the Shattered Sun for Critical Strike, this spec's top secondary; Flask of the Magisters if your gear already leans hard into Critical Strike and Mastery is the stat you're short on." },
+    { slot = "Food", items = { 255846, 242275, 242747, 275265 }, text = "Raid feasts: Harandar Celebration or Silvermoon Parade (+50 primary stat, +98 Stamina) - primary stat is the stronger food buff this season. Loa's Gathering, Feast of Knowledge or Amani Cornucopia (12.1: about +72 of your highest secondary, +108 Stamina) are the fallback if that's what's down. Personal: Royal Roast or Impossibly Royal Roast (+50 primary); Hearty Royal Roast is the same buff but persists through death, which is what you want in Mythic+." },
+    { slot = "Potion", items = { 241288, 271887, 241308, 271884 }, text = "Potion of Recklessness (+1725 of your highest secondary for 30s, at the cost of 232 of your lowest) is the default - it only works if your highest secondary is the one you want, Critical Strike for this spec. If your gear makes it pick another stat, Liquid Luster (12.1: +420 Versatility every 6s, stacking to 5 over 30s) has no downside and suits a long burst window; Light's Potential (+695 primary) is the simple alternative. Draught of Rampant Abandon (+774 primary) is stronger on paper, but its void zone pacifies you and a GCD or two inside it erases the gain. Always carry Concentrated Silvermoon Health Potions - 421k, the 12.1 upgrade." },
+    { slot = "Weapon Oil", items = { 243734 }, text = "Thalassian Phoenix Oil - the current tier's weapon oil and the guides' default for all content (+16 Critical Strike and Haste for 2 hours, from Enchanting)." },
+    { slot = "Weapon Enchant", items = { 244029, 243971, 273072 }, text = "Acuity of the Ren'dorei procs +67 primary stat for 15s; Jan'alai's Precision procs +124 Critical Strike instead and wins if your stat weights put Critical Strike well clear of the rest. Rite of the Hash'ey (12.1: +139 of a random secondary, favouring your highest above 80% health) is the third option." },
+    { slot = "Ring Enchants", items = { 243957, 243987 }, text = "Eyes of the Eagle (+2% critical strike effectiveness) on both rings is the guides' damage pick; Nature's Fury (+29 Critical Strike) if your sim says otherwise - the difference is tiny." },
     { slot = "Chest Enchant", items = { 243977 }, text = "Mark of the Worldsoul (+50 primary stat)." },
     { slot = "Leg Enchant", items = { 240133 }, text = "Sunfire Silk Spellthread (+41 Intellect, +115 Stamina)." },
-    { slot = "Helm, Shoulders and Boots", items = { 243979, 243963, 244009, 244021, 243983 }, text = "Helm: Blessing of Speed (+13). Shoulders: Akil'zon's Swiftness (+65 Speed) or Silvermoon's Mending (+166 Leech). Boots: Farstrider's Hunt (+11 Speed, +232 Stamina) or Shaladrassil's Roots (+28 Leech, +232 Stamina). Speed is the throughput-neutral default; swap to Leech for a progression fight you keep dying on." },
-    { slot = "Gems", items = { 240967, 240904, 240908 }, text = "One Powerful Eversong Diamond (+23 primary stat and crit effectiveness per unique gem colour you socket) - it's unique-equipped. Then Flawless Deadly Garnet (+17 Critical Strike) in every other socket, or Flawless Masterful Garnet (+16 Critical Strike, +7 Mastery) to spread a second colour if your diamond counts colours." },
-    { slot = "Augment Rune", items = { 259085, 246492, 224572 }, text = "Void-Touched Augment Rune (+25 primary stat for 1 hour; it does not persist through death) for progression pulls and high keys. Soulgorged Augment Rune (+6, persists through death) or Crystallized Augment Rune (+6) are the cheap fallbacks the rest of the time." },
+    { slot = "Helm, Shoulders and Boots", items = { 243981, 243963, 244009, 244007, 243991, 243953 }, text = "None of these touch your throughput, so it's personal preference. Speed: Empowered Blessing of Speed (+22), Akil'zon's Swiftness (+65), Farstrider's Hunt (+11, +232 Stamina). Avoidance, to survive the bigger hits: Empowered Rune of Avoidance (+37), Amirdrassil's Grace (+111), Lynx's Dexterity (+19, +232 Stamina). Leech (Empowered Hex of Leeching, Silvermoon's Mending, Shaladrassil's Roots) for a fight you keep dying on." },
+    { slot = "Gems", items = { 240983, 240904, 240908, 240967 }, text = "One Indecipherable Eversong Diamond (+32 primary stat) - it's unique-equipped and the other diamonds only give +23. Then Flawless Deadly Garnet (+17 Critical Strike) in every other socket, or Flawless Masterful Garnet (+16 Critical Strike, +7 Mastery) if you're balancing the two. With five or more sockets, Powerful Eversong Diamond (+23 primary stat, +0.15% critical strike effectiveness per unique gem colour) can edge ahead if you socket one gem of each colour." },
+    { slot = "Augment Rune", items = { 259085, 243191 }, text = "Void-Touched Augment Rune (+25 primary stat for 1 hour; it does not persist through death) is the only Midnight rune - use it for progression pulls and high keys. Ethereal Augment Rune (+6, reusable, from the K'aresh Trust at renown 18) is the free stopgap the rest of the time." },
   },
   gear = {
     { slot = "Head", text = "One of your tier-set slots — the four-piece bonus reinforces your Essence/empower-spell engine, worth prioritizing" },
@@ -168,9 +186,9 @@ ns.GuideStore:RegisterSpec("EVOKER", 1467, {
   -- split; one exact code rarely commands a majority, since flex-point
   -- choices vary, so the share is reported as it is.
   mplusMetaLoadout = {
-    string = "CsbBPJc41CfcseY0baneJ1IHrBAAAAAAAAAAAjZwgZGmBGzYMTjZmpZmZ2mZmZmZmZmZGgZmxYmZZmZgBGD2glxox2AyMBYDzgZGM8AA",
-    source = "Blizzard Battle.net API, US region, 2026-10-04: top 50 current-season Mythic+ Devastation Evokers by best keystone level, sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick (6/50, 12%); 47/50 (94%) ran Scalecommander overall.",
-    patch = "12.1",
+    string = "CsbBPJc41CfcseY0baneJ1IHrBAAAAAAAAAAAjZwgZGmBGYMTjZmpZmZ2mZmZmZmZmZGwMzMzYmZZmZgBGD2glxox2AyMBYDzgZGM8AA",
+    source = "Blizzard Battle.net API, US region, 2026-10-13: top 50 current-season Mythic+ Devastation Evokers by best keystone level in the first week of patch 12.1.5 (period 1085), sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick, tied with 1 other build (5/50, 10% each); 49/50 (98%) ran Scalecommander overall.",
+    patch = "12.1.5",
     sampleSize = 50,
   },
   tips = {
@@ -178,6 +196,7 @@ ns.GuideStore:RegisterSpec("EVOKER", 1467, {
     "Open Dragonrage close to pull rather than saving it — line it up with Bloodlust if you can, but don't delay it far past its own cooldown chasing a perfect setup.",
     "Don't let Essence or Essence Burst sit at cap — Living Flame, Disintegrate, and Pyre all exist to keep it flowing.",
     "If you're talented into Animosity, treat Fire Breath and Eternity Surge as Dragonrage-extenders, not just damage — skipping them shortens your burst window.",
+    "Shattering Star is passive now (Shattering Stars, from Eternity Surge) — if an old macro or action bar still has it, it's gone.",
     "Use Hover proactively for movement-heavy mechanics rather than eating a cast interruption.",
   },
 })
@@ -190,18 +209,22 @@ ns.GuideStore:RegisterSpec("EVOKER", 1467, {
 -- pending direct confirmation. No SimC profile exists for this spec, so it
 -- is NOT SimC-cross-checked — see the mplusLoadout note in the header above.
 -- 12.1 buffs Preservation's single-target/triage kit in PvE: Living Flame
--- healing +20%, Verdant Embrace +25%, and Consume Flame (talent) now heals
--- for 240% of the amount consumed (was 200%) with a fix so its heal can
--- crit.
+-- healing +25%, Verdant Embrace +25% (each buffed again by a 2026-08-25
+-- hotfix), and Consume Flame (talent) heals for 240% of the Dream Breath it
+-- consumes. Rechecked 2026-10-13 against warcraft.wiki.gg for 12.1.5:
+-- Spiritbloom was removed in 12.0.0 and Emerald Communion is now a PvP
+-- talent, so both were taken out of this guide; 12.1.5 cut Merithra's
+-- Blessing's proc duration to 30s and raised Consume Flame healing by 20%
+-- (after fixing it double-dipping on healing increases).
 ns.GuideStore:RegisterSpec("EVOKER", 1468, {
   specName = "Preservation",
   role = "HEALER",
   overview = {
     "Preservation Evoker heals through a mix of direct heals, the Echo mechanic (which doubles a future heal on the same target), and strong cooldown-driven raid healing via Dream Breath and Rewind/Time Dilation-style talents.",
-    "The core mechanic is Essence for spending on abilities like Living Flame and Dream Breath, plus Echo — placing a marker on a target (mostly generated by Temporal Anomaly) so your next heal on them heals for extra, rewarding pre-planning rather than purely reactive healing. Fire Breath doubles as a healing tool: its damage-over-time procs Leaping Flames and generates Essence Burst, which pays for extra Emerald Blossom casts.",
-    "Patch 12.1 pushed extra healing into Preservation's single-target/triage tools rather than its group cooldowns: Living Flame and Verdant Embrace both hit noticeably harder, and Consume Flame (if talented) converts more of Fire Breath's damage-over-time into healing. That makes spot-healing between Dream Breath windows meaningfully stronger than in prior tiers.",
-    "Preservation's two hero trees push the kit in different directions: Flameshaper adds a second Dream Breath charge and leans on Consume Flame, while Chronowarden trades some of that group-cooldown focus for Primacy's haste-per-active-HoT stacking and a Living Flame/Chrono Flame-based filler.",
-    "Bring Preservation when you want a healer with excellent raid cooldown throughput (Dream Breath, Rewind), useful damage-mitigation utility like Blessing of the Bronze and Time Dilation, and a rotation that rewards proactive Echo placement.",
+    "The core mechanic is Essence, spent on Echo and Emerald Blossom and regenerated over time, plus Echo itself — a buff on an ally that makes your next healing spell cast an extra time on them at 70% strength, rewarding pre-planning rather than purely reactive healing. Temporal Anomaly applies Echo to the first 5 allies it passes through. Essence Burst procs (from Living Flame and Reversion) make your next Essence spell free, and the Merithra's Blessing apex talent upgrades Reversion into a bloom that heals five allies.",
+    "Patch 12.1 pushed extra healing into Preservation's single-target/triage tools: Living Flame and Verdant Embrace both hit noticeably harder (and were buffed again by a later hotfix), and Dream Breath moved most of its healing into its heal-over-time. Spiritbloom was removed in Midnight, so Dream Breath, Emerald Blossom and Merithra's Blessing now cover group healing.",
+    "Preservation's two hero trees push the kit in different directions: Flameshaper adds a second Dream Breath charge (Legacy of the Lifebinder), and with Consume Flame your Verdant Embrace, Emerald Blossom and Fluttering Seedlings detonate the Dream Breath on allies they heal for extra healing (20% stronger in 12.1.5). Chronowarden leans on Chrono Flame (Living Flame repeats part of your recent healing), Double-time (Dream Breath and Fire Breath crits extend their duration) and Afterimage (empower spells send Chrono Flames).",
+    "Bring Preservation when you want a healer with excellent raid cooldown throughput (Dream Breath, Rewind), useful utility like Time Dilation (damage smoothing) and Blessing of the Bronze (movement cooldowns), and a rotation that rewards proactive Echo placement.",
   },
   statPriority = {
     { stat = "primary" },
@@ -212,50 +235,51 @@ ns.GuideStore:RegisterSpec("EVOKER", 1468, {
   },
   rotation = {
     { title = "Priorities", steps = {
-        { text = "Ramp pattern for a damage phase: Dream Breath into Merithra's Blessing, then Temporal Anomaly, spend the Echoes it generates, Emerald Blossom on the Essence Burst proc, and close with another Merithra's Blessing" },
+        { text = "Ramp pattern for a damage phase: Temporal Anomaly to Echo the group, Dream Breath (which, with 4 ranks of Merithra's Blessing, always upgrades your next Reversion), then Merithra's Blessing, Emerald Blossom on Essence Burst procs, and Verdant Embrace" },
         { spellID = 373861, text = "Temporal Anomaly on cooldown outside a planned ramp too — it's your main Echo engine and a group-wide shield in one cast" },
-        { spellID = 355936, text = "Dream Breath (empowered) on cooldown for strong group-wide healing" },
-        { spellID = 366155, text = "Reversion to spend Echoes on your priority targets, or Merithra's Blessing (if talented) to spend them on whoever is lowest" },
-        { spellID = 360995, text = "Verdant Embrace on cooldown to reposition to and top off an ally at range — buffed 25% in 12.1" },
-        { spellID = 357208, text = "Fire Breath on cooldown — procs Leaping Flames and Essence Burst, which pays for a free Emerald Blossom" },
-        { spellID = 361469, text = "Living Flame for efficient single-target healing (or damage when topped off) — buffed 20% in 12.1, a stronger filler than before" },
-        { spellID = 367226, text = "Spiritbloom for strong burst healing on a cluster of injured allies" },
+        { spellID = 355936, text = "Dream Breath (empowered) on cooldown for strong group-wide healing — most of it now comes from the heal-over-time" },
+        { spellID = 1256581, text = "Merithra's Blessing (your upgraded Reversion) as soon as it procs — the proc only lasts 30 seconds since 12.1.5" },
+        { spellID = 366155, text = "Reversion on your priority targets when it isn't upgraded" },
+        { spellID = 360995, text = "Verdant Embrace on cooldown to reposition to and top off an ally at range — buffed in 12.1; on Flameshaper it also detonates their Dream Breath through Consume Flame" },
+        { spellID = 355913, text = "Emerald Blossom on Essence Burst procs when the group needs healing" },
+        { spellID = 357208, text = "Fire Breath on cooldown — its Leaping Flames makes your next Living Flame hit extra targets, and on Flameshaper, Essence Well gives it a chance at Essence Burst" },
+        { spellID = 361469, text = "Living Flame for efficient single-target healing (or damage when topped off) — buffed in 12.1, a stronger filler than before" },
     }},
     { title = "Cooldown usage", steps = {
-        { spellID = 363534, text = "Rewind (talent) — your strongest cooldown, heals all damage the raid took in the last several seconds, so use it right after a spike lands rather than before" },
-        { text = "Dream Flight for a big raid-wide cooldown window" },
-        { spellID = 370537, text = "Stasis (talent) to bank 3 spell casts and unleash them together for an extra burst window" },
-        { text = "Tip the Scales for an on-demand, fully-empowered Dream Breath or Fire Breath outside your normal cooldown timing" },
-        { spellID = 357170, text = "Time Dilation to reduce damage taken by an ally proactively" },
-        { text = "Emerald Communion for sustained healing and mana regeneration on a long fight" },
-        { text = "If talented into Consume Flame, weave it in after Fire Breath's dot has ticked for a while — it now converts a larger share (240%) of the remaining damage into healing" },
+        { spellID = 363534, text = "Rewind (talent) — your strongest cooldown, heals back part of the damage the group took in the last 5 seconds, so use it right after a spike lands rather than before" },
+        { spellID = 359816, text = "Dream Flight for a big raid-wide cooldown window (a choice node with Stasis)" },
+        { spellID = 370537, text = "Stasis (talent) to bank 3 helpful spells and unleash them together for an extra burst window" },
+        { spellID = 370553, text = "Tip the Scales for an on-demand, fully-empowered Dream Breath or Fire Breath outside your normal cooldown timing" },
+        { spellID = 357170, text = "Time Dilation to spread out the damage an ally is about to take" },
         { spellID = 364343, text = "Pre-place Echo on multiple raid members before a known damage phase" },
     }},
     { title = "Opener Notes", steps = {
         { text = "Preservation's two hero talent trees are Flameshaper (also Devastation's) and Chronowarden (also Augmentation's) — check which one your loadout uses" },
-        { text = "Flameshaper adds a second Dream Breath charge and leans on Consume Flame to convert Fire Breath's damage into healing; Chronowarden leans on Primacy (haste per active HoT, up to 3) and shifts your filler toward Living Flame/Chrono Flame, running its own version of the ramp above" },
+        { spellID = 444088, text = "Flameshaper (by far the most-played tree in high keys) adds a second Dream Breath charge and, with Consume Flame, turns Verdant Embrace, Emerald Blossom and Fluttering Seedlings into detonators for the Dream Breath on their targets",
+          condition = "Flameshaper hero talent only" },
+        { spellID = 431442, text = "Chronowarden shifts your filler toward Living Flame through Chrono Flame, and Double-time extends Dream Breath and Fire Breath when they crit",
+          condition = "Chronowarden hero talent only" },
     }},
   },
   cooldowns = {
-    { spellID = 363534, text = "Rewind (talent) — the strongest cooldown available, heals all damage the raid took in the last several seconds; use it right after unavoidable burst damage lands rather than before" },
+    { spellID = 363534, text = "Rewind (talent) — the strongest cooldown available, heals back part of the damage the group took in the last 5 seconds; use it right after unavoidable burst damage lands rather than before" },
     { spellID = 359816, text = "Dream Flight — raid-wide healing cooldown, use for a scripted heavy damage phase" },
-    { spellID = 370537, text = "Stasis (talent) — banks 3 spell casts to unleash together for an extra burst window" },
-    { text = "Emerald Communion — channel for strong sustained self/group healing and mana return" },
+    { spellID = 370537, text = "Stasis (talent) — banks 3 helpful spells to unleash together for an extra burst window" },
     { spellID = 363916, text = "Obsidian Scales — personal defensive, reduces damage taken" },
-    { spellID = 357170, text = "Time Dilation — proactive damage reduction for an ally about to take a hit" },
+    { spellID = 357170, text = "Time Dilation — proactively spreads half of an ally's incoming damage over 8 seconds" },
   },
   consumables = {
-    { slot = "Flask", items = { 241327, 241323 }, text = "Flask of the Shattered Sun for Critical Strike, this spec's top secondary; Flask of the Magisters if your gear already leans hard into Critical Strike and Mastery is the stat you're short on." },
-    { slot = "Food", items = { 275265, 275266, 255846, 275259, 242755 }, text = "Raid feasts: Loa's Gathering or Feast of Knowledge (Stamina plus your highest secondary, new in 12.1), or Harandar Celebration / Silvermoon Parade (Stamina plus 50 primary stat) - the two families sim within a fraction of a percent of each other, so eat whichever is down. Solo and Mythic+: Hearty Venom-Spiced Cutlets or Hearty Puffer Plate (highest secondary) or Hearty Sun-Seared Lumifin (Critical Strike); Hearty food persists through death." },
-    { slot = "Potion", items = { 241301, 241295, 241289, 271884 }, text = "Lightfused Mana Potion is the safe mana return; Potion of Devoured Dreams gives more over 10s but leaves you defenceless while it channels, so only when nothing is targeting you. Potion of Recklessness (+1585 highest secondary for 30s) for a throughput window instead. Always carry Concentrated Silvermoon Health Potions." },
-    { slot = "Weapon Oil", items = { 243734, 243736 }, text = "Thalassian Phoenix Oil - the current tier's weapon oil (+16 Critical Strike and Haste for 2 hours, from Enchanting); Oil of Dawn instead if you'd rather your heals proc a small absorb on their target." },
-    { slot = "Weapon Enchant", items = { 244029, 243971, 243997 }, text = "Acuity of the Ren'dorei procs +67 primary stat for 15s; Jan'alai's Precision procs +124 Critical Strike instead. The primary-stat proc is the usual default; take the secondary one if your stat weights put Critical Strike well clear of the rest. Worldsoul Cradle (heals proc a 12.5k barrier on the target) is the healer-flavoured alternative." },
+    { slot = "Flask", items = { 241326, 241322 }, text = "Flask of the Shattered Sun for Critical Strike, this spec's top secondary; Flask of the Magisters if your gear already leans hard into Critical Strike and Mastery is the stat you're short on." },
+    { slot = "Food", items = { 255846, 242275, 242747, 275265 }, text = "Raid feasts: Harandar Celebration or Silvermoon Parade (+50 primary stat, +98 Stamina) - primary stat is the stronger food buff this season. Loa's Gathering, Feast of Knowledge or Amani Cornucopia (12.1: about +72 of your highest secondary, +108 Stamina) are the fallback if that's what's down. Personal: Royal Roast or Impossibly Royal Roast (+50 primary); Hearty Royal Roast is the same buff but persists through death, which is what you want in Mythic+." },
+    { slot = "Potion", items = { 241288, 241300, 241294, 271884 }, text = "Potion of Recklessness (+1725 of your highest secondary for 30s, at the cost of 232 of your lowest) is the default - it only works if your highest secondary is the one you want, Critical Strike for this spec, so use it with your healing cooldowns. Mana potions are weak this season: Lightfused Mana Potion (26,200 mana) is the safe one, Potion of Devoured Dreams gives more over 10s but leaves you defenceless while it channels. Always carry Concentrated Silvermoon Health Potions - 421k, the 12.1 upgrade." },
+    { slot = "Weapon Oil", items = { 243734, 243736 }, text = "Thalassian Phoenix Oil - the current tier's weapon oil and the guides' default for all content (+16 Critical Strike and Haste for 2 hours, from Enchanting); Oil of Dawn instead if you'd rather your heals proc a small absorb on their target." },
+    { slot = "Weapon Enchant", items = { 244029, 243971, 273072, 243997 }, text = "Acuity of the Ren'dorei procs +67 primary stat for 15s; Jan'alai's Precision procs +124 Critical Strike instead and wins if your stat weights put Critical Strike well clear of the rest. Rite of the Hash'ey (12.1: +139 of a random secondary, favouring your highest above 80% health) is the third option. Worldsoul Cradle (heals proc a 12.5k barrier on the target) is the healer-flavoured alternative." },
     { slot = "Ring Enchants", items = { 243987, 243959 }, text = "Nature's Fury (+29 Critical Strike) on both rings; Zul'jin's Mastery (+29 Mastery) if you're topping up your second stat instead. Use the greater tier - the lesser one is +24." },
     { slot = "Chest Enchant", items = { 243977, 244003 }, text = "Mark of the Worldsoul (+50 primary stat); Mark of the Magister (+40 Intellect, +5% mana) if mana is what runs out." },
     { slot = "Leg Enchant", items = { 240133, 240155 }, text = "Sunfire Silk Spellthread (+41 Intellect, +115 Stamina); Arcanoweave Spellthread (+41 Intellect, +4% mana) if you'd rather have the mana than the health." },
-    { slot = "Helm, Shoulders and Boots", items = { 243979, 243963, 244009, 244021, 243983 }, text = "Helm: Blessing of Speed (+13). Shoulders: Akil'zon's Swiftness (+65 Speed) or Silvermoon's Mending (+166 Leech). Boots: Farstrider's Hunt (+11 Speed, +232 Stamina) or Shaladrassil's Roots (+28 Leech, +232 Stamina). Speed is the throughput-neutral default; swap to Leech for a progression fight you keep dying on." },
-    { slot = "Gems", items = { 240969, 240904, 240908 }, text = "One Telluric Eversong Diamond (+23 primary stat, +1% mana per unique gem colour) - it's unique-equipped. Then Flawless Deadly Garnet (+17 Critical Strike) in every other socket, or Flawless Masterful Garnet (+16 Critical Strike, +7 Mastery) to spread a second colour if your diamond counts colours." },
-    { slot = "Augment Rune", items = { 259085, 246492, 224572 }, text = "Void-Touched Augment Rune (+25 primary stat for 1 hour; it does not persist through death) for progression pulls and high keys. Soulgorged Augment Rune (+6, persists through death) or Crystallized Augment Rune (+6) are the cheap fallbacks the rest of the time." },
+    { slot = "Helm, Shoulders and Boots", items = { 243981, 243963, 244009, 244007, 243991, 243953 }, text = "None of these touch your throughput, so it's personal preference. Speed: Empowered Blessing of Speed (+22), Akil'zon's Swiftness (+65), Farstrider's Hunt (+11, +232 Stamina). Avoidance, to survive the bigger hits: Empowered Rune of Avoidance (+37), Amirdrassil's Grace (+111), Lynx's Dexterity (+19, +232 Stamina). Leech (Empowered Hex of Leeching, Silvermoon's Mending, Shaladrassil's Roots) for a fight you keep dying on." },
+    { slot = "Gems", items = { 240983, 240904, 240908 }, text = "One Indecipherable Eversong Diamond (+32 primary stat) - it's unique-equipped and the other diamonds only give +23. Then Flawless Deadly Garnet (+17 Critical Strike) in every other socket, or Flawless Masterful Garnet (+16 Critical Strike, +7 Mastery) if you're balancing the two." },
+    { slot = "Augment Rune", items = { 259085, 243191 }, text = "Void-Touched Augment Rune (+25 primary stat for 1 hour; it does not persist through death) is the only Midnight rune - use it for progression pulls and high keys. Ethereal Augment Rune (+6, reusable, from the K'aresh Trust at renown 18) is the free stopgap the rest of the time." },
   },
   gear = {
     { slot = "Head", text = "One of your tier-set slots — the four-piece bonus adds real throughput to your Echo/Dream Breath loop, worth prioritizing" },
@@ -274,17 +298,18 @@ ns.GuideStore:RegisterSpec("EVOKER", 1468, {
   -- choices vary, so the share is reported as it is.
   mplusMetaLoadout = {
     string = "CwbBPJc41CfcseY0baneJ1IHrBAAAAAmZmZ2WmZGDjxsZGw2wAAAzYmZmZMMTMmBAAAMzMTGzMzMGzAAjZgFwGYGmQ2YsZYGgZGGA",
-    source = "Blizzard Battle.net API, US region, 2026-10-04: top 50 current-season Mythic+ Preservation Evokers by best keystone level, sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick (3/50, 6%); 47/50 (94%) ran Flameshaper overall.",
-    patch = "12.1",
+    source = "Blizzard Battle.net API, US region, 2026-10-13: top 50 current-season Mythic+ Preservation Evokers by best keystone level in the first week of patch 12.1.5 (period 1085), sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick (7/50, 14%); 48/50 (96%) ran Flameshaper overall.",
+    patch = "12.1.5",
     sampleSize = 50,
   },
   tips = {
     "Place Echo ahead of expected damage rather than reactively — it rewards planning over reacting.",
     "Use empowered Dream Breath at a higher level when it's safe to hold the cast, for stronger group healing.",
     "Save Rewind for right after a big, already-landed damage spike since it heals retroactively.",
-    "Blessing of the Bronze and similar buffs are raid utility — keep them refreshed on the group.",
+    "Blessing of the Bronze is raid utility — keep it up on the group.",
     "Living Flame and Verdant Embrace both got real healing buffs in 12.1 — use them more freely for single-target/triage healing between Dream Breath windows rather than treating them as pure filler.",
     "Spend Essence Burst procs on Emerald Blossom when the group needs healing, or Disintegrate when it doesn't — don't let the proc sit unused either way.",
+    "Merithra's Blessing procs only last 30 seconds since 12.1.5 — cast the upgraded Reversion promptly instead of saving it for later.",
   },
 })
 
@@ -308,9 +333,9 @@ ns.GuideStore:RegisterSpec("EVOKER", 1473, {
   role = "DAMAGER",
   overview = {
     "Augmentation Evoker is a support-damage hybrid, not a conventional DPS spec: most of its value doesn't come from its own damage meter position, it comes from making everyone else's damage bigger. It casts a moderate amount of direct damage itself, but its actual job is buffing allies through Ebon Might and Prescience.",
-    "The core mechanic is applying and refreshing Ebon Might — a damage-and-versatility buff shared with you and nearby allies — and placing Prescience — a crit-chance buff, capped at two allies — on specific targets, both timed around when those allies' own cooldowns are active so the buff amplifies a bigger number. Direct damage from Living Flame, Upheaval, and Eruption fills the gaps and generates Essence, but it is secondary to buff uptime; Eruption in particular is what keeps Ebon Might itself topped up, and empower spells like Fire Breath and Upheaval are only worth casting while Ebon Might is actually active.",
-    "Patch 12.1's one documented change specific to this spec touches the Double-time talent: the bonus stats an ally gains when your Ebon Might crits now last a flat 15 seconds and refresh if you reapply Ebon Might while that buff is still active, so a well-timed refresh keeps the bonus rolling continuously instead of needing to be re-triggered by a fresh crit.",
-    "Augmentation's two hero trees split it further: Chronowarden pushes buff strength and favors Critical Strike, while Scalecommander redirects more of the kit's value into your own Deep Breath and empowered casts.",
+    "The core mechanic is keeping Ebon Might rolling — since Midnight it automatically gives every damage-dealing ally nearby 8% of your primary stat (split when more than 2 allies are covered) and raises your own damage by 20% — and placing Prescience, a 3% crit buff with 2 charges, on damage dealers whose own cooldowns are active. Eruption, Deep Breath/Breath of Eons and your empower spells (Fire Breath, Upheaval) all extend Ebon Might, so they are only worth casting while it is up. Living Flame and Azure Strike fill the gaps.",
+    "Patch 12.1's change specific to this spec touches the Chronowarden Double-time talent: when Ebon Might procs its 50% bonus stats (a chance equal to your critical strike chance), the bonus now lasts a flat 15 seconds and extends if you reapply Ebon Might while it's still active, so a well-timed refresh keeps it rolling.",
+    "Augmentation's two hero trees split it further: Chronowarden (Double-time, Temporality and Temporal Burst, the latter two lengthened by Mastery in 12.1.5) pushes buff strength and favors Critical Strike, while Scalecommander turns Eruption into a 3-target Mass Eruption after each empower spell and spreads Bombardments, with Melt Armor's damage doubled in 12.1.5.",
     "Bring Augmentation when your group wants a force-multiplier spec that boosts the whole raid's damage output, especially in coordinated cooldown-stacking compositions, rather than pure personal damage.",
   },
   statPriority = {
@@ -322,49 +347,47 @@ ns.GuideStore:RegisterSpec("EVOKER", 1473, {
   },
   rotation = {
     { title = "Priorities", steps = {
-        { spellID = 395152, text = "Refresh Ebon Might on yourself and key allies once it has about 4 seconds or less remaining — don't clip it early" },
-        { text = "Breath of Eons on cooldown" },
-        { spellID = 357210, text = "Deep Breath on cooldown (Scalecommander)" },
-        { spellID = 409311, text = "Prescience on cooldown, capped at two allies — typically high-damage or cooldown-heavy players" },
-        { spellID = 370553, text = "Tip the Scales, generally paired with Fire Breath, otherwise used on cooldown" },
-        { spellID = 357208, text = "Fire Breath at its highest available rank — only while Ebon Might is active" },
-        { spellID = 408092, text = "Upheaval, same rule — only while Ebon Might is active" },
-        { spellID = 395160, text = "Eruption once you're at 2 Essence or holding Essence Burst — this is also what maintains Ebon Might, so don't let it sit unspent" },
-        { spellID = 361469, text = "Living Flame as filler direct damage and Essence generation" },
-        { spellID = 395152, text = "If talented into Double-time, time your Ebon Might refresh to land while the previous crit's stat buff is still active — it extends cleanly instead of resetting" },
+        { spellID = 360827, text = "Before the pull: Blistering Scales on your tank, then pre-cast Living Flame" },
+        { spellID = 395152, text = "Refresh Ebon Might once it has about 4 seconds or less remaining — don't clip it early; with Double-time, refreshing while its bonus is up also extends the bonus" },
+        { spellID = 409311, text = "Prescience on damage dealers early in the fight, then on whoever has a big cooldown coming up — it has 2 charges, so don't let both sit" },
+        { spellID = 370553, text = "Tip the Scales with Fire Breath ready, but not while Breath of Eons is about to come off cooldown" },
+        { spellID = 403631, text = "Breath of Eons on cooldown, lined up with your group's burst (it replaces Deep Breath once talented)" },
+        { spellID = 357208, text = "Fire Breath only while Ebon Might is up — rank 1 if Upheaval is ready, rank 3 otherwise" },
+        { spellID = 396286, text = "Upheaval at rank 1, also only while Ebon Might is up" },
+        { spellID = 404977, text = "Time Skip to recover your cooldowns faster, outside the Breath of Eons window" },
+        { spellID = 395160, text = "Eruption whenever Ebon Might will outlast its cast — it extends Ebon Might, so don't let Essence sit unspent; on Scalecommander, aim it at the target marked by Bombardments" },
+        { spellID = 361469, text = "Living Flame as filler, Azure Strike while moving" },
     }},
     { title = "AoE / Cooldown usage", steps = {
         { text = "The single-target priority above barely changes in AoE — the job is still maximizing Ebon Might uptime on the group" },
-        { text = "Breath of Eons is worth prioritizing even more here since it applies a Temporal Wound to every enemy it flies through" },
-        { text = "Prioritize applying Ebon Might/Prescience to the group before your own direct damage" },
-        { text = "Time Ebon Might/Prescience with allies' cooldown windows rather than a fixed rotation — this is the spec's actual damage output, not a buff bolted onto a DPS rotation" },
-        { text = "Coordinate Breath of Eons roughly every 2 minutes, paired with allies' own DPS cooldowns rather than used in isolation" },
-        { text = "Keep moving to reposition buffs efficiently across a spread-out raid" },
+        { spellID = 403631, text = "Breath of Eons is worth prioritizing even more here since it applies a Temporal Wound to every enemy it flies through" },
+        { text = "Time Prescience and Breath of Eons with allies' cooldown windows rather than a fixed rotation — this is the spec's actual damage output, not a buff bolted onto a DPS rotation" },
+        { text = "Keep moving to stay within range of the group so Ebon Might and Prescience reach everyone" },
     }},
     { title = "Opener Notes", steps = {
         { text = "Augmentation's two hero talent trees are Chronowarden (also Preservation's) and Scalecommander (also Devastation's) — check which one your loadout uses" },
-        { text = "Chronowarden pushes buff strength further and favors Critical Strike, while Scalecommander shifts more of the spec's own damage onto Deep Breath and empowered casts — the Ebon Might/Prescience priority above holds for both" },
+        { text = "Chronowarden pushes buff strength further and favors Critical Strike, while Scalecommander adds Mass Eruption and Bombardments to your own damage — the Ebon Might/Prescience priority above holds for both" },
     }},
   },
   cooldowns = {
-    { spellID = 395152, text = "Ebon Might — core damage-sharing buff, refresh once it has ~4 seconds left and time it with allies' burst windows" },
-    { spellID = 403631, text = "Breath of Eons — major raid-wide burst cooldown on roughly a 2-minute cycle, coordinate with allies' own cooldowns" },
-    { spellID = 409311, text = "Prescience — crit buff capped at two allies, prioritize players with strong burst cooldowns of their own" },
-    { spellID = 357210, text = "Deep Breath — Scalecommander hero-tree cooldown, use it on cooldown" },
+    { spellID = 395152, text = "Ebon Might — core primary-stat buff for every damage dealer nearby, refresh once it has ~4 seconds left" },
+    { spellID = 403631, text = "Breath of Eons — major burst cooldown on a 2-minute cycle (replaces Deep Breath), coordinate with allies' own cooldowns" },
+    { spellID = 409311, text = "Prescience — 3% crit buff with 2 charges, prioritize damage dealers with strong burst cooldowns of their own" },
+    { spellID = 404977, text = "Time Skip — makes your cooldowns recover 10 times faster for 2 seconds" },
     { spellID = 363916, text = "Obsidian Scales — personal defensive, reduces damage taken" },
   },
   consumables = {
-    { slot = "Flask", items = { 241323, 241327 }, text = "Flask of the Magisters for Mastery, this spec's top secondary; Flask of the Shattered Sun if your gear already leans hard into Mastery and Critical Strike is the stat you're short on." },
-    { slot = "Food", items = { 275265, 275266, 255846, 275259, 242757 }, text = "Raid feasts: Loa's Gathering or Feast of Knowledge (Stamina plus your highest secondary, new in 12.1), or Harandar Celebration / Silvermoon Parade (Stamina plus 50 primary stat) - the two families sim within a fraction of a percent of each other, so eat whichever is down. Solo and Mythic+: Hearty Venom-Spiced Cutlets or Hearty Puffer Plate (highest secondary) or Hearty Warped Wise Wings (Mastery); Hearty food persists through death." },
-    { slot = "Potion", items = { 241289, 241309, 271887, 271884 }, text = "Potion of Recklessness (+1585 Mastery for 30s, at the cost of 213 of your lowest secondary) is the burst potion; Light's Potential (+593 primary stat) if your lowest secondary is one you can't afford to lose. Liquid Luster (12.1) ramps Versatility over 30s and suits a pre-pot into a long opener. Always carry Concentrated Silvermoon Health Potions - 421k, the 12.1 upgrade." },
-    { slot = "Weapon Oil", items = { 243734 }, text = "Thalassian Phoenix Oil - the current tier's weapon oil (+16 Critical Strike and Haste for 2 hours, from Enchanting)." },
-    { slot = "Weapon Enchant", items = { 244029, 244031 }, text = "Acuity of the Ren'dorei procs +67 primary stat for 15s; Arcane Mastery procs +124 Mastery instead. The primary-stat proc is the usual default; take the secondary one if your stat weights put Mastery well clear of the rest." },
-    { slot = "Ring Enchants", items = { 243959, 243987 }, text = "Zul'jin's Mastery (+29 Mastery) on both rings; Nature's Fury (+29 Critical Strike) if you're topping up your second stat instead. Use the greater tier - the lesser one is +24." },
+    { slot = "Flask", items = { 241322, 241326 }, text = "Flask of the Magisters for Mastery, this spec's top secondary; Flask of the Shattered Sun if your gear already leans hard into Mastery and Critical Strike is the stat you're short on." },
+    { slot = "Food", items = { 255846, 242275, 242747, 275265 }, text = "Raid feasts: Harandar Celebration or Silvermoon Parade (+50 primary stat, +98 Stamina) - primary stat is the stronger food buff this season. Loa's Gathering, Feast of Knowledge or Amani Cornucopia (12.1: about +72 of your highest secondary, +108 Stamina) are the fallback if that's what's down. Personal: Royal Roast or Impossibly Royal Roast (+50 primary); Hearty Royal Roast is the same buff but persists through death, which is what you want in Mythic+." },
+    { slot = "Potion", items = { 241288, 271887, 241308, 271884 }, text = "Potion of Recklessness (+1725 of your highest secondary for 30s, at the cost of 232 of your lowest) is the default - it only works if your highest secondary is the one you want, Mastery for this spec. If your gear makes it pick another stat, Liquid Luster (12.1: +420 Versatility every 6s, stacking to 5 over 30s) has no downside and suits a long burst window; Light's Potential (+695 primary) is the simple alternative. Draught of Rampant Abandon (+774 primary) is stronger on paper, but its void zone pacifies you and a GCD or two inside it erases the gain. Always carry Concentrated Silvermoon Health Potions - 421k, the 12.1 upgrade." },
+    { slot = "Weapon Oil", items = { 243734 }, text = "Thalassian Phoenix Oil - the current tier's weapon oil and the guides' default for all content (+16 Critical Strike and Haste for 2 hours, from Enchanting)." },
+    { slot = "Weapon Enchant", items = { 244029, 244031, 273072 }, text = "Acuity of the Ren'dorei procs +67 primary stat for 15s; Arcane Mastery procs +124 Mastery instead and wins if your stat weights put Mastery well clear of the rest. Rite of the Hash'ey (12.1: +139 of a random secondary, favouring your highest above 80% health) is the third option." },
+    { slot = "Ring Enchants", items = { 243957, 243959 }, text = "Eyes of the Eagle (+2% critical strike effectiveness) on both rings is the guides' damage pick; Zul'jin's Mastery (+29 Mastery) if your sim says otherwise - the difference is tiny." },
     { slot = "Chest Enchant", items = { 243977 }, text = "Mark of the Worldsoul (+50 primary stat)." },
     { slot = "Leg Enchant", items = { 240133 }, text = "Sunfire Silk Spellthread (+41 Intellect, +115 Stamina)." },
-    { slot = "Helm, Shoulders and Boots", items = { 243979, 243963, 244009, 244021, 243983 }, text = "Helm: Blessing of Speed (+13). Shoulders: Akil'zon's Swiftness (+65 Speed) or Silvermoon's Mending (+166 Leech). Boots: Farstrider's Hunt (+11 Speed, +232 Stamina) or Shaladrassil's Roots (+28 Leech, +232 Stamina). Speed is the throughput-neutral default; swap to Leech for a progression fight you keep dying on." },
-    { slot = "Gems", items = { 240967, 240896, 240898 }, text = "One Powerful Eversong Diamond (+23 primary stat and crit effectiveness per unique gem colour you socket) - it's unique-equipped. Then Flawless Masterful Amethyst (+17 Mastery) in every other socket, or Flawless Deadly Amethyst (+16 Mastery, +7 Critical Strike) to spread a second colour if your diamond counts colours." },
-    { slot = "Augment Rune", items = { 259085, 246492, 224572 }, text = "Void-Touched Augment Rune (+25 primary stat for 1 hour; it does not persist through death) for progression pulls and high keys. Soulgorged Augment Rune (+6, persists through death) or Crystallized Augment Rune (+6) are the cheap fallbacks the rest of the time." },
+    { slot = "Helm, Shoulders and Boots", items = { 243981, 243963, 244009, 244007, 243991, 243953 }, text = "None of these touch your throughput, so it's personal preference. Speed: Empowered Blessing of Speed (+22), Akil'zon's Swiftness (+65), Farstrider's Hunt (+11, +232 Stamina). Avoidance, to survive the bigger hits: Empowered Rune of Avoidance (+37), Amirdrassil's Grace (+111), Lynx's Dexterity (+19, +232 Stamina). Leech (Empowered Hex of Leeching, Silvermoon's Mending, Shaladrassil's Roots) for a fight you keep dying on." },
+    { slot = "Gems", items = { 240983, 240896, 240898, 240967 }, text = "One Indecipherable Eversong Diamond (+32 primary stat) - it's unique-equipped and the other diamonds only give +23. Then Flawless Masterful Amethyst (+17 Mastery) in every other socket, or Flawless Deadly Amethyst (+16 Mastery, +7 Critical Strike) if you're balancing the two. With five or more sockets, Powerful Eversong Diamond (+23 primary stat, +0.15% critical strike effectiveness per unique gem colour) can edge ahead if you socket one gem of each colour." },
+    { slot = "Augment Rune", items = { 259085, 243191 }, text = "Void-Touched Augment Rune (+25 primary stat for 1 hour; it does not persist through death) is the only Midnight rune - use it for progression pulls and high keys. Ethereal Augment Rune (+6, reusable, from the K'aresh Trust at renown 18) is the free stopgap the rest of the time." },
   },
   gear = {
     { slot = "Head", text = "One of your tier-set slots — the four-piece bonus strengthens your Ebon Might/Prescience uptime, worth prioritizing" },
@@ -382,17 +405,17 @@ ns.GuideStore:RegisterSpec("EVOKER", 1473, {
   -- split; one exact code rarely commands a majority, since flex-point
   -- choices vary, so the share is reported as it is.
   mplusMetaLoadout = {
-    string = "CEcBPJc41CfcseY0baneJ1IHrNMzMbjZGMDzMLzYmZMzGAAAAAAAAmhZGYM1YmZGAAAAMzMjxMzyYmBmZzYwCsMGGbDgZiYDjZwMDgB",
-    source = "Blizzard Battle.net API, US region, 2026-08-30: top 22 current-season Mythic+ Augmentation Evokers by best keystone level, sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick (2/22, 9%); 13/22 (59%) ran Chronowarden overall.",
-    patch = "12.1",
-    sampleSize = 22,
+    string = "CEcBPJc41CfcseY0baneJ1IHrNMzMbzMzMzyAzsMjxMmBAAAAAAAAmhZGYM1YmZGAAAAMzMjxMzyYmBmZzYwCsMGGbDgZiYDjZwMDgB",
+    source = "Blizzard Battle.net API, US region, 2026-10-13: top 49 current-season Mythic+ Augmentation Evokers by best keystone level in the first week of patch 12.1.5 (period 1085), sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick (4/49, 8%); 33/49 (67%) ran Chronowarden overall.",
+    patch = "12.1.5",
+    sampleSize = 49,
   },
   tips = {
     "Communicate with the allies you're buffing so Ebon Might and Prescience land while their own cooldowns are active.",
     "Don't treat this as a pure personal-damage spec — your buff uptime on the raid matters more than your own damage meter position.",
     "Reapply Prescience before it expires, and consider swapping targets if a different ally's cooldown window is coming up.",
     "Coordinate your major cooldowns with the raid's overall burst plan rather than using them purely on cooldown.",
-    "If you've talented Double-time, refresh Ebon Might while its crit-triggered stat buff is still active rather than letting it lapse — since 12.1 the refresh extends the buff cleanly instead of forcing a new crit to restart it.",
+    "If you've talented Double-time, refresh Ebon Might while its bonus-stat proc is still active rather than letting it lapse — since 12.1 the refresh extends the bonus instead of needing a new proc to restart it.",
     "Spend Essence and Essence Burst on Eruption rather than banking it — Eruption is what keeps Ebon Might rolling, so treat it as maintenance, not just damage.",
     "Only fire off Fire Breath or Upheaval while Ebon Might is active; casting them outside the window gives up their scaling.",
   },

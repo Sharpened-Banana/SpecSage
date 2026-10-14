@@ -217,7 +217,7 @@ def main():
                                                                  wowhead.updated(dump, specID) or "?"))
         out.append("ns.GuideStore:RegisterBiS(%d, {" % specID)
         out.append("  source = %s," % lua_str("; ".join(sources)))
-        out.append('  patch = "12.1",')
+        out.append('  patch = "12.1.5",')
         out.append("  lists = {")
         titles = []
         for tab in tabs or []:

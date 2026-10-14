@@ -288,7 +288,7 @@ def main():
 
         out.append("ns.GuideStore:RegisterTrinkets(%d, {" % specID)
         out.append("  source = %s," % lua_str("; ".join(sources)))
-        out.append('  patch = "12.1",')
+        out.append('  patch = "12.1.5",')
 
         notes = []
         if not charts:

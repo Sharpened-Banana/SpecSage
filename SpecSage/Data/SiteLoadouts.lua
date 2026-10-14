@@ -7,15 +7,15 @@
 -- under. One site's picks at the time the script ran, alongside (not
 -- replacing) the SimC-default and live-top-player builds the guides carry.
 -- See DESIGN.md's "Guide-site talent builds".
--- Generated: 2026-10-04 09:52 UTC
+-- Generated: 2026-10-14 02:04 UTC
 
 local ADDON, ns = ...
 if not ns.GuideStore then return end
 
 -- WARRIOR 71 (arms-warrior)
 ns.GuideStore:RegisterSiteLoadouts(71, {
-  source = "Talent guide, updated 2026/08/12",
-  patch = "12.1",
+  source = "Talent guide, updated 2026/10/13",
+  patch = "12.1.5",
   builds = {
     { label = "Slayer: Raid ST", string = "CcEAAAAAAAAAAAAAAAAAAAAAAAzMzsMzMmZGAAAghphxYmxyMzMzgxMDAAAAgZWmZAhxyyALgBMDTIzgNwMjtx2ALzsMAzMAYGGA" },
     { label = "Slayer: Raid MT", string = "CcEAAAAAAAAAAAAAAAAAAAAAAAzMzsMzYmZGAAAghphxYmxyMzMzgxMDAAAAgZWmZgJMW2GYBMgZYCZGsBmZsN2GYZmtBYmBAzwA" },
@@ -28,8 +28,8 @@ ns.GuideStore:RegisterSiteLoadouts(71, {
 
 -- WARRIOR 72 (fury-warrior)
 ns.GuideStore:RegisterSiteLoadouts(72, {
-  source = "Talent guide, updated 2026/08/12",
-  patch = "12.1",
+  source = "Talent guide, updated 2026/10/13",
+  patch = "12.1.5",
   builds = {
     { label = "Slayer: Raid ST", string = "CgEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgGDzMmZ2MzMzMDjZmZGzMzsMzMmZmZzYmBAAixy2ALgJYGmAzwGwMDjNAAYmhxYYMYM" },
     { label = "Slayer: Raid MT", string = "CgEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgGDjxMzmZmZmZYMzMzMzYmlZMmZMbmZmBAAixy2ALgJYGmAzwGwMzmxGAAMzwYWGGDGD" },
@@ -42,8 +42,8 @@ ns.GuideStore:RegisterSiteLoadouts(72, {
 
 -- WARRIOR 73 (protection-warrior)
 ns.GuideStore:RegisterSiteLoadouts(73, {
-  source = "Talent guide, updated 2026/08/12",
-  patch = "12.1",
+  source = "Talent guide, updated 2026/10/13",
+  patch = "12.1.5",
   builds = {
     { label = "Colossus: Raid", string = "CkEAAAAAAAAAAAAAAAAAAAAAA0yAAAzMDzMzMzMzmxsMjxYmGmZGLjZmZYGzMAAAAYZAYGDAsZGDbkBmhFaMzCMDzgZDAwMDAYAjB" },
     { label = "Colossus: Mythic+", string = "CkEAAAAAAAAAAAAAAAAAAAAAA0yAAAjZYmZmZGzmZmlZMGz0YGzYZMzMDzYmBAAAALDAzYAgNzYYjMwMsQjZWgZGzgZDAwMDAYAjB" },
@@ -54,8 +54,8 @@ ns.GuideStore:RegisterSiteLoadouts(73, {
 
 -- PALADIN 65 (holy-paladin)
 ns.GuideStore:RegisterSiteLoadouts(65, {
-  source = "Talent guide, updated 2026/09/20",
-  patch = "12.1",
+  source = "Talent guide, updated 2026/10/13",
+  patch = "12.1.5",
   builds = {
     { label = "Herald of the Sun: Raid", string = "CEEAAAAAAAAAAAAAAAAAAAAAAAAAALAwMAAw2MzMjZMzYxYmZYZwMLmpJGGzMDjZLDADYYDsxyMmZZ2mZmtGAAAgFAYzwYGzwMAAmZYGjRDA" },
     { label = "Herald of the Sun: Raid (2)", string = "CEEAAAAAAAAAAAAAAAAAAAAAAAAAALAwMAAwyMzMjZ2mZmNYMsM2MziZaihxMzwY2yAwAG2AbsMjZWmtZmZrBAAAYBA2MMmxMMDAgZGmxY0A" },
@@ -72,20 +72,20 @@ ns.GuideStore:RegisterSiteLoadouts(65, {
 
 -- PALADIN 66 (protection-paladin)
 ns.GuideStore:RegisterSiteLoadouts(66, {
-  source = "Talent guide, updated 2026/09/14",
-  patch = "12.1",
+  source = "Talent guide, updated 2026/10/13",
+  patch = "12.1.5",
   builds = {
-    { label = "Templar: Raid", string = "CIEAAAAAAAAAAAAAAAAAAAAAAsNzYWmZYGzM2WGDLzithBAYAAAAAAQamZxMmZGjZrNAMgBMYbAAgZm2mZWmBAYzyGzYAMmhxAAsNDwMDyYD" },
-    { label = "Templar: Mythic+", string = "CIEAAAAAAAAAAAAAAAAAAAAAAsZeAzyYGzYmZWWGjZZWmlZMAADAAAAAAaamhZMzwY2aDADMgZw2AAAzMtNzsMDAwmlFMAgZYMAALzAmZGkxC" },
-    { label = "Lightsmith: Raid", string = "CIEAAAAAAAAAAAAAAAAAAAAAAsNDzyYmHYmZmx2yYMLzithBAYAAAAAAQamZxMmZGjZrNAMgBMYbAAAEgZmttlWmZsYZjZMAGzwYAwMDAmZQGL" },
+    { label = "Templar: Raid", string = "CIEAAAAAAAAAAAAAAAAAAAAAAsNzYWmZYGzM2WGDLzithBAYAAAAAAQamZxMmZGjZrNAMgBMYbAAgZm2mZWmBAYzyGzYAMmhxAAsNDwMDyYB" },
+    { label = "Templar: Mythic+", string = "CIEAAAAAAAAAAAAAAAAAAAAAAsZYWGzYmZmZWWGjZZWmlZMAADAAAAAAaamhZMzwY2aDADMgZw2AAAzMtNzsMDAwmlFMAgZYMAALzAmZGkxC" },
+    { label = "Lightsmith: Raid", string = "CIEAAAAAAAAAAAAAAAAAAAAAAsNDzyYmHYmZmx2yYMLzithBAYAAAAAAQamZxMmZYMbtBgBMwMYbAAAEgZmttlWmZsYZjZMAGzwYAwMDAmZQGL" },
     { label = "Lightsmith: Mythic+", string = "CIEAAAAAAAAAAAAAAAAAAAAAAsZsNLjZMjZmZZbMmlZZWmxAAMAAAAAAopZGmxMDjZrNAMwAmBbDAAgAMzstt0yMjFLLYAAzwYAwMDAzMDyYB" },
   },
 })
 
 -- PALADIN 70 (retribution-paladin)
 ns.GuideStore:RegisterSiteLoadouts(70, {
-  source = "Talent guide, updated 2026/08/25",
-  patch = "12.1",
+  source = "Talent guide, updated 2026/10/13",
+  patch = "12.1.5",
   builds = {
     { label = "Templar: Raid", string = "CYEAAAAAAAAAAAAAAAAAAAAAAAAAAAANbbzMzywMDAAAAAAzUGzwMjtxsNMz2MGjxwMWYbAAAZmptZmtZAAbAGAMmhZwMmZ2w2MYYMjBD" },
     { label = "Templar: Mythic+", string = "CYEAAAAAAAAAAAAAAAAAAAAAAAAAAAwoZbbmZWGzMzAAAAAAYmyYGmZsNmthZ2mxYMGmxGbAAAZmptZmtZAAbAGAMmhBmxMzGWmBDjZMYA" },
@@ -98,8 +98,8 @@ ns.GuideStore:RegisterSiteLoadouts(70, {
 
 -- HUNTER 253 (beast-mastery-hunter)
 ns.GuideStore:RegisterSiteLoadouts(253, {
-  source = "Talent guide, updated 2026/08/12",
-  patch = "12.1",
+  source = "Talent guide, updated 2026/10/13",
+  patch = "12.1.5",
   builds = {
     { label = "Pack Leader: Raid", string = "C0PAAAAAAAAAAAAAAAAAAAAAAAMmxwCsAzwQDbAAYGGzsMzwMmZYYmxYmxMzYGzwMzYGzghmBAAAAMDAAAzMzMAzsRYYWAbDAD" },
     { label = "Pack Leader: Mythic+", string = "C0PAAAAAAAAAAAAAAAAAAAAAAAMmxwCsBzwQDbAAYGPwMzsMzwMzMjZGMzYmhZGzMzYbmZYMDLDNDAAAAAAAAmHYMzAmZjAmFw2AwA" },
@@ -112,13 +112,13 @@ ns.GuideStore:RegisterSiteLoadouts(253, {
 
 -- HUNTER 254 (marksmanship-hunter)
 ns.GuideStore:RegisterSiteLoadouts(254, {
-  source = "Talent guide, updated 2026/08/12",
-  patch = "12.1",
+  source = "Talent guide, updated 2026/10/13",
+  patch = "12.1.5",
   builds = {
     { label = "Sentinel: Single Target", string = "C4PAAAAAAAAAAAAAAAAAAAAAAwCMwMGzYZAMD2AAAAAAAAAzYmZmFzYmZMDGTzYwYbZmZmZmZmZWwsMYGAAwYmZMAmptNYA2YmtZMA" },
-    { label = "Sentinel: Raid AoE/Cleave", string = "C4PAAAAAAAAAAAAAAAAAAAAAAwCMwMGzYZAMD2AAAAAAAAAzYmZmFzYmZMDGTzYwstZmZmZmZmZWwsMMDAAwYmZMAmptNYA2YmtZMA" },
+    { label = "Sentinel: Raid AoE/Cleave", string = "C4PAAAAAAAAAAAAAAAAAAAAAAwCMwMGzYZAMD2AAAAAAAAAzYmZmFzYmZMDGTzYwsttNzMzMzMzMLYWGmBAAYMzMAYm22gBYjZ2mxA" },
     { label = "Sentinel: Mythic+", string = "C4PAAAAAAAAAAAAAAAAAAAAAAwGMwMGzYZAMD2AAAAAAAAAzYmZGbzYmZMDLjpZMYW22mZmZmZmZmFmZZYGAAAPwYMAMTbgBYjZ2mxA" },
-    { label = "Sentinel: Delves", string = "C4PAAAAAAAAAAAAAAAAAAAAAAwGMwMGzYZAMD2AAAAAAAAAzYmZGMmZGzMMmGGMLbLzMzMzMzMzCmthZAAAmZMGAmpNsMDwGzsNjB" },
+    { label = "Sentinel: Delves", string = "C4PAAAAAAAAAAAAAAAAAAAAAAwGMwMGzYZAMD2AAAAAAAAAzYmZGMmZGzMMmGGMLbbzMzMzMzMzCmthZAAAmZMGAmpNsMDwGzsNjB" },
     { label = "Dark Ranger: Single Target", string = "C4PAAAAAAAAAAAAAAAAAAAAAAYzsMwAmgZYbAzCAAAAAAAAYGzMzsYGzMjZwYaGDGbLzMzMzMzMzCmlBDAAwYmZMzMDIbwAsxMbzYA" },
     { label = "Dark Ranger: Mythic+", string = "C4PAAAAAAAAAAAAAAAAAAAAAAYzsMwAmgZYbAzCAAAAAAAAYGzMzYbGzMjZYZMNjBzymZMzMzMzMLMzywMAAAegxYmZmBEwAsxMbzYA" },
     { label = "Dark Ranger: Delves", string = "C4PAAAAAAAAAAAAAAAAAAAAAAYzsMwAmgZYbAzCAAAAAAAAYGzMzgxMzYmhx0wgZZzMmZmZmZmFMbDzAAAMzYMzMzACWmBYjZ2mxA" },
@@ -127,8 +127,8 @@ ns.GuideStore:RegisterSiteLoadouts(254, {
 
 -- HUNTER 255 (survival-hunter)
 ns.GuideStore:RegisterSiteLoadouts(255, {
-  source = "Talent guide, updated 2026/08/27",
-  patch = "12.1",
+  source = "Talent guide, updated 2026/10/13",
+  patch = "12.1.5",
   builds = {
     { label = "Pack Leader: Raid", string = "C8PAAAAAAAAAAAAAAAAAAAAAAMgxMGWIbwMM0gFjZmxMWGAAAAAAmZmZmhZMmxMYMNDAAAwAgZssMzMLMzMzYmxAmZDAjxMWMAA" },
     { label = "Pack Leader: Mythic+", string = "C8PAAAAAAAAAAAAAAAAAAAAAAMgxMG2ILwMM0gFzMzMzMWGAAAAAAmZmZmhZMmxMYMNDAAAwAgHYssMzYhZmZGzMGwMbAYMmZWMAA" },
@@ -142,8 +142,8 @@ ns.GuideStore:RegisterSiteLoadouts(255, {
 
 -- ROGUE 259 (assassination-rogue)
 ns.GuideStore:RegisterSiteLoadouts(259, {
-  source = "Talent guide, updated 2026/09/06",
-  patch = "12.1",
+  source = "Talent guide, updated 2026/10/13",
+  patch = "12.1.5",
   builds = {
     { label = "Deathstalker: Raid Single Target", string = "CMQAAAAAAAAAAAAAAAAAAAAAAYmlxsNDGAAAAAYWGsNDAAAAAottZmZmZmxYZmZmtZWmZmZMjZMGzMGGgNzyADYJYZYCMsAmZAGjB" },
     { label = "Deathstalker: Raid", string = "CMQAAAAAAAAAAAAAAAAAAAAAAYmlxsZwAAAAAAzygtZAAAAAAttNzMzMzMGLzMzsNzyMz8AjxMjxYmZmxAsZWGYALBLDTghFwMDwYMA" },
@@ -156,8 +156,8 @@ ns.GuideStore:RegisterSiteLoadouts(259, {
 
 -- ROGUE 260 (outlaw-rogue)
 ns.GuideStore:RegisterSiteLoadouts(260, {
-  source = "Talent guide, updated 2026/08/12",
-  patch = "12.1",
+  source = "Talent guide, updated 2026/10/13",
+  patch = "12.1.5",
   builds = {
     { label = "Trickster: Raid", string = "CQQAAAAAAAAAAAAAAAAAAAAAAAgx2MMzMmZmtZmZmZMmF4BmZbaZw2MAAAAAAbbzMzwMzMziZmZbAAAAYmBAjZxwQGYWYhWYjBYmBDMA" },
     { label = "Trickster: Mythic+", string = "CQQAAAAAAAAAAAAAAAAAAAAAAAgx2MMzMjZmtZmZMzMzsAmZbaZw2MAAAAAAbbzMzwMzMziZmZbAAAAYmBAjZxwQGYWYhWYjBYmBDMA" },
@@ -170,20 +170,21 @@ ns.GuideStore:RegisterSiteLoadouts(260, {
 
 -- ROGUE 261 (subtlety-rogue)
 ns.GuideStore:RegisterSiteLoadouts(261, {
-  source = "Talent guide, updated 2026/10/03",
-  patch = "12.1",
+  source = "Talent guide, updated 2026/10/13",
+  patch = "12.1.5",
   builds = {
     { label = "Deathstalker: Raid", string = "CUQAAAAAAAAAAAAAAAAAAAAAAAgx2MAAAAAwsMGLTMbbjxMDDzMzMzw8AbzYGbbzMzMzMjBjZ2GAAAAGMmFzyADYBsMMhMLYGmZAmxA" },
     { label = "Deathstalker: Mythic+", string = "CUQAAAAAAAAAAAAAAAAAAAAAAAgx2MAAAAAwsMGLTMbbjxMDjZmZmZGGbzYGbbzMzMzMjBjZ2GAAAAGMmFzyADYBsMMhMLYGmZAmxA" },
     { label = "Trickster: Raid", string = "CUQAAAAAAAAAAAAAAAAAAAAAAAgx2MAAAAAwsMGLTMbbjxMDDzMzMzw8AbzYGbbzMzMzMjBjZ2GAAAAGMGwY2MMwAziWoFbYGwMDmxA" },
-    { label = "Trickster: Mythic+", string = "CUQAAAAAAAAAAAAAAAAAAAAAAAgx2MAAAAAwsMGLTMbLjxMDDzMzMzw8AbzYGbbzMzMzMjBjZ2GAAAAGMGwY2MMwAziWoFbYGwMDmxA" },
+    { label = "Trickster: Mythic+", string = "CUQAAAAAAAAAAAAAAAAAAAAAAAgx2MAAAAAwsMGLTMbLjxMDDzMzMzw8AbzYGbbzMzMzMjBjZ2GAAAAGMGwYWMMwAziWoFbYGwMDmxA" },
+    { label = "Trickster: Delves", string = "CUQAAAAAAAAAAAAAAAAAAAAAAAgx2MAAAAAwsMGLTMbLjxMDDzMzMzw8AbzYGbbzMzMzMjBjZ2GAAAAGMGwY2MMwAziWoFbYGwMDmxA" },
   },
 })
 
 -- PRIEST 256 (discipline-priest)
 ns.GuideStore:RegisterSiteLoadouts(256, {
-  source = "Talent guide, updated 2026/09/22",
-  patch = "12.1",
+  source = "Talent guide, updated 2026/10/13",
+  patch = "12.1.5",
   builds = {
     { label = "Oracle: Raid", string = "CAQAAAAAAAAAAAAAAAAAAAAAAADsMGWmZmBDmZbmtZmZmxMDAAAAAAAAAgZYZGMzMDmxMgpZamBYmNMEGzyAMGsAAAjxMjBzAMzMTwA" },
     { label = "Oracle: Mythic+", string = "CAQAAAAAAAAAAAAAAAAAAAAAAADsMDWmZMmBmZbmtZmZmxMDAAAAAAAAAgxYZGMzMjNjZGsZamYAmZDDhxsMAjBLAAwYmZGDmBYmZEMD" },
@@ -194,8 +195,8 @@ ns.GuideStore:RegisterSiteLoadouts(256, {
 
 -- PRIEST 257 (holy-priest)
 ns.GuideStore:RegisterSiteLoadouts(257, {
-  source = "Talent guide, updated 2026/08/24",
-  patch = "12.1",
+  source = "Talent guide, updated 2026/10/13",
+  patch = "12.1.5",
   builds = {
     { label = "Archon: Raid", string = "CEQAAAAAAAAAAAAAAAAAAAAAAwYAAAAAAAgZmlxMjZmZYmZYZGmBAAAwwsMDzMzMYGzAYmaAgZWMTmFDAMGsZmZ2A0MMjxwMz2yAMDMA" },
     { label = "Archon: Mythic+", string = "CEQAAAAAAAAAAAAAAAAAAAAAAwYAAAAAAAMmxsMYMzMDzMDLzMzMAAAAGzsMDmZmBjZGDYmCAMzmZysZAgxgNzM2A0MmZMGmZ2WGgBMA" },
@@ -207,8 +208,8 @@ ns.GuideStore:RegisterSiteLoadouts(257, {
 
 -- PRIEST 258 (shadow-priest)
 ns.GuideStore:RegisterSiteLoadouts(258, {
-  source = "Talent guide, updated 2026/08/12",
-  patch = "12.1",
+  source = "Talent guide, updated 2026/10/13",
+  patch = "12.1.5",
   builds = {
     { label = "Archon: Single Target", string = "CIQAAAAAAAAAAAAAAAAAAAAAAMMDzAAAAAAAAAAAAwMLmxMbzMGz2MGzw2MzYmZGbIzYxMNAzAMzmZY2MAkxYBAzMIjZmZMbMz2yAMTMA" },
     { label = "Archon: Raid Cleave", string = "CIQAAAAAAAAAAAAAAAAAAAAAAMMDDAAAAAAAAAAAAmZxMmZbmxMz2MGzw2MzYmZGbIzYxMNAzAMzmZY2MAkxYBAzMIjZmZMbMz2yAMTMA" },
@@ -221,8 +222,8 @@ ns.GuideStore:RegisterSiteLoadouts(258, {
 
 -- DEATHKNIGHT 250 (blood-death-knight)
 ns.GuideStore:RegisterSiteLoadouts(250, {
-  source = "Talent guide, updated 2026/09/21",
-  patch = "12.1",
+  source = "Talent guide, updated 2026/10/13",
+  patch = "12.1.5",
   builds = {
     { label = "Deathbringer: Raid", string = "CoPAAAAAAAAAAAAAAAAAAAAAAwYWGzMmxMjhZZmZmmZxYmxMmBAAAAmZmZmZmZYGjZAYMzMzAAAMmtBGwSwywEYYBwMMAAMzAYYA" },
     { label = "Deathbringer: Mythic+", string = "CoPAAAAAAAAAAAAAAAAAAAAAAwMzyMzMmxMzMMLzMz0MLGjxMGAAAAwMmZmZmZYGDAYmZmZGAAgxsNwAWCWGmADLAmxMAAMzAYYA" },
@@ -235,8 +236,8 @@ ns.GuideStore:RegisterSiteLoadouts(250, {
 
 -- DEATHKNIGHT 251 (frost-death-knight)
 ns.GuideStore:RegisterSiteLoadouts(251, {
-  source = "Talent guide, updated 2026/09/05",
-  patch = "12.1",
+  source = "Talent guide, updated 2026/10/13",
+  patch = "12.1.5",
   builds = {
     { label = "Deathbringer: Raid", string = "CsPAAAAAAAAAAAAAAAAAAAAAAMAmZMjZAz2MzMzMLzMjMjxYYmxgZmZmZmZmZAAAAAAAAAYMbDMgFwywEyYBzMmZGYAYYmBYmBD" },
     { label = "Deathbringer: Mythic+", string = "CsPAAAAAAAAAAAAAAAAAAAAAAMAzMMjZAz2MzMzMLzMjMjxYYmxgZmZmZmZmZAAAAAAAAAYMbDMgFwywEyYBzMmZGYAYYmBYmBD" },
@@ -249,8 +250,8 @@ ns.GuideStore:RegisterSiteLoadouts(251, {
 
 -- DEATHKNIGHT 252 (unholy-death-knight)
 ns.GuideStore:RegisterSiteLoadouts(252, {
-  source = "Talent guide, updated 2026/09/05",
-  patch = "12.1",
+  source = "Talent guide, updated 2026/10/13",
+  patch = "12.1.5",
   builds = {
     { label = "Rider of the Apocalypse: Rider ST", string = "CwPAAAAAAAAAAAAAAAAAAAAAAAwMjZMDDz2MzMTzmZmZMjBAAAAAAAgZGmZAwyMmZ2mZGzMDYzsYYIDMbM0YBAzAAzMjZAmZmxYA" },
     { label = "Rider of the Apocalypse: Rider M+/Delves", string = "CwPAAAAAAAAAAAAAAAAAAAAAAAYmhZMDDz2MzMTzmxMzMjBAAAAAAAgZGzYAwyMmZ2MzYMDYzsZYIDMbM0YBDYGAGzMjZAmZmxYA" },
@@ -262,8 +263,8 @@ ns.GuideStore:RegisterSiteLoadouts(252, {
 
 -- SHAMAN 262 (elemental-shaman)
 ns.GuideStore:RegisterSiteLoadouts(262, {
-  source = "Talent guide, updated 2026/08/21",
-  patch = "12.1",
+  source = "Talent guide, updated 2026/10/13",
+  patch = "12.1.5",
   builds = {
     { label = "Farseer: Raid", string = "CYQAAAAAAAAAAAAAAAAAAAAAAAAAAAzMbLzMmZmZZbZMMjBAAAAsYmNYADY2YCZWAgZZmZGjtFTYmZZsMzMzYYZWmxiZGmZZAADAMzYYYA" },
     { label = "Farseer: Mythic+", string = "CYQAAAAAAAAAAAAAAAAAAAAAAAAAAAzMbLzMGjZZZZMmhBAAAAsYmNYADY2YCZWAgZZmZGjtFTbMzYsMzMzYYZWMWmZGzMLAAzAgZGDDD" },
@@ -274,8 +275,8 @@ ns.GuideStore:RegisterSiteLoadouts(262, {
 
 -- SHAMAN 263 (enhancement-shaman)
 ns.GuideStore:RegisterSiteLoadouts(263, {
-  source = "Talent guide, updated 2026/08/22",
-  patch = "12.1",
+  source = "Talent guide, updated 2026/10/13",
+  patch = "12.1.5",
   builds = {
     { label = "Stormbringer: Raid", string = "CcQAAAAAAAAAAAAAAAAAAAAAAMzMzgZmZmZmhZmZAAAAAAAAA2AsZGDLkFYGGawCAzyMmZGLLzAzMbsMzMzwwYGAgZYMzYmJwMDGMGA" },
     { label = "Stormbringer: Cleave", string = "CcQAAAAAAAAAAAAAAAAAAAAAAMzMzgZmZmZmhZmZAAAAAAAAA2AsZGDbkFYGGawCAzyMmZGLLzAzMbsMzMzwwYGAgZYMzYmJwMDGMGA" },
@@ -290,8 +291,8 @@ ns.GuideStore:RegisterSiteLoadouts(263, {
 
 -- SHAMAN 264 (restoration-shaman)
 ns.GuideStore:RegisterSiteLoadouts(264, {
-  source = "Talent guide, updated 2026/09/05",
-  patch = "12.1",
+  source = "Talent guide, updated 2026/10/13",
+  patch = "12.1.5",
   builds = {
     { label = "Farseer: Raid", string = "CgQAAAAAAAAAAAAAAAAAAAAAAAAAAgBAAAAzMzsssNjZGjZGzMMWMzGMgJY2YCMWMDzgtxYmmtlZmNzYWYxMzMmhZZAAAgZmBAzMwgZA" },
     { label = "Farseer: Mythic+", string = "CgQAAAAAAAAAAAAAAAAAAAAAAAAAAgBAAAAzMzsssNzMzMjZGjZMWMzCMgJYWYCMWwMDmtZGjmtlZmNzYWYxYmxwysMAAAwMzAgZGYwM" },
@@ -303,8 +304,8 @@ ns.GuideStore:RegisterSiteLoadouts(264, {
 
 -- MAGE 62 (arcane-mage)
 ns.GuideStore:RegisterSiteLoadouts(62, {
-  source = "Talent guide, updated 2026/08/31",
-  patch = "12.1",
+  source = "Talent guide, updated 2026/10/13",
+  patch = "12.1.5",
   builds = {
     { label = "Spellslinger: Raid", string = "C4DAAAAAAAAAAAAAAAAAAAAAAYGGLzMzswMDamZGAAAGAAEwMzMLLzMxCAAwMzMjNLzMzsMjxYmZwCzYmZGAgBAAYmZBAMDAGmZG" },
     { label = "Spellslinger: Mythic+", string = "C4DAAAAAAAAAAAAAAAAAAAAAAMzwYZmZmFMzQzMGAAAGAAEwMzMLLzMxCAAbDmZG2sMjZMjxMzMzwCzMzMzAAMAAAzMbAADAGmZG" },
@@ -315,8 +316,8 @@ ns.GuideStore:RegisterSiteLoadouts(62, {
 
 -- MAGE 63 (fire-mage)
 ns.GuideStore:RegisterSiteLoadouts(63, {
-  source = "Talent guide, updated 2026/08/13",
-  patch = "12.1",
+  source = "Talent guide, updated 2026/10/13",
+  patch = "12.1.5",
   builds = {
     { label = "Sunfury: Raid", string = "C8DAAAAAAAAAAAAAAAAAAAAAAYGGLzMzswMzIzMzAAAwAAmZmmlttZAA2MzM2mZmZGLAAAAAYxMjZAAgZMmZmZMzsMAMzQGjBMDjB" },
     { label = "Sunfury: Mythic+", string = "C8DAAAAAAAAAAAAAAAAAAAAAAMzwYZmZmFMzIzMzMAAAGAwMz0sstNDAwmZmx2MzMzYDAAAAALmZmZAAgZMmZmZMzsMAMzQYMgZYMA" },
@@ -329,8 +330,8 @@ ns.GuideStore:RegisterSiteLoadouts(63, {
 
 -- MAGE 64 (frost-mage)
 ns.GuideStore:RegisterSiteLoadouts(64, {
-  source = "Talent guide, updated 2026/08/21",
-  patch = "12.1",
+  source = "Talent guide, updated 2026/10/13",
+  patch = "12.1.5",
   builds = {
     { label = "Spellslinger: Raid ST", string = "CAEAAAAAAAAAAAAAAAAAAAAAAYGGLzMzsMmZmYmZGjZMziZmZmZMDAAAMzMzyyMTbAAAAAAwGAbLjZmZgtZMzMsAAAwMbAzEGwADD" },
     { label = "Spellslinger: Raid Cleave", string = "CAEAAAAAAAAAAAAAAAAAAAAAAYGGLzMzsMmZmYmZGzMzMziZmZMjZAAAgZmZWWmZaDAAAAAA2AYbZMzMDmthxMsAAAwMbAzEGwMYYA" },
@@ -343,8 +344,8 @@ ns.GuideStore:RegisterSiteLoadouts(64, {
 
 -- WARLOCK 265 (affliction-warlock)
 ns.GuideStore:RegisterSiteLoadouts(265, {
-  source = "Talent guide, updated 2026/08/12",
-  patch = "12.1",
+  source = "Talent guide, updated 2026/10/13",
+  patch = "12.1.5",
   builds = {
     { label = "Hellcaller: Raid", string = "CkQAAAAAAAAAAAAAAAAAAAAAAwMzMzoZhhZmZmlBAAYmZZWmZmlxAAWgBmFjGzAysAWGAAAmBAAmZAzMjhZGmZMzMGMzMzAAmBG" },
     { label = "Hellcaller: Raid Cleave", string = "CkQAAAAAAAAAAAAAAAAAAAAAAwMmZGNbM2mZGzyAAAmZmlZxMzyYAALwAziRjZAZ2ALDAAAzAAAzMYMjZmtxwYmZmZYYmZGAgZgB" },
@@ -357,8 +358,8 @@ ns.GuideStore:RegisterSiteLoadouts(265, {
 
 -- WARLOCK 266 (demonology-warlock)
 ns.GuideStore:RegisterSiteLoadouts(266, {
-  source = "Talent guide, updated 2026/08/12",
-  patch = "12.1",
+  source = "Talent guide, updated 2026/10/13",
+  patch = "12.1.5",
   builds = {
     { label = "Diabolist: Raid", string = "CoQAAAAAAAAAAAAAAAAAAAAAAYmZMzoZjhZmxsMAAAAAAAgxMGWgB2GtQDLGjxysMzMjZAgZGzMzMzAMzMmZAAAGzMzMDDLzYAD" },
     { label = "Diabolist: Raid Cleave", string = "CoQAAAAAAAAAAAAAAAAAAAAAAYmhZGNbmx2MzYWGAAAAAAAwYGDLwAbj2ohFjZGLz2MzMmBAmZMmZmZAmZGmZDAAMmZmxwwyMGwA" },
@@ -370,22 +371,22 @@ ns.GuideStore:RegisterSiteLoadouts(266, {
 
 -- WARLOCK 267 (destruction-warlock)
 ns.GuideStore:RegisterSiteLoadouts(267, {
-  source = "Talent guide, updated 2026/08/29",
-  patch = "12.1",
+  source = "Talent guide, updated 2026/10/13",
+  patch = "12.1.5",
   builds = {
     { label = "Diabolist: Raid", string = "CsQAAAAAAAAAAAAAAAAAAAAAAwMzMzoZjhZmZmlZzMzMLGjFzAAgZmxMzsAGzYYhMw2wGNWYAAgxAjNAMzAYmxYAAAYmZmBAwYYA" },
-    { label = "Diabolist: Mythic+", string = "CsQAAAAAAAAAAAAAAAAAAAAAAwMjZGNbmZ2mZGzysZmZmFzMLLzDMAAYGjZmZBMmxwCZgthFaswAAAjZYAAmZAGzYMbAAAmZmBAAGG" },
-    { label = "Diabolist: Cleave", string = "CsQAAAAAAAAAAAAAAAAAAAAAAwMzMzoZjhZmxsMLzMzMLGz2iZAAwMGzMzCYMjhFyAbDb0YhBAAGDwCAmZAmZGjZDAAwMzMAAMGG" },
+    { label = "Diabolist: Mythic+", string = "CsQAAAAAAAAAAAAAAAAAAAAAAwMMzoZzMz2MzYWmtZGzsYGLLjBAAzYMzMLgxMGWIDsNsQjFGAAYMDDbAYmBYMjZmNAAAzMzAAwYYA" },
+    { label = "Diabolist: Cleave", string = "CsQAAAAAAAAAAAAAAAAAAAAAAwMzMzoZjhZmxsMbzMzMLGz2iZAAwMGzMzCYMjhFyAbDb0YhBAAGDwGAmZAmZGjZDAAwMzMAAMGG" },
     { label = "Hellcaller: Raid", string = "CsQAAAAAAAAAAAAAAAAAAAAAAwMmZGNLMzmZmZWmFzMzsYMWMDAAmZGzMziNYgZxoxMAmtYjBAAGDM2AAmZwYGzYDAAwMzMAAMGG" },
-    { label = "Hellcaller: Mythic+", string = "CsQAAAAAAAAAAAAAAAAAAAAAAwMjZGNLmxiZGzysNzMjFzYZZmBAAzgZmZxCMwsY0YGAzWsxAAAjZYAAwMDGzMmZDAAwMzMDAAzwA" },
-    { label = "Hellcaller: Cleave", string = "CsQAAAAAAAAAAAAAAAAAAAAAAwMmZGNLMzmZmZWmlZmZmFjZbxDMAAYGjZmZxGMwsY0YGAzWsxAAAjBGbAAzMYMjZsBAAYmZGAAGDD" },
+    { label = "Hellcaller: Mythic+", string = "CsQAAAAAAAAAAAAAAAAAAAAAAwMjZGNLmxiZGzysNzMzsYGLLjBAAzYMzMLWgBmFjGzAY2iNGAAYMYYDAYmBjZGzsBAAYmZmBAwYYA" },
+    { label = "Hellcaller: Cleave", string = "CsQAAAAAAAAAAAAAAAAAAAAAAwMmZGNLMzmZmZWmlZmZmFjZbxMAAYGjZmZxGMwsY0YGAzWsxAAAjBYDAYmBjZMjNAAAzMzAAwYYA" },
   },
 })
 
 -- MONK 268 (brewmaster-monk)
 ns.GuideStore:RegisterSiteLoadouts(268, {
-  source = "Talent guide, updated 2026/08/13",
-  patch = "12.1",
+  source = "Talent guide, updated 2026/10/13",
+  patch = "12.1.5",
   builds = {
     { label = "Shado-pan: Standard Raid", string = "CwQAAAAAAAAAAAAAAAAAAAAAAAAAAgZbzYGPwYWM2mxMDAAAAAAALLYEmBmhxmZMmZmZMzywMmZZYZzy2sNMLAAwGCAAwsNLNzMziZYDgZGmGDAAYA" },
     { label = "Shado-pan: Mythic+", string = "CwQAAAAAAAAAAAAAAAAAAAAAAAAAAwMLbGDzwyM2MmZMAAAAAAALLgYmBmhBzgZmZGzsNMjZWGW2stNbzYWAAgNEAAgZbWamZmNG2AYmhpxAGAwA" },
@@ -398,8 +399,8 @@ ns.GuideStore:RegisterSiteLoadouts(268, {
 
 -- MONK 270 (mistweaver-monk)
 ns.GuideStore:RegisterSiteLoadouts(270, {
-  source = "Talent guide, updated 2026/09/05",
-  patch = "12.1",
+  source = "Talent guide, updated 2026/10/13",
+  patch = "12.1.5",
   builds = {
     { label = "Conduit of the Celestials: Raid", string = "C4QAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAghx2YZYzixMzyyM2wYGmZZZbmxCzoZMDYwgxYmZmhZbMGsYCAAAAgAsYZmlZbmBAAGwAMDYMMWkxMA" },
     { label = "Conduit of the Celestials: Mythic+", string = "C4QAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAghxyMLjZx2MmZsZsZZGzs9AzstsMzYhhmxMgBDYWmZmZY2wMMLzEAAAAABYx2Mbz2MDAAMAAzAGDsIjZA" },
@@ -412,8 +413,8 @@ ns.GuideStore:RegisterSiteLoadouts(270, {
 
 -- MONK 269 (windwalker-monk)
 ns.GuideStore:RegisterSiteLoadouts(269, {
-  source = "Talent guide, updated 2026/08/13",
-  patch = "12.1",
+  source = "Talent guide, updated 2026/10/13",
+  patch = "12.1.5",
   builds = {
     { label = "Shado-pan: Raid - Single Target", string = "C0QAAAAAAAAAAAAAAAAAAAAAAMzYw2MmhlZGbzAAAAAAAAAAAAsMMaGzwwAmxwMzMDz2wMMLzEAwiZ2mZYmZmBAwGAMLzSzMzsAgBmZAglBiB8B" },
     { label = "Shado-pan: Raid - Cleave", string = "C0QAAAAAAAAAAAAAAAAAAAAAAMzYw2wMsNzYbGAAAAAAAAAAAglhRzYGGGwMGmZmZY2YmhZZmAAWMz2MzYMzMAA2AgZZWamZmFAMwMDAsMQMgB" },
@@ -426,8 +427,8 @@ ns.GuideStore:RegisterSiteLoadouts(269, {
 
 -- DRUID 102 (balance-druid)
 ns.GuideStore:RegisterSiteLoadouts(102, {
-  source = "Talent guide, updated 2026/08/12",
-  patch = "12.1",
+  source = "Talent guide, updated 2026/10/13",
+  patch = "12.1.5",
   builds = {
     { label = "Keeper of the Grove: Raid", string = "CYGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWoMbNjxMDMmlZmZmBMDWmZbGzYGLsMjZmZMzGGAMALbjFMNzsMCAAAwGzMzMYzAjZAMzAADA" },
     { label = "Keeper of the Grove: Mythic+", string = "CYGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWoMbNMmZgxsMzMzMLMwDMbzsMWmxMWYZGjxMjFMAYAW2GLYamZZEAAAgNzMPwMD2MmxYGAzMAwA" },
@@ -440,8 +441,8 @@ ns.GuideStore:RegisterSiteLoadouts(102, {
 
 -- DRUID 103 (feral-druid)
 ns.GuideStore:RegisterSiteLoadouts(103, {
-  source = "Talent guide, updated 2026/08/12",
-  patch = "12.1",
+  source = "Talent guide, updated 2026/10/13",
+  patch = "12.1.5",
   builds = {
     { label = "Druid of the Claw: Raid", string = "CcGAAAAAAAAAAAAAAAAAAAAAAAAAAAAwghxYmZmxsxDsMz2MzMmZGAAAAWCmNYMzomxswMzMGzMDAAAAAAgBAAAQzsMLzMzACsAmZAWMzwAAAYmNMA" },
     { label = "Druid of the Claw: Mythic+", string = "CcGAAAAAAAAAAAAAAAAAAAAAAAAAAAAgZmZ2YmZmxY2MPw2YbGzMmZAAAAYLY2MwMzUzYWMzMzsMmxAAAAAAwADAAAgmZZWmZmBEYBmZGgFGMAAAmZDD" },
@@ -452,34 +453,34 @@ ns.GuideStore:RegisterSiteLoadouts(103, {
 
 -- DRUID 104 (guardian-druid)
 ns.GuideStore:RegisterSiteLoadouts(104, {
-  source = "Talent guide, updated 2026/08/28",
-  patch = "12.1",
+  source = "Talent guide, updated 2026/10/13",
+  patch = "12.1.5",
   builds = {
     { label = "Druid of the Claw: Raid", string = "CgGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgZmxsMPwYMzmZZGMWGY2gRT0MzsMzMzMGzYGAAAAAwMWmBAAAgamlZZmZGAALYmBYxMYAbW2GAMzGMA" },
     { label = "Druid of the Claw: Mythic+", string = "CgGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgZmxsMmZMziZZGmZZZgZzwoJamZWmZmZmlxMMAAAAAgZsMDAAAA1MLzyMzMAAWwMPAwiZwA2sAAmZDG" },
     { label = "Elune's Chosen: Raid", string = "CgGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgZmxsYGjZ2MLGMLLDMbwoJamZWmZmZGjZMDAAAAAYGLzAW2mZwY2GATBAAA2wMDwiZwA2ssNAzMAG" },
-    { label = "Elune's Chosen: Mythic+", string = "CgGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgZmZml5BmZMziZxwMLLDMbGGNRzMzyMzMzsMmBAAAAAgZsYAbbzMYMLDgpAAAAbYmBYxMYAbWAYmBwA" },
+    { label = "Elune's Chosen: Mythic+", string = "CgGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgZmxsMzMjZWMLGmZZZgZzwoJamZWmZmZmlxMAAAAAAMjFDYbbmBjZZAMFAAAYDzMALmBDYxCAzMAG" },
     { label = "Elune's Chosen: Delves", string = "CgGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgZmxsMzMjZWMLGMWGY2MjRT0MzsYmZmxYGGAAAAAwwyMgltZGMmlBwUAAAgNMzDMgFzgBjNLbAmZAMA" },
   },
 })
 
 -- DRUID 105 (restoration-druid)
 ns.GuideStore:RegisterSiteLoadouts(105, {
-  source = "Talent guide, updated 2026/08/12",
-  patch = "12.1",
+  source = "Talent guide, updated 2026/10/13",
+  patch = "12.1.5",
   builds = {
-    { label = "Keeper of the Grove: Raid", string = "CkGAAAAAAAAAAAAAAAAAAAAAAMjxMLzMjZmxsNMDmFjNmBAAAAAAAAAAbDa2YMNzY4BMLzMzMDDzAAAAAAAAAbbjFMNzsMAAABswYmZYmBGNDAmZAADA" },
+    { label = "Keeper of the Grove: Raid", string = "CkGAAAAAAAAAAAAAAAAAAAAAAMjxMLzMjZmxsN8ADzsYsxMAAAAAAAAAAYbQzGjpZGDPgZZmZmZYYGAAAAAAAAYbbsgpZmlBAAIgFGzMDzMwoZAwMDAYA" },
     { label = "Keeper of the Grove: Mythic+", string = "CkGAAAAAAAAAAAAAAAAAAAAAAMMmZZMjZmxsNMMmlZsZbGAAAAAAAAAAsMoZzw0MjZwsYmZmZZGGDAAAAAAAGw2yYBTzMLDAAQALMmZgZ2ANDAmZAADA" },
     { label = "Keeper of the Grove: Mythic+ (2)", string = "CkGAAAAAAAAAAAAAAAAAAAAAAMMmZZMjZmxsNzMgFzsZbGAAAAAAAAAAsNoZzw0MmZMmFzMzMLzwYAAAAAAAwAAQAAAzyMbNLzsYDm5BwMWANDAwMDADA" },
-    { label = "Wildstalker: Raid", string = "CkGAAAAAAAAAAAAAAAAAAAAAAYMmZZmZMzMmthZwsZsNmBAAAAAAAAAAbDa2YMNzY4BMLzMzMDDzAAAAAAAAAAIAAgZbmlmtZ2sxYmZwMwoZAAmZAYA" },
-    { label = "Wildstalker: Mythic+", string = "CkGAAAAAAAAAAAAAAAAAAAAAAMMmZZMjZmxsNMMmlZsZbGAAAAAAAAAAsMoZzw0MjZwsYmZmZZGGDAAAAAAAGAACAAYWmZrZbmFbMmZgZWANDAwMDADA" },
+    { label = "Wildstalker: Raid", string = "CkGAAAAAAAAAAAAAAAAAAAAAAYMmZZmZMzMmthHYYmNjtxMAAAAAAAAAAYbQzGjpZGDPgZZmZmZYYGAAAAAAAAAABAAMbzs0sNzmNGzMDmBGNDAwMDADA" },
+    { label = "Wildstalker: Mythic+", string = "CkGAAAAAAAAAAAAAAAAAAAAAAMMmZZMjZmxsN8AMzsMjNbzAAAAAAAAAAglBNbGmmZMDmFzMzMLzwYAAAAAAAwAAQAAAzyMbNbzsYjxMDMzCoZAAmZAYA" },
   },
 })
 
 -- DEMONHUNTER 577 (havoc-demon-hunter)
 ns.GuideStore:RegisterSiteLoadouts(577, {
-  source = "Talent guide, updated 2026/09/24",
-  patch = "12.1",
+  source = "Talent guide, updated 2026/10/13",
+  patch = "12.1.5",
   builds = {
     { label = "Fel-Scarred: Raid", string = "CEkAAAAAAAAAAAAAAAAAAAAAAYmZGzMzmxMzMmZmMmZAAAAAAAzyDMmtZYmBzMWmZMDzMGzyALziZMMbaaMzMG2AAAAAAAAYmBDAAAAD" },
     { label = "Fel-Scarred: Mythic+", string = "CEkAAAAAAAAAAAAAAAAAAAAAAYmZGzMz2MmZmxYmMmZAAAAAAAzixsNDzMwMWmZmZYmBzyALzmZMMLaaMzMmxGAAAwAAAAYmBDAAAAD" },
@@ -490,8 +491,8 @@ ns.GuideStore:RegisterSiteLoadouts(577, {
 
 -- DEMONHUNTER 581 (vengeance-demon-hunter)
 ns.GuideStore:RegisterSiteLoadouts(581, {
-  source = "Talent guide, updated 2026/08/12",
-  patch = "12.1",
+  source = "Talent guide, updated 2026/10/13",
+  patch = "12.1.5",
   builds = {
     { label = "Aldrachi Reaver: Raid", string = "CUkAAAAAAAAAAAAAAAAAAAAAAAAYMzMjZmZkZmZY2MzMjhZMzYGzYmZYGmx2MzYMAAAAgZbGMMW2YCDzMjFAAAAMYAIAzMADAAAgB" },
     { label = "Aldrachi Reaver: Mythic+", string = "CUkAAAAAAAAAAAAAAAAAAAAAAAAYMzMjhZkZmBWMjZwMjZGz8AzMzYYmZmx2YGjxMAAAAMbzghxyGTYYmZsAAAAgBGABYmBMDAAAgB" },
@@ -506,24 +507,24 @@ ns.GuideStore:RegisterSiteLoadouts(581, {
 
 -- DEMONHUNTER 1480 (devourer-demon-hunter)
 ns.GuideStore:RegisterSiteLoadouts(1480, {
-  source = "Talent guide, updated 2026/09/18",
-  patch = "12.1",
+  source = "Talent guide, updated 2026/10/13",
+  patch = "12.1.5",
   builds = {
-    { label = "Void-Scarred: Raid ST", string = "CgcBAAAAAAAAAAAAAAAAAAAAAAA2MmZmZmZmxwMAAAAAAAegxsNYGAAAAAAAAmxMMmZmZMzMzYmtZGjNttAgAGgZMzMbzMTz2MLzMjZMA" },
-    { label = "Void-Scarred: Raid Cleave", string = "CgcBAAAAAAAAAAAAAAAAAAAAAAAWMmZmZmZmBmBAAAAAAY7BGz2gZAAAAAAAAYGzwYmZmZmZmZMz2Mjxm2WAQADwDMmZmtZmpZbmlZmxYGA" },
-    { label = "Void-Scarred: Mythic+", string = "CgcBAAAAAAAAAAAAAAAAAAAAAAAWmZmZmZGjxwMAAAAAAALGz2gZAAAAAAAAYGzw8AzMzMzMzMMz2MjxmsAgAGgZMzMbzMTzyMLzMDzMA" },
-    { label = "Void-Scarred: Delves", string = "CgcBAAAAAAAAAAAAAAAAAAAAAAA2MzMzMzMjxwMAAAAAAAmxAmBAAAAAAAgZMDzDMzMzMzMzMmZbmxYTbbAIgBwMzMz2Mz0sNz2MzwMDA" },
-    { label = "Annihilator: Raid ST", string = "CgcBAAAAAAAAAAAAAAAAAAAAAAA2MmZmZmZmxwMAAAAAAAegxsNYGAAAAAAAAmxMMzMzMjZmZGzsYGjFtswMzMzWbzMzAYGDABMGMmB" },
-    { label = "Annihilator: Raid Cleave", string = "CgcBAAAAAAAAAAAAAAAAAAAAAAA2MmZmZmZmxwMAAAAAAAegxsNYGAAAAAAAAmxMMzMzMzMzMDzsYGjFtswMzMzWbzMzAYGDABMGMmB" },
-    { label = "Annihilator: Mythic+", string = "CgcBAAAAAAAAAAAAAAAAAAAAAAA2mxMzMzMzMGmBAAAAAAYxY2GMDAAAAAAAAzYwMzMzMzMzMjZWMjxiWWYmZmZrtZmZAMMAEwYwYGA" },
-    { label = "Annihilator: Delves", string = "CgcBAAAAAAAAAAAAAAAAAAAAAAA2MmZmZmZmxwMAAAAAAAmxAmBAAAAAAAgZMDzMzMzMzMzwMbmxYRLbMzMzs1yMzMAmZGACYMYMD" },
+    { label = "Void-Scarred: Raid ST", string = "CgcBAAAAAAAAAAAAAAAAAAAAAAAWMzMzMzMzMwMAAAAAAALPwY2GMDAAAAAAAAzYwYmZmxMzMMzyMjxm2WAQADgxMzsNzMNbzsNzwYGD" },
+    { label = "Void-Scarred: Raid Cleave", string = "CgcBAAAAAAAAAAAAAAAAAAAAAAAWMzMzMzMzMwMAAAAAAALzYMYGAAAAAAAAmxMMmZmZGzMDzsMDjNtsAgAGAjZmZZmZa2mZbmZwMGA" },
+    { label = "Void-Scarred: Mythic+", string = "CgcBAAAAAAAAAAAAAAAAAAAAAAAWmxMzMzMzMGmBAAAAAAgxsNYGAAAAAAAAmxMMmZmZmZmZYmlZGjNtsAgAGAjZmZZmZa2mZzMjxMGA" },
+    { label = "Void-Scarred: Delves", string = "CgcBAAAAAAAAAAAAAAAAAAAAAAAWMmZmZmZmxwMAAAAAAAmxAmBAAAAAAAgZMDjZmZmZmZGmZbmxYTbbAIgBwMzMz2Mz0sNzmZGjZMA" },
+    { label = "Annihilator: Raid ST", string = "CgcBAAAAAAAAAAAAAAAAAAAAAAA2MmZmZmZmxwMAAAAAAALPwY2GMDAAAAAAAAzYwMzMzMmZmZMziZMW0yCzMzMbtNzMDgZMAE4BGDGGA" },
+    { label = "Annihilator: Raid Cleave", string = "CgcBAAAAAAAAAAAAAAAAAAAAAAA2MmZmZmZmBmBAAAAAAY5BGz2gZAAAAAAAAYGzwMzMzMzMzMMziZMWkFmZmZ2abmZGADDABegxMMmB" },
+    { label = "Annihilator: Mythic+", string = "CgcBAAAAAAAAAAAAAAAAAAAAAAA2mxMzMzYmxwMAAAAAAALGz2gZAAAAAAAAYGzwMzMzMzMzMMziZMWkFmZmZ2abmZGADDABegxMMmB" },
+    { label = "Annihilator: Delves", string = "CgcBAAAAAAAAAAAAAAAAAAAAAAA2MmZmZGzMGmBAAAAAAYZGDYGAAAAAAAAmxMMzMzMzMzMDzsZGjFZjZmZmtWmZmBwYGAC8AjZYMD" },
   },
 })
 
 -- EVOKER 1467 (devastation-evoker)
 ns.GuideStore:RegisterSiteLoadouts(1467, {
-  source = "Talent guide, updated 2026/09/23",
-  patch = "12.1",
+  source = "Talent guide, updated 2026/10/13",
+  patch = "12.1.5",
   builds = {
     { label = "Scalecommander: Raid", string = "CsbBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAjZwMDzwMgBjZaMzMNzM2mZmZmZmZmZGwMmZGzMLzMDMwYwGsMGN2GQmBBbYgZGMjHA" },
     { label = "Scalecommander: Mythic+", string = "CsbBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAjZwgZGmBGYMTjZmpZmZ2mZmZmZmZmZGwMzMzYmZZmZgBGD2glxox2AyMIYDzgZGM8AA" },
@@ -536,8 +537,8 @@ ns.GuideStore:RegisterSiteLoadouts(1467, {
 
 -- EVOKER 1468 (preservation-evoker)
 ns.GuideStore:RegisterSiteLoadouts(1468, {
-  source = "Talent guide, updated 2026/08/12",
-  patch = "12.1",
+  source = "Talent guide, updated 2026/10/13",
+  patch = "12.1.5",
   builds = {
     { label = "Flameshaper: Mythic+", string = "CwbBAAAAAAAAAAAAAAAAAAAAAAAAAAAmZmZ2WmZGDjxsZGw2wAAAzYmZmZMMTMmBAAAMzMTGzMzMGzAAjZgFwGYGmQ2YsZYGgZGGA" },
     { label = "Flameshaper: Delves", string = "CwbBAAAAAAAAAAAAAAAAAAAAAAAAAAAmZmZ2MwYmZGMzMDbAAAYYMDzYGZmZAAAALzMz0MGzMjZmBAGzAbgNwMMhsxYzwAYmZmB" },
@@ -549,8 +550,8 @@ ns.GuideStore:RegisterSiteLoadouts(1468, {
 
 -- EVOKER 1473 (augmentation-evoker)
 ns.GuideStore:RegisterSiteLoadouts(1473, {
-  source = "Talent guide, updated 2026/09/28",
-  patch = "12.1",
+  source = "Talent guide, updated 2026/10/13",
+  patch = "12.1.5",
   builds = {
     { label = "Chronowarden: Raid", string = "CEcBAAAAAAAAAAAAAAAAAAAAAMMzMbzMzgZYmZZGzMjZ2AAAAAAAAYmhxMYM1YmZGAAAAMjZMmZWGzMwMMwYGLsADMDDNiFMGzMAwA" },
     { label = "Chronowarden: Mythic+", string = "CEcBAAAAAAAAAAAAAAAAAAAAAMMzMbzMzgZYmZZGzMjZ2AAAAAAAAwMMzAjpGzMzAAAAgZmZMmZ2GzMwMMwYGLsADMDDNiFMmZmBAG" },

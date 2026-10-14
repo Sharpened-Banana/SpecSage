@@ -221,7 +221,7 @@ find SpecSage -name '*.lua' -exec luac5.1 -p {} +
 
 ## Game version
 
-`## Interface: 120100` in the `.toc` targets Midnight patch 12.1. When a patch
+`## Interface: 120105` in the `.toc` targets Midnight patch 12.1.5. When a patch
 bumps the interface number, update that line or the addon shows as out of
 date. The current value is shown by `/dump select(4, GetBuildInfo())` in game.
 

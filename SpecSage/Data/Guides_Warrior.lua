@@ -1,7 +1,15 @@
 local ADDON, ns = ...
 
 -- SpecSage guide data: Warrior (Arms 71, Fury 72, Protection 73)
--- Content targets Midnight (patch 12.1). Specs below with an `mplusLoadout`
+-- 12.1.5 pass (2026-10-13): every spec's overview, rotation, cooldowns
+-- and tips here were re-checked against SimC's `midnight` branch (client
+-- data 12.1.5.70391: action priority lists, talent and spell tables),
+-- spell tooltips and the 12.1.5 patch notes, and corrected where they had
+-- drifted; every spellID resolves to the ability its step names. Where an
+-- older note further down disagrees with a spec block, the block is current.
+-- The Arms MID1 note below is historical: every Warrior `mplusLoadout`
+-- matches its MID2 profile as of 12.1.5.
+-- Content targets Midnight (patch 12.1.5). Specs below with an `mplusLoadout`
 -- and/or `raidLoadout` field have that talent string (only) cross-checked
 -- against SimulationCraft's public profiles (github.com/simulationcraft/simc,
 -- GPLv3, `midnight` branch) as of patch 12.1; specs without one have no such
@@ -33,8 +41,9 @@ local ADDON, ns = ...
 --     Battle.net Game Data API (client-credentials OAuth, US region) rather
 --     than SimC, on 2026-08-30. Methodology: every current-season Mythic+
 --     leaderboard (8-dungeon pool, period 1078; refreshed 2026-10-04 at
--- period 1083 - a field whose `source` still says 2026-08-30 was kept
--- because the newer sample had no repeated build) across all 83 US connected
+-- period 1083, and 2026-10-13 at period 1085, 12.1.5's first day - a
+-- field whose `source` carries an older date was kept because the newer
+-- sample had no clear most-common build) across all 83 US connected
 --     realms was scanned (top 20 groups per realm/dungeon) for each spec's
 --     group members; the 50 distinct characters per spec with the highest
 --     observed keystone level had their live `specializations` looked up
@@ -83,8 +92,8 @@ ns.GuideStore:RegisterSpec("WARRIOR", 71, {
   specName = "Arms",
   role = "DAMAGER",
   overview = {
-    "Arms Warrior is a two-handed weapon melee spec built around Mortal Strike as its core rhythm and Colossus Smash (or Sudden Death procs) as its burst windows. It plays as a methodical, cooldown-driven spec: you build and spend rage on a tight priority list, keep Rend and Overpower windows active, and time your offensive cooldowns to land inside Colossus Smash's armor-reduction debuff.",
-    "The spec's core resource is Rage, generated from auto-attacks and abilities like Overpower, and spent on Mortal Strike, Cleave, and execute-range finishers. Its defining mechanic is the Colossus Smash / Warbreaker debuff window — damage done to the target is increased for a short duration, so cooldowns and high-value spenders are stacked inside it for burst.",
+    "Arms Warrior is a two-handed weapon melee spec built around Mortal Strike as its core rhythm and Colossus Smash (or Sudden Death procs) as its burst windows. It plays as a methodical, cooldown-driven spec: you build and spend rage on a tight priority list, keep Rend rolling, spend Overpower charges, and time your offensive cooldowns to land inside Colossus Smash's damage-amplifying debuff.",
+    "The spec's core resource is Rage, generated from auto-attacks and abilities like Overpower, and spent on Mortal Strike, Cleave, and execute-range finishers. Its defining mechanic is the Colossus Smash debuff window — the damage you deal to affected targets is increased by 30% for 10 seconds, so cooldowns and high-value spenders are stacked inside it for burst.",
     "Arms brings strong single-target cleave, self-sufficient defensives (Die by the Sword, Rallying Cry), and solid execute-phase damage, making it a reliable pick for raid progression and Mythic+ alike when you want consistent melee pressure without pet or DoT management.",
   },
   statPriority = {
@@ -98,28 +107,39 @@ ns.GuideStore:RegisterSpec("WARRIOR", 71, {
     { title = "Opener", steps = {
         { spellID = 100, text = "Charge to open and generate your first Rage" },
         { spellID = 260708, text = "Sweeping Strikes pre-cast if multiple targets are already up" },
-        { spellID = 167105, text = "Colossus Smash / Warbreaker to open your burst window" },
+        { spellID = 107574, text = "Avatar, then Ravager if talented, right before your first Colossus Smash" },
+        { spellID = 167105, text = "Colossus Smash to open your burst window" },
         { spellID = 12294, text = "Mortal Strike inside the Colossus Smash window" },
         { text = "Trinkets, potions, and your other offensive cooldowns alongside this first Colossus Smash" },
     }},
     { title = "Single Target", steps = {
-        { spellID = 167105, text = "Colossus Smash — open burst windows and align cooldowns with it" },
-        { spellID = 12294, text = "Mortal Strike on cooldown — top rage priority; also fire it early if Rend has less than 3 seconds left, or if you're holding a Fierce Followthrough buff" },
-        { spellID = 772, text = "Rend — keep the bleed active on the target" },
-        { spellID = 7384, text = "Overpower when charges are available" },
-        { spellID = 845, text = "Cleave / Slam (or Heroic Strike procs under Slayer) to spend excess rage between cooldowns" },
-        { spellID = 163201, text = "Execute once the target drops below 35% health, or on a Sudden Death proc even outside execute range",
-          condition = "Slayer hero talent: use with Rage above 40, or on a Sudden Death proc" },
-        { spellID = 376079, text = "Champion's Spear on cooldown for extra burst inside your Colossus Smash window" },
+        { spellID = 772, text = "Rend — refresh it when it's about to drop, and top it up before Colossus Smash if it has under 10 seconds left (Cleave applies Rend instead if you have both)" },
+        { spellID = 107574, text = "Avatar together with Colossus Smash (or when Colossus Smash is still more than a global away)" },
+        { spellID = 228920, text = "Ravager, if talented, just before Colossus Smash so its bleed amplification lands in the window" },
+        { spellID = 167105, text = "Colossus Smash on cooldown — open every burst window with it" },
+        { spellID = 436358, text = "Demolish inside Colossus Smash while Colossal Might is up",
+          condition = "Colossus hero talent only" },
+        { spellID = 227847, text = "Bladestorm while Colossus Smash or Avatar is up",
+          condition = "Slayer hero talent only" },
+        { spellID = 376079, text = "Champion's Spear, if talented, inside your Colossus Smash window" },
+        { spellID = 1269383, text = "Heroic Strike whenever a Master of Warfare proc upgrades Slam into it" },
+        { spellID = 163201, text = "Execute at 2 Sudden Death stacks; in execute range (below 20% health, 35% with Massacre) it becomes a main spender",
+          condition = "Slayer hero talent: in execute range, Execute with Rage above 40 or on a Sudden Death proc" },
+        { spellID = 12294, text = "Mortal Strike on cooldown — and early under Colossus while Colossal Might is below 10 stacks" },
+        { spellID = 7384, text = "Overpower to spend charges (at 2 Opportunist stacks first under Slayer)" },
+        { spellID = 1464, text = "Slam as the Rage-dump filler when everything else is on cooldown" },
     }},
     { title = "AoE", steps = {
         { spellID = 260708, text = "Sweeping Strikes whenever multiple targets are up" },
-        { spellID = 227847, text = "Bladestorm to open on 3+ targets" },
-        { spellID = 167105, text = "Colossus Smash / Warbreaker before committing cooldowns" },
-        { spellID = 845, text = "Cleave as your rage dump against multiple targets" },
-        { spellID = 772, text = "Rend on targets that will live long enough for the bleed to pay off" },
-        { spellID = 7384, text = "Overpower to keep charges from capping" },
-        { text = "Fill remaining rage with Mortal Strike on the highest-priority target" },
+        { spellID = 845, text = "Cleave first if the pack has no Rend yet — it applies Rend to every target it hits" },
+        { spellID = 107574, text = "Avatar, Ravager and Colossus Smash together to open the pull" },
+        { spellID = 227847, text = "Bladestorm on cooldown once 3+ targets are up",
+          condition = "Slayer hero talent; Colossus uses it as a late filler instead" },
+        { spellID = 436358, text = "Demolish once Mortal Strike has built Colossal Might",
+          condition = "Colossus hero talent only" },
+        { spellID = 845, text = "Cleave as your main Rage dump against multiple targets" },
+        { spellID = 7384, text = "Overpower, especially with Dreadnaught, whose shockwave is pure AoE damage" },
+        { text = "Fill with Mortal Strike, Execute on Sudden Death procs, and Slam (or Heroic Strike) between cooldowns" },
     }},
     { title = "Opener Notes", steps = {
         { text = "Pool rage before pulling, then open with Colossus Smash into Mortal Strike to front-load burst" },
@@ -132,23 +152,24 @@ ns.GuideStore:RegisterSpec("WARRIOR", 71, {
     { spellID = 167105, text = "Colossus Smash — core damage-amp window, use on cooldown" },
     { spellID = 227847, text = "Bladestorm — strong AoE/cleave cooldown, also usable defensively; under the Slayer hero talent it's pulled into the Colossus Smash burst window instead",
       condition = "Slayer hero talent: use while your Colossus Smash debuff is active" },
-    { spellID = 436358, text = "Demolish — Colossus hero talent spender, use on cooldown stacked on Colossal Might inside your Colossus Smash window",
+    { spellID = 228920, text = "Ravager (talent) — drop it just before Colossus Smash; enemies it hits take 50% more damage from your bleeds" },
+    { spellID = 436358, text = "Demolish — Colossus hero talent spender on a 30-second cooldown, cast inside your Colossus Smash window while Colossal Might is up",
       condition = "Colossus hero talent only" },
     { spellID = 118038, text = "Die by the Sword — major defensive, use under heavy melee pressure" },
     { spellID = 97462, text = "Rallying Cry — raid-wide defensive cooldown for group survival checks" },
   },
   consumables = {
-    { slot = "Flask", items = { 241327, 241325 }, text = "Flask of the Shattered Sun for Critical Strike, this spec's top secondary; Flask of the Blood Knights if your gear already leans hard into Critical Strike and Haste is the stat you're short on." },
-    { slot = "Food", items = { 275265, 275266, 255846, 275259, 242755 }, text = "Raid feasts: Loa's Gathering or Feast of Knowledge (Stamina plus your highest secondary, new in 12.1), or Harandar Celebration / Silvermoon Parade (Stamina plus 50 primary stat) - the two families sim within a fraction of a percent of each other, so eat whichever is down. Solo and Mythic+: Hearty Venom-Spiced Cutlets or Hearty Puffer Plate (highest secondary) or Hearty Sun-Seared Lumifin (Critical Strike); Hearty food persists through death." },
-    { slot = "Potion", items = { 241289, 241309, 271887, 271884 }, text = "Potion of Recklessness (+1585 Critical Strike for 30s, at the cost of 213 of your lowest secondary) is the burst potion; Light's Potential (+593 primary stat) if your lowest secondary is one you can't afford to lose. Liquid Luster (12.1) ramps Versatility over 30s and suits a pre-pot into a long opener. Always carry Concentrated Silvermoon Health Potions - 421k, the 12.1 upgrade." },
-    { slot = "Weapon Oil", items = { 243734, 237371, 237369 }, text = "Thalassian Phoenix Oil - the current tier's weapon oil (+16 Critical Strike and Haste for 2 hours, from Enchanting); Refulgent Whetstone (bladed) or Refulgent Weightstone (blunt) gives +15 Attack Power instead, from Blacksmithing - the two are close, so take whichever is cheaper." },
-    { slot = "Weapon Enchant", items = { 244029, 243971 }, text = "Acuity of the Ren'dorei procs +67 primary stat for 15s; Jan'alai's Precision procs +124 Critical Strike instead. The primary-stat proc is the usual default; take the secondary one if your stat weights put Critical Strike well clear of the rest." },
-    { slot = "Ring Enchants", items = { 243987, 244015 }, text = "Nature's Fury (+29 Critical Strike) on both rings; Silvermoon's Alacrity (+29 Haste) if you're topping up your second stat instead. Use the greater tier - the lesser one is +24." },
+    { slot = "Flask", items = { 241326, 241324 }, text = "Flask of the Shattered Sun for Critical Strike, this spec's top secondary; Flask of the Blood Knights if your gear already leans hard into Critical Strike and Haste is the stat you're short on." },
+    { slot = "Food", items = { 255846, 242275, 242747, 275265 }, text = "Raid feasts: Harandar Celebration or Silvermoon Parade (+50 primary stat, +98 Stamina) - primary stat is the stronger food buff this season. Loa's Gathering, Feast of Knowledge or Amani Cornucopia (12.1: about +72 of your highest secondary, +108 Stamina) are the fallback if that's what's down. Personal: Royal Roast or Impossibly Royal Roast (+50 primary); Hearty Royal Roast is the same buff but persists through death, which is what you want in Mythic+." },
+    { slot = "Potion", items = { 241288, 271887, 241308, 271884 }, text = "Potion of Recklessness (+1725 of your highest secondary for 30s, at the cost of 232 of your lowest) is the default - it only works if your highest secondary is the one you want, Critical Strike for this spec. If your gear makes it pick another stat, Liquid Luster (12.1: +420 Versatility every 6s, stacking to 5 over 30s) has no downside and suits a long burst window; Light's Potential (+695 primary) is the simple alternative. Draught of Rampant Abandon (+774 primary) is stronger on paper, but its void zone pacifies you and a GCD or two inside it erases the gain. Always carry Concentrated Silvermoon Health Potions - 421k, the 12.1 upgrade." },
+    { slot = "Weapon Oil", items = { 243734, 237371, 237369 }, text = "Thalassian Phoenix Oil - the current tier's weapon oil and the guides' default for all content (+16 Critical Strike and Haste for 2 hours, from Enchanting); Refulgent Whetstone (bladed) or Refulgent Weightstone (blunt) gives +15 Attack Power instead, from Blacksmithing, if the oil is scarce." },
+    { slot = "Weapon Enchant", items = { 273072, 244029, 243971 }, text = "Rite of the Hash'ey (12.1) procs +139 of a random secondary for 15s, and favours your highest one while you're above 80% health - the guides' pick for most physical specs, on both weapons if you dual-wield. Acuity of the Ren'dorei (+67 primary stat) is close behind; Jan'alai's Precision (+124 Critical Strike) if your sim puts Critical Strike well clear." },
+    { slot = "Ring Enchants", items = { 243957, 243987 }, text = "Eyes of the Eagle (+2% critical strike effectiveness) on both rings is the guides' damage pick; Nature's Fury (+29 Critical Strike) if your sim says otherwise - the difference is tiny." },
     { slot = "Chest Enchant", items = { 243977 }, text = "Mark of the Worldsoul (+50 primary stat)." },
-    { slot = "Leg Enchant", items = { 244641 }, text = "Forest Hunter's Armor Kit (+41 primary stat, +115 Stamina)." },
-    { slot = "Helm, Shoulders and Boots", items = { 243979, 243963, 244009, 244021, 243983 }, text = "Helm: Blessing of Speed (+13). Shoulders: Akil'zon's Swiftness (+65 Speed) or Silvermoon's Mending (+166 Leech). Boots: Farstrider's Hunt (+11 Speed, +232 Stamina) or Shaladrassil's Roots (+28 Leech, +232 Stamina). Speed is the throughput-neutral default; swap to Leech for a progression fight you keep dying on." },
-    { slot = "Gems", items = { 240967, 240904, 240906 }, text = "One Powerful Eversong Diamond (+23 primary stat and crit effectiveness per unique gem colour you socket) - it's unique-equipped. Then Flawless Deadly Garnet (+17 Critical Strike) in every other socket, or Flawless Quick Garnet (+16 Critical Strike, +7 Haste) to spread a second colour if your diamond counts colours." },
-    { slot = "Augment Rune", items = { 259085, 246492, 224572 }, text = "Void-Touched Augment Rune (+25 primary stat for 1 hour; it does not persist through death) for progression pulls and high keys. Soulgorged Augment Rune (+6, persists through death) or Crystallized Augment Rune (+6) are the cheap fallbacks the rest of the time." },
+    { slot = "Leg Enchant", items = { 244641, 244643 }, text = "Forest Hunter's Armor Kit (+41 primary stat, +115 Stamina) or Blood Knight's Armor Kit (+41 primary stat, +27 armor) - the same offensive stat either way, so it's health or armour; the 12.1 guides split between them." },
+    { slot = "Helm, Shoulders and Boots", items = { 243981, 243963, 244009, 244007, 243991, 243953 }, text = "None of these touch your throughput, so it's personal preference. Speed: Empowered Blessing of Speed (+22), Akil'zon's Swiftness (+65), Farstrider's Hunt (+11, +232 Stamina). Avoidance, to survive the bigger hits: Empowered Rune of Avoidance (+37), Amirdrassil's Grace (+111), Lynx's Dexterity (+19, +232 Stamina). Leech (Empowered Hex of Leeching, Silvermoon's Mending, Shaladrassil's Roots) for a fight you keep dying on." },
+    { slot = "Gems", items = { 240983, 240904, 240906, 240967 }, text = "One Indecipherable Eversong Diamond (+32 primary stat) - it's unique-equipped and the other diamonds only give +23. Then Flawless Deadly Garnet (+17 Critical Strike) in every other socket, or Flawless Quick Garnet (+16 Critical Strike, +7 Haste) if you're balancing the two. With five or more sockets, Powerful Eversong Diamond (+23 primary stat, +0.15% critical strike effectiveness per unique gem colour) can edge ahead if you socket one gem of each colour." },
+    { slot = "Augment Rune", items = { 259085, 243191 }, text = "Void-Touched Augment Rune (+25 primary stat for 1 hour; it does not persist through death) is the only Midnight rune - use it for progression pulls and high keys. Ethereal Augment Rune (+6, reusable, from the K'aresh Trust at renown 18) is the free stopgap the rest of the time." },
   },
   gear = {
     { slot = "Head", text = "Tier set piece — the set bonus usually reshapes your Colossus Smash burst more than a small item-level gap does. Season 2's set bonus boosts Mortal Strike/Execute and gives Slam a small cleave, with the four-piece boosting Overpower and having it buff your next Slam, stacking." },
@@ -173,9 +194,9 @@ ns.GuideStore:RegisterSpec("WARRIOR", 71, {
   -- split; one exact code rarely commands a majority, since flex-point
   -- choices vary, so the share is reported as it is.
   mplusMetaLoadout = {
-    string = "CcEASWsDSHNyPDXnbxuIhH3ZdjZmZmFzYmZGAAAghphxYmZzMzMzYmxMDAAAAgxyMDMhxy2ALgBMDTIzgNwMDDDmlZ2GgZGAMDDA",
-    source = "Blizzard Battle.net API, US region, 2026-10-04: top 50 current-season Mythic+ Arms Warriors by best keystone level, sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick, tied with 1 other build (5/50, 10% each); 50/50 (100%) ran Slayer overall.",
-    patch = "12.1",
+    string = "CcEASWsDSHNyPDXnbxuIhH3ZdjZmZmFzYmZGAAAghphZGzMbmZmZGmxMDAAAAgxyMDMhxy2ALgBMDTIzgNwMDDDmlZ2GgZGAMDDA",
+    source = "Blizzard Battle.net API, US region, 2026-10-13: top 50 current-season Mythic+ Arms Warriors by best keystone level in the first week of patch 12.1.5 (period 1085), sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick, tied with 1 other build (6/50, 12% each); 50/50 (100%) ran Slayer overall.",
+    patch = "12.1.5",
     sampleSize = 50,
   },
   tips = {
@@ -211,22 +232,30 @@ ns.GuideStore:RegisterSpec("WARRIOR", 72, {
     }},
     { title = "Single Target", steps = {
         { spellID = 1719, text = "Recklessness and Avatar on cooldown" },
-        { spellID = 184367, text = "Rampage whenever you can afford it — refreshing Enrage is the top priority" },
-        { spellID = 163201, text = "Execute whenever it's available" },
-        { spellID = 85288, text = "Raging Blow to spend Enrage charges before they're wasted (Slayer's main filler)" },
-        { spellID = 205545, text = "Odyn's Fury on cooldown" },
-        { spellID = 23881, text = "Bloodthirst on cooldown — core Rage and Enrage generator" },
-        { spellID = 1680, text = "Whirlwind if nothing else is available" },
+        { spellID = 184367, text = "Rampage whenever Enrage is about to drop or you're at 100+ Rage — refreshing Enrage comes first" },
+        { spellID = 227847, text = "Bladestorm during Recklessness",
+          condition = "Slayer hero talent" },
+        { text = "Thunder Blast at 2 stacks, or before the buff or Avatar runs out",
+          condition = "Mountain Thane hero talent" },
+        { spellID = 163201, text = "Execute on a Sudden Death proc, and freely during Recklessness" },
+        { spellID = 335097, text = "Crushing Blow and Bloodbath — Recklessness turns Raging Blow and Bloodthirst into these (Reckless Abandon); press them while they're up" },
+        { spellID = 385059, text = "Odyn's Fury on cooldown, ideally inside Recklessness" },
+        { spellID = 85288, text = "Raging Blow to spend charges before they cap (Hack and Slash can refund a charge from Rampage)" },
+        { spellID = 23881, text = "Bloodthirst — core Rage and Enrage generator" },
+        { spellID = 1680, text = "Whirlwind as the last filler — it generates Rage on its own in 12.1, and Carving Blades boosts it on a single target" },
         { text = "Keep Enrage as close to 100% uptime as possible — it underpins most of Fury's damage" },
     }},
     { title = "AoE", steps = {
-        { spellID = 1680, text = "Whirlwind whenever the Improved Whirlwind buff isn't already active" },
-        { spellID = 23881, text = "Bloodthirst still on cooldown for rage, healing, and cleave damage" },
-        { spellID = 85288, text = "Raging Blow to dump Enrage charges — cleaves naturally" },
-        { spellID = 163201, text = "Execute cleaves too — use it whenever available" },
-        { spellID = 184367, text = "Rampage to maintain Enrage uptime while cleaving" },
-        { spellID = 6343, text = "Thunder Clap for extra AoE threat and damage" },
-        { spellID = 46968, text = "Shockwave to stun and cluster adds when available" },
+        { spellID = 1680, text = "Whirlwind whenever the Improved Whirlwind buff isn't up, so your single-target attacks cleave (Thunder Clap does this job under Mountain Thane)" },
+        { spellID = 1719, text = "Recklessness and Avatar on cooldown" },
+        { spellID = 184367, text = "Rampage to maintain Enrage while cleaving" },
+        { spellID = 227847, text = "Bladestorm during Recklessness",
+          condition = "Slayer hero talent" },
+        { text = "Thunder Blast and Thunder Clap as your main AoE buttons, especially while Avatar is up",
+          condition = "Mountain Thane hero talent" },
+        { spellID = 385059, text = "Odyn's Fury on cooldown — it hits everything nearby" },
+        { spellID = 163201, text = "Execute on Sudden Death procs" },
+        { spellID = 335097, text = "Crushing Blow / Bloodbath during Recklessness, then Raging Blow and Bloodthirst outside it" },
     }},
     { title = "Opener Notes", steps = {
         { text = "Open with Bloodthirst to establish Enrage immediately, then weave Rampage as rage allows" },
@@ -238,23 +267,23 @@ ns.GuideStore:RegisterSpec("WARRIOR", 72, {
     { spellID = 1719, text = "Recklessness — pop for a burst window, ideally with trinkets" },
     { spellID = 107574, text = "Avatar — pair with Recklessness for the same burst window" },
     { spellID = 227847, text = "Bladestorm — strong cleave/AoE cooldown, also a brief defensive tool; under Slayer it's folded into the main Recklessness burst sequence" },
-    { spellID = 205545, text = "Odyn's Fury — hard-hitting burst cooldown, weave into the same window as Recklessness" },
+    { spellID = 385059, text = "Odyn's Fury — hard-hitting burst cooldown, weave into the same window as Recklessness" },
     { spellID = 184364, text = "Enraged Regeneration — self-healing cooldown for sustain checks" },
     { spellID = 23920, text = "Spell Reflection — reflects the next incoming spell, use against dangerous casts" },
     { spellID = 97462, text = "Rallying Cry — raid-wide defensive utility cooldown" },
   },
   consumables = {
-    { slot = "Flask", items = { 241325, 241323 }, text = "Flask of the Blood Knights for Haste, this spec's top secondary; Flask of the Magisters if your gear already leans hard into Haste and Mastery is the stat you're short on." },
-    { slot = "Food", items = { 275265, 275266, 255846, 275259, 242754 }, text = "Raid feasts: Loa's Gathering or Feast of Knowledge (Stamina plus your highest secondary, new in 12.1), or Harandar Celebration / Silvermoon Parade (Stamina plus 50 primary stat) - the two families sim within a fraction of a percent of each other, so eat whichever is down. Solo and Mythic+: Hearty Venom-Spiced Cutlets or Hearty Puffer Plate (highest secondary) or Hearty Null and Void Plate (Haste); Hearty food persists through death." },
-    { slot = "Potion", items = { 241289, 241309, 271887, 271884 }, text = "Potion of Recklessness (+1585 Haste for 30s, at the cost of 213 of your lowest secondary) is the burst potion; Light's Potential (+593 primary stat) if your lowest secondary is one you can't afford to lose. Liquid Luster (12.1) ramps Versatility over 30s and suits a pre-pot into a long opener. Always carry Concentrated Silvermoon Health Potions - 421k, the 12.1 upgrade." },
-    { slot = "Weapon Oil", items = { 243734, 237371, 237369 }, text = "Thalassian Phoenix Oil - the current tier's weapon oil (+16 Critical Strike and Haste for 2 hours, from Enchanting); Refulgent Whetstone (bladed) or Refulgent Weightstone (blunt) gives +15 Attack Power instead, from Blacksmithing - the two are close, so take whichever is cheaper." },
-    { slot = "Weapon Enchant", items = { 244029, 243973 }, text = "Acuity of the Ren'dorei procs +67 primary stat for 15s; Berserker's Rage procs +124 Haste instead. The primary-stat proc is the usual default; take the secondary one if your stat weights put Haste well clear of the rest." },
-    { slot = "Ring Enchants", items = { 244015, 243959 }, text = "Silvermoon's Alacrity (+29 Haste) on both rings; Zul'jin's Mastery (+29 Mastery) if you're topping up your second stat instead. Use the greater tier - the lesser one is +24." },
+    { slot = "Flask", items = { 241324, 241322 }, text = "Flask of the Blood Knights for Haste, this spec's top secondary; Flask of the Magisters if your gear already leans hard into Haste and Mastery is the stat you're short on." },
+    { slot = "Food", items = { 255846, 242275, 242747, 275265 }, text = "Raid feasts: Harandar Celebration or Silvermoon Parade (+50 primary stat, +98 Stamina) - primary stat is the stronger food buff this season. Loa's Gathering, Feast of Knowledge or Amani Cornucopia (12.1: about +72 of your highest secondary, +108 Stamina) are the fallback if that's what's down. Personal: Royal Roast or Impossibly Royal Roast (+50 primary); Hearty Royal Roast is the same buff but persists through death, which is what you want in Mythic+." },
+    { slot = "Potion", items = { 241288, 271887, 241308, 271884 }, text = "Potion of Recklessness (+1725 of your highest secondary for 30s, at the cost of 232 of your lowest) is the default - it only works if your highest secondary is the one you want, Haste for this spec. If your gear makes it pick another stat, Liquid Luster (12.1: +420 Versatility every 6s, stacking to 5 over 30s) has no downside and suits a long burst window; Light's Potential (+695 primary) is the simple alternative. Draught of Rampant Abandon (+774 primary) is stronger on paper, but its void zone pacifies you and a GCD or two inside it erases the gain. Always carry Concentrated Silvermoon Health Potions - 421k, the 12.1 upgrade." },
+    { slot = "Weapon Oil", items = { 243734, 237371, 237369 }, text = "Thalassian Phoenix Oil - the current tier's weapon oil and the guides' default for all content (+16 Critical Strike and Haste for 2 hours, from Enchanting); Refulgent Whetstone (bladed) or Refulgent Weightstone (blunt) gives +15 Attack Power instead, from Blacksmithing, if the oil is scarce." },
+    { slot = "Weapon Enchant", items = { 273072, 244029, 243973 }, text = "Rite of the Hash'ey (12.1) procs +139 of a random secondary for 15s, and favours your highest one while you're above 80% health - the guides' pick for most physical specs, on both weapons if you dual-wield. Acuity of the Ren'dorei (+67 primary stat) is close behind; Berserker's Rage (+124 Haste) if your sim puts Haste well clear." },
+    { slot = "Ring Enchants", items = { 243957, 244015 }, text = "Eyes of the Eagle (+2% critical strike effectiveness) on both rings is the guides' damage pick; Silvermoon's Alacrity (+29 Haste) if your sim says otherwise - the difference is tiny." },
     { slot = "Chest Enchant", items = { 243977 }, text = "Mark of the Worldsoul (+50 primary stat)." },
-    { slot = "Leg Enchant", items = { 244641 }, text = "Forest Hunter's Armor Kit (+41 primary stat, +115 Stamina)." },
-    { slot = "Helm, Shoulders and Boots", items = { 243979, 243963, 244009, 244021, 243983 }, text = "Helm: Blessing of Speed (+13). Shoulders: Akil'zon's Swiftness (+65 Speed) or Silvermoon's Mending (+166 Leech). Boots: Farstrider's Hunt (+11 Speed, +232 Stamina) or Shaladrassil's Roots (+28 Leech, +232 Stamina). Speed is the throughput-neutral default; swap to Leech for a progression fight you keep dying on." },
-    { slot = "Gems", items = { 240967, 240888, 240892 }, text = "One Powerful Eversong Diamond (+23 primary stat and crit effectiveness per unique gem colour you socket) - it's unique-equipped. Then Flawless Quick Peridot (+17 Haste) in every other socket, or Flawless Masterful Peridot (+16 Haste, +7 Mastery) to spread a second colour if your diamond counts colours." },
-    { slot = "Augment Rune", items = { 259085, 246492, 224572 }, text = "Void-Touched Augment Rune (+25 primary stat for 1 hour; it does not persist through death) for progression pulls and high keys. Soulgorged Augment Rune (+6, persists through death) or Crystallized Augment Rune (+6) are the cheap fallbacks the rest of the time." },
+    { slot = "Leg Enchant", items = { 244641, 244643 }, text = "Forest Hunter's Armor Kit (+41 primary stat, +115 Stamina) or Blood Knight's Armor Kit (+41 primary stat, +27 armor) - the same offensive stat either way, so it's health or armour; the 12.1 guides split between them." },
+    { slot = "Helm, Shoulders and Boots", items = { 243981, 243963, 244009, 244007, 243991, 243953 }, text = "None of these touch your throughput, so it's personal preference. Speed: Empowered Blessing of Speed (+22), Akil'zon's Swiftness (+65), Farstrider's Hunt (+11, +232 Stamina). Avoidance, to survive the bigger hits: Empowered Rune of Avoidance (+37), Amirdrassil's Grace (+111), Lynx's Dexterity (+19, +232 Stamina). Leech (Empowered Hex of Leeching, Silvermoon's Mending, Shaladrassil's Roots) for a fight you keep dying on." },
+    { slot = "Gems", items = { 240983, 240888, 240892, 240967 }, text = "One Indecipherable Eversong Diamond (+32 primary stat) - it's unique-equipped and the other diamonds only give +23. Then Flawless Quick Peridot (+17 Haste) in every other socket, or Flawless Masterful Peridot (+16 Haste, +7 Mastery) if you're balancing the two. With five or more sockets, Powerful Eversong Diamond (+23 primary stat, +0.15% critical strike effectiveness per unique gem colour) can edge ahead if you socket one gem of each colour." },
+    { slot = "Augment Rune", items = { 259085, 243191 }, text = "Void-Touched Augment Rune (+25 primary stat for 1 hour; it does not persist through death) is the only Midnight rune - use it for progression pulls and high keys. Ethereal Augment Rune (+6, reusable, from the K'aresh Trust at renown 18) is the free stopgap the rest of the time." },
   },
   gear = {
     { slot = "Head", text = "Tier set piece — the set bonus is usually worth more than a small item-level upgrade. Season 2's set bonus boosts Raging Blow and lets it extend Recklessness, with the four-piece boosting Bloodthirst and its crit bonus during Recklessness — check your tooltip for the exact current numbers, they vary by source." },
@@ -277,15 +306,15 @@ ns.GuideStore:RegisterSpec("WARRIOR", 72, {
   -- split; one exact code rarely commands a majority, since flex-point
   -- choices vary, so the share is reported as it is.
   mplusMetaLoadout = {
-    string = "CgEASWsDSHNyPDXnbxuIhH3ZdDAAAAAAAjhxYmZzMzMzMzMmZmZmZm5BWmxYmxsZmZGAAAjltBWADYGGgZYDYmhBAAYmhxsMMGMG",
-    source = "Blizzard Battle.net API, US region, 2026-10-04: top 50 current-season Mythic+ Fury Warriors by best keystone level, sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick, tied with 1 other build (3/50, 6% each); 30/50 (60%) ran Slayer overall.",
-    patch = "12.1",
+    string = "CgEASWsDSHNyPDXnbxuIhH3ZdDAAAAAAgGDjxMzmZmZmZmZMzMzMzMzDsMjxMjZzMzMAAQMW2GYBMBzwEYG2AmZYAAAmZYMLDjBjB",
+    source = "Blizzard Battle.net API, US region, 2026-10-13: top 50 current-season Mythic+ Fury Warriors by best keystone level in the first week of patch 12.1.5 (period 1085), sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick (9/50, 18%); 38/50 (76%) ran Slayer overall.",
+    patch = "12.1.5",
     sampleSize = 50,
   },
   tips = {
     "Try to stay Enraged as close to 100% of the time as possible — it underpins most of Fury's damage.",
     "Don't let Raging Blow charges cap; spend them before they overflow.",
-    "Whirlwind's passive buff is worth maintaining even on single target if it's about to fall off.",
+    "Whirlwind generates Rage on its own since 12.1 and, with Carving Blades, hits harder on a single target — it's a real single-target filler again, not just a cleave enabler.",
     "Save Recklessness for windows where you can string several abilities together rather than opening cold.",
     "Rampage is both your best Rage sink and your main Enrage source — spend big chunks of Rage on it rather than trickling Rage away elsewhere.",
     "Open every pull with Charge into an early Recklessness/Avatar so the burst window covers as much of the fight as possible.",
@@ -296,7 +325,7 @@ ns.GuideStore:RegisterSpec("WARRIOR", 73, {
   specName = "Protection",
   role = "TANK",
   overview = {
-    "Protection Warrior is a shield-and-board tank that plays around Shield Block for physical mitigation and Ignore Pain as a damage-smoothing absorb shield. Its offense and defense are tightly linked: Revenge and Shield Slam generate rage that is spent both on threat abilities and on Ignore Pain to soak incoming hits.",
+    "Protection Warrior is a shield-and-board tank that plays around Shield Block for physical mitigation and Ignore Pain as a damage-smoothing absorb shield. Its offense and defense are tightly linked: Shield Slam (and, under Mountain Thane, Thunder Blast) generates the Rage that is spent both on Revenge and Execute for threat and on Ignore Pain to soak incoming hits.",
     "The core resource is Rage, generated from taking damage and auto-attacking, and the defining mechanic is the interplay between Shield Block (mitigation window) and Ignore Pain (absorb shield) — both compete for the same rage pool, so pacing rage spend between offense, block uptime, and pain absorption is the spec's central skill.",
     "Protection brings strong sustained mitigation, good AoE threat via Thunder Clap and Revenge, and reliable cooldowns for both magic and physical damage spikes, making it a dependable tank for both raid bosses and Mythic+ trash-heavy pulls.",
   },
@@ -316,30 +345,34 @@ ns.GuideStore:RegisterSpec("WARRIOR", 73, {
         { spellID = 2565, text = "Shield Block established as soon as you have the Rage for it" },
     }},
     { title = "Single Target", steps = {
-        { spellID = 23922, text = "Shield Slam on cooldown — top rage priority, strong threat, and one of your two main Rage generators" },
-        { spellID = 6343, text = "Thunder Clap to keep its debuff active on the target — your other main Rage generator" },
-        { spellID = 6572, text = "Revenge when free or off cooldown for rage-efficient damage" },
-        { spellID = 163201, text = "Execute in range to spend Rage efficiently" },
-        { spellID = 190456, text = "Ignore Pain to smooth incoming damage, spending excess rage" },
-        { spellID = 1160, text = "Demoralizing Shout for extra mitigation as needed" },
-        { spellID = 20243, text = "Devastate as a rage-neutral filler when nothing else is ready" },
+        { spellID = 107574, text = "Avatar, Ravager, Champion's Spear and Shield Charge on cooldown when talented — they're Rage and damage, not just burst" },
+        { text = "Thunder Blast whenever it's available",
+          condition = "Mountain Thane hero talent" },
+        { spellID = 436358, text = "Demolish at 5+ Colossal Might stacks",
+          condition = "Colossus hero talent only" },
+        { spellID = 23922, text = "Shield Slam on cooldown — top Rage priority, strong threat, and your main Rage generator" },
+        { spellID = 6343, text = "Thunder Clap — right after Shield Slam under Colossus whenever Phalanx has dropped, otherwise after a free Revenge" },
+        { spellID = 163201, text = "Execute in range — its damage went up 30% in 12.1.5, and Colossus's Practiced Strikes makes it (and Revenge) 10 Rage cheaper" },
+        { spellID = 6572, text = "Revenge whenever a proc makes it free, then as your Rage spender" },
+        { spellID = 1160, text = "Demoralizing Shout on cooldown with Booming Voice for the extra Rage, otherwise as mitigation" },
+        { spellID = 20243, text = "Devastate as a filler when nothing else is ready" },
     }},
     { title = "AoE", steps = {
-        { spellID = 6343, text = "Thunder Clap as the primary AoE threat generator (Thunder Blast under Mountain Thane)" },
-        { spellID = 6572, text = "Revenge cleaves nearby targets — use liberally when free" },
-        { spellID = 23922, text = "Shield Slam still on cooldown for single-target priority damage" },
+        { text = "Thunder Blast first at 3+ targets",
+          condition = "Mountain Thane hero talent" },
+        { spellID = 6343, text = "Thunder Clap as the primary AoE threat generator — with Blood and Thunder talented it also applies Rend to everything it hits" },
+        { spellID = 6572, text = "Revenge cleaves nearby targets — use free procs immediately and spend Rage on it at 3+ targets" },
+        { spellID = 23922, text = "Shield Slam still on cooldown for Rage" },
+        { spellID = 228920, text = "Ravager on cooldown — enemies it hits take more damage from your bleeds" },
         { spellID = 46968, text = "Shockwave to stun and control add clusters" },
         { spellID = 190456, text = "Ignore Pain to absorb burst damage from multiple attackers" },
         { text = "Rotate cooldowns proactively when pulling large packs" },
     }},
     { title = "Mitigation", steps = {
-        { spellID = 2565, text = "Shield Block before predictable physical damage windows — your primary active mitigation" },
-        { spellID = 190456, text = "Ignore Pain to convert spare rage into an absorb shield" },
-        { spellID = 436358, text = "Demolish on cooldown, stacked on Colossal Might",
-          condition = "Colossus hero talent only" },
-        { spellID = 12975, text = "Last Stand for a big health buffer during dangerous phases" },
-        { spellID = 871, text = "Shield Wall as the strongest cooldown for the heaviest damage spikes" },
-        { text = "Rotate Shield Wall, Demoralizing Shout, Spell Reflection, and Last Stand across a fight's danger points rather than stacking them all on one pull" },
+        { spellID = 2565, text = "Shield Block before predictable physical damage windows — your primary active mitigation; keep it rolling with plenty of time left" },
+        { spellID = 190456, text = "Ignore Pain off the global cooldown to bank spare Rage before it caps, especially right before Shield Slam" },
+        { spellID = 871, text = "Shield Wall as the strongest cooldown for the heaviest damage spikes — with the Last Stand talent it also raises your maximum health by 30% and heals you for that amount" },
+        { text = "Rotate Shield Wall, Demoralizing Shout and Spell Reflection across a fight's danger points rather than stacking them all on one pull" },
         { text = "Alternate Shield Block and Ignore Pain uptime so rage isn't wasted overcapping either" },
     }},
     { title = "Opener Notes", steps = {
@@ -347,25 +380,24 @@ ns.GuideStore:RegisterSpec("WARRIOR", 73, {
     }},
   },
   cooldowns = {
-    { spellID = 871, text = "Shield Wall — biggest defensive cooldown, save for the most dangerous hits" },
-    { spellID = 12975, text = "Last Stand — extra effective health, pair with predictable burst damage" },
+    { spellID = 871, text = "Shield Wall — biggest defensive cooldown, save for the most dangerous hits; with the Last Stand talent it also grants 30% maximum health" },
     { spellID = 2565, text = "Shield Block — core physical mitigation, keep uptime high" },
     { spellID = 1160, text = "Demoralizing Shout — raid-wide damage reduction utility" },
     { spellID = 23920, text = "Spell Reflection — reflects the next incoming spell, use against dangerous casts" },
     { spellID = 97462, text = "Rallying Cry — group-wide defensive cooldown for raid damage checks" },
   },
   consumables = {
-    { slot = "Flask", items = { 241325, 241327, 241321 }, text = "Flask of the Blood Knights for Haste, this spec's top secondary; Flask of the Shattered Sun if your gear already leans hard into Haste and Critical Strike is the stat you're short on. Flask of Thalassian Resistance (Versatility) is the survivability pick for progression." },
-    { slot = "Food", items = { 275265, 275266, 255846, 275259, 242754 }, text = "Raid feasts: Loa's Gathering or Feast of Knowledge (Stamina plus your highest secondary, new in 12.1), or Harandar Celebration / Silvermoon Parade (Stamina plus 50 primary stat) - the two families sim within a fraction of a percent of each other, so eat whichever is down. Solo and Mythic+: Hearty Venom-Spiced Cutlets or Hearty Puffer Plate (highest secondary) or Hearty Null and Void Plate (Haste); Hearty food persists through death." },
-    { slot = "Potion", items = { 241287, 241289, 271887, 271884 }, text = "Light's Preservation (a 93k absorb for 30s) for the pull or phase that actually threatens you; Potion of Recklessness (+1585 highest secondary) when damage matters more, or Liquid Luster (12.1) for a Versatility ramp that covers both. Always carry Concentrated Silvermoon Health Potions - 421k, the 12.1 upgrade." },
-    { slot = "Weapon Oil", items = { 243734, 237371, 237369 }, text = "Thalassian Phoenix Oil - the current tier's weapon oil (+16 Critical Strike and Haste for 2 hours, from Enchanting); Refulgent Whetstone (bladed) or Refulgent Weightstone (blunt) gives +15 Attack Power instead, from Blacksmithing - the two are close, so take whichever is cheaper." },
-    { slot = "Weapon Enchant", items = { 244029, 243973, 243999 }, text = "Acuity of the Ren'dorei procs +67 primary stat for 15s; Berserker's Rage procs +124 Haste instead. The primary-stat proc is the usual default; take the secondary one if your stat weights put Haste well clear of the rest. Worldsoul Aegis (a 14k barrier that erupts when it breaks) is the defensive alternative." },
+    { slot = "Flask", items = { 241324, 241326, 241320 }, text = "Flask of the Blood Knights for Haste, this spec's top secondary; Flask of the Shattered Sun if your gear already leans hard into Haste and Critical Strike is the stat you're short on. Flask of Thalassian Resistance (Versatility) is the survivability pick for progression." },
+    { slot = "Food", items = { 255846, 275265, 242275, 275259 }, text = "Raid feasts: Harandar Celebration or Silvermoon Parade (+50 primary stat, +98 Stamina), or the 12.1 Loa's Gathering, Feast of Knowledge or Amani Cornucopia (about +72 of your highest secondary, +108 Stamina) - for a tank the two families come out about even, so eat whichever is down. Personal: Royal Roast (+50 primary) or Hearty Venom-Spiced Cutlets / Hearty Puffer Plate (+65 highest secondary); only feasts give Stamina, and Hearty food persists through death." },
+    { slot = "Potion", items = { 241288, 241308, 241286, 271884 }, text = "Potion of Recklessness (+1725 of your highest secondary for 30s, at the cost of 232 of your lowest) is the default - it only works if your highest secondary is the one you want, Haste for this spec. Light's Potential (+695 primary stat) is a hair behind and never picks the wrong stat. Light's Preservation (a 121k absorb for 30s) for the pull that actually threatens you. Skip Draught of Rampant Abandon - its void zone silences you where you stand, the last thing a tank positioning a pack needs. Always carry Concentrated Silvermoon Health Potions - 421k, the 12.1 upgrade." },
+    { slot = "Weapon Oil", items = { 243734, 237371, 237369 }, text = "Thalassian Phoenix Oil - the current tier's weapon oil and the guides' default for all content (+16 Critical Strike and Haste for 2 hours, from Enchanting); Refulgent Whetstone (bladed) or Refulgent Weightstone (blunt) gives +15 Attack Power instead, from Blacksmithing, if the oil is scarce." },
+    { slot = "Weapon Enchant", items = { 273072, 244029, 243973, 243999 }, text = "Rite of the Hash'ey (12.1) procs +139 of a random secondary for 15s, and favours your highest one while you're above 80% health - the guides' pick for most physical specs, on both weapons if you dual-wield. Acuity of the Ren'dorei (+67 primary stat) is close behind; Berserker's Rage (+124 Haste) if your sim puts Haste well clear. Worldsoul Aegis (a 14k barrier that erupts when it breaks) is the defensive alternative." },
     { slot = "Ring Enchants", items = { 244015, 243987 }, text = "Silvermoon's Alacrity (+29 Haste) on both rings; Nature's Fury (+29 Critical Strike) if you're topping up your second stat instead. Use the greater tier - the lesser one is +24." },
     { slot = "Chest Enchant", items = { 243977, 243947 }, text = "Mark of the Worldsoul (+50 primary stat); Mark of Nalorakk (+40 Strength, +116 Stamina) when you want the health instead." },
-    { slot = "Leg Enchant", items = { 244641, 244643 }, text = "Forest Hunter's Armor Kit (+41 primary stat, +115 Stamina); Blood Knight's Armor Kit (+41 primary stat, +27 armor) for the armour instead." },
-    { slot = "Helm, Shoulders and Boots", items = { 244005, 244021, 243983, 243949, 243991, 243953 }, text = "Helm: Rune of Avoidance (+22) or Hex of Leeching (+33). Shoulders: Silvermoon's Mending (+166 Leech) or Amirdrassil's Grace (+111 Avoidance). Boots: Shaladrassil's Roots (+28 Leech, +232 Stamina) or Lynx's Dexterity (+19 Avoidance, +232 Stamina). Leech is the stronger sustain pick for a tank; Avoidance for dungeons heavy on unavoidable AoE." },
-    { slot = "Gems", items = { 240971, 240888, 240890 }, text = "One Stoic Eversong Diamond (+23 primary stat, +13 armor) - it's unique-equipped. Then Flawless Quick Peridot (+17 Haste) in every other socket, or Flawless Deadly Peridot (+16 Haste, +7 Critical Strike) to spread a second colour if your diamond counts colours." },
-    { slot = "Augment Rune", items = { 259085, 246492, 224572 }, text = "Void-Touched Augment Rune (+25 primary stat for 1 hour; it does not persist through death) for progression pulls and high keys. Soulgorged Augment Rune (+6, persists through death) or Crystallized Augment Rune (+6) are the cheap fallbacks the rest of the time." },
+    { slot = "Leg Enchant", items = { 244641, 244643 }, text = "Forest Hunter's Armor Kit (+41 primary stat, +115 Stamina) or Blood Knight's Armor Kit (+41 primary stat, +27 armor) - the same offensive stat either way, so it's health or armour; the 12.1 guides split between them." },
+    { slot = "Helm, Shoulders and Boots", items = { 244007, 244021, 243983, 243951, 243991, 243953 }, text = "Helm: Empowered Rune of Avoidance (+37) or Empowered Hex of Leeching (+55). Shoulders: Silvermoon's Mending (+166 Leech) or Amirdrassil's Grace (+111 Avoidance). Boots: Shaladrassil's Roots (+28 Leech, +232 Stamina) or Lynx's Dexterity (+19 Avoidance, +232 Stamina). Leech is the stronger sustain pick for a tank; Avoidance for dungeons heavy on unavoidable AoE. Speed (Empowered Blessing of Speed, Akil'zon's Swiftness, Farstrider's Hunt) is just as valid if you'd rather move faster." },
+    { slot = "Gems", items = { 240983, 240888, 240890 }, text = "One Indecipherable Eversong Diamond (+32 primary stat) - it's unique-equipped and the other diamonds only give +23. Then Flawless Quick Peridot (+17 Haste) in every other socket, or Flawless Deadly Peridot (+16 Haste, +7 Critical Strike) if you're balancing the two." },
+    { slot = "Augment Rune", items = { 259085, 243191 }, text = "Void-Touched Augment Rune (+25 primary stat for 1 hour; it does not persist through death) is the only Midnight rune - use it for progression pulls and high keys. Ethereal Augment Rune (+6, reusable, from the K'aresh Trust at renown 18) is the free stopgap the rest of the time." },
   },
   gear = {
     { slot = "Head", text = "Tier set piece — mitigation- and threat-relevant set bonuses often outweigh raw item level for a tank. Season 2's set bonus boosts free Revenge procs and buffs your next Shield Slam, with the four-piece adding a bleed to Ravager and free Revenges and cutting Ravager's cooldown." },
@@ -389,16 +421,16 @@ ns.GuideStore:RegisterSpec("WARRIOR", 73, {
   -- split; one exact code rarely commands a majority, since flex-point
   -- choices vary, so the share is reported as it is.
   mplusMetaLoadout = {
-    string = "CkEASWsDSHNyPDXnbxuIhH3ZdnBAAGzwMzMzMmNzMLzYMGNmxwiZmZGzwMDAAAAWmZAmxAMYbbGzyy2oZmhZYZWaMzGMmZGGbAwMzMDAYGYMA",
-    source = "Blizzard Battle.net API, US region, 2026-10-04: top 49 current-season Mythic+ Protection Warriors by best keystone level, sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick (2/49, 4%); 45/49 (92%) ran Mountain Thane overall.",
-    patch = "12.1",
+    string = "CkEASWsDSHNyPDXnbxuIhH3ZdnBAAGzYmZmZmxsZmZZGjxImxwyMzMzYGmZAAAAwyMDwMGgB2glFjGzAYWiZ2AmZGGbAwMDAAzAjB",
+    source = "Blizzard Battle.net API, US region, 2026-10-13: top 49 current-season Mythic+ Protection Warriors by best keystone level in the first week of patch 12.1.5 (period 1085), sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick, tied with 1 other build (2/49, 4% each); 45/49 (92%) ran Mountain Thane overall.",
+    patch = "12.1.5",
     sampleSize = 49,
   },
   tips = {
     "Keep Shield Block active before big physical hits rather than reacting after the fact.",
     "Don't dump all your rage into Ignore Pain at once — spread it to smooth damage over time.",
-    "Thunder Clap's debuff is worth refreshing even on single target for the extra mitigation, since it doubles as one of your two Rage generators alongside Shield Slam.",
+    "Thunder Clap stays in the single-target rotation too — it's cheap damage and threat between Shield Slams, and under Colossus it keeps Phalanx up.",
     "Save your strongest defensive cooldown for known burst phases rather than reacting late.",
-    "Rotate your secondary defensives (Shield Wall, Demoralizing Shout, Spell Reflection, Last Stand) across a fight's danger points instead of stacking them all on one pull.",
+    "Rotate your secondary defensives (Shield Wall, Demoralizing Shout, Spell Reflection) across a fight's danger points instead of stacking them all on one pull.",
   },
 })

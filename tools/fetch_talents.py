@@ -131,7 +131,7 @@ def main():
                                                                    wowhead.updated(dump, specID, "talentUpdated") or "?"))
         out.append("ns.GuideStore:RegisterSiteLoadouts(%d, {" % specID)
         out.append("  source = %s," % lua_str("; ".join(sources)))
-        out.append('  patch = "12.1",')
+        out.append('  patch = "12.1.5",')
         out.append("  builds = {")
         for b in kept + wh_kept:
             out.append("    { site = %s, label = %s, string = %s }," % (lua_str(b["site"]), lua_str(b["label"]), lua_str(b["string"])))

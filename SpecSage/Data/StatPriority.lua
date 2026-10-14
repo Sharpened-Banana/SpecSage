@@ -12,16 +12,16 @@
 -- being invented into the order. This is the guide site's editorial priority at
 -- the time each page was read - it goes stale every patch, and the Tome
 -- says so - not a sim of your character. See DESIGN.md's "Stat priority".
--- Generated: 2026-10-04 09:52 UTC
+-- Generated: 2026-10-14 02:04 UTC
 
 local ADDON, ns = ...
 if not ns.GuideStore then return end
 
 -- WARRIOR 71 (arms-warrior)
 ns.GuideStore:RegisterStatPriority(71, {
-  source = "Stat priority guide, updated 2026/08/12",
+  source = "Stat priority guide, updated 2026/10/13",
   url = "https://www.wowhead.com/guide/classes/warrior/arms/stat-priority-pve-dps",
-  patch = "12.1",
+  patch = "12.1.5",
   heroSplit = true,
   lists = {
     { title = "Colossus",
@@ -35,9 +35,9 @@ ns.GuideStore:RegisterStatPriority(71, {
 
 -- WARRIOR 72 (fury-warrior)
 ns.GuideStore:RegisterStatPriority(72, {
-  source = "Stat priority guide, updated 2026/08/12",
+  source = "Stat priority guide, updated 2026/10/13",
   url = "https://www.wowhead.com/guide/classes/warrior/fury/stat-priority-pve-dps",
-  patch = "12.1",
+  patch = "12.1.5",
   heroSplit = true,
   lists = {
     { title = "Mountain Thane",
@@ -51,9 +51,9 @@ ns.GuideStore:RegisterStatPriority(72, {
 
 -- WARRIOR 73 (protection-warrior)
 ns.GuideStore:RegisterStatPriority(73, {
-  source = "Stat priority guide, updated 2026/08/12",
+  source = "Stat priority guide, updated 2026/10/13",
   url = "https://www.wowhead.com/guide/classes/warrior/protection/stat-priority-pve-tank",
-  patch = "12.1",
+  patch = "12.1.5",
   heroSplit = false,
   lists = {
     { title = "Colossus / Mountain Thane - Survivability",
@@ -68,9 +68,9 @@ ns.GuideStore:RegisterStatPriority(73, {
 
 -- PALADIN 65 (holy-paladin)
 ns.GuideStore:RegisterStatPriority(65, {
-  source = "Stat priority guide, updated 2026/08/12",
+  source = "Stat priority guide, updated 2026/10/13",
   url = "https://www.wowhead.com/guide/classes/paladin/holy/stat-priority-pve-healer",
-  patch = "12.1",
+  patch = "12.1.5",
   heroSplit = true,
   lists = {
     { title = "Herald of the Sun",
@@ -86,9 +86,9 @@ ns.GuideStore:RegisterStatPriority(65, {
 
 -- PALADIN 66 (protection-paladin)
 ns.GuideStore:RegisterStatPriority(66, {
-  source = "Stat priority guide, updated 2026/08/12",
+  source = "Stat priority guide, updated 2026/10/13",
   url = "https://www.wowhead.com/guide/classes/paladin/protection/stat-priority-pve-tank",
-  patch = "12.1",
+  patch = "12.1.5",
   heroSplit = false,
   lists = {
     { title = "Lightsmith / Templar - Survivability",
@@ -103,9 +103,9 @@ ns.GuideStore:RegisterStatPriority(66, {
 
 -- PALADIN 70 (retribution-paladin)
 ns.GuideStore:RegisterStatPriority(70, {
-  source = "Stat priority guide, updated 2026/08/12",
+  source = "Stat priority guide, updated 2026/10/13",
   url = "https://www.wowhead.com/guide/classes/paladin/retribution/stat-priority-pve-dps",
-  patch = "12.1",
+  patch = "12.1.5",
   heroSplit = true,
   lists = {
     { title = "Templar",
@@ -119,9 +119,9 @@ ns.GuideStore:RegisterStatPriority(70, {
 
 -- HUNTER 253 (beast-mastery-hunter)
 ns.GuideStore:RegisterStatPriority(253, {
-  source = "Stat priority guide, updated 2026/08/12",
+  source = "Stat priority guide, updated 2026/10/13",
   url = "https://www.wowhead.com/guide/classes/hunter/beast-mastery/stat-priority-pve-dps",
-  patch = "12.1",
+  patch = "12.1.5",
   heroSplit = true,
   lists = {
     { title = "Pack Leader",
@@ -137,9 +137,9 @@ ns.GuideStore:RegisterStatPriority(253, {
 
 -- HUNTER 254 (marksmanship-hunter)
 ns.GuideStore:RegisterStatPriority(254, {
-  source = "Stat priority guide, updated 2026/08/12",
+  source = "Stat priority guide, updated 2026/10/13",
   url = "https://www.wowhead.com/guide/classes/hunter/marksmanship/stat-priority-pve-dps",
-  patch = "12.1",
+  patch = "12.1.5",
   heroSplit = true,
   lists = {
     { title = "Sentinel",
@@ -153,9 +153,9 @@ ns.GuideStore:RegisterStatPriority(254, {
 
 -- HUNTER 255 (survival-hunter)
 ns.GuideStore:RegisterStatPriority(255, {
-  source = "Stat priority guide, updated 2026/08/12",
+  source = "Stat priority guide, updated 2026/10/13",
   url = "https://www.wowhead.com/guide/classes/hunter/survival/stat-priority-pve-dps",
-  patch = "12.1",
+  patch = "12.1.5",
   heroSplit = true,
   lists = {
     { title = "Pack Leader",
@@ -170,9 +170,9 @@ ns.GuideStore:RegisterStatPriority(255, {
 
 -- ROGUE 259 (assassination-rogue)
 ns.GuideStore:RegisterStatPriority(259, {
-  source = "Stat priority guide, updated 2026/08/12",
+  source = "Stat priority guide, updated 2026/10/13",
   url = "https://www.wowhead.com/guide/classes/rogue/assassination/stat-priority-pve-dps",
-  patch = "12.1",
+  patch = "12.1.5",
   heroSplit = true,
   lists = {
     { title = "Fatebound",
@@ -186,9 +186,9 @@ ns.GuideStore:RegisterStatPriority(259, {
 
 -- ROGUE 260 (outlaw-rogue)
 ns.GuideStore:RegisterStatPriority(260, {
-  source = "Stat priority guide, updated 2026/08/12",
+  source = "Stat priority guide, updated 2026/10/13",
   url = "https://www.wowhead.com/guide/classes/rogue/outlaw/stat-priority-pve-dps",
-  patch = "12.1",
+  patch = "12.1.5",
   heroSplit = true,
   lists = {
     { title = "Trickster",
@@ -202,9 +202,9 @@ ns.GuideStore:RegisterStatPriority(260, {
 
 -- ROGUE 261 (subtlety-rogue)
 ns.GuideStore:RegisterStatPriority(261, {
-  source = "Stat priority guide, updated 2026/08/19",
+  source = "Stat priority guide, updated 2026/10/13",
   url = "https://www.wowhead.com/guide/classes/rogue/subtlety/stat-priority-pve-dps",
-  patch = "12.1",
+  patch = "12.1.5",
   heroSplit = true,
   lists = {
     { title = "Deathstalker",
@@ -220,9 +220,9 @@ ns.GuideStore:RegisterStatPriority(261, {
 
 -- PRIEST 256 (discipline-priest)
 ns.GuideStore:RegisterStatPriority(256, {
-  source = "Stat priority guide, updated 2026/08/12",
+  source = "Stat priority guide, updated 2026/10/13",
   url = "https://www.wowhead.com/guide/classes/priest/discipline/stat-priority-pve-healer",
-  patch = "12.1",
+  patch = "12.1.5",
   heroSplit = true,
   lists = {
     { title = "Oracle",
@@ -238,9 +238,9 @@ ns.GuideStore:RegisterStatPriority(256, {
 
 -- PRIEST 257 (holy-priest)
 ns.GuideStore:RegisterStatPriority(257, {
-  source = "Stat priority guide, updated 2026/09/28",
+  source = "Stat priority guide, updated 2026/10/13",
   url = "https://www.wowhead.com/guide/classes/priest/holy/stat-priority-pve-healer",
-  patch = "12.1",
+  patch = "12.1.5",
   heroSplit = true,
   lists = {
     { title = "Archon - Raid",
@@ -264,9 +264,9 @@ ns.GuideStore:RegisterStatPriority(257, {
 
 -- PRIEST 258 (shadow-priest)
 ns.GuideStore:RegisterStatPriority(258, {
-  source = "Stat priority guide, updated 2026/08/31",
+  source = "Stat priority guide, updated 2026/10/13",
   url = "https://www.wowhead.com/guide/classes/priest/shadow/stat-priority-pve-dps",
-  patch = "12.1",
+  patch = "12.1.5",
   heroSplit = true,
   lists = {
     { title = "Archon",
@@ -280,9 +280,9 @@ ns.GuideStore:RegisterStatPriority(258, {
 
 -- DEATHKNIGHT 250 (blood-death-knight)
 ns.GuideStore:RegisterStatPriority(250, {
-  source = "Stat priority guide, updated 2026/08/12",
+  source = "Stat priority guide, updated 2026/10/13",
   url = "https://www.wowhead.com/guide/classes/death-knight/blood/stat-priority-pve-tank",
-  patch = "12.1",
+  patch = "12.1.5",
   heroSplit = true,
   lists = {
     { title = "San'layn",
@@ -298,9 +298,9 @@ ns.GuideStore:RegisterStatPriority(250, {
 
 -- DEATHKNIGHT 251 (frost-death-knight)
 ns.GuideStore:RegisterStatPriority(251, {
-  source = "Stat priority guide, updated 2026/08/12",
+  source = "Stat priority guide, updated 2026/10/13",
   url = "https://www.wowhead.com/guide/classes/death-knight/frost/stat-priority-pve-dps",
-  patch = "12.1",
+  patch = "12.1.5",
   heroSplit = true,
   lists = {
     { title = "Deathbringer",
@@ -314,9 +314,9 @@ ns.GuideStore:RegisterStatPriority(251, {
 
 -- DEATHKNIGHT 252 (unholy-death-knight)
 ns.GuideStore:RegisterStatPriority(252, {
-  source = "Stat priority guide, updated 2026/08/17",
+  source = "Stat priority guide, updated 2026/10/13",
   url = "https://www.wowhead.com/guide/classes/death-knight/unholy/stat-priority-pve-dps",
-  patch = "12.1",
+  patch = "12.1.5",
   heroSplit = true,
   lists = {
     { title = "San'layn",
@@ -330,9 +330,9 @@ ns.GuideStore:RegisterStatPriority(252, {
 
 -- SHAMAN 262 (elemental-shaman)
 ns.GuideStore:RegisterStatPriority(262, {
-  source = "Stat priority guide, updated 2026/08/12",
+  source = "Stat priority guide, updated 2026/10/13",
   url = "https://www.wowhead.com/guide/classes/shaman/elemental/stat-priority-pve-dps",
-  patch = "12.1",
+  patch = "12.1.5",
   heroSplit = true,
   lists = {
     { title = "Farseer",
@@ -348,9 +348,9 @@ ns.GuideStore:RegisterStatPriority(262, {
 
 -- SHAMAN 263 (enhancement-shaman)
 ns.GuideStore:RegisterStatPriority(263, {
-  source = "Stat priority guide, updated 2026/08/22",
+  source = "Stat priority guide, updated 2026/10/13",
   url = "https://www.wowhead.com/guide/classes/shaman/enhancement/stat-priority-pve-dps",
-  patch = "12.1",
+  patch = "12.1.5",
   heroSplit = true,
   lists = {
     { title = "Stormbringer",
@@ -366,9 +366,9 @@ ns.GuideStore:RegisterStatPriority(263, {
 
 -- SHAMAN 264 (restoration-shaman)
 ns.GuideStore:RegisterStatPriority(264, {
-  source = "Stat priority guide, updated 2026/08/12",
+  source = "Stat priority guide, updated 2026/10/13",
   url = "https://www.wowhead.com/guide/classes/shaman/restoration/stat-priority-pve-healer",
-  patch = "12.1",
+  patch = "12.1.5",
   heroSplit = true,
   lists = {
     { title = "Farseer",
@@ -384,9 +384,9 @@ ns.GuideStore:RegisterStatPriority(264, {
 
 -- MAGE 62 (arcane-mage)
 ns.GuideStore:RegisterStatPriority(62, {
-  source = "Stat priority guide, updated 2026/08/12",
+  source = "Stat priority guide, updated 2026/10/13",
   url = "https://www.wowhead.com/guide/classes/mage/arcane/stat-priority-pve-dps",
-  patch = "12.1",
+  patch = "12.1.5",
   heroSplit = true,
   lists = {
     { title = "Spellslinger",
@@ -400,9 +400,9 @@ ns.GuideStore:RegisterStatPriority(62, {
 
 -- MAGE 63 (fire-mage)
 ns.GuideStore:RegisterStatPriority(63, {
-  source = "Stat priority guide, updated 2026/08/12",
+  source = "Stat priority guide, updated 2026/10/13",
   url = "https://www.wowhead.com/guide/classes/mage/fire/stat-priority-pve-dps",
-  patch = "12.1",
+  patch = "12.1.5",
   heroSplit = true,
   lists = {
     { title = "Sunfury",
@@ -416,9 +416,9 @@ ns.GuideStore:RegisterStatPriority(63, {
 
 -- MAGE 64 (frost-mage)
 ns.GuideStore:RegisterStatPriority(64, {
-  source = "Stat priority guide, updated 2026/08/12",
+  source = "Stat priority guide, updated 2026/10/13",
   url = "https://www.wowhead.com/guide/classes/mage/frost/stat-priority-pve-dps",
-  patch = "12.1",
+  patch = "12.1.5",
   heroSplit = true,
   lists = {
     { title = "Frostfire",
@@ -432,9 +432,9 @@ ns.GuideStore:RegisterStatPriority(64, {
 
 -- WARLOCK 265 (affliction-warlock)
 ns.GuideStore:RegisterStatPriority(265, {
-  source = "Stat priority guide, updated 2026/08/12",
+  source = "Stat priority guide, updated 2026/10/13",
   url = "https://www.wowhead.com/guide/classes/warlock/affliction/stat-priority-pve-dps",
-  patch = "12.1",
+  patch = "12.1.5",
   heroSplit = true,
   lists = {
     { title = "Hellcaller",
@@ -448,9 +448,9 @@ ns.GuideStore:RegisterStatPriority(265, {
 
 -- WARLOCK 266 (demonology-warlock)
 ns.GuideStore:RegisterStatPriority(266, {
-  source = "Stat priority guide, updated 2026/08/12",
+  source = "Stat priority guide, updated 2026/10/13",
   url = "https://www.wowhead.com/guide/classes/warlock/demonology/stat-priority-pve-dps",
-  patch = "12.1",
+  patch = "12.1.5",
   heroSplit = true,
   lists = {
     { title = "Diabolist",
@@ -466,9 +466,9 @@ ns.GuideStore:RegisterStatPriority(266, {
 
 -- WARLOCK 267 (destruction-warlock)
 ns.GuideStore:RegisterStatPriority(267, {
-  source = "Stat priority guide, updated 2026/08/12",
+  source = "Stat priority guide, updated 2026/10/13",
   url = "https://www.wowhead.com/guide/classes/warlock/destruction/stat-priority-pve-dps",
-  patch = "12.1",
+  patch = "12.1.5",
   heroSplit = true,
   lists = {
     { title = "Diabolist",
@@ -484,9 +484,9 @@ ns.GuideStore:RegisterStatPriority(267, {
 
 -- MONK 268 (brewmaster-monk)
 ns.GuideStore:RegisterStatPriority(268, {
-  source = "Stat priority guide, updated 2026/08/12",
+  source = "Stat priority guide, updated 2026/10/13",
   url = "https://www.wowhead.com/guide/classes/monk/brewmaster/stat-priority-pve-tank",
-  patch = "12.1",
+  patch = "12.1.5",
   heroSplit = false,
   lists = {
     { title = "Shado-pan / Master of Harmony - Defensive",
@@ -502,9 +502,9 @@ ns.GuideStore:RegisterStatPriority(268, {
 
 -- MONK 270 (mistweaver-monk)
 ns.GuideStore:RegisterStatPriority(270, {
-  source = "Stat priority guide, updated 2026/09/05",
+  source = "Stat priority guide, updated 2026/10/13",
   url = "https://www.wowhead.com/guide/classes/monk/mistweaver/stat-priority-pve-healer",
-  patch = "12.1",
+  patch = "12.1.5",
   heroSplit = false,
   lists = {
     { title = "Conduit of the Celestials / Master of Harmony - Raid",
@@ -520,9 +520,9 @@ ns.GuideStore:RegisterStatPriority(270, {
 
 -- MONK 269 (windwalker-monk)
 ns.GuideStore:RegisterStatPriority(269, {
-  source = "Stat priority guide, updated 2026/09/04",
+  source = "Stat priority guide, updated 2026/10/13",
   url = "https://www.wowhead.com/guide/classes/monk/windwalker/stat-priority-pve-dps",
-  patch = "12.1",
+  patch = "12.1.5",
   heroSplit = true,
   lists = {
     { title = "Shado-pan",
@@ -538,9 +538,9 @@ ns.GuideStore:RegisterStatPriority(269, {
 
 -- DRUID 102 (balance-druid)
 ns.GuideStore:RegisterStatPriority(102, {
-  source = "Stat priority guide, updated 2026/08/12",
+  source = "Stat priority guide, updated 2026/10/13",
   url = "https://www.wowhead.com/guide/classes/druid/balance/stat-priority-pve-dps",
-  patch = "12.1",
+  patch = "12.1.5",
   heroSplit = true,
   lists = {
     { title = "Keeper of the Grove",
@@ -555,9 +555,9 @@ ns.GuideStore:RegisterStatPriority(102, {
 
 -- DRUID 103 (feral-druid)
 ns.GuideStore:RegisterStatPriority(103, {
-  source = "Stat priority guide, updated 2026/08/12",
+  source = "Stat priority guide, updated 2026/10/13",
   url = "https://www.wowhead.com/guide/classes/druid/feral/stat-priority-pve-dps",
-  patch = "12.1",
+  patch = "12.1.5",
   heroSplit = true,
   lists = {
     { title = "Druid of the Claw",
@@ -571,9 +571,9 @@ ns.GuideStore:RegisterStatPriority(103, {
 
 -- DRUID 104 (guardian-druid)
 ns.GuideStore:RegisterStatPriority(104, {
-  source = "Stat priority guide, updated 2026/08/12",
+  source = "Stat priority guide, updated 2026/10/13",
   url = "https://www.wowhead.com/guide/classes/druid/guardian/stat-priority-pve-tank",
-  patch = "12.1",
+  patch = "12.1.5",
   heroSplit = false,
   lists = {
     { title = "Druid of the Claw / Elune's Chosen - Survivability",
@@ -588,9 +588,9 @@ ns.GuideStore:RegisterStatPriority(104, {
 
 -- DRUID 105 (restoration-druid)
 ns.GuideStore:RegisterStatPriority(105, {
-  source = "Stat priority guide, updated 2026/08/12",
+  source = "Stat priority guide, updated 2026/10/13",
   url = "https://www.wowhead.com/guide/classes/druid/restoration/stat-priority-pve-healer",
-  patch = "12.1",
+  patch = "12.1.5",
   heroSplit = true,
   lists = {
     { title = "Keeper of the Grove",
@@ -604,9 +604,9 @@ ns.GuideStore:RegisterStatPriority(105, {
 
 -- DEMONHUNTER 577 (havoc-demon-hunter)
 ns.GuideStore:RegisterStatPriority(577, {
-  source = "Stat priority guide, updated 2026/08/12",
+  source = "Stat priority guide, updated 2026/10/13",
   url = "https://www.wowhead.com/guide/classes/demon-hunter/havoc/stat-priority-pve-dps",
-  patch = "12.1",
+  patch = "12.1.5",
   heroSplit = true,
   lists = {
     { title = "Fel-Scarred",
@@ -620,9 +620,9 @@ ns.GuideStore:RegisterStatPriority(577, {
 
 -- DEMONHUNTER 581 (vengeance-demon-hunter)
 ns.GuideStore:RegisterStatPriority(581, {
-  source = "Stat priority guide, updated 2026/08/25",
+  source = "Stat priority guide, updated 2026/10/13",
   url = "https://www.wowhead.com/guide/classes/demon-hunter/vengeance/stat-priority-pve-tank",
-  patch = "12.1",
+  patch = "12.1.5",
   heroSplit = true,
   lists = {
     { title = "Aldrachi Reaver",
@@ -638,27 +638,27 @@ ns.GuideStore:RegisterStatPriority(581, {
 
 -- DEMONHUNTER 1480 (devourer-demon-hunter)
 ns.GuideStore:RegisterStatPriority(1480, {
-  source = "Stat priority guide, updated 2026/08/12",
+  source = "Stat priority guide, updated 2026/10/13",
   url = "https://www.wowhead.com/guide/classes/demon-hunter/devourer/stat-priority-pve-dps",
-  patch = "12.1",
+  patch = "12.1.5",
   heroSplit = true,
   lists = {
     { title = "Annihilator",
-      note = "Annihilator wants as much Haste as it can get",
-      list = { { stat = "primary" }, { stat = "haste" }, { stat = "mastery" }, { stat = "crit" }, { stat = "versatility" } },
+      note = "Collapsing Star always crits, so Crit loses value; it gains some in Mythic+ but still trails Mastery and Haste",
+      list = { { stat = "primary" }, { stat = "mastery" }, { stat = "haste" }, { stat = "crit" }, { stat = "versatility" } },
     },
     { title = "Void-Scarred",
-      note = "Haste only to roughly 800 rating (about 18-20%) and no further - past that it is the worst stat; Crit and Mastery are close, with more Mastery in Mythic+ and more Crit in raid",
-      list = { { stat = "primary" }, { stat = "haste" }, { stat = "crit" }, { stat = "mastery" }, { stat = "versatility" } },
+      note = "Collapsing Star always crits, so Crit loses value; it gains some in Mythic+ but still trails Mastery and Haste",
+      list = { { stat = "primary" }, { stat = "mastery" }, { stat = "haste" }, { stat = "crit" }, { stat = "versatility" } },
     },
   },
 })
 
 -- EVOKER 1467 (devastation-evoker)
 ns.GuideStore:RegisterStatPriority(1467, {
-  source = "Stat priority guide, updated 2026/08/12",
+  source = "Stat priority guide, updated 2026/10/13",
   url = "https://www.wowhead.com/guide/classes/evoker/devastation/stat-priority-pve-dps",
-  patch = "12.1",
+  patch = "12.1.5",
   heroSplit = true,
   lists = {
     { title = "Flameshaper",
@@ -672,9 +672,9 @@ ns.GuideStore:RegisterStatPriority(1467, {
 
 -- EVOKER 1468 (preservation-evoker)
 ns.GuideStore:RegisterStatPriority(1468, {
-  source = "Stat priority guide, updated 2026/08/31",
+  source = "Stat priority guide, updated 2026/10/13",
   url = "https://www.wowhead.com/guide/classes/evoker/preservation/stat-priority-pve-healer",
-  patch = "12.1",
+  patch = "12.1.5",
   heroSplit = false,
   lists = {
     { title = "Flameshaper / Chronowarden - Raid",
@@ -689,9 +689,9 @@ ns.GuideStore:RegisterStatPriority(1468, {
 
 -- EVOKER 1473 (augmentation-evoker)
 ns.GuideStore:RegisterStatPriority(1473, {
-  source = "Stat priority guide, updated 2026/08/12",
+  source = "Stat priority guide, updated 2026/10/13",
   url = "https://www.wowhead.com/guide/classes/evoker/augmentation/stat-priority-pve-dps",
-  patch = "12.1",
+  patch = "12.1.5",
   heroSplit = true,
   lists = {
     { title = "Chronowarden",

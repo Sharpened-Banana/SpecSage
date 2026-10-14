@@ -41,9 +41,9 @@
 ],
 [
 "Chest",
-251159,
+281236,
 "",
-"Den of Nalorakk"
+"Kith'ix"
 ],
 [
 "Wrist",
@@ -71,15 +71,15 @@
 ],
 [
 "Boots",
-268261,
+159327,
 "",
-"The Twin Fangs"
+"Temple of Sethraliss"
 ],
 [
 "Ring",
-158366,
+281029,
 "",
-"Temple of Sethraliss"
+"Kith'ix"
 ],
 [
 "Ring",
@@ -89,9 +89,9 @@
 ],
 [
 "Trinket",
-270167,
+281215,
 "",
-"Nymrissa Wavecaller"
+"Kith'ix"
 ],
 [
 "Trinket",
@@ -136,17 +136,13 @@
 ]
 ],
 "err": [],
-"talentUpdated": "2026/08/12",
+"talentUpdated": "2026/10/13",
 "tiers": [
 {
 "items": [
 [
-270164,
-"raid"
-],
-[
-270167,
-"raid"
+281215,
+"dungeon"
 ],
 [
 273796,
@@ -158,12 +154,20 @@
 {
 "items": [
 [
+270169,
+"raid"
+],
+[
 250215,
 "dungeon"
 ],
 [
-250214,
-"dungeon"
+270164,
+"raid"
+],
+[
+270167,
+"raid"
 ]
 ],
 "tier": "A"
@@ -171,8 +175,8 @@
 {
 "items": [
 [
-270169,
-"raid"
+250214,
+"dungeon"
 ],
 [
 193757,
@@ -232,7 +236,7 @@
 "tier": "D"
 }
 ],
-"updated": "2026/09/14"
+"updated": "2026/10/13"
 },
 "103": {
 "bis": [
@@ -272,7 +276,7 @@
 "Chest",
 271531,
 "",
-"Vashnik the Malignant"
+"Kith'ix"
 ],
 [
 "Wrist",
@@ -312,9 +316,9 @@
 ],
 [
 "Ring",
-252258,
+281029,
 "",
-"Voidscar Arena"
+"Kith'ix"
 ],
 [
 "Trinket",
@@ -355,7 +359,7 @@
 ]
 ],
 "err": [],
-"talentUpdated": "2026/08/12",
+"talentUpdated": "2026/10/13",
 "tiers": [
 {
 "items": [
@@ -368,7 +372,7 @@
 "raid"
 ],
 [
-270164,
+281215,
 "raid"
 ]
 ],
@@ -377,16 +381,20 @@
 {
 "items": [
 [
+270164,
+"raid"
+],
+[
+270165,
+"raid"
+],
+[
 159617,
 "dungeon"
 ],
 [
 273796,
 "dungeon"
-],
-[
-270165,
-"raid"
 ]
 ],
 "tier": "A"
@@ -443,7 +451,7 @@
 "tier": "D"
 }
 ],
-"updated": "2026/08/12"
+"updated": "2026/10/13"
 },
 "104": {
 "bis": [
@@ -481,9 +489,9 @@
 ],
 [
 "Chest",
-271531,
+281236,
 "",
-"Tier Set"
+"Kith'ix"
 ],
 [
 "Wrist",
@@ -523,9 +531,9 @@
 ],
 [
 "Ring 2",
-268249,
+281029,
 "",
-"Vashnik the Malignant"
+"Kith'ix"
 ],
 [
 "Trinket",
@@ -562,7 +570,7 @@
 [
 "Elune's Chosen",
 "Mythic+",
-"CgGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgZmZml5BmZMziZxwMLLDMbGGNRzMzyMzMzsMmBAAAAAgZsYAbbzMYMLDgpAAAAbYmBYxMYAbWAYmBwA"
+"CgGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgZmxsMzMjZWMLGmZZZgZzwoJamZWmZmZmlxMAAAAAAMjFDYbbmBjZZAMFAAAYDzMALmBDYxCAzMAG"
 ],
 [
 "Elune's Chosen",
@@ -571,7 +579,7 @@
 ]
 ],
 "err": [],
-"talentUpdated": "2026/08/28",
+"talentUpdated": "2026/10/13",
 "tiers": [
 {
 "items": [
@@ -611,6 +619,14 @@
 [
 273797,
 "dungeon"
+],
+[
+280617,
+"raid"
+],
+[
+281215,
+"raid"
 ],
 [
 250215,
@@ -687,7 +703,7 @@
 "tier": "D"
 }
 ],
-"updated": "2026/08/30"
+"updated": "2026/10/13"
 },
 "105": {
 "bis": [
@@ -755,9 +771,9 @@
 ],
 [
 "Ring",
-240949,
+281029,
 "",
-"Jewelcrafting (Crafted)"
+"Kithix (Raid)"
 ],
 [
 "Ring",
@@ -892,7 +908,7 @@
 [
 "Keeper of the Grove",
 "Raid",
-"CkGAAAAAAAAAAAAAAAAAAAAAAMjxMLzMjZmxsNMDmFjNmBAAAAAAAAAAbDa2YMNzY4BMLzMzMDDzAAAAAAAAAbbjFMNzsMAAABswYmZYmBGNDAmZAADA"
+"CkGAAAAAAAAAAAAAAAAAAAAAAMjxMLzMjZmxsN8ADzsYsxMAAAAAAAAAAYbQzGjpZGDPgZZmZmZYYGAAAAAAAAYbbsgpZmlBAAIgFGzMDzMwoZAwMDAYA"
 ],
 [
 "Keeper of the Grove",
@@ -907,16 +923,16 @@
 [
 "Wildstalker",
 "Raid",
-"CkGAAAAAAAAAAAAAAAAAAAAAAYMmZZmZMzMmthZwsZsNmBAAAAAAAAAAbDa2YMNzY4BMLzMzMDDzAAAAAAAAAAIAAgZbmlmtZ2sxYmZwMwoZAAmZAYA"
+"CkGAAAAAAAAAAAAAAAAAAAAAAYMmZZmZMzMmthHYYmNjtxMAAAAAAAAAAYbQzGjpZGDPgZZmZmZYYGAAAAAAAAAABAAMbzs0sNzmNGzMDmBGNDAwMDADA"
 ],
 [
 "Wildstalker",
 "Mythic+",
-"CkGAAAAAAAAAAAAAAAAAAAAAAMMmZZMjZmxsNMMmlZsZbGAAAAAAAAAAsMoZzw0MjZwsYmZmZZGGDAAAAAAAGAACAAYWmZrZbmFbMmZgZWANDAwMDADA"
+"CkGAAAAAAAAAAAAAAAAAAAAAAMMmZZMjZmxsN8AMzsMjNbzAAAAAAAAAAglBNbGmmZMDmFzMzMLzwYAAAAAAAwAAQAAAzyMbNbzsYjxMDMzCoZAAmZAYA"
 ]
 ],
 "err": [],
-"talentUpdated": "2026/08/12",
+"talentUpdated": "2026/10/13",
 "tiers": [
 {
 "items": [
@@ -938,7 +954,7 @@
 "dungeon"
 ],
 [
-249343,
+280835,
 "raid"
 ]
 ],
@@ -996,6 +1012,14 @@
 {
 "items": [
 [
+270171,
+"raid"
+],
+[
+281215,
+"raid"
+],
+[
 251788,
 "delves"
 ],
@@ -1008,10 +1032,6 @@
 },
 {
 "items": [
-[
-270171,
-"raid"
-],
 [
 264701,
 "delves"
@@ -1032,7 +1052,7 @@
 "tier": "F"
 }
 ],
-"updated": "2026/09/22"
+"updated": "2026/10/13"
 },
 "1467": {
 "bis": [
@@ -1130,9 +1150,9 @@
 ],
 [
 "Trinket",
-270167,
+281215,
 "",
-"Nymrissa Wavecaller"
+"Kith'ix"
 ]
 ],
 "title": "Best in Slot Gear for Devastation Evoker"
@@ -1182,21 +1202,25 @@
 ]
 ],
 "err": [],
-"talentUpdated": "2026/09/23",
+"talentUpdated": "2026/10/13",
 "tiers": [
 {
 "items": [
+[
+281215,
+"raid"
+],
 [
 270164,
 "raid"
 ],
 [
-273796,
-"dungeon"
-],
-[
 270167,
 "raid"
+],
+[
+273796,
+"dungeon"
 ]
 ],
 "tier": "S"
@@ -1334,7 +1358,7 @@
 "tier": "D"
 }
 ],
-"updated": "2026/08/31"
+"updated": "2026/10/13"
 },
 "1468": {
 "bis": [
@@ -1380,7 +1404,7 @@
 "Gloves",
 271502,
 "",
-"Kings Rest & Catalyst"
+"Kithix (Raid)"
 ],
 [
 "Belt",
@@ -1468,7 +1492,7 @@
 ]
 ],
 "err": [],
-"talentUpdated": "2026/08/12",
+"talentUpdated": "2026/10/13",
 "tiers": [
 {
 "items": [
@@ -1492,6 +1516,18 @@
 [
 250214,
 "dungeon"
+],
+[
+281215,
+"raid"
+],
+[
+280835,
+"raid"
+],
+[
+270171,
+"raid"
 ]
 ],
 "tier": "A"
@@ -1565,15 +1601,6 @@
 {
 "items": [
 [
-270171,
-"raid"
-]
-],
-"tier": "D"
-},
-{
-"items": [
-[
 252957,
 "delves"
 ],
@@ -1582,10 +1609,19 @@
 "dungeon"
 ]
 ],
+"tier": "D"
+},
+{
+"items": [
+[
+264701,
+"delves"
+]
+],
 "tier": "F"
 }
 ],
-"updated": "2026/08/16"
+"updated": "2026/10/13"
 },
 "1473": {
 "bis": [
@@ -1611,9 +1647,9 @@
 ],
 [
 "Neck",
-268265,
+268251,
 "",
-"Ula'tek"
+"Twin Fangs"
 ],
 [
 "Shoulders",
@@ -1625,7 +1661,7 @@
 "Cloak",
 268253,
 "",
-"The Coiled Altar"
+"The Coiled Altart"
 ],
 [
 "Chest",
@@ -1671,9 +1707,9 @@
 ],
 [
 "Ring",
-158366,
+281029,
 "",
-"Temple of Sethraliss"
+"Kith'ix"
 ],
 [
 "Trinket",
@@ -1683,9 +1719,9 @@
 ],
 [
 "Trinket",
-250224,
+281215,
 "",
-"Voidscar Arena"
+"Kith'ix"
 ]
 ],
 "title": "Best in Slot Gear for Augmentation Evoker"
@@ -1747,12 +1783,16 @@
 ]
 ],
 "err": [],
-"talentUpdated": "2026/09/28",
+"talentUpdated": "2026/10/13",
 "tiers": [
 {
 "items": [
 [
 270168,
+"raid"
+],
+[
+281215,
 "raid"
 ],
 [
@@ -1777,6 +1817,10 @@
 {
 "items": [
 [
+270169,
+"raid"
+],
+[
 249346,
 "raid"
 ],
@@ -1791,10 +1835,6 @@
 [
 250214,
 "dungeon"
-],
-[
-270169,
-"raid"
 ]
 ],
 "tier": "A"
@@ -1903,7 +1943,7 @@
 "tier": "D"
 }
 ],
-"updated": "2026/09/19"
+"updated": "2026/10/13"
 },
 "1480": {
 "bis": [
@@ -1937,7 +1977,7 @@
 "Shoulders",
 271535,
 "",
-"Voidscar Arena"
+"Vashnik the Malignant"
 ],
 [
 "Cloak",
@@ -1949,7 +1989,7 @@
 "Chest",
 271540,
 "",
-"Den of Nalorakk"
+"General Kith'ix"
 ],
 [
 "Wrist",
@@ -1983,9 +2023,9 @@
 ],
 [
 "Ring",
-268249,
+281029,
 "",
-"Vashnik the Malignant"
+"General Kith'ix"
 ],
 [
 "Ring",
@@ -1995,18 +2035,12 @@
 ],
 [
 "Trinket",
-250215,
+281215,
 "",
-"Murder Row"
+"General Kith'ix"
 ],
 [
-"Trinket (Raid)",
-270167,
-"",
-"Nymrissa Wavecaller"
-],
-[
-"Trinket (M+)",
+"Trinket",
 270164,
 "",
 "The Lost Explorers"
@@ -2019,59 +2053,55 @@
 [
 "Void-Scarred",
 "Raid ST",
-"CgcBAAAAAAAAAAAAAAAAAAAAAAA2MmZmZmZmxwMAAAAAAAegxsNYGAAAAAAAAmxMMmZmZMzMzYmtZGjNttAgAGgZMzMbzMTz2MLzMjZMA"
+"CgcBAAAAAAAAAAAAAAAAAAAAAAAWMzMzMzMzMwMAAAAAAALPwY2GMDAAAAAAAAzYwYmZmxMzMMzyMjxm2WAQADgxMzsNzMNbzsNzwYGD"
 ],
 [
 "Void-Scarred",
 "Raid Cleave",
-"CgcBAAAAAAAAAAAAAAAAAAAAAAAWMmZmZmZmBmBAAAAAAY7BGz2gZAAAAAAAAYGzwYmZmZmZmZMz2Mjxm2WAQADwDMmZmtZmpZbmlZmxYGA"
+"CgcBAAAAAAAAAAAAAAAAAAAAAAAWMzMzMzMzMwMAAAAAAALzYMYGAAAAAAAAmxMMmZmZGzMDzsMDjNtsAgAGAjZmZZmZa2mZbmZwMGA"
 ],
 [
 "Void-Scarred",
 "Mythic+",
-"CgcBAAAAAAAAAAAAAAAAAAAAAAAWmZmZmZGjxwMAAAAAAALGz2gZAAAAAAAAYGzw8AzMzMzMzMMz2MjxmsAgAGgZMzMbzMTzyMLzMDzMA"
+"CgcBAAAAAAAAAAAAAAAAAAAAAAAWmxMzMzMzMGmBAAAAAAgxsNYGAAAAAAAAmxMMmZmZmZmZYmlZGjNtsAgAGAjZmZZmZa2mZzMjxMGA"
 ],
 [
 "Void-Scarred",
 "Delves",
-"CgcBAAAAAAAAAAAAAAAAAAAAAAA2MzMzMzMjxwMAAAAAAAmxAmBAAAAAAAgZMDzDMzMzMzMzMmZbmxYTbbAIgBwMzMz2Mz0sNz2MzwMDA"
+"CgcBAAAAAAAAAAAAAAAAAAAAAAAWMmZmZmZmxwMAAAAAAAmxAmBAAAAAAAgZMDjZmZmZmZGmZbmxYTbbAIgBwMzMz2Mz0sNzmZGjZMA"
 ],
 [
 "Annihilator",
 "Raid ST",
-"CgcBAAAAAAAAAAAAAAAAAAAAAAA2MmZmZmZmxwMAAAAAAAegxsNYGAAAAAAAAmxMMzMzMjZmZGzsYGjFtswMzMzWbzMzAYGDABMGMmB"
+"CgcBAAAAAAAAAAAAAAAAAAAAAAA2MmZmZmZmxwMAAAAAAALPwY2GMDAAAAAAAAzYwMzMzMmZmZMziZMW0yCzMzMbtNzMDgZMAE4BGDGGA"
 ],
 [
 "Annihilator",
 "Raid Cleave",
-"CgcBAAAAAAAAAAAAAAAAAAAAAAA2MmZmZmZmxwMAAAAAAAegxsNYGAAAAAAAAmxMMzMzMzMzMDzsYGjFtswMzMzWbzMzAYGDABMGMmB"
+"CgcBAAAAAAAAAAAAAAAAAAAAAAA2MmZmZmZmBmBAAAAAAY5BGz2gZAAAAAAAAYGzwMzMzMzMzMMziZMWkFmZmZ2abmZGADDABegxMMmB"
 ],
 [
 "Annihilator",
 "Mythic+",
-"CgcBAAAAAAAAAAAAAAAAAAAAAAA2mxMzMzMzMGmBAAAAAAYxY2GMDAAAAAAAAzYwMzMzMzMzMjZWMjxiWWYmZmZrtZmZAMMAEwYwYGA"
+"CgcBAAAAAAAAAAAAAAAAAAAAAAA2mxMzMzYmxwMAAAAAAALGz2gZAAAAAAAAYGzwMzMzMzMzMMziZMWkFmZmZ2abmZGADDABegxMMmB"
 ],
 [
 "Annihilator",
 "Delves",
-"CgcBAAAAAAAAAAAAAAAAAAAAAAA2MmZmZmZmxwMAAAAAAAmxAmBAAAAAAAgZMDzMzMzMzMzwMbmxYRLbMzMzs1yMzMAmZGACYMYMD"
+"CgcBAAAAAAAAAAAAAAAAAAAAAAA2MmZmZGzMGmBAAAAAAYZGDYGAAAAAAAAmxMMzMzMzMzMDzsZGjFZjZmZmtWmZmBwYGAC8AjZYMD"
 ]
 ],
 "err": [],
-"talentUpdated": "2026/09/18",
+"talentUpdated": "2026/10/13",
 "tiers": [
 {
 "items": [
-[
-250215,
-"dungeon"
-],
 [
 270164,
 "raid"
 ],
 [
-270167,
+281215,
 "raid"
 ]
 ],
@@ -2079,6 +2109,14 @@
 },
 {
 "items": [
+[
+250215,
+"dungeon"
+],
+[
+270167,
+"raid"
+],
 [
 273796,
 "dungeon"
@@ -2206,7 +2244,7 @@
 "tier": "D"
 }
 ],
-"updated": "2026/08/17"
+"updated": "2026/10/13"
 },
 "250": {
 "bis": [
@@ -2222,7 +2260,7 @@
 "Head",
 271474,
 "",
-"Nek'zali the Soulcoiler"
+"Kith'ix"
 ],
 [
 "Neck",
@@ -2286,9 +2324,9 @@
 ],
 [
 "Ring",
-268249,
+281029,
 "",
-"Vashnik the Malignant"
+"Kith'ix"
 ],
 [
 "Ring",
@@ -2323,7 +2361,7 @@
 "Head",
 271474,
 "",
-"Nek'zali the Soulcoiler"
+"Kith'ix"
 ],
 [
 "Neck",
@@ -2384,6 +2422,12 @@
 251487,
 "",
 "Crafting"
+],
+[
+"Ring",
+281029,
+"",
+"Kith'ix"
 ],
 [
 "Ring",
@@ -2446,7 +2490,7 @@
 ]
 ],
 "err": [],
-"talentUpdated": "2026/09/21",
+"talentUpdated": "2026/10/13",
 "tiers": [
 {
 "items": [
@@ -2550,7 +2594,7 @@
 "tier": "D"
 }
 ],
-"updated": "2026/08/20"
+"updated": "2026/10/13"
 },
 "251": {
 "bis": [
@@ -2563,7 +2607,7 @@
 "Ula'tek"
 ],
 [
-"Offhand",
+"Weapon",
 268209,
 "",
 "The Coiled Altar"
@@ -2624,15 +2668,15 @@
 ],
 [
 "Boots",
-268260,
+268245,
 "",
-"Vashnik the Malignant"
+"Nek'zali the Soulcoiler"
 ],
 [
 "Ring",
-268249,
+281029,
 "",
-"Vashnik the Malignant"
+"Kith'ix"
 ],
 [
 "Ring",
@@ -2689,7 +2733,7 @@
 ]
 ],
 "err": [],
-"talentUpdated": "2026/09/05",
+"talentUpdated": "2026/10/13",
 "tiers": [
 {
 "items": [
@@ -2698,7 +2742,7 @@
 "raid"
 ],
 [
-270164,
+281215,
 "raid"
 ],
 [
@@ -2707,6 +2751,19 @@
 ]
 ],
 "tier": "S"
+},
+{
+"items": [
+[
+270165,
+"raid"
+],
+[
+270164,
+"raid"
+]
+],
+"tier": "A"
 },
 {
 "items": [
@@ -2721,15 +2778,6 @@
 [
 250238,
 "dungeon"
-]
-],
-"tier": "A"
-},
-{
-"items": [
-[
-270165,
-"raid"
 ],
 [
 273796,
@@ -2781,7 +2829,7 @@
 "tier": "D"
 }
 ],
-"updated": "2026/09/02"
+"updated": "2026/10/13"
 },
 "252": {
 "bis": [
@@ -2855,15 +2903,15 @@
 ],
 [
 "Ring",
-268249,
+281029,
 "",
-"Vashnik"
+"Kyth'ix"
 ],
 [
 "Ring",
-252258,
+273792,
 "",
-"Voidscar Arena]"
+"Altar of Fangs]"
 ],
 [
 "Trinket",
@@ -2909,7 +2957,7 @@
 ]
 ],
 "err": [],
-"talentUpdated": "2026/09/05",
+"talentUpdated": "2026/10/13",
 "tiers": [
 {
 "items": [
@@ -2919,6 +2967,10 @@
 ],
 [
 270173,
+"raid"
+],
+[
+281215,
 "raid"
 ]
 ],
@@ -3061,7 +3113,7 @@
 "tier": "D"
 }
 ],
-"updated": "2026/10/01"
+"updated": "2026/10/13"
 },
 "253": {
 "bis": [
@@ -3113,7 +3165,7 @@
 "Gloves",
 271493,
 "",
-"King's Rest"
+"Kith'ix"
 ],
 [
 "Belt",
@@ -3141,15 +3193,15 @@
 ],
 [
 "Ring",
-252258,
+281029,
 "",
-"Voidscar Arena"
+"Kith'ix"
 ],
 [
 "Trinket",
-270173,
+281215,
 "",
-"The Coiled Altar"
+"Kith'ix"
 ],
 [
 "Trinket",
@@ -3200,12 +3252,12 @@
 ]
 ],
 "err": [],
-"talentUpdated": "2026/08/12",
+"talentUpdated": "2026/10/13",
 "tiers": [
 {
 "items": [
 [
-270173,
+281215,
 "raid"
 ],
 [
@@ -3223,6 +3275,10 @@
 "items": [
 [
 270165,
+"raid"
+],
+[
+270173,
 "raid"
 ],
 [
@@ -3328,7 +3384,7 @@
 "tier": "D"
 }
 ],
-"updated": "2026/09/09"
+"updated": "2026/10/13"
 },
 "254": {
 "bis": [
@@ -3380,7 +3436,7 @@
 "Gloves",
 271493,
 "",
-"Catalyst the Ruby Life Pools Gloves"
+"Catalyst the Kith'ix Gloves"
 ],
 [
 "Belt",
@@ -3402,15 +3458,15 @@
 ],
 [
 "Ring",
-251136,
+268252,
 "",
-"Murder Row"
+"Sszorak"
 ],
 [
 "Ring",
-158366,
+281029,
 "",
-"Temple of Sethraliss"
+"Kith'ix"
 ],
 [
 "Trinket",
@@ -3432,6 +3488,12 @@
 [
 "",
 268207,
+"",
+""
+],
+[
+"",
+281238,
 "",
 ""
 ],
@@ -3460,7 +3522,7 @@
 [
 "Sentinel",
 "Raid AoE/Cleave",
-"C4PAAAAAAAAAAAAAAAAAAAAAAwCMwMGzYZAMD2AAAAAAAAAzYmZmFzYmZMDGTzYwstZmZmZmZmZWwsMMDAAwYmZMAmptNYA2YmtZMA"
+"C4PAAAAAAAAAAAAAAAAAAAAAAwCMwMGzYZAMD2AAAAAAAAAzYmZmFzYmZMDGTzYwsttNzMzMzMzMLYWGmBAAYMzMAYm22gBYjZ2mxA"
 ],
 [
 "Sentinel",
@@ -3470,7 +3532,7 @@
 [
 "Sentinel",
 "Delves",
-"C4PAAAAAAAAAAAAAAAAAAAAAAwGMwMGzYZAMD2AAAAAAAAAzYmZGMmZGzMMmGGMLbLzMzMzMzMzCmthZAAAmZMGAmpNsMDwGzsNjB"
+"C4PAAAAAAAAAAAAAAAAAAAAAAwGMwMGzYZAMD2AAAAAAAAAzYmZGMmZGzMMmGGMLbbzMzMzMzMzCmthZAAAmZMGAmpNsMDwGzsNjB"
 ],
 [
 "Dark Ranger",
@@ -3489,7 +3551,7 @@
 ]
 ],
 "err": [],
-"talentUpdated": "2026/08/12",
+"talentUpdated": "2026/10/13",
 "tiers": [
 {
 "items": [
@@ -3500,10 +3562,6 @@
 [
 270168,
 "raid"
-],
-[
-270173,
-"raid"
 ]
 ],
 "tier": "S"
@@ -3511,15 +3569,36 @@
 {
 "items": [
 [
+281215,
+"raid"
+],
+[
+270173,
+"raid"
+]
+],
+"tier": "A"
+},
+{
+"items": [
+[
+159617,
+"dungeon"
+],
+[
+270165,
+"raid"
+],
+[
 273796,
 "dungeon"
 ],
 [
-159617,
-"dungeon"
+270164,
+"raid"
 ]
 ],
-"tier": "A"
+"tier": "B"
 },
 {
 "items": [
@@ -3528,36 +3607,11 @@
 "dungeon"
 ],
 [
-250215,
-"dungeon"
-],
-[
-270165,
-"raid"
-],
-[
-273797,
-"dungeon"
-],
-[
-270164,
-"raid"
-],
-[
 270166,
 "raid"
 ],
 [
 250214,
-"dungeon"
-]
-],
-"tier": "B"
-},
-{
-"items": [
-[
-193757,
 "dungeon"
 ],
 [
@@ -3569,8 +3623,16 @@
 "dungeon"
 ],
 [
+193757,
+"dungeon"
+],
+[
 246304,
 "crafting"
+],
+[
+250259,
+"dungeon"
 ]
 ],
 "tier": "C"
@@ -3578,30 +3640,50 @@
 {
 "items": [
 [
-250259,
+250215,
 "dungeon"
+],
+[
+273797,
+"dungeon"
+],
+[
+241340,
+"crafting"
 ]
 ],
 "tier": "D"
 }
 ],
-"updated": "2026/09/09"
+"updated": "2026/10/13"
 },
 "255": {
 "bis": [
 {
 "rows": [
 [
-"Weapon",
-268215,
+"Main Hand",
+268209,
+"",
+"The Coiled Altar"
+],
+[
+"Off Hand",
+271093,
 "",
 "Ula'tek"
+],
+[
+"2-Hand",
+268213,
+"",
+"The Coiled Altar"
 ],
 [
 "Head",
 271492,
 "",
-"Tier Set|Voidscar Arena"
+"Tier Set|Temple of Sethraliss"
 ],
 [
 "Neck",
@@ -3637,7 +3719,7 @@
 "Gloves",
 271493,
 "",
-"Tier Set|King's Rest"
+"Tier Set|Kith'ix"
 ],
 [
 "Belt",
@@ -3653,21 +3735,21 @@
 ],
 [
 "Boots",
-268233,
+268258,
+"",
+"The lost Explorers"
+],
+[
+"Ring",
+268252,
 "",
 "Sszorak"
 ],
 [
 "Ring",
-273792,
+281029,
 "",
-"Altar of Fangs"
-],
-[
-"Ring",
-252258,
-"",
-"Voidscar Arena"
+"Kith'ix"
 ],
 [
 "Trinket",
@@ -3723,7 +3805,7 @@
 ]
 ],
 "err": [],
-"talentUpdated": "2026/08/27",
+"talentUpdated": "2026/10/13",
 "tiers": [
 {
 "items": [
@@ -3733,6 +3815,10 @@
 ],
 [
 270175,
+"raid"
+],
+[
+281215,
 "raid"
 ]
 ],
@@ -3815,7 +3901,7 @@
 "tier": "D"
 }
 ],
-"updated": "2026/08/21"
+"updated": "2026/10/13"
 },
 "256": {
 "bis": [
@@ -3944,7 +4030,7 @@
 ]
 ],
 "err": [],
-"talentUpdated": "2026/09/22",
+"talentUpdated": "2026/10/13",
 "tiers": [
 {
 "items": [
@@ -3962,11 +4048,15 @@
 {
 "items": [
 [
-270162,
+280835,
 "raid"
 ],
 [
 270164,
+"raid"
+],
+[
+270162,
 "raid"
 ]
 ],
@@ -4019,7 +4109,7 @@
 "tier": "D"
 }
 ],
-"updated": "2026/08/18"
+"updated": "2026/10/13"
 },
 "257": {
 "bis": [
@@ -4153,7 +4243,7 @@
 ]
 ],
 "err": [],
-"talentUpdated": "2026/08/24",
+"talentUpdated": "2026/10/13",
 "tiers": [
 {
 "items": [
@@ -4185,6 +4275,10 @@
 [
 250215,
 "dungeon"
+],
+[
+280835,
+"raid"
 ]
 ],
 "tier": "A"
@@ -4228,7 +4322,7 @@
 "tier": "D"
 }
 ],
-"updated": "2026/08/24"
+"updated": "2026/10/13"
 },
 "258": {
 "bis": [
@@ -4296,9 +4390,9 @@
 ],
 [
 "Legs",
-271554,
+281235,
 "",
-"Den of Nalorakk"
+"Unbinding of Kith'Ix"
 ],
 [
 "Boots",
@@ -4308,9 +4402,9 @@
 ],
 [
 "Ring",
-252258,
+281029,
 "",
-"Voidscar Arena"
+"Unbinding of Kith'Ix"
 ],
 [
 "Ring",
@@ -4320,9 +4414,9 @@
 ],
 [
 "Trinket",
-270167,
+281215,
 "",
-"Nymrissa Wavecaller"
+"Unbinding of Kith'Ix"
 ],
 [
 "Trinket",
@@ -4367,10 +4461,15 @@
 ]
 ],
 "err": [],
-"talentUpdated": "2026/08/12",
+"talentUpdated": "2026/10/13",
 "tiers": [
 {
-"items": [],
+"items": [
+[
+281215,
+"raid"
+]
+],
 "tier": "S"
 },
 {
@@ -4455,7 +4554,7 @@
 "tier": "F"
 }
 ],
-"updated": "2026/08/31"
+"updated": "2026/10/13"
 },
 "259": {
 "bis": [
@@ -4499,9 +4598,9 @@
 ],
 [
 "Chest",
-271513,
+281236,
 "",
-"Den of Nalorakk"
+"Kith'ix"
 ],
 [
 "Wrist",
@@ -4535,15 +4634,15 @@
 ],
 [
 "Ring",
-273792,
+281029,
 "",
-"Altar of Fangs"
+"Kith'ix"
 ],
 [
 "Ring",
-268249,
+268252,
 "",
-"Vashnik the Malignant"
+"Sszorak"
 ],
 [
 "Trinket",
@@ -4553,9 +4652,9 @@
 ],
 [
 "Trinket",
-270168,
+281215,
 "",
-"Ula'tek"
+"Kith'ix"
 ]
 ],
 "title": "Best in Slot Gear for Assassination Rogue"
@@ -4605,7 +4704,7 @@
 ]
 ],
 "err": [],
-"talentUpdated": "2026/09/06",
+"talentUpdated": "2026/10/13",
 "tiers": [
 {
 "items": [
@@ -4614,7 +4713,7 @@
 "raid"
 ],
 [
-270168,
+281215,
 "raid"
 ]
 ],
@@ -4627,11 +4726,7 @@
 "raid"
 ],
 [
-270173,
-"raid"
-],
-[
-270164,
+270168,
 "raid"
 ]
 ],
@@ -4639,6 +4734,14 @@
 },
 {
 "items": [
+[
+270173,
+"raid"
+],
+[
+270164,
+"raid"
+],
 [
 159617,
 "dungeon"
@@ -4660,10 +4763,6 @@
 "dungeon"
 ],
 [
-193701,
-"dungeon"
-],
-[
 270166,
 "raid"
 ],
@@ -4676,6 +4775,10 @@
 },
 {
 "items": [
+[
+193701,
+"dungeon"
+],
 [
 193757,
 "dungeon"
@@ -4753,7 +4856,7 @@
 "tier": "D"
 }
 ],
-"updated": "2026/09/24"
+"updated": "2026/10/13"
 },
 "260": {
 "bis": [
@@ -4892,7 +4995,7 @@
 ]
 ],
 "err": [],
-"talentUpdated": "2026/08/12",
+"talentUpdated": "2026/10/13",
 "tiers": [
 {
 "items": [
@@ -4905,7 +5008,7 @@
 "raid"
 ],
 [
-270164,
+281215,
 "raid"
 ],
 [
@@ -4920,6 +5023,10 @@
 [
 159617,
 "dungeon"
+],
+[
+270164,
+"raid"
 ],
 [
 270166,
@@ -5056,7 +5163,7 @@
 "tier": "D"
 }
 ],
-"updated": "2026/09/30"
+"updated": "2026/10/13"
 },
 "261": {
 "bis": [
@@ -5102,7 +5209,7 @@
 "Chest",
 271513,
 "",
-"Tier Set - Nek'zali the Soulcoiler"
+"Tier Set - Kith'ix"
 ],
 [
 "Wrist",
@@ -5114,7 +5221,7 @@
 "Gloves",
 271511,
 "",
-"Tier Set - Sszorak"
+"Tier Set - Temple of Sethraliss"
 ],
 [
 "Belt",
@@ -5136,9 +5243,9 @@
 ],
 [
 "Ring",
-251194,
+281029,
 "",
-"Blinding Vale"
+"Kith'ix"
 ],
 [
 "Ring",
@@ -5181,11 +5288,16 @@
 [
 "Trickster",
 "Mythic+",
+"CUQAAAAAAAAAAAAAAAAAAAAAAAgx2MAAAAAwsMGLTMbLjxMDDzMzMzw8AbzYGbbzMzMzMjBjZ2GAAAAGMGwYWMMwAziWoFbYGwMDmxA"
+],
+[
+"Trickster",
+"Delves",
 "CUQAAAAAAAAAAAAAAAAAAAAAAAgx2MAAAAAwsMGLTMbLjxMDDzMzMzw8AbzYGbbzMzMzMjBjZ2GAAAAGMGwY2MMwAziWoFbYGwMDmxA"
 ]
 ],
 "err": [],
-"talentUpdated": "2026/10/03",
+"talentUpdated": "2026/10/13",
 "tiers": [
 {
 "items": [
@@ -5224,6 +5336,14 @@
 {
 "items": [
 [
+281215,
+"raid"
+],
+[
+270168,
+"raid"
+],
+[
 250214,
 "dungeon"
 ],
@@ -5242,10 +5362,6 @@
 [
 251785,
 "dungeon"
-],
-[
-270168,
-"raid"
 ]
 ],
 "tier": "B"
@@ -5329,7 +5445,7 @@
 "tier": "D"
 }
 ],
-"updated": "2026/09/02"
+"updated": "2026/10/13"
 },
 "262": {
 "bis": [
@@ -5387,7 +5503,7 @@
 "Gloves",
 271484,
 "",
-"Tier Set"
+"Tier Set/The Unbinding of Kith'ix"
 ],
 [
 "Belt",
@@ -5421,9 +5537,9 @@
 ],
 [
 "Trinket",
-270164,
+281215,
 "",
-"The Lost Explorers"
+"The Unbinding of Kith'ix"
 ],
 [
 "Trinket",
@@ -5458,7 +5574,7 @@
 ]
 ],
 "err": [],
-"talentUpdated": "2026/08/21",
+"talentUpdated": "2026/10/13",
 "tiers": [
 {
 "items": [
@@ -5469,6 +5585,10 @@
 [
 250215,
 "dungeon"
+],
+[
+281215,
+"raid"
 ],
 [
 270164,
@@ -5562,7 +5682,7 @@
 "tier": "D"
 }
 ],
-"updated": "2026/08/17"
+"updated": "2026/10/13"
 },
 "263": {
 "bis": [
@@ -5584,7 +5704,7 @@
 "Head",
 271483,
 "",
-"Catalyst &ndash; Voidscar Arena"
+"Twin Fangs"
 ],
 [
 "Neck",
@@ -5620,7 +5740,7 @@
 "Gloves",
 271484,
 "",
-"Token &ndash; Entombed Sentinels"
+"Catalyst &ndash; Kith'ix"
 ],
 [
 "Belt",
@@ -5642,9 +5762,9 @@
 ],
 [
 "Ring 1",
-273792,
+281029,
 "",
-"Altar of Fangs"
+"Kith'ix"
 ],
 [
 "Ring 2",
@@ -5678,12 +5798,6 @@
 [
 "",
 268209,
-"",
-""
-],
-[
-"",
-270164,
 "",
 ""
 ]
@@ -5734,7 +5848,7 @@
 ]
 ],
 "err": [],
-"talentUpdated": "2026/08/22",
+"talentUpdated": "2026/10/13",
 "tiers": [
 {
 "items": [
@@ -5747,7 +5861,7 @@
 "raid"
 ],
 [
-270164,
+281215,
 "raid"
 ]
 ],
@@ -5756,12 +5870,16 @@
 {
 "items": [
 [
-273796,
-"dungeon"
+270164,
+"raid"
 ],
 [
 270165,
 "raid"
+],
+[
+273796,
+"dungeon"
 ],
 [
 250225,
@@ -5883,7 +6001,7 @@
 "tier": "F"
 }
 ],
-"updated": "2026/08/24"
+"updated": "2026/10/13"
 },
 "264": {
 "bis": [
@@ -5962,16 +6080,16 @@
 "Den of Nalorakk"
 ],
 [
-"Trinkets",
+"Trinket",
 270162,
 "",
 "Nek'zali the Soulcoiler (Raid)"
 ],
 [
-"Trinkets",
-270167,
+"Trinket",
+281215,
 "",
-"Nymrissa Wavebinder (Raid)"
+"Kith'ix (Raid)"
 ],
 [
 "1h Weapon",
@@ -5987,40 +6105,6 @@
 ]
 ],
 "title": "Best in Slot Gear for Restoration Shaman"
-},
-{
-"rows": [
-[
-"",
-237831,
-"",
-"Your most important slot is a weapon, but this season you are guaranteed to get a very strong weapon by week 4 at the latest due to your bonus rolls on Ula'tek. Crafting a weapon that you know you will replace in the first month of the season would be a waste of myth crests, so unless you really need to secure some extra power very early on your best choice is a shield."
-],
-[
-"",
-244584,
-"",
-"Your second craft is a bit less valuable than the first due to other slots being less relevant than your weapon. You still want a second embellishment but the specific timing of when you craft it can vary depending on how lucky you get with your bonus rolls."
-]
-],
-"title": "Midnight Season 2 Gearing Strategy for Restoration Shaman"
-},
-{
-"rows": [
-[
-"",
-237831,
-"",
-"Your most important slot is a weapon, but this season you are guaranteed to get a very strong weapon due to your bonus rolls. Crafting a weapon that you know you will replace in the first month of the season would be a waste of myth crests, so your best choice is a shield."
-],
-[
-"",
-244584,
-"",
-"Your second craft is a bit less valuable than the first due to other slots being less relevant than your weapon. You still want a second embellishment but the specific timing of when you craft it can vary depending on how lucky you get with your bonus rolls."
-]
-],
-"title": "Midnight Season 2 Gearing Strategy for Restoration Shaman"
 },
 {
 "rows": [
@@ -6068,12 +6152,16 @@
 ]
 ],
 "err": [],
-"talentUpdated": "2026/09/05",
+"talentUpdated": "2026/10/13",
 "tiers": [
 {
 "items": [
 [
 270162,
+"raid"
+],
+[
+281215,
 "raid"
 ],
 [
@@ -6083,16 +6171,16 @@
 [
 270167,
 "raid"
-],
-[
-270169,
-"raid"
 ]
 ],
 "tier": "S"
 },
 {
 "items": [
+[
+270169,
+"raid"
+],
 [
 193757,
 "dungeon"
@@ -6173,7 +6261,7 @@
 "tier": "F"
 }
 ],
-"updated": "2026/08/26"
+"updated": "2026/10/13"
 },
 "265": {
 "bis": [
@@ -6259,9 +6347,9 @@
 ],
 [
 "Ring",
-273792,
+281029,
 "",
-"The Coiled Altar"
+"Kith'Ix"
 ],
 [
 "Trinket",
@@ -6277,6 +6365,23 @@
 ]
 ],
 "title": "Best in Slot Gear for Affliction Warlock"
+},
+{
+"rows": [
+[
+"",
+270164,
+"",
+""
+],
+[
+"",
+270164,
+"",
+""
+]
+],
+"title": "Best Bonus Roll targets for Affliction Warlock in Midnight"
 }
 ],
 "builds": [
@@ -6312,7 +6417,7 @@
 ]
 ],
 "err": [],
-"talentUpdated": "2026/08/12",
+"talentUpdated": "2026/10/13",
 "tiers": [
 {
 "items": [
@@ -6330,6 +6435,10 @@
 ],
 [
 270167,
+"raid"
+],
+[
+281215,
 "raid"
 ]
 ],
@@ -6412,7 +6521,7 @@
 "tier": "D"
 }
 ],
-"updated": "2026/08/23"
+"updated": "2026/10/13"
 },
 "266": {
 "bis": [
@@ -6426,9 +6535,9 @@
 ],
 [
 "Offhand",
-268197,
+245769,
 "",
-"Entombed Sentinels"
+"Crafting"
 ],
 [
 "Head",
@@ -6446,7 +6555,7 @@
 "Shoulders",
 271544,
 "",
-"The Lost Explorers"
+"Venomous Abyss Trash Drop"
 ],
 [
 "Cloak",
@@ -6462,9 +6571,9 @@
 ],
 [
 "Wrist",
-239648,
+271542,
 "",
-"Crafting"
+"Entombed Sentinels"
 ],
 [
 "Gloves",
@@ -6482,7 +6591,7 @@
 "Legs",
 271545,
 "",
-"Sszorak"
+"Kith'ix"
 ],
 [
 "Boots",
@@ -6498,24 +6607,41 @@
 ],
 [
 "Ring",
-158366,
+281029,
 "",
-""
+"Kith'ix"
 ],
 [
 "Trinket",
-270164,
+281215,
 "",
-"The Lost Explorers"
+"Kith'ix"
 ],
 [
 "Trinket",
-273796,
+273649,
 "",
 ""
 ]
 ],
 "title": "Best in Slot Gear for Demonology Warlock"
+},
+{
+"rows": [
+[
+"",
+270164,
+"",
+""
+],
+[
+"",
+270164,
+"",
+""
+]
+],
+"title": "Best Bonus Roll targets for Demonology Warlock in Midnight"
 }
 ],
 "builds": [
@@ -6546,10 +6672,18 @@
 ]
 ],
 "err": [],
-"talentUpdated": "2026/08/12",
+"talentUpdated": "2026/10/13",
 "tiers": [
 {
 "items": [
+[
+281215,
+"raid"
+],
+[
+273649,
+"dungeon"
+],
 [
 270164,
 "raid"
@@ -6588,10 +6722,6 @@
 },
 {
 "items": [
-[
-273649,
-"dungeon"
-],
 [
 250224,
 "dungeon"
@@ -6646,7 +6776,7 @@
 "tier": "D"
 }
 ],
-"updated": "2026/09/08"
+"updated": "2026/10/13"
 },
 "267": {
 "bis": [
@@ -6704,7 +6834,7 @@
 "Gloves",
 271547,
 "",
-"Entombed Sentinels"
+"The Coiled Altar + Catalyst"
 ],
 [
 "Belt",
@@ -6714,9 +6844,9 @@
 ],
 [
 "Legs",
-271545,
+281235,
 "",
-"Sszorak"
+"Kith'Ix"
 ],
 [
 "Boots",
@@ -6732,9 +6862,9 @@
 ],
 [
 "Ring",
-273792,
+281029,
 "",
-"The Coiled Altar"
+"Kith'Ix"
 ],
 [
 "Trinket",
@@ -6744,21 +6874,15 @@
 ],
 [
 "Trinket",
-270167,
+280835,
 "",
-"Nymrissa Wavecaller"
+"Kith'Ix"
 ]
 ],
 "title": "Best in Slot Gear for Destruction Warlock"
 },
 {
 "rows": [
-[
-"",
-271092,
-"",
-""
-],
 [
 "",
 270164,
@@ -6784,12 +6908,12 @@
 [
 "Diabolist",
 "Mythic+",
-"CsQAAAAAAAAAAAAAAAAAAAAAAwMjZGNbmZ2mZGzysZmZmFzMLLzDMAAYGjZmZBMmxwCZgthFaswAAAjZYAAmZAGzYMbAAAmZmBAAGG"
+"CsQAAAAAAAAAAAAAAAAAAAAAAwMMzoZzMz2MzYWmtZGzsYGLLjBAAzYMzMLgxMGWIDsNsQjFGAAYMDDbAYmBYMjZmNAAAzMzAAwYYA"
 ],
 [
 "Diabolist",
 "Cleave",
-"CsQAAAAAAAAAAAAAAAAAAAAAAwMzMzoZjhZmxsMLzMzMLGz2iZAAwMGzMzCYMjhFyAbDb0YhBAAGDwCAmZAmZGjZDAAwMzMAAMGG"
+"CsQAAAAAAAAAAAAAAAAAAAAAAwMzMzoZjhZmxsMbzMzMLGz2iZAAwMGzMzCYMjhFyAbDb0YhBAAGDwGAmZAmZGjZDAAwMzMAAMGG"
 ],
 [
 "Hellcaller",
@@ -6799,16 +6923,16 @@
 [
 "Hellcaller",
 "Mythic+",
-"CsQAAAAAAAAAAAAAAAAAAAAAAwMjZGNLmxiZGzysNzMjFzYZZmBAAzgZmZxCMwsY0YGAzWsxAAAjZYAAwMDGzMmZDAAwMzMDAAzwA"
+"CsQAAAAAAAAAAAAAAAAAAAAAAwMjZGNLmxiZGzysNzMzsYGLLjBAAzYMzMLWgBmFjGzAY2iNGAAYMYYDAYmBjZGzsBAAYmZmBAwYYA"
 ],
 [
 "Hellcaller",
 "Cleave",
-"CsQAAAAAAAAAAAAAAAAAAAAAAwMmZGNLMzmZmZWmlZmZmFjZbxDMAAYGjZmZxGMwsY0YGAzWsxAAAjBGbAAzMYMjZsBAAYmZGAAGDD"
+"CsQAAAAAAAAAAAAAAAAAAAAAAwMmZGNLMzmZmZWmlZmZmFjZbxMAAYGjZmZxGMwsY0YGAzWsxAAAjBYDAYmBjZMjNAAAzMzAAwYYA"
 ]
 ],
 "err": [],
-"talentUpdated": "2026/08/29",
+"talentUpdated": "2026/10/13",
 "tiers": [
 {
 "items": [
@@ -6817,18 +6941,47 @@
 "raid"
 ],
 [
-270167,
-"raid"
-],
-[
 250215,
 "dungeon"
+],
+[
+281215,
+"raid"
 ]
 ],
 "tier": "S"
 },
 {
 "items": [
+[
+270167,
+"raid"
+],
+[
+273796,
+"dungeon"
+],
+[
+270169,
+"raid"
+]
+],
+"tier": "A"
+},
+{
+"items": [
+[
+273649,
+"dungeon"
+],
+[
+250224,
+"dungeon"
+],
+[
+193757,
+"dungeon"
+],
 [
 250214,
 "dungeon"
@@ -6839,31 +6992,6 @@
 ],
 [
 250259,
-"dungeon"
-]
-],
-"tier": "A"
-},
-{
-"items": [
-[
-273796,
-"dungeon"
-],
-[
-273649,
-"dungeon"
-],
-[
-250224,
-"dungeon"
-],
-[
-270169,
-"raid"
-],
-[
-193757,
 "dungeon"
 ]
 ],
@@ -6908,7 +7036,7 @@
 "tier": "D"
 }
 ],
-"updated": "2026/08/18"
+"updated": "2026/10/13"
 },
 "268": {
 "bis": [
@@ -6930,7 +7058,7 @@
 "Head",
 271519,
 "",
-"Catalyst|Raid|Vault"
+"Catalyst|Mythic+|Vault"
 ],
 [
 "Neck",
@@ -6982,9 +7110,9 @@
 ],
 [
 "Boots",
-159304,
+272240,
 "",
-"Kings' Rest"
+"(Labyrinth of Kindo'jan)"
 ],
 [
 "Ring",
@@ -7006,9 +7134,9 @@
 ],
 [
 "Trinket (Damage)",
-270173,
+281215,
 "",
-"The Coiled Altar"
+"Kith'ix"
 ],
 [
 "Trinket (Defense)",
@@ -7082,7 +7210,7 @@
 ]
 ],
 "err": [],
-"talentUpdated": "2026/08/13",
+"talentUpdated": "2026/10/13",
 "tiers": [
 {
 "items": [
@@ -7091,16 +7219,20 @@
 "raid"
 ],
 [
-270173,
+270168,
 "raid"
 ],
 [
-270168,
+281215,
 "raid"
 ],
 [
 250245,
 "dungeon"
+],
+[
+270173,
+"raid"
 ]
 ],
 "tier": "S"
@@ -7154,6 +7286,10 @@
 [
 265657,
 "delves"
+],
+[
+280617,
+"raid"
 ]
 ],
 "tier": "A"
@@ -7266,7 +7402,7 @@
 "tier": "D"
 }
 ],
-"updated": "2026/08/27"
+"updated": "2026/10/13"
 },
 "269": {
 "bis": [
@@ -7291,10 +7427,10 @@
 "Ula'tek"
 ],
 [
-"Shoulder",
+"Shoulders",
 271517,
 "",
-"Tier Set"
+"The Lost Explorers"
 ],
 [
 "Cloak",
@@ -7304,9 +7440,9 @@
 ],
 [
 "Chest",
-268235,
+281236,
 "",
-"Nek'zali the Soulcoiler"
+"Kith'ix"
 ],
 [
 "Wrist",
@@ -7346,9 +7482,9 @@
 ],
 [
 "Ring",
-252258,
+281029,
 "",
-"Voidscar Arena"
+"Kith'ix"
 ],
 [
 "Trinket 1",
@@ -7399,7 +7535,7 @@
 ]
 ],
 "err": [],
-"talentUpdated": "2026/08/13",
+"talentUpdated": "2026/10/13",
 "tiers": [
 {
 "items": [
@@ -7431,6 +7567,14 @@
 [
 270164,
 "raid"
+],
+[
+270165,
+"raid"
+],
+[
+281215,
+"raid"
 ]
 ],
 "tier": "A"
@@ -7458,10 +7602,6 @@
 },
 {
 "items": [
-[
-270165,
-"raid"
-],
 [
 250214,
 "dungeon"
@@ -7499,7 +7639,7 @@
 "tier": "F"
 }
 ],
-"updated": "2026/08/25"
+"updated": "2026/10/13"
 },
 "270": {
 "bis": [
@@ -7533,7 +7673,7 @@
 "Chest",
 271522,
 "",
-"Voidscar Arena & Catalyst"
+"Kith'ix & Catalyst"
 ],
 [
 "Bracers",
@@ -7590,16 +7730,10 @@
 "Nek'zali the Soulcoiler"
 ],
 [
-"1h Weapon",
-268211,
+"Weapon",
+251123,
 "",
-"The Coiled Altar"
-],
-[
-"Offhand",
-159667,
-"",
-"Kings' Rest"
+"Murder Row"
 ]
 ],
 "title": "Best in Slot Gear for Mistweaver Monk for Raid"
@@ -7680,9 +7814,9 @@
 ],
 [
 "Trinkets",
-270167,
+281215,
 "",
-"Nymrissa Wavebinder"
+"Kith'ix"
 ],
 [
 "Trinkets",
@@ -7739,7 +7873,7 @@
 ]
 ],
 "err": [],
-"talentUpdated": "2026/09/05",
+"talentUpdated": "2026/10/13",
 "tiers": [
 {
 "items": [
@@ -7757,11 +7891,15 @@
 "raid"
 ],
 [
-270169,
+270164,
 "raid"
 ],
 [
-270164,
+281215,
+"raid"
+],
+[
+280835,
 "raid"
 ],
 [
@@ -7773,6 +7911,10 @@
 },
 {
 "items": [
+[
+270169,
+"raid"
+],
 [
 250248,
 "dungeon"
@@ -7876,7 +8018,7 @@
 "tier": "F"
 }
 ],
-"updated": "2026/10/02"
+"updated": "2026/10/13"
 },
 "577": {
 "bis": [
@@ -7896,7 +8038,7 @@
 ],
 [
 "Head",
-271875,
+271537,
 "",
 "Ula'tek"
 ],
@@ -7920,9 +8062,9 @@
 ],
 [
 "Chest",
-271540,
+281236,
 "",
-"King's Rest"
+"Kith'ix"
 ],
 [
 "Wrist",
@@ -8005,7 +8147,7 @@
 ]
 ],
 "err": [],
-"talentUpdated": "2026/09/24",
+"talentUpdated": "2026/10/13",
 "tiers": [
 {
 "items": [
@@ -8024,6 +8166,10 @@
 "items": [
 [
 270175,
+"raid"
+],
+[
+281215,
 "raid"
 ]
 ],
@@ -8150,7 +8296,7 @@
 "tier": "F"
 }
 ],
-"updated": "2026/08/28"
+"updated": "2026/10/13"
 },
 "581": {
 "bis": [
@@ -8196,7 +8342,7 @@
 "Chest",
 271540,
 "",
-"Vashnik the Malignant"
+"The Unbinding of Kith'ix"
 ],
 [
 "Wrist",
@@ -8242,9 +8388,9 @@
 ],
 [
 "Trinket",
-270164,
+281215,
 "",
-"The Lost Explorers"
+"The Unbinding of Kith'ix"
 ],
 [
 "Trinket",
@@ -8257,6 +8403,12 @@
 270173,
 "",
 "The Coiled Altar"
+],
+[
+"Trinket (Group Defensive)",
+280617,
+"",
+"The Unbinding of Kith'ix"
 ]
 ],
 "title": "Best in Slot Gear for Vengeance Demon Hunter"
@@ -8305,16 +8457,24 @@
 ]
 ],
 "err": [],
-"talentUpdated": "2026/08/12",
+"talentUpdated": "2026/10/13",
 "tiers": [
 {
 "items": [
+[
+281215,
+"raid"
+],
 [
 270175,
 "raid"
 ],
 [
 270173,
+"raid"
+],
+[
+280617,
 "raid"
 ]
 ],
@@ -8445,7 +8605,7 @@
 "tier": "D"
 }
 ],
-"updated": "2026/09/05"
+"updated": "2026/10/13"
 },
 "62": {
 "bis": [
@@ -8574,7 +8734,7 @@
 ]
 ],
 "err": [],
-"talentUpdated": "2026/08/31",
+"talentUpdated": "2026/10/13",
 "tiers": [
 {
 "items": [
@@ -8718,7 +8878,7 @@
 "tier": "F"
 }
 ],
-"updated": "2026/09/26"
+"updated": "2026/10/13"
 },
 "63": {
 "bis": [
@@ -8826,6 +8986,35 @@
 {
 "rows": [
 [
+"One-Hand Sword",
+281056,
+"",
+"One-Hand Sword Lower Item level than ."
+],
+[
+"Cloth Legs",
+281235,
+"",
+"Cloth Legs Critical Strike stat offsets the gain from the Cantrip"
+],
+[
+"Finger",
+281029,
+"",
+"Finger Low Haste budget, might break even depending on your rings"
+],
+[
+"Trinket",
+281215,
+"",
+"Trinket Critical Strike stat trinket, best to avoid."
+]
+],
+"title": "Best in Slot Gear for Fire Mage"
+},
+{
+"rows": [
+[
 "",
 271092,
 "",
@@ -8874,7 +9063,7 @@
 ]
 ],
 "err": [],
-"talentUpdated": "2026/08/13",
+"talentUpdated": "2026/10/13",
 "tiers": [
 {
 "items": [
@@ -8888,6 +9077,10 @@
 ],
 [
 270167,
+"raid"
+],
+[
+270169,
 "raid"
 ]
 ],
@@ -8917,10 +9110,6 @@
 "dungeon"
 ],
 [
-270169,
-"raid"
-],
-[
 273649,
 "dungeon"
 ]
@@ -8929,6 +9118,10 @@
 },
 {
 "items": [
+[
+281215,
+"raid"
+],
 [
 270161,
 "raid"
@@ -9026,7 +9219,7 @@
 "tier": "D"
 }
 ],
-"updated": "2026/08/24"
+"updated": "2026/10/13"
 },
 "64": {
 "bis": [
@@ -9106,15 +9299,15 @@
 ],
 [
 "Ring",
-268249,
+281029,
 "",
-"Vashnik the Malignant"
+"Kith'ix"
 ],
 [
 "Ring",
-158366,
+268252,
 "",
-"Temple of Sethraliss"
+"Sszorak"
 ],
 [
 "Trinket",
@@ -9124,9 +9317,9 @@
 ],
 [
 "Trinket",
-270167,
+281215,
 "",
-"Nymrissa Wavecaller"
+"Kith'ix"
 ]
 ],
 "title": "Best in Slot Gear for Frost Mage"
@@ -9165,10 +9358,14 @@
 ]
 ],
 "err": [],
-"talentUpdated": "2026/08/21",
+"talentUpdated": "2026/10/13",
 "tiers": [
 {
 "items": [
+[
+281215,
+"raid"
+],
 [
 270164,
 "raid"
@@ -9308,7 +9505,7 @@
 "tier": "D"
 }
 ],
-"updated": "2026/08/18"
+"updated": "2026/10/13"
 },
 "65": {
 "bis": [
@@ -9330,7 +9527,7 @@
 "Head",
 271465,
 "",
-"Murder Row"
+"Kith'ix"
 ],
 [
 "Neck",
@@ -9394,21 +9591,27 @@
 ],
 [
 "Ring",
-252258,
+281029,
 "",
-"Voidscar Arena"
+"Kith'ix"
 ],
 [
-"Trinket",
+"Trinket 1",
 270162,
 "",
 "Nek'zali the Soulcoiler"
 ],
 [
-"Trinket",
+"Trinket 2 (for Raid)",
 270164,
 "",
 "The Lost Explorers"
+],
+[
+"Trinket 2 (for M+)",
+281215,
+"",
+"Kith'ix"
 ]
 ],
 "title": "Best in Slot Gear for Holy Paladin"
@@ -9467,12 +9670,16 @@
 ]
 ],
 "err": [],
-"talentUpdated": "2026/09/20",
+"talentUpdated": "2026/10/13",
 "tiers": [
 {
 "items": [
 [
 270162,
+"raid"
+],
+[
+281215,
 "raid"
 ],
 [
@@ -9486,6 +9693,10 @@
 "items": [
 [
 270167,
+"raid"
+],
+[
+280835,
 "raid"
 ],
 [
@@ -9567,7 +9778,7 @@
 "tier": "D"
 }
 ],
-"updated": "2026/09/24"
+"updated": "2026/10/13"
 },
 "66": {
 "bis": [
@@ -9587,9 +9798,9 @@
 ],
 [
 "Head",
-271465,
+281239,
 "",
-"Tier Set"
+"Kith'ix"
 ],
 [
 "Neck",
@@ -9653,9 +9864,9 @@
 ],
 [
 "Ring 2",
-268249,
+281029,
 "",
-"Vashnik the Malignant"
+"Kith'ix"
 ],
 [
 "Trinket",
@@ -9677,17 +9888,17 @@
 [
 "Templar",
 "Raid",
-"CIEAAAAAAAAAAAAAAAAAAAAAAsNzYWmZYGzM2WGDLzithBAYAAAAAAQamZxMmZGjZrNAMgBMYbAAgZm2mZWmBAYzyGzYAMmhxAAsNDwMDyYD"
+"CIEAAAAAAAAAAAAAAAAAAAAAAsNzYWmZYGzM2WGDLzithBAYAAAAAAQamZxMmZGjZrNAMgBMYbAAgZm2mZWmBAYzyGzYAMmhxAAsNDwMDyYB"
 ],
 [
 "Templar",
 "Mythic+",
-"CIEAAAAAAAAAAAAAAAAAAAAAAsZeAzyYGzYmZWWGjZZWmlZMAADAAAAAAaamhZMzwY2aDADMgZw2AAAzMtNzsMDAwmlFMAgZYMAALzAmZGkxC"
+"CIEAAAAAAAAAAAAAAAAAAAAAAsZYWGzYmZmZWWGjZZWmlZMAADAAAAAAaamhZMzwY2aDADMgZw2AAAzMtNzsMDAwmlFMAgZYMAALzAmZGkxC"
 ],
 [
 "Lightsmith",
 "Raid",
-"CIEAAAAAAAAAAAAAAAAAAAAAAsNDzyYmHYmZmx2yYMLzithBAYAAAAAAQamZxMmZGjZrNAMgBMYbAAAEgZmttlWmZsYZjZMAGzwYAwMDAmZQGL"
+"CIEAAAAAAAAAAAAAAAAAAAAAAsNDzyYmHYmZmx2yYMLzithBAYAAAAAAQamZxMmZYMbtBgBMwMYbAAAEgZmttlWmZsYZjZMAGzwYAwMDAmZQGL"
 ],
 [
 "Lightsmith",
@@ -9696,7 +9907,7 @@
 ]
 ],
 "err": [],
-"talentUpdated": "2026/09/14",
+"talentUpdated": "2026/10/13",
 "tiers": [
 {
 "items": [
@@ -9731,6 +9942,14 @@
 ],
 [
 270163,
+"raid"
+],
+[
+281215,
+"raid"
+],
+[
+280617,
 "raid"
 ],
 [
@@ -9812,7 +10031,7 @@
 "tier": "D"
 }
 ],
-"updated": "2026/08/30"
+"updated": "2026/10/13"
 },
 "70": {
 "bis": [
@@ -9886,9 +10105,9 @@
 ],
 [
 "Ring",
-268249,
+281029,
 "",
-"Vashnik the Malignant"
+"The Unbinding of Kith'ix"
 ],
 [
 "Ring",
@@ -9945,7 +10164,7 @@
 ]
 ],
 "err": [],
-"talentUpdated": "2026/08/25",
+"talentUpdated": "2026/10/13",
 "tiers": [
 {
 "items": [
@@ -9983,16 +10202,12 @@
 "dungeon"
 ],
 [
-250259,
-"dungeon"
+270168,
+"raid"
 ],
 [
-251792,
-"delves"
-],
-[
-274493,
-"delves"
+281215,
+"raid"
 ]
 ],
 "tier": "B"
@@ -10000,8 +10215,16 @@
 {
 "items": [
 [
+250259,
+"dungeon"
+],
+[
 250228,
 "dungeon"
+],
+[
+270163,
+"raid"
 ],
 [
 158367,
@@ -10009,10 +10232,6 @@
 ],
 [
 250229,
-"dungeon"
-],
-[
-250238,
 "dungeon"
 ],
 [
@@ -10030,6 +10249,14 @@
 [
 246305,
 "crafting"
+],
+[
+251792,
+"delves"
+],
+[
+274493,
+"delves"
 ]
 ],
 "tier": "C"
@@ -10037,12 +10264,8 @@
 {
 "items": [
 [
-270168,
-"raid"
-],
-[
-270163,
-"raid"
+250238,
+"dungeon"
 ],
 [
 273795,
@@ -10068,7 +10291,7 @@
 "tier": "D"
 }
 ],
-"updated": "2026/08/25"
+"updated": "2026/10/13"
 },
 "71": {
 "bis": [
@@ -10078,7 +10301,7 @@
 "Helm",
 271456,
 "",
-"The Twin Fangs"
+"Kithix"
 ],
 [
 "Neck",
@@ -10090,7 +10313,7 @@
 "Shoulders",
 271454,
 "",
-"BoE Trash Drop"
+"Temple of Sethraliss"
 ],
 [
 "Cloak",
@@ -10124,7 +10347,7 @@
 ],
 [
 "Legs",
-271455,
+271878,
 "",
 "Ula'tek"
 ],
@@ -10136,9 +10359,9 @@
 ],
 [
 "Ring",
-252258,
+281029,
 "",
-"Voidscar Arena"
+"Kithix"
 ],
 [
 "Ring",
@@ -10201,7 +10424,7 @@
 ]
 ],
 "err": [],
-"talentUpdated": "2026/08/12",
+"talentUpdated": "2026/10/13",
 "tiers": [
 {
 "items": [
@@ -10215,7 +10438,7 @@
 ],
 [
 270164,
-"dungeon"
+"raid"
 ]
 ],
 "tier": "S"
@@ -10224,15 +10447,15 @@
 "items": [
 [
 273796,
-"raid"
-],
-[
-250259,
 "dungeon"
 ],
 [
-250228,
+281215,
 "raid"
+],
+[
+250228,
+"dungeon"
 ],
 [
 270165,
@@ -10249,7 +10472,7 @@
 ],
 [
 250229,
-"raid"
+"dungeon"
 ],
 [
 193757,
@@ -10266,7 +10489,7 @@
 "items": [
 [
 270168,
-"dungeon"
+"raid"
 ],
 [
 273797,
@@ -10274,7 +10497,7 @@
 ],
 [
 270163,
-"dungeon"
+"raid"
 ],
 [
 273795,
@@ -10284,7 +10507,7 @@
 "tier": "C"
 }
 ],
-"updated": "2026/08/26"
+"updated": "2026/10/13"
 },
 "72": {
 "bis": [
@@ -10294,7 +10517,7 @@
 "Helm",
 271456,
 "",
-"Murder Row"
+"Kithix"
 ],
 [
 "Neck",
@@ -10330,7 +10553,7 @@
 "Gloves",
 271457,
 "",
-"Den of Nalorakk"
+"Entombed Sentinels"
 ],
 [
 "Belt",
@@ -10340,15 +10563,15 @@
 ],
 [
 "Legs",
-271455,
+271878,
 "",
 "Ula'tek"
 ],
 [
 "Boots",
-268260,
+237828,
 "",
-"Vashnik the Malignant"
+"Crafted"
 ],
 [
 "Ring",
@@ -10358,9 +10581,9 @@
 ],
 [
 "Ring",
-268249,
+281029,
 "",
-"Vashnik the Malignant"
+"Kithix"
 ],
 [
 "Trinket",
@@ -10382,9 +10605,9 @@
 ],
 [
 "Offhand",
-237846,
+280799,
 "",
-"Crafted"
+"Kithix"
 ]
 ],
 "title": "Best-in-Slot Gear for Fury Warriors"
@@ -10423,7 +10646,7 @@
 ]
 ],
 "err": [],
-"talentUpdated": "2026/08/12",
+"talentUpdated": "2026/10/13",
 "tiers": [
 {
 "items": [
@@ -10437,7 +10660,7 @@
 ],
 [
 270164,
-"dungeon"
+"raid"
 ]
 ],
 "tier": "S"
@@ -10446,15 +10669,15 @@
 "items": [
 [
 273796,
-"raid"
-],
-[
-250259,
 "dungeon"
 ],
 [
-250228,
+281215,
 "raid"
+],
+[
+250228,
+"dungeon"
 ],
 [
 270165,
@@ -10471,7 +10694,7 @@
 ],
 [
 250229,
-"raid"
+"dungeon"
 ],
 [
 193757,
@@ -10488,7 +10711,7 @@
 "items": [
 [
 270168,
-"dungeon"
+"raid"
 ],
 [
 273797,
@@ -10496,7 +10719,7 @@
 ],
 [
 270163,
-"dungeon"
+"raid"
 ],
 [
 273795,
@@ -10506,7 +10729,7 @@
 "tier": "C"
 }
 ],
-"updated": "2026/09/30"
+"updated": "2026/10/13"
 },
 "73": {
 "bis": [
@@ -10526,9 +10749,9 @@
 ],
 [
 "Head",
-271456,
+281239,
 "",
-"Tier Set"
+"Kith'ix"
 ],
 [
 "Neck",
@@ -10592,9 +10815,9 @@
 ],
 [
 "Ring 2",
-268249,
+281029,
 "",
-"Vashnik the Malignant"
+"Kith'ix"
 ],
 [
 "Trinket",
@@ -10635,7 +10858,7 @@
 ]
 ],
 "err": [],
-"talentUpdated": "2026/08/12",
+"talentUpdated": "2026/10/13",
 "tiers": [
 {
 "items": [
@@ -10670,6 +10893,14 @@
 ],
 [
 270163,
+"raid"
+],
+[
+281215,
+"raid"
+],
+[
+280617,
 "raid"
 ],
 [
@@ -10751,6 +10982,6 @@
 "tier": "D"
 }
 ],
-"updated": "2026/08/30"
+"updated": "2026/10/13"
 }
 }

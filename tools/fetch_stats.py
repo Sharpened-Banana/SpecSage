@@ -59,7 +59,7 @@ def main():
         out.append("  source = %s," % lua_str(
             "Wowhead %s stat priority guide, updated %s" % (name, rec.get("updated") or "?")))
         out.append("  url = %s," % lua_str(rec["url"]))
-        out.append('  patch = "12.1",')
+        out.append('  patch = "12.1.5",')
         out.append("  heroSplit = %s," % ("true" if rec.get("heroSplit") else "false"))
         out.append("  lists = {")
         for var in rec["variants"]:

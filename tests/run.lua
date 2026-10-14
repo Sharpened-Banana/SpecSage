@@ -2117,7 +2117,11 @@ do
         end
     end
     check(#badBonus == 0, "every bonus list is colon-separated numbers only", table.concat(badBonus, ","))
-    check(withBonus > rows * 0.95, "nearly every BiS row carries its bonus list",
+    -- The bonus lists come from Icy Veins' tables, which have sat behind a
+    -- Cloudflare check since 12.1.5 (2026-10-13); items new that patch
+    -- (Kith'ix's loot) ship bare until a source carries their lists again,
+    -- so the bar is "most rows", not "nearly all".
+    check(withBonus > rows * 0.85, "most BiS rows carry their bonus list",
         format("%d of %d", withBonus, rows))
 
     -- The exact row from the bug report.
@@ -2324,13 +2328,13 @@ do
     check(dump:find("Stat priority guide, updated", 1, true) ~= nil and dump:find("Wowhead", 1, true) == nil,
         "the section carries the guide's date without naming the site", dump)
 
-    -- A list's note (Wowhead's own caveat - a haste cap, a tie between two
-    -- stats) renders under it rather than being dropped.
+    -- A list's note (the guide's own caveat - a stat losing value, a tie
+    -- between two stats) renders under it rather than being dropped.
     Tome:Open("DEMONHUNTER", 1480)
     Tome:SelectTab("Stats")
     dump = ShownText(Tome.statLinePool)
     check(dump:find("Void-Scarred\nPrimary Stat", 1, true) ~= nil, "Devourer lists its Void-Scarred order", dump)
-    check(dump:find("800 rating", 1, true) ~= nil, "Wowhead's haste-cap caveat rides along as a note", dump)
+    check(dump:find("Collapsing Star always crits", 1, true) ~= nil, "the guide's caveat rides along as a note", dump)
 
     -- Leaving the tab hides the rows, the same contract every other tab's
     -- own row pool has (HideOtherTabWidgets).
@@ -3208,7 +3212,6 @@ do
                     unavailable = unavailable + 1
                 elseif data then
                     withLists = withLists + 1
-                    if data.note then withNote = withNote + 1 end
                     local sawSim, sawGuide, sorted, simRowsCarryGuideTier = false, false, true, true
                     for _, listEntry in ipairs(data.lists) do
                         local isSim = listEntry.list[1] and listEntry.list[1].gain ~= nil
@@ -3239,6 +3242,9 @@ do
                     check(simRowsCarryGuideTier, format("spec %d guide tier values are valid tiers and no second-site tier remains", specID))
                     check(sawGuide, format("spec %d carries a Guide list and names no site", specID))
                     if sawSim then withSim = withSim + 1 end
+                    -- A sim spec may carry a note too (a guide S-tier the sims
+                    -- missed), so only the no-sim specs' notes count here.
+                    if not sawSim and data.note then withNote = withNote + 1 end
                     if sawGuide then withIcyVeins = withIcyVeins + 1 end
                     -- A spec with no sim list explains why.
                     check(sawSim or (data.note and data.note:find("No sim list", 1, true) ~= nil),
@@ -4483,14 +4489,14 @@ section("Tome: Consumables tab item chips (2026-09-05)")
 do
     -- Data/Consumables.lua: name -> itemID (and back), and the scanner that
     -- finds the names a line of guide prose mentions.
-    check(ns.ConsumableItems["Flask of the Blood Knights"] == 241325
-        and ns.ConsumableNames[241325] == "Flask of the Blood Knights",
+    check(ns.ConsumableItems["Flask of the Blood Knights"] == 241324
+        and ns.ConsumableNames[241324] == "Flask of the Blood Knights",
         "the item table maps names to IDs and back")
     local found = ns.FindConsumableItems(
         "Flask of the Blood Knights for Haste; Flask of the Magisters if you're short on Mastery. "
         .. "Always carry Concentrated Silvermoon Health Potions; Flask of the Blood Knights again.")
     check(#found == 3, "each named consumable is found once, in order of appearance", #found)
-    check(found[1].name == "Flask of the Blood Knights" and found[1].itemID == 241325,
+    check(found[1].name == "Flask of the Blood Knights" and found[1].itemID == 241324,
         "the first chip is the first item named, with its itemID")
     check(found[2].name == "Flask of the Magisters", "the second item named comes second", found[2] and found[2].name)
     check(found[3].name == "Concentrated Silvermoon Health Potion",
@@ -4526,21 +4532,33 @@ do
     local function slotItems(guide, slot)
         for _, entry in ipairs(guide.consumables) do if entry.slot == slot then return entry.items end end
     end
-    check(slotItems(blood, "Flask")[1] == 241325 and slotItems(holy, "Flask")[1] == 241321,
-        "each spec's flask leads with its own top secondary (Blood: Haste; Holy Priest: Versatility)")
-    check(slotItems(blood, "Potion")[1] == 241287 and slotItems(holy, "Potion")[1] == 241301,
-        "a tank leads with the absorb potion, a healer with the mana potion")
+    -- Flask IDs are the rank-2 (item level 295) ones, catalogue checked 2026-10-13.
+    local FLASK_FOR = { haste = 241324, mastery = 241322, crit = 241326, versatility = 241320 }
+    local function topSecondary(guide)
+        for _, s in ipairs(guide.statPriority or {}) do
+            if FLASK_FOR[s.stat] then return s.stat end
+        end
+    end
+    check(slotItems(blood, "Flask")[1] == FLASK_FOR[topSecondary(blood)]
+        and slotItems(holy, "Flask")[1] == FLASK_FOR[topSecondary(holy)],
+        "each spec's flask leads with its own top secondary", topSecondary(blood) .. "/" .. tostring(topSecondary(holy)))
+    local function has(list, id) for _, v in ipairs(list) do if v == id then return true end end return false end
+    check(has(slotItems(blood, "Potion"), 241286) and not has(slotItems(blood, "Potion"), 241300)
+        and has(slotItems(holy, "Potion"), 241300) and not has(slotItems(holy, "Potion"), 241286),
+        "a tank's potions include the absorb potion, a healer's the mana potion")
+    check(slotItems(blood, "Weapon Enchant") == nil and slotItems(holy, "Weapon Enchant") ~= nil,
+        "Death Knights runeforge, so they get no Weapon Enchant kind")
     check(slotItems(blood, "Weapon Oil")[1] == 243734 and #slotItems(blood, "Weapon Oil") == 3
         and #slotItems(holy, "Weapon Oil") == 2,
         "every spec lists the current tier's oil; physical specs add the stones, healers Oil of Dawn")
 
     -- The tab: a heading, the chips, then the prose, per kind; chips hover
     -- and click like BiS item links.
-    mock.items[241323] = { name = "Flask of the Magisters", quality = 1 }
+    mock.items[241322] = { name = "Flask of the Magisters", quality = 1 }
     ns.GuideStore:RegisterSpec("MAGE", 9605, {
         specName = "Chip Spec", role = "DAMAGER",
         consumables = {
-            { slot = "Flask", items = { 241323, 241325 }, text = "Magisters for Mastery, Blood Knights for Haste." },
+            { slot = "Flask", items = { 241322, 241324 }, text = "Magisters for Mastery, Blood Knights for Haste." },
             { slot = "Prose-only", text = "Always carry Concentrated Silvermoon Health Potions." },
             { slot = "Enchants", text = "Nothing this table knows." },
         },
@@ -4554,9 +4572,9 @@ do
     end
     check(#shown == 3, "two chips from the item list plus one found in prose", #shown)
     local first, second, third = shown[1], shown[2], shown[3]
-    check(first.itemID == 241323 and first.text:GetText() == "Flask of the Magisters",
+    check(first.itemID == 241322 and first.text:GetText() == "Flask of the Magisters",
         "the first chip is the cached flask under the client's name", first.text:GetText())
-    check(second.itemID == 241325 and second.text:GetText() == "Flask of the Blood Knights",
+    check(second.itemID == 241324 and second.text:GetText() == "Flask of the Blood Knights",
         "an uncached item's chip falls back to the table's name", second.text:GetText())
     check(third.itemID == 271884, "a prose-only entry still gets chips for the items it names", third.itemID)
     local requested = false
@@ -4580,7 +4598,7 @@ do
     check(proseBottom - nextHeadY >= 16, "a group gap separates one kind from the next", proseBottom - nextHeadY)
 
     first:GetScript("OnEnter")(first)
-    check(GameTooltip.itemID == 241323, "hovering a chip shows the item's tooltip", GameTooltip.itemID)
+    check(GameTooltip.itemID == 241322, "hovering a chip shows the item's tooltip", GameTooltip.itemID)
     first:GetScript("OnLeave")(first)
     mock.itemRefClicks = {}
     first:GetScript("OnMouseUp")(first, "LeftButton")
@@ -4605,12 +4623,12 @@ do
     -- The item arriving later redraws the chip under its real name.
     Tome:Open("MAGE", 9605)
     Tome:SelectTab("Consumables")
-    mock.items[241325] = { name = "Flask of the Blood Knights (cached)", quality = 1 }
-    Tome:OnBiSItemInfoReceived(241325)
+    mock.items[241324] = { name = "Flask of the Blood Knights (cached)", quality = 1 }
+    Tome:OnBiSItemInfoReceived(241324)
     check(Tome.consumableChipPool[2].text:GetText() == "Flask of the Blood Knights (cached)",
         "GET_ITEM_INFO_RECEIVED for a chip's item redraws the chip", Tome.consumableChipPool[2].text:GetText())
-    mock.items[241325] = nil
-    mock.items[241323] = nil
+    mock.items[241324] = nil
+    mock.items[241322] = nil
 end
 
 --------------------------------------------------------------------------------

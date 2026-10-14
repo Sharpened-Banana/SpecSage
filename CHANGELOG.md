@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.3.6 (2026-10-13)
+
+**Improved**
+- Updated for patch 12.1.5 (interface 120105).
+- Every spec's rotation, overview, cooldowns and tips were checked against 12.1.5's SimulationCraft action lists and spell data and corrected where they had drifted. Abilities that no longer exist were removed (for example Icy Veins for Frost Mage, Warbreaker for Arms, Apocalypse for Unholy, Spiritbloom for Preservation, Mana Tide Totem for Restoration Shaman, Rapture and Schism for Discipline). Steps that differ by hero tree now say which tree they're for. Wrong or outdated spell IDs were fixed, so ability icons and tooltips match the step's text.
+- The suggested Mythic+ builds for Protection Paladin, Affliction and Demonology move to SimulationCraft's 12.1.5 profiles.
+- Guide data refreshed on 2026-10-13 for 12.1.5: BiS changes for 36 specs (Kith'ix's loot enters many lists), trinket tier changes for 38, and new guide talent builds for Protection Paladin, Guardian, Restoration Druid, Marksmanship, Subtlety, Destruction and Devourer.
+- Devourer's stat priority is now Intellect > Mastery > Haste > Crit > Versatility for both hero trees.
+- Consumables: flasks and potions now point at the rank-2 items. Every role leads with Potion of Recklessness and every spec with the Indecipherable Eversong Diamond. Physical specs get Rite of the Hash'ey and damage specs Eyes of the Eagle. The primary-stat feasts and Royal Roast are back on top for damage and healing. Helm enchants use the Empowered versions, and the Ethereal Augment Rune replaces the old runes that the stat squish made useless. Death Knights see their runeforge instead of a weapon enchant.
+- Top players' Mythic+ builds refreshed from Blizzard's leaderboards (US, 2026-10-13, 12.1.5's first day) for 37 specs; 27 changed. Havoc's top players have moved to Fel-Scarred and Assassination's to Fatebound. Brewmaster and Destruction keep their October 4 builds: the new samples had no clear most-common build.
+
 ## 1.3.5 (2026-10-07)
 
 **Improved**

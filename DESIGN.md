@@ -1,7 +1,7 @@
 # SpecSage — Design Document
 
 SpecSage is an all-in-one World of Warcraft addon for Retail (Midnight,
-Interface 120100). It combines:
+Interface 120105). It combines:
 
 1. **The Tome** — a browsable guide window for every class and spec: overview,
    stat priority, rotation priorities, cooldowns, consumables/enchants, tips.
@@ -1188,8 +1188,9 @@ against a catalogue of the current expansion's flasks, potions, food, oils
 and stones, weapon / ring / chest / leg / helm-shoulder-boot enchants, gems
 and augment runes - every item looked up on Wowhead (name, ID, tooltip) on
 the date in the script. Each entry is `{ slot, items = { itemIDs }, text }`:
-eleven kinds per spec, from Flask through Augment Rune, with the weapon
-oil its own kind. The Tome draws each kind as a heading, then the items as
+eleven kinds per spec (ten for Death Knights, whose runeforge replaces a
+weapon enchant and is described in their Weapon Oil text), from Flask
+through Augment Rune, with the weapon oil its own kind. The Tome draws each kind as a heading, then the items as
 chips (icon plus quality-coloured name - hover for the tooltip, click for
 the link, an enchant chip shows the enchant's name without the scroll's
 "Enchant Ring - " prefix), then the reasoning, with a group gap before the
@@ -1199,8 +1200,11 @@ fallback name before the client has an item cached, and the prose scanner
 `items` list (a third-party pack). Chips are not inline because a
 FontString cannot report where a word landed after wrapping. Recommendations
 are derived, not simmed: stat-matched to the priority the guide already
-states, with role variants (absorb potion and Leech/Avoidance enchants for
-tanks, mana potion and Oil of Dawn for healers, stones for physical specs).
+states, with role variants (Leech/Avoidance enchants for tanks, Oil of
+Dawn for healers, stones and Rite of the Hash'ey for physical specs). As of
+12.1.5 every role leads with Potion of Recklessness and every spec with the
+Indecipherable Eversong Diamond, following the guide's 12.1 pages; flasks
+and potions point at the rank-2 items.
 When a patch adds items, extend the catalogue and rerun. The Feedback link
 now points at `github.com/Sharpened-Banana/SpecSage`, read from the TOC's
 `X-Website`.

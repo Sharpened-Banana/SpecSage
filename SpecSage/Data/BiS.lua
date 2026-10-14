@@ -15,28 +15,28 @@
 -- a current dungeon piece can be a level-48 rare rather than the item level
 -- 334 epic the guide means. Rows the guide site lists carry the bonus list
 -- the guide site states for the same item, since the guide site's markup has none.
--- Generated: 2026-10-04 09:49 UTC
+-- Generated: 2026-10-14 02:08 UTC
 
 local ADDON, ns = ...
 if not ns.GuideStore then return end
 
 -- WARRIOR 71 (arms-warrior)
 ns.GuideStore:RegisterBiS(71, {
-  source = "Gear guide, updated 2026/08/26",
-  patch = "12.1",
+  source = "Gear guide, updated 2026/10/13",
+  patch = "12.1.5",
   lists = {
     { title = "Guide", list = {
-      { slot = "Head", itemID = 271456, name = "Tempered Horns of the Jade Warlord", from = "The Twin Fangs", bonus = "12854" },
+      { slot = "Head", itemID = 271456, name = "Tempered Horns of the Jade Warlord", from = "Kithix", bonus = "12854" },
       { slot = "Neck", itemID = 268265, name = "Aqirbane Reliquary", from = "Ula'tek", bonus = "13848" },
-      { slot = "Shoulder", itemID = 271454, name = "Raging Pauldrons of the Jade Warlord", from = "BoE Trash Drop", bonus = "12854" },
+      { slot = "Shoulder", itemID = 271454, name = "Raging Pauldrons of the Jade Warlord", from = "Temple of Sethraliss", bonus = "12854" },
       { slot = "Back", itemID = 268253, name = "Silken Voodoo Drape", from = "The Coiled Altar", bonus = "13848" },
       { slot = "Chest", itemID = 271459, name = "Cuirass of the Jade Warlord", from = "The Coiled Altar", bonus = "13848" },
       { slot = "Wrist", itemID = 237834, name = "Spellbreaker's Bracers", from = "Crafted", bonus = "13751:12497:13836" },
       { slot = "Hands", itemID = 271457, name = "Jeweled Gauntlets of the Jade Warlord", from = "Entombed Sentinels", bonus = "12854" },
       { slot = "Waist", itemID = 268259, name = "Girdle of Toxic Regret", from = "The Coiled Altar", bonus = "13848" },
-      { slot = "Legs", itemID = 271455, name = "Greaves of the Jade Warlord", from = "Ula'tek", bonus = "13848" },
+      { slot = "Legs", itemID = 271878, name = "Chausses of Unbound Rancor", from = "Ula'tek", bonus = "4786:13335:13708:13848" },
       { slot = "Feet", itemID = 237828, name = "Spellbreaker's March", from = "Crafted", bonus = "13751:12497:13836" },
-      { slot = "Ring", itemID = 252258, name = "Sickening Signet of Atroxus", from = "Voidscar Arena", bonus = "12854" },
+      { slot = "Ring", itemID = 281029, name = "Band of the Swarmcaller", from = "Kithix" },
       { slot = "Ring", itemID = 273792, name = "Band of the Amani Warlord", from = "Altar of Fangs", bonus = "12854" },
       { slot = "Trinket", itemID = 270173, name = "Zul'jin's Guillotine Technique", from = "The Coiled Altar", bonus = "13848" },
       { slot = "Trinket", itemID = 270175, name = "Voracious Heart of Ula'tek", from = "Ula'tek", bonus = "13848" },
@@ -47,39 +47,39 @@ ns.GuideStore:RegisterBiS(71, {
 
 -- WARRIOR 72 (fury-warrior)
 ns.GuideStore:RegisterBiS(72, {
-  source = "Gear guide, updated 2026/09/30",
-  patch = "12.1",
+  source = "Gear guide, updated 2026/10/13",
+  patch = "12.1.5",
   lists = {
     { title = "Guide", list = {
-      { slot = "Head", itemID = 271456, name = "Tempered Horns of the Jade Warlord", from = "Murder Row", bonus = "12854" },
+      { slot = "Head", itemID = 271456, name = "Tempered Horns of the Jade Warlord", from = "Kithix", bonus = "12854" },
       { slot = "Neck", itemID = 268265, name = "Aqirbane Reliquary", from = "Ula'tek", bonus = "13848" },
       { slot = "Shoulder", itemID = 271454, name = "Raging Pauldrons of the Jade Warlord", from = "Murder Row", bonus = "12854" },
       { slot = "Back", itemID = 268253, name = "Silken Voodoo Drape", from = "The Coiled Altar", bonus = "13848" },
       { slot = "Chest", itemID = 271459, name = "Cuirass of the Jade Warlord", from = "The Coiled Altar", bonus = "13848" },
       { slot = "Wrist", itemID = 237834, name = "Spellbreaker's Bracers", from = "Crafted", bonus = "13751:12497:13836" },
-      { slot = "Hands", itemID = 271457, name = "Jeweled Gauntlets of the Jade Warlord", from = "Den of Nalorakk", bonus = "12854" },
+      { slot = "Hands", itemID = 271457, name = "Jeweled Gauntlets of the Jade Warlord", from = "Entombed Sentinels", bonus = "12854" },
       { slot = "Waist", itemID = 268259, name = "Girdle of Toxic Regret", from = "The Coiled Altar", bonus = "13848" },
-      { slot = "Legs", itemID = 271455, name = "Greaves of the Jade Warlord", from = "Ula'tek", bonus = "13848" },
-      { slot = "Feet", itemID = 268260, name = "Scaled Fiend's Warboots", from = "Vashnik the Malignant", bonus = "12854" },
+      { slot = "Legs", itemID = 271878, name = "Chausses of Unbound Rancor", from = "Ula'tek", bonus = "4786:13335:13708:13848" },
+      { slot = "Feet", itemID = 237828, name = "Spellbreaker's March", from = "Crafted", bonus = "13751:12497:13836" },
       { slot = "Ring", itemID = 252258, name = "Sickening Signet of Atroxus", from = "Voidscar Arena", bonus = "12854" },
-      { slot = "Ring", itemID = 268249, name = "Vile Alchemist's Band", from = "Vashnik the Malignant", bonus = "12854" },
+      { slot = "Ring", itemID = 281029, name = "Band of the Swarmcaller", from = "Kithix" },
       { slot = "Trinket", itemID = 270173, name = "Zul'jin's Guillotine Technique", from = "The Coiled Altar", bonus = "13848" },
       { slot = "Trinket", itemID = 270175, name = "Voracious Heart of Ula'tek", from = "Ula'tek", bonus = "13848" },
       { slot = "Weapon", itemID = 268213, name = "Maze-roa, Warlord's Fury", from = "The Coiled Altar", bonus = "13848" },
-      { slot = "Off-hand", itemID = 237846, name = "Blood Knight's Warblade", from = "Crafted" },
+      { slot = "Off-hand", itemID = 280799, name = "Lu'selama, Light's Justice", from = "Kithix" },
     }},
   },
 })
 
 -- WARRIOR 73 (protection-warrior)
 ns.GuideStore:RegisterBiS(73, {
-  source = "Gear guide, updated 2026/08/30",
-  patch = "12.1",
+  source = "Gear guide, updated 2026/10/13",
+  patch = "12.1.5",
   lists = {
     { title = "Guide", list = {
       { slot = "Weapon", itemID = 268209, name = "Aman'muso, Warlord's Vengeance", from = "The Coiled Altar", bonus = "13848" },
       { slot = "Off-hand", itemID = 268196, name = "Venom-Slashed Scuteward", from = "The Lost Explorers", bonus = "12854" },
-      { slot = "Head", itemID = 271456, name = "Tempered Horns of the Jade Warlord", from = "Tier Set", bonus = "12854" },
+      { slot = "Head", itemID = 281239, name = "Corroded Hulk's Skullcap", from = "Kith'ix" },
       { slot = "Neck", itemID = 268265, name = "Aqirbane Reliquary", from = "Ula'tek", bonus = "13848" },
       { slot = "Shoulder", itemID = 271454, name = "Raging Pauldrons of the Jade Warlord", from = "Tier Set", bonus = "12854" },
       { slot = "Back", itemID = 268253, name = "Silken Voodoo Drape", from = "The Coiled Altar", bonus = "13848" },
@@ -90,7 +90,7 @@ ns.GuideStore:RegisterBiS(73, {
       { slot = "Legs", itemID = 271878, name = "Chausses of Unbound Rancor", from = "Ula'tek", bonus = "4786:13335:13708:13848" },
       { slot = "Feet", itemID = 237828, name = "Spellbreaker's March", from = "Crafting Blacksmithing", bonus = "13751:12497:13836" },
       { slot = "Ring", itemID = 268252, name = "Apex Brute's Claw Ring", from = "Sszorak", bonus = "12854" },
-      { slot = "Ring", itemID = 268249, name = "Vile Alchemist's Band", from = "Vashnik the Malignant", bonus = "12854" },
+      { slot = "Ring", itemID = 281029, name = "Band of the Swarmcaller", from = "Kith'ix" },
       { slot = "Trinket", itemID = 270173, name = "Zul'jin's Guillotine Technique", from = "The Coiled Altar", bonus = "13848" },
       { slot = "Trinket", itemID = 270175, name = "Voracious Heart of Ula'tek", from = "Ula'tek", bonus = "13848" },
     }},
@@ -99,13 +99,13 @@ ns.GuideStore:RegisterBiS(73, {
 
 -- PALADIN 65 (holy-paladin)
 ns.GuideStore:RegisterBiS(65, {
-  source = "Gear guide, updated 2026/09/24",
-  patch = "12.1",
+  source = "Gear guide, updated 2026/10/13",
+  patch = "12.1.5",
   lists = {
     { title = "Guide", list = {
       { slot = "Weapon", itemID = 268211, name = "Baleful Hexblade", from = "The Coiled Altar", bonus = "13848" },
       { slot = "Off-hand", itemID = 268262, name = "Bubblefin Splash Guard", from = "Nymrissa Wavecaller", bonus = "12854" },
-      { slot = "Head", itemID = 271465, name = "Warhelm of the Consecrated Flame", from = "Murder Row", bonus = "12854" },
+      { slot = "Head", itemID = 271465, name = "Warhelm of the Consecrated Flame", from = "Kith'ix", bonus = "12854" },
       { slot = "Neck", itemID = 268265, name = "Aqirbane Reliquary", from = "Ula'tek", bonus = "13848" },
       { slot = "Shoulder", itemID = 271463, name = "Pauldrons of the Consecrated Flame", from = "Murder Row", bonus = "12854" },
       { slot = "Back", itemID = 268253, name = "Silken Voodoo Drape", from = "The Coiled Altar", bonus = "13848" },
@@ -116,22 +116,23 @@ ns.GuideStore:RegisterBiS(65, {
       { slot = "Legs", itemID = 271464, name = "Greaves of the Consecrated Flame", from = "Ula'tek", bonus = "13848" },
       { slot = "Feet", itemID = 268260, name = "Scaled Fiend's Warboots", from = "Vashnik the Malignant", bonus = "12854" },
       { slot = "Ring", itemID = 268249, name = "Vile Alchemist's Band", from = "Vashnik the Malignant", bonus = "12854" },
-      { slot = "Ring", itemID = 252258, name = "Sickening Signet of Atroxus", from = "Voidscar Arena", bonus = "12854" },
+      { slot = "Ring", itemID = 281029, name = "Band of the Swarmcaller", from = "Kith'ix" },
       { slot = "Trinket", itemID = 270162, name = "Soulcoiler Ritual Vessel", from = "Nek'zali the Soulcoiler", bonus = "12854" },
-      { slot = "Trinket", itemID = 270164, name = "Gebbo's Bottomless Bag", from = "The Lost Explorers", bonus = "12854" },
+      { slot = "Trinket", itemID = 270164, name = "Gebbo's Bottomless Bag", from = "for Raid · The Lost Explorers", bonus = "12854" },
+      { slot = "Trinket", itemID = 281215, name = "Twisted Horror's Tendril", from = "for M+ · Kith'ix" },
     }},
   },
 })
 
 -- PALADIN 66 (protection-paladin)
 ns.GuideStore:RegisterBiS(66, {
-  source = "Gear guide, updated 2026/08/30",
-  patch = "12.1",
+  source = "Gear guide, updated 2026/10/13",
+  patch = "12.1.5",
   lists = {
     { title = "Guide", list = {
       { slot = "Weapon", itemID = 268209, name = "Aman'muso, Warlord's Vengeance", from = "The Coiled Altar", bonus = "13848" },
       { slot = "Off-hand", itemID = 268196, name = "Venom-Slashed Scuteward", from = "The Lost Explorers", bonus = "12854" },
-      { slot = "Head", itemID = 271465, name = "Warhelm of the Consecrated Flame", from = "Tier Set", bonus = "12854" },
+      { slot = "Head", itemID = 281239, name = "Corroded Hulk's Skullcap", from = "Kith'ix" },
       { slot = "Neck", itemID = 268265, name = "Aqirbane Reliquary", from = "Ula'tek", bonus = "13848" },
       { slot = "Shoulder", itemID = 271463, name = "Pauldrons of the Consecrated Flame", from = "Tier Set", bonus = "12854" },
       { slot = "Back", itemID = 268253, name = "Silken Voodoo Drape", from = "The Coiled Altar", bonus = "13848" },
@@ -142,7 +143,7 @@ ns.GuideStore:RegisterBiS(66, {
       { slot = "Legs", itemID = 271878, name = "Chausses of Unbound Rancor", from = "Ula'tek", bonus = "4786:13335:13708:13848" },
       { slot = "Feet", itemID = 237828, name = "Spellbreaker's March", from = "Crafting Blacksmithing", bonus = "13751:12497:13836" },
       { slot = "Ring", itemID = 268252, name = "Apex Brute's Claw Ring", from = "Sszorak", bonus = "12854" },
-      { slot = "Ring", itemID = 268249, name = "Vile Alchemist's Band", from = "Vashnik the Malignant", bonus = "12854" },
+      { slot = "Ring", itemID = 281029, name = "Band of the Swarmcaller", from = "Kith'ix" },
       { slot = "Trinket", itemID = 270173, name = "Zul'jin's Guillotine Technique", from = "The Coiled Altar", bonus = "13848" },
       { slot = "Trinket", itemID = 270175, name = "Voracious Heart of Ula'tek", from = "Ula'tek", bonus = "13848" },
     }},
@@ -151,8 +152,8 @@ ns.GuideStore:RegisterBiS(66, {
 
 -- PALADIN 70 (retribution-paladin)
 ns.GuideStore:RegisterBiS(70, {
-  source = "Gear guide, updated 2026/08/25",
-  patch = "12.1",
+  source = "Gear guide, updated 2026/10/13",
+  patch = "12.1.5",
   lists = {
     { title = "Guide", list = {
       { slot = "Weapon", itemID = 268213, name = "Maze-roa, Warlord's Fury", from = "The Coiled Altar", bonus = "13848" },
@@ -166,7 +167,7 @@ ns.GuideStore:RegisterBiS(70, {
       { slot = "Waist", itemID = 268259, name = "Girdle of Toxic Regret", from = "The Coiled Altar", bonus = "13848" },
       { slot = "Legs", itemID = 271464, name = "Greaves of the Consecrated Flame", from = "Ula'tek", bonus = "13848" },
       { slot = "Feet", itemID = 268260, name = "Scaled Fiend's Warboots", from = "Vashnik the Malignant", bonus = "12854" },
-      { slot = "Ring", itemID = 268249, name = "Vile Alchemist's Band", from = "Vashnik the Malignant", bonus = "12854" },
+      { slot = "Ring", itemID = 281029, name = "Band of the Swarmcaller", from = "The Unbinding of Kith'ix" },
       { slot = "Ring", itemID = 251513, name = "Loa Worshiper's Band", from = "Jewelcrafting", bonus = "13751:12497:13836" },
       { slot = "Trinket", itemID = 270173, name = "Zul'jin's Guillotine Technique", from = "The Coiled Altar", bonus = "13848" },
       { slot = "Trinket", itemID = 270175, name = "Voracious Heart of Ula'tek", from = "Ula'tek", bonus = "13848" },
@@ -176,8 +177,8 @@ ns.GuideStore:RegisterBiS(70, {
 
 -- HUNTER 253 (beast-mastery-hunter)
 ns.GuideStore:RegisterBiS(253, {
-  source = "Gear guide, updated 2026/09/09",
-  patch = "12.1",
+  source = "Gear guide, updated 2026/10/13",
+  patch = "12.1.5",
   lists = {
     { title = "Guide", list = {
       { slot = "Weapon", itemID = 268207, name = "Caustic Repose Greatbow", from = "Ula'tek", bonus = "13848:13708" },
@@ -187,13 +188,13 @@ ns.GuideStore:RegisterBiS(253, {
       { slot = "Back", itemID = 268253, name = "Silken Voodoo Drape", from = "The Coiled Altar", bonus = "13848" },
       { slot = "Chest", itemID = 271495, name = "Skulking Viper's Scuteplate", from = "Ula'tek", bonus = "13848" },
       { slot = "Wrist", itemID = 244584, name = "Farstrider's Plated Bracers", from = "", bonus = "13751:12497:13836:12384:8791:8960:1808" },
-      { slot = "Hands", itemID = 271493, name = "Skulking Viper's Hidepiercers", from = "King's Rest", bonus = "12854" },
+      { slot = "Hands", itemID = 271493, name = "Skulking Viper's Hidepiercers", from = "Kith'ix", bonus = "12854" },
       { slot = "Waist", itemID = 244581, name = "Farstrider's Trophy Belt", from = "", bonus = "13751:12497:13836:12384:8791:8960:1808" },
       { slot = "Legs", itemID = 271491, name = "Skulking Viper's Coiled Legwraps", from = "The Coiled Altar", bonus = "13848" },
       { slot = "Feet", itemID = 159388, name = "Sabatons of Coruscating Energy", from = "Temple of Sethraliss", bonus = "12854" },
       { slot = "Ring", itemID = 268249, name = "Vile Alchemist's Band", from = "Vashnik the Malignant", bonus = "12854" },
-      { slot = "Ring", itemID = 252258, name = "Sickening Signet of Atroxus", from = "Voidscar Arena", bonus = "12854" },
-      { slot = "Trinket", itemID = 270173, name = "Zul'jin's Guillotine Technique", from = "The Coiled Altar", bonus = "13848" },
+      { slot = "Ring", itemID = 281029, name = "Band of the Swarmcaller", from = "Kith'ix" },
+      { slot = "Trinket", itemID = 281215, name = "Twisted Horror's Tendril", from = "Kith'ix" },
       { slot = "Trinket", itemID = 270175, name = "Voracious Heart of Ula'tek", from = "Ula'tek", bonus = "13848" },
       { slot = "Trinket", itemID = 270168, name = "Font of Venomous Rage", from = "Situationally · Ula'tek", bonus = "13848" },
     }},
@@ -202,8 +203,8 @@ ns.GuideStore:RegisterBiS(253, {
 
 -- HUNTER 254 (marksmanship-hunter)
 ns.GuideStore:RegisterBiS(254, {
-  source = "Gear guide, updated 2026/09/09",
-  patch = "12.1",
+  source = "Gear guide, updated 2026/10/13",
+  patch = "12.1.5",
   lists = {
     { title = "Guide", list = {
       { slot = "Weapon", itemID = 268207, name = "Caustic Repose Greatbow", from = "Ula'tek", bonus = "13848:13708" },
@@ -213,12 +214,12 @@ ns.GuideStore:RegisterBiS(254, {
       { slot = "Back", itemID = 268253, name = "Silken Voodoo Drape", from = "The Coiled Altar", bonus = "13848" },
       { slot = "Chest", itemID = 271495, name = "Skulking Viper's Scuteplate", from = "Catalyst the Ula'tek Chest", bonus = "13848" },
       { slot = "Wrist", itemID = 244584, name = "Farstrider's Plated Bracers", from = "Crafting/Misc", bonus = "13751:12497:13836:12384:8791:8960:1808" },
-      { slot = "Hands", itemID = 271493, name = "Skulking Viper's Hidepiercers", from = "Catalyst the Ruby Life Pools Gloves", bonus = "12854" },
+      { slot = "Hands", itemID = 271493, name = "Skulking Viper's Hidepiercers", from = "Catalyst the Kith'ix Gloves", bonus = "12854" },
       { slot = "Waist", itemID = 244581, name = "Farstrider's Trophy Belt", from = "Crafting/Misc", bonus = "13751:12497:13836:12384:8791:8960:1808" },
       { slot = "Legs", itemID = 271491, name = "Skulking Viper's Coiled Legwraps", from = "Catalyst the The Coiled Altar Legs", bonus = "13848" },
       { slot = "Feet", itemID = 268258, name = "Boots of the Reckless Wayfarer", from = "The Lost Explorers", bonus = "12854" },
-      { slot = "Ring", itemID = 251136, name = "Signet of Snarling Servitude", from = "Murder Row", bonus = "12854" },
-      { slot = "Ring", itemID = 158366, name = "Charged Sandstone Band", from = "Temple of Sethraliss", bonus = "12854" },
+      { slot = "Ring", itemID = 268252, name = "Apex Brute's Claw Ring", from = "Sszorak", bonus = "12854" },
+      { slot = "Ring", itemID = 281029, name = "Band of the Swarmcaller", from = "Kith'ix" },
       { slot = "Trinket", itemID = 270175, name = "Voracious Heart of Ula'tek", from = "Ula'tek", bonus = "13848" },
       { slot = "Trinket", itemID = 270168, name = "Font of Venomous Rage", from = "Ula'tek", bonus = "13848" },
     }},
@@ -227,23 +228,25 @@ ns.GuideStore:RegisterBiS(254, {
 
 -- HUNTER 255 (survival-hunter)
 ns.GuideStore:RegisterBiS(255, {
-  source = "Gear guide, updated 2026/08/21",
-  patch = "12.1",
+  source = "Gear guide, updated 2026/10/13",
+  patch = "12.1.5",
   lists = {
     { title = "Guide", list = {
-      { slot = "Weapon", itemID = 268215, name = "Abyssal Broodfiend's Bardiche", from = "Ula'tek", bonus = "13848:13846" },
-      { slot = "Head", itemID = 271492, name = "Skulking Viper's Weeping Fangs", from = "Tier Set / Voidscar Arena", bonus = "12854" },
+      { slot = "Weapon", itemID = 268209, name = "Aman'muso, Warlord's Vengeance", from = "The Coiled Altar", bonus = "13848" },
+      { slot = "Off-hand", itemID = 271093, name = "Zatha'tek, Breath of Corruption", from = "Ula'tek", bonus = "13848" },
+      { slot = "Weapon", itemID = 268213, name = "Maze-roa, Warlord's Fury", from = "The Coiled Altar", bonus = "13848" },
+      { slot = "Head", itemID = 271492, name = "Skulking Viper's Weeping Fangs", from = "Tier Set / Temple of Sethraliss", bonus = "12854" },
       { slot = "Neck", itemID = 268265, name = "Aqirbane Reliquary", from = "Ula'tek", bonus = "13848" },
       { slot = "Shoulder", itemID = 271490, name = "Jaws of the Skulking Viper", from = "Tier Set / The Coiled Altar", bonus = "13848" },
       { slot = "Back", itemID = 268253, name = "Silken Voodoo Drape", from = "The Coiled Altar", bonus = "13848" },
       { slot = "Chest", itemID = 271876, name = "Awoken Dreadfang Cuirass", from = "Ula'tek" },
       { slot = "Wrist", itemID = 244584, name = "Farstrider's Plated Bracers", from = "Crafting", bonus = "13751:12497:13836:12384:8791:8960:1808" },
-      { slot = "Hands", itemID = 271493, name = "Skulking Viper's Hidepiercers", from = "Tier Set / King's Rest", bonus = "12854" },
+      { slot = "Hands", itemID = 271493, name = "Skulking Viper's Hidepiercers", from = "Tier Set / Kith'ix", bonus = "12854" },
       { slot = "Waist", itemID = 244581, name = "Farstrider's Trophy Belt", from = "Crafting", bonus = "13751:12497:13836:12384:8791:8960:1808" },
       { slot = "Legs", itemID = 271491, name = "Skulking Viper's Coiled Legwraps", from = "Tier Set / The Coiled Altar", bonus = "13848" },
-      { slot = "Feet", itemID = 268233, name = "Ferocious Scaleboots", from = "Sszorak", bonus = "12854" },
-      { slot = "Ring", itemID = 273792, name = "Band of the Amani Warlord", from = "Altar of Fangs", bonus = "12854" },
-      { slot = "Ring", itemID = 252258, name = "Sickening Signet of Atroxus", from = "Voidscar Arena", bonus = "12854" },
+      { slot = "Feet", itemID = 268258, name = "Boots of the Reckless Wayfarer", from = "The lost Explorers", bonus = "12854" },
+      { slot = "Ring", itemID = 268252, name = "Apex Brute's Claw Ring", from = "Sszorak", bonus = "12854" },
+      { slot = "Ring", itemID = 281029, name = "Band of the Swarmcaller", from = "Kith'ix" },
       { slot = "Trinket", itemID = 270175, name = "Voracious Heart of Ula'tek", from = "Ula'tek", bonus = "13848" },
       { slot = "Trinket", itemID = 270173, name = "Zul'jin's Guillotine Technique", from = "The Coiled Altar", bonus = "13848" },
     }},
@@ -252,8 +255,8 @@ ns.GuideStore:RegisterBiS(255, {
 
 -- ROGUE 259 (assassination-rogue)
 ns.GuideStore:RegisterBiS(259, {
-  source = "Gear guide, updated 2026/09/24",
-  patch = "12.1",
+  source = "Gear guide, updated 2026/10/13",
+  patch = "12.1.5",
   lists = {
     { title = "Guide", list = {
       { slot = "Weapon", itemID = 271093, name = "Zatha'tek, Breath of Corruption", from = "Ula'tek", bonus = "13848" },
@@ -262,24 +265,24 @@ ns.GuideStore:RegisterBiS(259, {
       { slot = "Neck", itemID = 268265, name = "Aqirbane Reliquary", from = "Ula'tek", bonus = "13848" },
       { slot = "Shoulder", itemID = 271508, name = "Chosen Bloodslayer's Voodoo Guards", from = "Voidscar Arena", bonus = "12854" },
       { slot = "Back", itemID = 268253, name = "Silken Voodoo Drape", from = "The Coiled Altar", bonus = "13848" },
-      { slot = "Chest", itemID = 271513, name = "Chosen Bloodslayer's Banded Poncho", from = "Den of Nalorakk", bonus = "12854" },
+      { slot = "Chest", itemID = 281236, name = "Chestwrap of Palpable Terror", from = "Kith'ix" },
       { slot = "Wrist", itemID = 244576, name = "Silvermoon Agent's Deflectors", from = "Crafting/Misc", bonus = "13751:12497:13836:8790" },
       { slot = "Hands", itemID = 271511, name = "Chosen Bloodslayer's Fanged Grips", from = "Entombed Sentinels", bonus = "12854" },
       { slot = "Waist", itemID = 268256, name = "Sash of the Forlorn Vessel", from = "The Coiled Altar", bonus = "12854" },
       { slot = "Legs", itemID = 271509, name = "Chosen Bloodslayer's Reinforced Pants", from = "The Coiled Altar", bonus = "13848" },
       { slot = "Feet", itemID = 244569, name = "Silvermoon Agent's Sneakers", from = "Crafted", bonus = "13751:12497:13836:8790" },
-      { slot = "Ring", itemID = 273792, name = "Band of the Amani Warlord", from = "Altar of Fangs", bonus = "12854" },
-      { slot = "Ring", itemID = 268249, name = "Vile Alchemist's Band", from = "Vashnik the Malignant", bonus = "12854" },
+      { slot = "Ring", itemID = 281029, name = "Band of the Swarmcaller", from = "Kith'ix" },
+      { slot = "Ring", itemID = 268252, name = "Apex Brute's Claw Ring", from = "Sszorak", bonus = "12854" },
       { slot = "Trinket", itemID = 270175, name = "Voracious Heart of Ula'tek", from = "Ula'tek", bonus = "13848" },
-      { slot = "Trinket", itemID = 270168, name = "Font of Venomous Rage", from = "Ula'tek", bonus = "13848" },
+      { slot = "Trinket", itemID = 281215, name = "Twisted Horror's Tendril", from = "Kith'ix" },
     }},
   },
 })
 
 -- ROGUE 260 (outlaw-rogue)
 ns.GuideStore:RegisterBiS(260, {
-  source = "Gear guide, updated 2026/09/30",
-  patch = "12.1",
+  source = "Gear guide, updated 2026/10/13",
+  patch = "12.1.5",
   lists = {
     { title = "Guide", list = {
       { slot = "Weapon", itemID = 268209, name = "Aman'muso, Warlord's Vengeance", from = "The Coiled Altar", bonus = "13848" },
@@ -304,8 +307,8 @@ ns.GuideStore:RegisterBiS(260, {
 
 -- ROGUE 261 (subtlety-rogue)
 ns.GuideStore:RegisterBiS(261, {
-  source = "Gear guide, updated 2026/09/02",
-  patch = "12.1",
+  source = "Gear guide, updated 2026/10/13",
+  patch = "12.1.5",
   lists = {
     { title = "Guide", list = {
       { slot = "Weapon", itemID = 271093, name = "Zatha'tek, Breath of Corruption", from = "Ula'tek", bonus = "13848" },
@@ -314,13 +317,13 @@ ns.GuideStore:RegisterBiS(261, {
       { slot = "Neck", itemID = 268265, name = "Aqirbane Reliquary", from = "Ula'tek", bonus = "13848" },
       { slot = "Shoulder", itemID = 271508, name = "Chosen Bloodslayer's Voodoo Guards", from = "Tier Set - Vashnik the Malignant", bonus = "12854" },
       { slot = "Back", itemID = 268253, name = "Silken Voodoo Drape", from = "The Coiled Altar", bonus = "13848" },
-      { slot = "Chest", itemID = 271513, name = "Chosen Bloodslayer's Banded Poncho", from = "Tier Set - Nek'zali the Soulcoiler", bonus = "12854" },
+      { slot = "Chest", itemID = 271513, name = "Chosen Bloodslayer's Banded Poncho", from = "Tier Set - Kith'ix", bonus = "12854" },
       { slot = "Wrist", itemID = 244576, name = "Silvermoon Agent's Deflectors", from = "Crafting/Misc", bonus = "13751:12497:13836:8790" },
-      { slot = "Hands", itemID = 271511, name = "Chosen Bloodslayer's Fanged Grips", from = "Tier Set - Sszorak", bonus = "12854" },
+      { slot = "Hands", itemID = 271511, name = "Chosen Bloodslayer's Fanged Grips", from = "Tier Set - Temple of Sethraliss", bonus = "12854" },
       { slot = "Waist", itemID = 268256, name = "Sash of the Forlorn Vessel", from = "The Coiled Altar", bonus = "12854" },
       { slot = "Legs", itemID = 271509, name = "Chosen Bloodslayer's Reinforced Pants", from = "The Coiled Altar", bonus = "13848" },
       { slot = "Feet", itemID = 159304, name = "Goldfeather Boots", from = "King's Rest", bonus = "12854" },
-      { slot = "Ring", itemID = 251194, name = "Lightwarden's Bind", from = "Blinding Vale", bonus = "12854" },
+      { slot = "Ring", itemID = 281029, name = "Band of the Swarmcaller", from = "Kith'ix" },
       { slot = "Ring", itemID = 162544, name = "Jade Ophidian Band", from = "Temple of Sethraliss" },
       { slot = "Trinket", itemID = 270173, name = "Zul'jin's Guillotine Technique", from = "The Coiled Altar", bonus = "13848" },
       { slot = "Trinket", itemID = 270175, name = "Voracious Heart of Ula'tek", from = "Ula'tek", bonus = "13848" },
@@ -330,8 +333,8 @@ ns.GuideStore:RegisterBiS(261, {
 
 -- PRIEST 256 (discipline-priest)
 ns.GuideStore:RegisterBiS(256, {
-  source = "Gear guide, updated 2026/08/18",
-  patch = "12.1",
+  source = "Gear guide, updated 2026/10/13",
+  patch = "12.1.5",
   lists = {
     { title = "Guide", list = {
       { slot = "Weapon", itemID = 271092, name = "Jan'thrazet, the Soul Fang", from = "", bonus = "13848" },
@@ -356,8 +359,8 @@ ns.GuideStore:RegisterBiS(256, {
 
 -- PRIEST 257 (holy-priest)
 ns.GuideStore:RegisterBiS(257, {
-  source = "Gear guide, updated 2026/08/24",
-  patch = "12.1",
+  source = "Gear guide, updated 2026/10/13",
+  patch = "12.1.5",
   lists = {
     { title = "Guide", list = {
       { slot = "Weapon", itemID = 271092, name = "Jan'thrazet, the Soul Fang", from = "", bonus = "13848" },
@@ -382,8 +385,8 @@ ns.GuideStore:RegisterBiS(257, {
 
 -- PRIEST 258 (shadow-priest)
 ns.GuideStore:RegisterBiS(258, {
-  source = "Gear guide, updated 2026/08/31",
-  patch = "12.1",
+  source = "Gear guide, updated 2026/10/13",
+  patch = "12.1.5",
   lists = {
     { title = "Guide", list = {
       { slot = "Weapon", itemID = 271092, name = "Jan'thrazet, the Soul Fang", from = "Ula'tek", bonus = "13848" },
@@ -396,11 +399,11 @@ ns.GuideStore:RegisterBiS(258, {
       { slot = "Wrist", itemID = 239648, name = "Martyr's Bindings", from = "Crafting/Misc", bonus = "12497" },
       { slot = "Hands", itemID = 271556, name = "Cosmic Penitent's Celestial Grips", from = "The Coiled Altar", bonus = "13848" },
       { slot = "Waist", itemID = 239649, name = "Martyr's Waistwrap", from = "Crafting/Misc", bonus = "12497" },
-      { slot = "Legs", itemID = 271554, name = "Enveloping Legwraps of the Cosmic Penitent", from = "Den of Nalorakk", bonus = "12854" },
+      { slot = "Legs", itemID = 281235, name = "Voidweaver's Leggings", from = "Unbinding of Kith'Ix" },
       { slot = "Feet", itemID = 268255, name = "Cackling Soultreads", from = "The Coiled Altar", bonus = "13848" },
-      { slot = "Ring", itemID = 252258, name = "Sickening Signet of Atroxus", from = "Voidscar Arena", bonus = "12854" },
+      { slot = "Ring", itemID = 281029, name = "Band of the Swarmcaller", from = "Unbinding of Kith'Ix" },
       { slot = "Ring", itemID = 268249, name = "Vile Alchemist's Band", from = "Vashnik the Malignant", bonus = "12854" },
-      { slot = "Trinket", itemID = 270167, name = "Wavecaller's Seastone", from = "Nymrissa Wavecaller", bonus = "12854" },
+      { slot = "Trinket", itemID = 281215, name = "Twisted Horror's Tendril", from = "Unbinding of Kith'Ix" },
       { slot = "Trinket", itemID = 250215, name = "Freightrunner's Flask", from = "Murder Row", bonus = "12854" },
     }},
   },
@@ -408,12 +411,12 @@ ns.GuideStore:RegisterBiS(258, {
 
 -- DEATHKNIGHT 250 (blood-death-knight)
 ns.GuideStore:RegisterBiS(250, {
-  source = "Gear guide, updated 2026/08/20",
-  patch = "12.1",
+  source = "Gear guide, updated 2026/10/13",
+  patch = "12.1.5",
   lists = {
     { title = "Guide (Deathbringer)", list = {
       { slot = "Weapon", itemID = 268213, name = "Maze-roa, Warlord's Fury", from = "The Coiled Altar", bonus = "13848" },
-      { slot = "Head", itemID = 271474, name = "Baleful Grave-Knight's Casque", from = "Nek'zali the Soulcoiler", bonus = "13692:13698:13750:12854" },
+      { slot = "Head", itemID = 271474, name = "Baleful Grave-Knight's Casque", from = "Kith'ix", bonus = "13692:13698:13750:12854" },
       { slot = "Neck", itemID = 268265, name = "Aqirbane Reliquary", from = "Ula'tek", bonus = "13848" },
       { slot = "Shoulder", itemID = 271472, name = "Baleful Grave-Knight's Gibbets", from = "Temple of Sethraliss", bonus = "13694:13697:12854" },
       { slot = "Back", itemID = 268253, name = "Silken Voodoo Drape", from = "The Coiled Altar", bonus = "13848" },
@@ -424,14 +427,14 @@ ns.GuideStore:RegisterBiS(250, {
       { slot = "Legs", itemID = 271878, name = "Chausses of Unbound Rancor", from = "Ula'tek", bonus = "4786:13335:13708:13848" },
       { slot = "Feet", itemID = 273777, name = "Poison-Proof Stompers", from = "Altar of Fangs", bonus = "12854" },
       { slot = "Ring", itemID = 251487, name = "Prismatic Focusing Iris", from = "Crafting" },
-      { slot = "Ring", itemID = 268249, name = "Vile Alchemist's Band", from = "Vashnik the Malignant", bonus = "12854" },
+      { slot = "Ring", itemID = 281029, name = "Band of the Swarmcaller", from = "Kith'ix" },
       { slot = "Ring", itemID = 251194, name = "Lightwarden's Bind", from = "Blinding Vale", bonus = "12854" },
       { slot = "Trinket", itemID = 270175, name = "Voracious Heart of Ula'tek", from = "Ula'tek", bonus = "13848" },
       { slot = "Trinket", itemID = 270173, name = "Zul'jin's Guillotine Technique", from = "The Coiled Altar", bonus = "13848" },
     }},
     { title = "Guide (San'layn)", list = {
       { slot = "Weapon", itemID = 268213, name = "Maze-roa, Warlord's Fury", from = "The Coiled Altar", bonus = "13848" },
-      { slot = "Head", itemID = 271474, name = "Baleful Grave-Knight's Casque", from = "Nek'zali the Soulcoiler", bonus = "13692:13698:13750:12854" },
+      { slot = "Head", itemID = 271474, name = "Baleful Grave-Knight's Casque", from = "Kith'ix", bonus = "13692:13698:13750:12854" },
       { slot = "Neck", itemID = 268265, name = "Aqirbane Reliquary", from = "Ula'tek", bonus = "13848" },
       { slot = "Shoulder", itemID = 271472, name = "Baleful Grave-Knight's Gibbets", from = "Temple of Sethraliss", bonus = "13694:13697:12854" },
       { slot = "Back", itemID = 268253, name = "Silken Voodoo Drape", from = "The Coiled Altar", bonus = "13848" },
@@ -442,6 +445,7 @@ ns.GuideStore:RegisterBiS(250, {
       { slot = "Legs", itemID = 271878, name = "Chausses of Unbound Rancor", from = "Ula'tek", bonus = "4786:13335:13708:13848" },
       { slot = "Feet", itemID = 273777, name = "Poison-Proof Stompers", from = "Altar of Fangs", bonus = "12854" },
       { slot = "Ring", itemID = 251487, name = "Prismatic Focusing Iris", from = "Crafting" },
+      { slot = "Ring", itemID = 281029, name = "Band of the Swarmcaller", from = "Kith'ix" },
       { slot = "Ring", itemID = 159459, name = "Ritual Binder's Ring", from = "King's Rest", bonus = "4786:12854" },
       { slot = "Ring", itemID = 252258, name = "Sickening Signet of Atroxus", from = "Voidscar Arena", bonus = "12854" },
       { slot = "Trinket", itemID = 270175, name = "Voracious Heart of Ula'tek", from = "Ula'tek", bonus = "13848" },
@@ -452,12 +456,12 @@ ns.GuideStore:RegisterBiS(250, {
 
 -- DEATHKNIGHT 251 (frost-death-knight)
 ns.GuideStore:RegisterBiS(251, {
-  source = "Gear guide, updated 2026/09/02",
-  patch = "12.1",
+  source = "Gear guide, updated 2026/10/13",
+  patch = "12.1.5",
   lists = {
     { title = "Guide", list = {
       { slot = "Weapon", itemID = 268202, name = "Jaw of the Shackled Goddess", from = "Ula'tek", bonus = "13848" },
-      { slot = "Off-hand", itemID = 268209, name = "Aman'muso, Warlord's Vengeance", from = "The Coiled Altar", bonus = "13848" },
+      { slot = "Weapon", itemID = 268209, name = "Aman'muso, Warlord's Vengeance", from = "The Coiled Altar", bonus = "13848" },
       { slot = "Head", itemID = 271474, name = "Baleful Grave-Knight's Casque", from = "Tier Set", bonus = "13692:13698:13750:12854" },
       { slot = "Neck", itemID = 268265, name = "Aqirbane Reliquary", from = "Ula'tek", bonus = "13848" },
       { slot = "Shoulder", itemID = 271472, name = "Baleful Grave-Knight's Gibbets", from = "Tier Set", bonus = "13694:13697:12854" },
@@ -467,8 +471,8 @@ ns.GuideStore:RegisterBiS(251, {
       { slot = "Hands", itemID = 271475, name = "Baleful Grave-Knight's Deathgrips", from = "Tier Set", bonus = "4786:12806" },
       { slot = "Waist", itemID = 268259, name = "Girdle of Toxic Regret", from = "The Coiled Altar", bonus = "13848" },
       { slot = "Legs", itemID = 271878, name = "Chausses of Unbound Rancor", from = "Ula'tek", bonus = "4786:13335:13708:13848" },
-      { slot = "Feet", itemID = 268260, name = "Scaled Fiend's Warboots", from = "Vashnik the Malignant", bonus = "12854" },
-      { slot = "Ring", itemID = 268249, name = "Vile Alchemist's Band", from = "Vashnik the Malignant", bonus = "12854" },
+      { slot = "Feet", itemID = 268245, name = "Entombed Cultist's Sabatons", from = "Nek'zali the Soulcoiler" },
+      { slot = "Ring", itemID = 281029, name = "Band of the Swarmcaller", from = "Kith'ix" },
       { slot = "Ring", itemID = 251513, name = "Loa Worshiper's Band", from = "Crafting/Misc", bonus = "13751:12497:13836" },
       { slot = "Trinket", itemID = 270173, name = "Zul'jin's Guillotine Technique", from = "The Coiled Altar", bonus = "13848" },
       { slot = "Trinket", itemID = 270175, name = "Voracious Heart of Ula'tek", from = "Ula'tek", bonus = "13848" },
@@ -478,8 +482,8 @@ ns.GuideStore:RegisterBiS(251, {
 
 -- DEATHKNIGHT 252 (unholy-death-knight)
 ns.GuideStore:RegisterBiS(252, {
-  source = "Gear guide, updated 2026/10/01",
-  patch = "12.1",
+  source = "Gear guide, updated 2026/10/13",
+  patch = "12.1.5",
   lists = {
     { title = "Guide", list = {
       { slot = "Weapon", itemID = 268213, name = "Maze-roa, Warlord's Fury", from = "The Coiled Altar", bonus = "13848" },
@@ -493,8 +497,8 @@ ns.GuideStore:RegisterBiS(252, {
       { slot = "Waist", itemID = 268259, name = "Girdle of Toxic Regret", from = "The Coiled Altar", bonus = "13848" },
       { slot = "Legs", itemID = 271878, name = "Chausses of Unbound Rancor", from = "Ula'tek", bonus = "4786:13335:13708:13848" },
       { slot = "Feet", itemID = 237828, name = "Spellbreaker's March", from = "Crafting", bonus = "13751:12497:13836" },
-      { slot = "Ring", itemID = 268249, name = "Vile Alchemist's Band", from = "Vashnik", bonus = "12854" },
-      { slot = "Ring", itemID = 252258, name = "Sickening Signet of Atroxus", from = "Voidscar Arena", bonus = "12854" },
+      { slot = "Ring", itemID = 281029, name = "Band of the Swarmcaller", from = "Kyth'ix" },
+      { slot = "Ring", itemID = 273792, name = "Band of the Amani Warlord", from = "Altar of Fangs", bonus = "12854" },
       { slot = "Trinket", itemID = 270175, name = "Voracious Heart of Ula'tek", from = "Ula'tek", bonus = "13848" },
       { slot = "Trinket", itemID = 270173, name = "Zul'jin's Guillotine Technique", from = "The Coiled Altar", bonus = "13848" },
     }},
@@ -503,8 +507,8 @@ ns.GuideStore:RegisterBiS(252, {
 
 -- SHAMAN 262 (elemental-shaman)
 ns.GuideStore:RegisterBiS(262, {
-  source = "Gear guide, updated 2026/08/17",
-  patch = "12.1",
+  source = "Gear guide, updated 2026/10/13",
+  patch = "12.1.5",
   lists = {
     { title = "Guide", list = {
       { slot = "Weapon", itemID = 271092, name = "Jan'thrazet, the Soul Fang", from = "Ula'tek", bonus = "13848" },
@@ -515,13 +519,13 @@ ns.GuideStore:RegisterBiS(262, {
       { slot = "Back", itemID = 268253, name = "Silken Voodoo Drape", from = "The Coiled Altar", bonus = "13848" },
       { slot = "Chest", itemID = 271486, name = "Fanged Raiment of the Ophidian Oracle", from = "Tier Set", bonus = "13708:13848" },
       { slot = "Wrist", itemID = 244584, name = "Farstrider's Plated Bracers", from = "Crafting", bonus = "13751:12497:13836:12384:8791:8960:1808" },
-      { slot = "Hands", itemID = 271484, name = "Hexing Grips of the Ophidian Oracle", from = "Tier Set", bonus = "12854" },
+      { slot = "Hands", itemID = 271484, name = "Hexing Grips of the Ophidian Oracle", from = "Tier Set/The Unbinding of Kith'ix", bonus = "12854" },
       { slot = "Waist", itemID = 268254, name = "Serpentine Mixing Belt", from = "Vashnik the Malignant", bonus = "12854" },
       { slot = "Legs", itemID = 271482, name = "Leggings of the Ophidian Oracle", from = "Tier Set", bonus = "13848" },
       { slot = "Feet", itemID = 244577, name = "Farstrider's Razor Talons", from = "Crafting", bonus = "13751:12497:13836:8795:12384" },
       { slot = "Ring", itemID = 268249, name = "Vile Alchemist's Band", from = "Vashnik the Malignant", bonus = "12854" },
       { slot = "Ring", itemID = 252258, name = "Sickening Signet of Atroxus", from = "Voidscar Arena", bonus = "12854" },
-      { slot = "Trinket", itemID = 270164, name = "Gebbo's Bottomless Bag", from = "The Lost Explorers", bonus = "12854" },
+      { slot = "Trinket", itemID = 281215, name = "Twisted Horror's Tendril", from = "The Unbinding of Kith'ix" },
       { slot = "Trinket", itemID = 273796, name = "Vile Vial of Volatile Venom", from = "Altar of Fangs", bonus = "12854" },
     }},
   },
@@ -529,23 +533,23 @@ ns.GuideStore:RegisterBiS(262, {
 
 -- SHAMAN 263 (enhancement-shaman)
 ns.GuideStore:RegisterBiS(263, {
-  source = "Gear guide, updated 2026/08/24",
-  patch = "12.1",
+  source = "Gear guide, updated 2026/10/13",
+  patch = "12.1.5",
   lists = {
     { title = "Guide", list = {
       { slot = "Weapon", itemID = 268209, name = "Aman'muso, Warlord's Vengeance", from = "The Coiled Altar", bonus = "13848" },
       { slot = "Off-hand", itemID = 237850, name = "Farstrider's Chopper", from = "", bonus = "13751:12497:13836:13771:8793" },
-      { slot = "Head", itemID = 271483, name = "Serpent Crown of the Ophidian Oracle", from = "Catalyst – Voidscar Arena", bonus = "12854" },
+      { slot = "Head", itemID = 271483, name = "Serpent Crown of the Ophidian Oracle", from = "Twin Fangs", bonus = "12854" },
       { slot = "Neck", itemID = 268265, name = "Aqirbane Reliquary", from = "Ula'tek", bonus = "13848" },
       { slot = "Shoulder", itemID = 271481, name = "Hissing Mantle of the Ophidian Oracle", from = "Catalyst – The Coiled Altar", bonus = "13848" },
       { slot = "Back", itemID = 268253, name = "Silken Voodoo Drape", from = "The Coiled Altar", bonus = "13848" },
       { slot = "Chest", itemID = 271486, name = "Fanged Raiment of the Ophidian Oracle", from = "Catalyst – Ula'tek", bonus = "13708:13848" },
       { slot = "Wrist", itemID = 244584, name = "Farstrider's Plated Bracers", from = "", bonus = "13751:12497:13836:12384:8791:8960:1808" },
-      { slot = "Hands", itemID = 271484, name = "Hexing Grips of the Ophidian Oracle", from = "Token – Entombed Sentinels", bonus = "12854" },
+      { slot = "Hands", itemID = 271484, name = "Hexing Grips of the Ophidian Oracle", from = "Catalyst – Kith'ix", bonus = "12854" },
       { slot = "Waist", itemID = 268254, name = "Serpentine Mixing Belt", from = "Vashnik", bonus = "12854" },
       { slot = "Legs", itemID = 271482, name = "Leggings of the Ophidian Oracle", from = "Catalyst – The Coiled Altar", bonus = "13848" },
       { slot = "Feet", itemID = 268258, name = "Boots of the Reckless Wayfarer", from = "The Lost Explorers", bonus = "12854" },
-      { slot = "Ring", itemID = 273792, name = "Band of the Amani Warlord", from = "Altar of Fangs", bonus = "12854" },
+      { slot = "Ring", itemID = 281029, name = "Band of the Swarmcaller", from = "Kith'ix" },
       { slot = "Ring", itemID = 268252, name = "Apex Brute's Claw Ring", from = "Sszorak", bonus = "12854" },
       { slot = "Trinket", itemID = 270175, name = "Voracious Heart of Ula'tek", from = "Ula'tek", bonus = "13848" },
       { slot = "Trinket", itemID = 270173, name = "Zul'jin's Guillotine Technique", from = "The Coiled Altar", bonus = "13848" },
@@ -555,8 +559,8 @@ ns.GuideStore:RegisterBiS(263, {
 
 -- SHAMAN 264 (restoration-shaman)
 ns.GuideStore:RegisterBiS(264, {
-  source = "Gear guide, updated 2026/08/26",
-  patch = "12.1",
+  source = "Gear guide, updated 2026/10/13",
+  patch = "12.1.5",
   lists = {
     { title = "Guide", list = {
       { slot = "Head", itemID = 271483, name = "Serpent Crown of the Ophidian Oracle", from = "Raid / Vault", bonus = "12854" },
@@ -572,7 +576,7 @@ ns.GuideStore:RegisterBiS(264, {
       { slot = "Ring", itemID = 268252, name = "Apex Brute's Claw Ring", from = "Sszorak (Raid)", bonus = "12854" },
       { slot = "Ring", itemID = 251148, name = "Pilfered Precious Band", from = "Den of Nalorakk", bonus = "12854" },
       { slot = "Trinket", itemID = 270162, name = "Soulcoiler Ritual Vessel", from = "Nek'zali the Soulcoiler (Raid)", bonus = "12854" },
-      { slot = "Trinket", itemID = 270167, name = "Wavecaller's Seastone", from = "Nymrissa Wavebinder (Raid)", bonus = "12854" },
+      { slot = "Trinket", itemID = 281215, name = "Twisted Horror's Tendril", from = "Kith'ix (Raid)" },
       { slot = "Weapon", itemID = 271092, name = "Jan'thrazet, the Soul Fang", from = "Ula'tek (Raid)", bonus = "13848" },
       { slot = "Off-hand", itemID = 268196, name = "Venom-Slashed Scuteward", from = "The Lost Explorers (Raid)", bonus = "12854" },
     }},
@@ -581,8 +585,8 @@ ns.GuideStore:RegisterBiS(264, {
 
 -- MAGE 62 (arcane-mage)
 ns.GuideStore:RegisterBiS(62, {
-  source = "Gear guide, updated 2026/09/26",
-  patch = "12.1",
+  source = "Gear guide, updated 2026/10/13",
+  patch = "12.1.5",
   lists = {
     { title = "Guide", list = {
       { slot = "Weapon", itemID = 271092, name = "Jan'thrazet, the Soul Fang", from = "Ula'tek", bonus = "13848" },
@@ -607,8 +611,8 @@ ns.GuideStore:RegisterBiS(62, {
 
 -- MAGE 63 (fire-mage)
 ns.GuideStore:RegisterBiS(63, {
-  source = "Gear guide, updated 2026/08/24",
-  patch = "12.1",
+  source = "Gear guide, updated 2026/10/13",
+  patch = "12.1.5",
   lists = {
     { title = "Guide", list = {
       { slot = "Weapon", itemID = 271092, name = "Jan'thrazet, the Soul Fang", from = "Ula'tek", bonus = "13848" },
@@ -633,8 +637,8 @@ ns.GuideStore:RegisterBiS(63, {
 
 -- MAGE 64 (frost-mage)
 ns.GuideStore:RegisterBiS(64, {
-  source = "Gear guide, updated 2026/08/18",
-  patch = "12.1",
+  source = "Gear guide, updated 2026/10/13",
+  patch = "12.1.5",
   lists = {
     { title = "Guide", list = {
       { slot = "Weapon", itemID = 271092, name = "Jan'thrazet, the Soul Fang", from = "Ula'tek", bonus = "13848" },
@@ -649,18 +653,18 @@ ns.GuideStore:RegisterBiS(64, {
       { slot = "Waist", itemID = 239649, name = "Martyr's Waistwrap", from = "Crafting/Misc", bonus = "12497" },
       { slot = "Legs", itemID = 271563, name = "Primal Leywarden's Tailored Legwraps", from = "Tier Set", bonus = "12854" },
       { slot = "Feet", itemID = 268255, name = "Cackling Soultreads", from = "The Coiled Altar", bonus = "13848" },
-      { slot = "Ring", itemID = 268249, name = "Vile Alchemist's Band", from = "Vashnik the Malignant", bonus = "12854" },
-      { slot = "Ring", itemID = 158366, name = "Charged Sandstone Band", from = "Temple of Sethraliss", bonus = "12854" },
+      { slot = "Ring", itemID = 281029, name = "Band of the Swarmcaller", from = "Kith'ix" },
+      { slot = "Ring", itemID = 268252, name = "Apex Brute's Claw Ring", from = "Sszorak", bonus = "12854" },
       { slot = "Trinket", itemID = 270164, name = "Gebbo's Bottomless Bag", from = "The Lost Explorers", bonus = "12854" },
-      { slot = "Trinket", itemID = 270167, name = "Wavecaller's Seastone", from = "Nymrissa Wavecaller", bonus = "12854" },
+      { slot = "Trinket", itemID = 281215, name = "Twisted Horror's Tendril", from = "Kith'ix" },
     }},
   },
 })
 
 -- WARLOCK 265 (affliction-warlock)
 ns.GuideStore:RegisterBiS(265, {
-  source = "Gear guide, updated 2026/08/23",
-  patch = "12.1",
+  source = "Gear guide, updated 2026/10/13",
+  patch = "12.1.5",
   lists = {
     { title = "Guide", list = {
       { slot = "Weapon", itemID = 271092, name = "Jan'thrazet, the Soul Fang", from = "Ula'tek", bonus = "13848" },
@@ -676,7 +680,7 @@ ns.GuideStore:RegisterBiS(265, {
       { slot = "Legs", itemID = 271545, name = "Damned Necrolyte's Leg Bindings", from = "Sszorak", bonus = "12854" },
       { slot = "Feet", itemID = 268255, name = "Cackling Soultreads", from = "The Coiled Altar", bonus = "13848" },
       { slot = "Ring", itemID = 268252, name = "Apex Brute's Claw Ring", from = "Sszorak", bonus = "12854" },
-      { slot = "Ring", itemID = 273792, name = "Band of the Amani Warlord", from = "The Coiled Altar", bonus = "12854" },
+      { slot = "Ring", itemID = 281029, name = "Band of the Swarmcaller", from = "Kith'Ix" },
       { slot = "Trinket", itemID = 270164, name = "Gebbo's Bottomless Bag", from = "The Lost Explorers", bonus = "12854" },
       { slot = "Trinket", itemID = 273649, name = "Stormbound Emblem of Dazar", from = "", bonus = "12854" },
     }},
@@ -685,34 +689,34 @@ ns.GuideStore:RegisterBiS(265, {
 
 -- WARLOCK 266 (demonology-warlock)
 ns.GuideStore:RegisterBiS(266, {
-  source = "Gear guide, updated 2026/09/08",
-  patch = "12.1",
+  source = "Gear guide, updated 2026/10/13",
+  patch = "12.1.5",
   lists = {
     { title = "Guide", list = {
       { slot = "Weapon", itemID = 271092, name = "Jan'thrazet, the Soul Fang", from = "Ula'tek", bonus = "13848" },
-      { slot = "Off-hand", itemID = 268197, name = "Spine of the Hissing Abyss", from = "Entombed Sentinels", bonus = "12854" },
+      { slot = "Off-hand", itemID = 245769, name = "Aln'hara Lantern", from = "Crafting", bonus = "13751:12497:13836:1686" },
       { slot = "Head", itemID = 271874, name = "Venomkeeper's Horrific Cowl", from = "Ula'tek", bonus = "13848" },
       { slot = "Neck", itemID = 268265, name = "Aqirbane Reliquary", from = "Ula'tek", bonus = "13848" },
-      { slot = "Shoulder", itemID = 271544, name = "Spires of the Damned Necrolyte", from = "The Lost Explorers", bonus = "12854" },
+      { slot = "Shoulder", itemID = 271544, name = "Spires of the Damned Necrolyte", from = "Venomous Abyss Trash Drop", bonus = "12854" },
       { slot = "Back", itemID = 268253, name = "Silken Voodoo Drape", from = "The Coiled Altar", bonus = "13848" },
       { slot = "Chest", itemID = 271549, name = "Damned Necrolyte's Rattling Robes", from = "Vashnik the Malignant", bonus = "12854" },
-      { slot = "Wrist", itemID = 239648, name = "Martyr's Bindings", from = "Crafting", bonus = "12497" },
+      { slot = "Wrist", itemID = 271542, name = "Damned Necrolyte's Shackles", from = "Entombed Sentinels" },
       { slot = "Hands", itemID = 271547, name = "Damned Necrolyte's Charred Grasps", from = "Entombed Sentinels", bonus = "13848" },
       { slot = "Waist", itemID = 239649, name = "Martyr's Waistwrap", from = "Crafting", bonus = "12497" },
-      { slot = "Legs", itemID = 271545, name = "Damned Necrolyte's Leg Bindings", from = "Sszorak", bonus = "12854" },
+      { slot = "Legs", itemID = 271545, name = "Damned Necrolyte's Leg Bindings", from = "Kith'ix", bonus = "12854" },
       { slot = "Feet", itemID = 268255, name = "Cackling Soultreads", from = "The Coiled Altar", bonus = "13848" },
       { slot = "Ring", itemID = 268252, name = "Apex Brute's Claw Ring", from = "Sszorak", bonus = "12854" },
-      { slot = "Ring", itemID = 158366, name = "Charged Sandstone Band", from = "", bonus = "12854" },
-      { slot = "Trinket", itemID = 270164, name = "Gebbo's Bottomless Bag", from = "The Lost Explorers", bonus = "12854" },
-      { slot = "Trinket", itemID = 273796, name = "Vile Vial of Volatile Venom", from = "", bonus = "12854" },
+      { slot = "Ring", itemID = 281029, name = "Band of the Swarmcaller", from = "Kith'ix" },
+      { slot = "Trinket", itemID = 281215, name = "Twisted Horror's Tendril", from = "Kith'ix" },
+      { slot = "Trinket", itemID = 273649, name = "Stormbound Emblem of Dazar", from = "", bonus = "12854" },
     }},
   },
 })
 
 -- WARLOCK 267 (destruction-warlock)
 ns.GuideStore:RegisterBiS(267, {
-  source = "Gear guide, updated 2026/08/18",
-  patch = "12.1",
+  source = "Gear guide, updated 2026/10/13",
+  patch = "12.1.5",
   lists = {
     { title = "Guide", list = {
       { slot = "Weapon", itemID = 271092, name = "Jan'thrazet, the Soul Fang", from = "Ula'tek", bonus = "13848" },
@@ -723,27 +727,27 @@ ns.GuideStore:RegisterBiS(267, {
       { slot = "Back", itemID = 268253, name = "Silken Voodoo Drape", from = "The Coiled Altar", bonus = "13848" },
       { slot = "Chest", itemID = 271549, name = "Damned Necrolyte's Rattling Robes", from = "Vashnik the Malignant", bonus = "12854" },
       { slot = "Wrist", itemID = 239648, name = "Martyr's Bindings", from = "Crafting", bonus = "12497" },
-      { slot = "Hands", itemID = 271547, name = "Damned Necrolyte's Charred Grasps", from = "Entombed Sentinels", bonus = "13848" },
+      { slot = "Hands", itemID = 271547, name = "Damned Necrolyte's Charred Grasps", from = "The Coiled Altar + Catalyst", bonus = "13848" },
       { slot = "Waist", itemID = 239649, name = "Martyr's Waistwrap", from = "Crafting", bonus = "12497" },
-      { slot = "Legs", itemID = 271545, name = "Damned Necrolyte's Leg Bindings", from = "Sszorak", bonus = "12854" },
+      { slot = "Legs", itemID = 281235, name = "Voidweaver's Leggings", from = "Kith'Ix" },
       { slot = "Feet", itemID = 268255, name = "Cackling Soultreads", from = "The Coiled Altar", bonus = "13848" },
       { slot = "Ring", itemID = 268252, name = "Apex Brute's Claw Ring", from = "Sszorak", bonus = "12854" },
-      { slot = "Ring", itemID = 273792, name = "Band of the Amani Warlord", from = "The Coiled Altar", bonus = "12854" },
+      { slot = "Ring", itemID = 281029, name = "Band of the Swarmcaller", from = "Kith'Ix" },
       { slot = "Trinket", itemID = 270164, name = "Gebbo's Bottomless Bag", from = "The Lost Explorers", bonus = "12854" },
-      { slot = "Trinket", itemID = 270167, name = "Wavecaller's Seastone", from = "Nymrissa Wavecaller", bonus = "12854" },
+      { slot = "Trinket", itemID = 280835, name = "Sigil of the Impending Eclipse", from = "Kith'Ix" },
     }},
   },
 })
 
 -- MONK 268 (brewmaster-monk)
 ns.GuideStore:RegisterBiS(268, {
-  source = "Gear guide, updated 2026/08/27",
-  patch = "12.1",
+  source = "Gear guide, updated 2026/10/13",
+  patch = "12.1.5",
   lists = {
     { title = "Guide", list = {
       { slot = "Weapon", itemID = 268215, name = "Abyssal Broodfiend's Bardiche", from = "2h · Ula'tek", bonus = "13848:13846" },
       { slot = "Weapon", itemID = 268209, name = "Aman'muso, Warlord's Vengeance", from = "1h · The Coiled Altar Sszorak", bonus = "13848" },
-      { slot = "Head", itemID = 271519, name = "Monkey King's Unyielding Visage", from = "Catalyst / Raid / Vault", bonus = "13848:13847:10835" },
+      { slot = "Head", itemID = 271519, name = "Monkey King's Unyielding Visage", from = "Catalyst / Mythic+ / Vault", bonus = "13848:13847:10835" },
       { slot = "Neck", itemID = 268265, name = "Aqirbane Reliquary", from = "Ula'tek", bonus = "13848" },
       { slot = "Shoulder", itemID = 271517, name = "Tassels of the Monkey King", from = "Catalyst / Mythic+ / Vault", bonus = "12854" },
       { slot = "Back", itemID = 268253, name = "Silken Voodoo Drape", from = "The Coiled Altar", bonus = "13848" },
@@ -752,11 +756,11 @@ ns.GuideStore:RegisterBiS(268, {
       { slot = "Hands", itemID = 271520, name = "Monkey King's Fighting Fists", from = "Catalyst / Mythic+ / Vault", bonus = "12854" },
       { slot = "Waist", itemID = 268256, name = "Sash of the Forlorn Vessel", from = "The Coiled Altar", bonus = "12854" },
       { slot = "Legs", itemID = 271518, name = "Pantaloons of the Monkey King", from = "Catalyst / Raid / Vault", bonus = "13848" },
-      { slot = "Feet", itemID = 159304, name = "Goldfeather Boots", from = "Kings' Rest", bonus = "12854" },
+      { slot = "Feet", itemID = 272240, name = "Miststalker's Striders", from = "(Labyrinth of Kindo'jan)" },
       { slot = "Ring", itemID = 251148, name = "Pilfered Precious Band", from = "Den of Nalorakk", bonus = "12854" },
       { slot = "Ring", itemID = 251513, name = "Loa Worshiper's Band", from = "Jewelcrafting", bonus = "13751:12497:13836" },
       { slot = "Trinket", itemID = 270175, name = "Voracious Heart of Ula'tek", from = "Damage · Ula'tek", bonus = "13848" },
-      { slot = "Trinket", itemID = 270173, name = "Zul'jin's Guillotine Technique", from = "Damage · The Coiled Altar", bonus = "13848" },
+      { slot = "Trinket", itemID = 281215, name = "Twisted Horror's Tendril", from = "Damage · Kith'ix" },
       { slot = "Trinket", itemID = 270160, name = "First Mate's Shellward", from = "Defense · The Lost Explorers" },
       { slot = "Trinket", itemID = 159617, name = "Lustrous Golden Plumage", from = "Defense · Kings' Rest", bonus = "12854" },
     }},
@@ -765,15 +769,15 @@ ns.GuideStore:RegisterBiS(268, {
 
 -- MONK 270 (mistweaver-monk)
 ns.GuideStore:RegisterBiS(270, {
-  source = "Gear guide, updated 2026/10/02",
-  patch = "12.1",
+  source = "Gear guide, updated 2026/10/13",
+  patch = "12.1.5",
   lists = {
     { title = "Guide (Raid)", list = {
       { slot = "Head", itemID = 271519, name = "Monkey King's Unyielding Visage", from = "Ula'tek & Catalyst", bonus = "13848:13847:10835" },
       { slot = "Neck", itemID = 268265, name = "Aqirbane Reliquary", from = "Ula'tek", bonus = "13848" },
       { slot = "Shoulder", itemID = 271517, name = "Tassels of the Monkey King", from = "Den of Nalorakk & Catalyst", bonus = "12854" },
       { slot = "Back", itemID = 193763, name = "Fireproof Drape", from = "Ruby Life Pools", bonus = "12854" },
-      { slot = "Chest", itemID = 271522, name = "Battle Gi of the Monkey King", from = "Voidscar Arena & Catalyst", bonus = "12854" },
+      { slot = "Chest", itemID = 271522, name = "Battle Gi of the Monkey King", from = "Kith'ix & Catalyst", bonus = "12854" },
       { slot = "Wrist", itemID = 251135, name = "Fury-fletched Armlets", from = "Murder Row", bonus = "12854" },
       { slot = "Hands", itemID = 271520, name = "Monkey King's Fighting Fists", from = "Murder Row & Catalyst", bonus = "12854" },
       { slot = "Waist", itemID = 251189, name = "Rootwalker Harness", from = "The Blinding Vale", bonus = "12854:10835" },
@@ -783,8 +787,7 @@ ns.GuideStore:RegisterBiS(270, {
       { slot = "Ring", itemID = 159459, name = "Ritual Binder's Ring", from = "Kings' Rest", bonus = "4786:12854" },
       { slot = "Trinket", itemID = 270167, name = "Wavecaller's Seastone", from = "Nymrissa Wavebinder", bonus = "12854" },
       { slot = "Trinket", itemID = 270162, name = "Soulcoiler Ritual Vessel", from = "Nek'zali the Soulcoiler", bonus = "12854" },
-      { slot = "Weapon", itemID = 268211, name = "Baleful Hexblade", from = "The Coiled Altar", bonus = "13848" },
-      { slot = "Off-hand", itemID = 159667, name = "Vessel of Last Rites", from = "Kings' Rest", bonus = "12854" },
+      { slot = "Weapon", itemID = 251123, name = "Nibbles' Training Rod", from = "Murder Row" },
     }},
     { title = "Guide (Mythic+)", list = {
       { slot = "Head", itemID = 271519, name = "Monkey King's Unyielding Visage", from = "Ula'tek & Catalyst", bonus = "13848:13847:10835" },
@@ -799,7 +802,7 @@ ns.GuideStore:RegisterBiS(270, {
       { slot = "Feet", itemID = 251153, name = "Arctic Explorer's Legwraps", from = "Den of Nalorakk", bonus = "12854" },
       { slot = "Ring", itemID = 268266, name = "Alluring Bubbleband", from = "Nymrissa Wavebinder", bonus = "12854" },
       { slot = "Ring", itemID = 252258, name = "Sickening Signet of Atroxus", from = "Voidscar Arena", bonus = "12854" },
-      { slot = "Trinket", itemID = 270167, name = "Wavecaller's Seastone", from = "Nymrissa Wavebinder", bonus = "12854" },
+      { slot = "Trinket", itemID = 281215, name = "Twisted Horror's Tendril", from = "Kith'ix" },
       { slot = "Trinket", itemID = 270162, name = "Soulcoiler Ritual Vessel", from = "Nek'zali the Soulcoiler", bonus = "12854" },
       { slot = "Weapon", itemID = 268211, name = "Baleful Hexblade", from = "The Coiled Altar", bonus = "13848" },
       { slot = "Off-hand", itemID = 268197, name = "Spine of the Hissing Abyss", from = "Entomed Sentinels", bonus = "12854" },
@@ -809,23 +812,23 @@ ns.GuideStore:RegisterBiS(270, {
 
 -- MONK 269 (windwalker-monk)
 ns.GuideStore:RegisterBiS(269, {
-  source = "Gear guide, updated 2026/08/25",
-  patch = "12.1",
+  source = "Gear guide, updated 2026/10/13",
+  patch = "12.1.5",
   lists = {
     { title = "Guide", list = {
       { slot = "Weapon", itemID = 268215, name = "Abyssal Broodfiend's Bardiche", from = "Ula'tek", bonus = "13848:13846" },
       { slot = "Head", itemID = 271875, name = "Gaze of the Coiled Watcher", from = "Ula'tek", bonus = "13847:13848" },
       { slot = "Neck", itemID = 268265, name = "Aqirbane Reliquary", from = "Ula'tek", bonus = "13848" },
-      { slot = "Shoulder", itemID = 271517, name = "Tassels of the Monkey King", from = "Tier Set", bonus = "12854" },
+      { slot = "Shoulder", itemID = 271517, name = "Tassels of the Monkey King", from = "The Lost Explorers", bonus = "12854" },
       { slot = "Back", itemID = 268253, name = "Silken Voodoo Drape", from = "The Coiled Altar", bonus = "13848" },
-      { slot = "Chest", itemID = 268235, name = "Vestment of the Awakening", from = "Nek'zali the Soulcoiler" },
+      { slot = "Chest", itemID = 281236, name = "Chestwrap of Palpable Terror", from = "Kith'ix" },
       { slot = "Wrist", itemID = 244576, name = "Silvermoon Agent's Deflectors", from = "Crafting", bonus = "13751:12497:13836:8790" },
       { slot = "Hands", itemID = 251124, name = "Gauntlets of Fevered Defense", from = "Murder Row" },
       { slot = "Waist", itemID = 268256, name = "Sash of the Forlorn Vessel", from = "The Coiled Altar", bonus = "12854" },
       { slot = "Legs", itemID = 268225, name = "Coiled Hex Legguards", from = "The Coiled Altar" },
       { slot = "Feet", itemID = 244569, name = "Silvermoon Agent's Sneakers", from = "Crafting", bonus = "13751:12497:13836:8790" },
       { slot = "Ring", itemID = 158366, name = "Charged Sandstone Band", from = "Temple of Sethraliss", bonus = "12854" },
-      { slot = "Ring", itemID = 252258, name = "Sickening Signet of Atroxus", from = "Voidscar Arena", bonus = "12854" },
+      { slot = "Ring", itemID = 281029, name = "Band of the Swarmcaller", from = "Kith'ix" },
       { slot = "Trinket", itemID = 270175, name = "Voracious Heart of Ula'tek", from = "Ula'tek", bonus = "13848" },
       { slot = "Trinket", itemID = 270173, name = "Zul'jin's Guillotine Technique", from = "The Coiled Altar", bonus = "13848" },
     }},
@@ -834,8 +837,8 @@ ns.GuideStore:RegisterBiS(269, {
 
 -- DRUID 102 (balance-druid)
 ns.GuideStore:RegisterBiS(102, {
-  source = "Gear guide, updated 2026/09/14",
-  patch = "12.1",
+  source = "Gear guide, updated 2026/10/13",
+  patch = "12.1.5",
   lists = {
     { title = "Guide", list = {
       { slot = "Weapon", itemID = 271092, name = "Jan'thrazet, the Soul Fang", from = "Ula'tek", bonus = "13848" },
@@ -844,15 +847,15 @@ ns.GuideStore:RegisterBiS(102, {
       { slot = "Neck", itemID = 268265, name = "Aqirbane Reliquary", from = "Ula'tek", bonus = "13848" },
       { slot = "Shoulder", itemID = 268246, name = "Frothing Venom Spaulders", from = "Vashnik the Malignant", bonus = "12854" },
       { slot = "Back", itemID = 268253, name = "Silken Voodoo Drape", from = "The Coiled Altar", bonus = "13848" },
-      { slot = "Chest", itemID = 251159, name = "War Trial Vestments", from = "Den of Nalorakk" },
+      { slot = "Chest", itemID = 281236, name = "Chestwrap of Palpable Terror", from = "Kith'ix" },
       { slot = "Wrist", itemID = 244576, name = "Silvermoon Agent's Deflectors", from = "Crafting/Misc", bonus = "13751:12497:13836:8790" },
       { slot = "Hands", itemID = 268234, name = "Ruthless Slaughtergrips", from = "Sszorak" },
       { slot = "Waist", itemID = 268256, name = "Sash of the Forlorn Vessel", from = "The Coiled Altar", bonus = "12854" },
       { slot = "Legs", itemID = 268225, name = "Coiled Hex Legguards", from = "The Coiled Altar" },
-      { slot = "Feet", itemID = 268261, name = "Bespittled Slitherslippers", from = "The Twin Fangs", bonus = "12854" },
-      { slot = "Ring", itemID = 158366, name = "Charged Sandstone Band", from = "Temple of Sethraliss", bonus = "12854" },
+      { slot = "Feet", itemID = 159327, name = "Sand-Shined Snakeskin Sandals", from = "Temple of Sethraliss", bonus = "12854" },
+      { slot = "Ring", itemID = 281029, name = "Band of the Swarmcaller", from = "Kith'ix" },
       { slot = "Ring", itemID = 268249, name = "Vile Alchemist's Band", from = "Vashnik the Malignant", bonus = "12854" },
-      { slot = "Trinket", itemID = 270167, name = "Wavecaller's Seastone", from = "Nymrissa Wavecaller", bonus = "12854" },
+      { slot = "Trinket", itemID = 281215, name = "Twisted Horror's Tendril", from = "Kith'ix" },
       { slot = "Trinket", itemID = 273796, name = "Vile Vial of Volatile Venom", from = "Altar of Fangs", bonus = "12854" },
     }},
   },
@@ -860,8 +863,8 @@ ns.GuideStore:RegisterBiS(102, {
 
 -- DRUID 103 (feral-druid)
 ns.GuideStore:RegisterBiS(103, {
-  source = "Gear guide, updated 2026/08/12",
-  patch = "12.1",
+  source = "Gear guide, updated 2026/10/13",
+  patch = "12.1.5",
   lists = {
     { title = "Guide", list = {
       { slot = "Weapon", itemID = 268215, name = "Abyssal Broodfiend's Bardiche", from = "Ula'tek", bonus = "13848:13846" },
@@ -869,14 +872,14 @@ ns.GuideStore:RegisterBiS(103, {
       { slot = "Neck", itemID = 268265, name = "Aqirbane Reliquary", from = "Ula'tek", bonus = "13848" },
       { slot = "Shoulder", itemID = 271526, name = "Enigmatic Dreamwatcher's Plumage", from = "Catalyst", bonus = "12854" },
       { slot = "Back", itemID = 268253, name = "Silken Voodoo Drape", from = "The Coiled Altar", bonus = "13848" },
-      { slot = "Chest", itemID = 271531, name = "Enigmatic Dreamwatcher's Lunar Raiment", from = "Vashnik the Malignant", bonus = "12854" },
+      { slot = "Chest", itemID = 271531, name = "Enigmatic Dreamwatcher's Lunar Raiment", from = "Kith'ix", bonus = "12854" },
       { slot = "Wrist", itemID = 244576, name = "Silvermoon Agent's Deflectors", from = "Crafting/Misc", bonus = "13751:12497:13836:8790" },
       { slot = "Hands", itemID = 244575, name = "Silvermoon Agent's Handwraps", from = "Crafting/Misc" },
       { slot = "Waist", itemID = 268256, name = "Sash of the Forlorn Vessel", from = "The Coiled Altar", bonus = "12854" },
       { slot = "Legs", itemID = 271527, name = "Enigmatic Dreamwatcher's Leggings", from = "Catalyst", bonus = "13848" },
       { slot = "Feet", itemID = 268261, name = "Bespittled Slitherslippers", from = "The Twin Fangs", bonus = "12854" },
       { slot = "Ring", itemID = 268249, name = "Vile Alchemist's Band", from = "Vashnik the Malignant", bonus = "12854" },
-      { slot = "Ring", itemID = 252258, name = "Sickening Signet of Atroxus", from = "Voidscar Arena", bonus = "12854" },
+      { slot = "Ring", itemID = 281029, name = "Band of the Swarmcaller", from = "Kith'ix" },
       { slot = "Trinket", itemID = 270173, name = "Zul'jin's Guillotine Technique", from = "The Coiled Altar", bonus = "13848" },
       { slot = "Trinket", itemID = 270175, name = "Voracious Heart of Ula'tek", from = "Ula'tek", bonus = "13848" },
     }},
@@ -885,8 +888,8 @@ ns.GuideStore:RegisterBiS(103, {
 
 -- DRUID 104 (guardian-druid)
 ns.GuideStore:RegisterBiS(104, {
-  source = "Gear guide, updated 2026/08/30",
-  patch = "12.1",
+  source = "Gear guide, updated 2026/10/13",
+  patch = "12.1.5",
   lists = {
     { title = "Guide", list = {
       { slot = "Weapon", itemID = 268215, name = "Abyssal Broodfiend's Bardiche", from = "Ula'tek", bonus = "13848:13846" },
@@ -894,14 +897,14 @@ ns.GuideStore:RegisterBiS(104, {
       { slot = "Neck", itemID = 268265, name = "Aqirbane Reliquary", from = "Ula'tek", bonus = "13848" },
       { slot = "Shoulder", itemID = 271526, name = "Enigmatic Dreamwatcher's Plumage", from = "Tier Set", bonus = "12854" },
       { slot = "Back", itemID = 268253, name = "Silken Voodoo Drape", from = "The Coiled Altar", bonus = "13848" },
-      { slot = "Chest", itemID = 271531, name = "Enigmatic Dreamwatcher's Lunar Raiment", from = "Tier Set", bonus = "12854" },
+      { slot = "Chest", itemID = 281236, name = "Chestwrap of Palpable Terror", from = "Kith'ix" },
       { slot = "Wrist", itemID = 268240, name = "Restless Spirit Shackles", from = "Nek'zali the Soulcoiler", bonus = "12854" },
       { slot = "Hands", itemID = 271529, name = "Enigmatic Dreamwatcher's Gauntlets", from = "Tier Set", bonus = "12854" },
       { slot = "Waist", itemID = 268256, name = "Sash of the Forlorn Vessel", from = "The Coiled Altar", bonus = "12854" },
       { slot = "Legs", itemID = 271527, name = "Enigmatic Dreamwatcher's Leggings", from = "Tier Set", bonus = "13848" },
       { slot = "Feet", itemID = 268261, name = "Bespittled Slitherslippers", from = "The Twin Fangs", bonus = "12854" },
       { slot = "Ring", itemID = 268252, name = "Apex Brute's Claw Ring", from = "Sszorak", bonus = "12854" },
-      { slot = "Ring", itemID = 268249, name = "Vile Alchemist's Band", from = "Vashnik the Malignant", bonus = "12854" },
+      { slot = "Ring", itemID = 281029, name = "Band of the Swarmcaller", from = "Kith'ix" },
       { slot = "Trinket", itemID = 270164, name = "Gebbo's Bottomless Bag", from = "The Lost Explorers", bonus = "12854" },
       { slot = "Trinket", itemID = 270173, name = "Zul'jin's Guillotine Technique", from = "The Coiled Altar", bonus = "13848" },
     }},
@@ -910,8 +913,8 @@ ns.GuideStore:RegisterBiS(104, {
 
 -- DRUID 105 (restoration-druid)
 ns.GuideStore:RegisterBiS(105, {
-  source = "Gear guide, updated 2026/09/22",
-  patch = "12.1",
+  source = "Gear guide, updated 2026/10/13",
+  patch = "12.1.5",
   lists = {
     { title = "Guide", list = {
       { slot = "Head", itemID = 271528, name = "Enigmatic Dreamwatcher's Somnolent Stare", from = "Ula'tek (Raid) & Catalyst", bonus = "13848" },
@@ -924,7 +927,7 @@ ns.GuideStore:RegisterBiS(105, {
       { slot = "Waist", itemID = 268256, name = "Sash of the Forlorn Vessel", from = "The Coiled Alter (Raid)", bonus = "12854" },
       { slot = "Legs", itemID = 271527, name = "Enigmatic Dreamwatcher's Leggings", from = "The Coiled Alter (Raid) & Catalyst", bonus = "13848" },
       { slot = "Feet", itemID = 244569, name = "Silvermoon Agent's Sneakers", from = "", bonus = "13751:12497:13836:8790" },
-      { slot = "Ring", itemID = 240949, name = "Masterwork Sin'dorei Band", from = "Jewelcrafting (Crafted)", bonus = "1221413836:13751:9627:13768:8960" },
+      { slot = "Ring", itemID = 281029, name = "Band of the Swarmcaller", from = "Kithix (Raid)" },
       { slot = "Ring", itemID = 252258, name = "Sickening Signet of Atroxus", from = "Voidscar Arena", bonus = "12854" },
       { slot = "Trinket", itemID = 270167, name = "Wavecaller's Seastone", from = "Nymrissa Wavebinder (Raid)", bonus = "12854" },
       { slot = "Trinket", itemID = 270162, name = "Soulcoiler Ritual Vessel", from = "Nek'zali the Soulcoiler (Raid)", bonus = "12854" },
@@ -953,17 +956,17 @@ ns.GuideStore:RegisterBiS(105, {
 
 -- DEMONHUNTER 577 (havoc-demon-hunter)
 ns.GuideStore:RegisterBiS(577, {
-  source = "Gear guide, updated 2026/08/28",
-  patch = "12.1",
+  source = "Gear guide, updated 2026/10/13",
+  patch = "12.1.5",
   lists = {
     { title = "Guide", list = {
       { slot = "Weapon", itemID = 268209, name = "Aman'muso, Warlord's Vengeance", from = "The Coiled Altar", bonus = "13848" },
       { slot = "Off-hand", itemID = 237840, name = "Spellbreaker's Warglaive", from = "Crafting/Misc", bonus = "13751:12497:13836:13771:8791" },
-      { slot = "Head", itemID = 271875, name = "Gaze of the Coiled Watcher", from = "Ula'tek", bonus = "13847:13848" },
+      { slot = "Head", itemID = 271537, name = "Abyssal Doomhound's Relentless Stare", from = "Ula'tek", bonus = "13848:13847" },
       { slot = "Neck", itemID = 268265, name = "Aqirbane Reliquary", from = "Ula'tek", bonus = "13848" },
       { slot = "Shoulder", itemID = 271535, name = "Abyssal Doomhound's Jaws", from = "Vashnik the Malignant", bonus = "12854" },
       { slot = "Back", itemID = 268253, name = "Silken Voodoo Drape", from = "The Coiled Altar", bonus = "13848" },
-      { slot = "Chest", itemID = 271540, name = "Abyssal Doomhound's Coreguard", from = "King's Rest", bonus = "12854" },
+      { slot = "Chest", itemID = 281236, name = "Chestwrap of Palpable Terror", from = "Kith'ix" },
       { slot = "Wrist", itemID = 244576, name = "Silvermoon Agent's Deflectors", from = "Crafting/Misc", bonus = "13751:12497:13836:8790" },
       { slot = "Hands", itemID = 271538, name = "Abyssal Doomhound's Studded Gauntlets", from = "Entombed Sentinels", bonus = "12854" },
       { slot = "Waist", itemID = 268256, name = "Sash of the Forlorn Vessel", from = "The Coiled Altar", bonus = "12854" },
@@ -979,8 +982,8 @@ ns.GuideStore:RegisterBiS(577, {
 
 -- DEMONHUNTER 581 (vengeance-demon-hunter)
 ns.GuideStore:RegisterBiS(581, {
-  source = "Gear guide, updated 2026/09/05",
-  patch = "12.1",
+  source = "Gear guide, updated 2026/10/13",
+  patch = "12.1.5",
   lists = {
     { title = "Guide", list = {
       { slot = "Weapon", itemID = 268209, name = "Aman'muso, Warlord's Vengeance", from = "The Coiled Altar", bonus = "13848" },
@@ -989,7 +992,7 @@ ns.GuideStore:RegisterBiS(581, {
       { slot = "Neck", itemID = 268265, name = "Aqirbane Reliquary", from = "Ula'tek", bonus = "13848" },
       { slot = "Shoulder", itemID = 271535, name = "Abyssal Doomhound's Jaws", from = "Voidscar Arena", bonus = "12854" },
       { slot = "Back", itemID = 268253, name = "Silken Voodoo Drape", from = "The Coiled Altar", bonus = "13848" },
-      { slot = "Chest", itemID = 271540, name = "Abyssal Doomhound's Coreguard", from = "Vashnik the Malignant", bonus = "12854" },
+      { slot = "Chest", itemID = 271540, name = "Abyssal Doomhound's Coreguard", from = "The Unbinding of Kith'ix", bonus = "12854" },
       { slot = "Wrist", itemID = 244576, name = "Silvermoon Agent's Deflectors", from = "Crafted", bonus = "13751:12497:13836:8790" },
       { slot = "Hands", itemID = 271538, name = "Abyssal Doomhound's Studded Gauntlets", from = "Murder Row", bonus = "12854" },
       { slot = "Waist", itemID = 268256, name = "Sash of the Forlorn Vessel", from = "The Coiled Altar", bonus = "12854" },
@@ -997,44 +1000,44 @@ ns.GuideStore:RegisterBiS(581, {
       { slot = "Feet", itemID = 251153, name = "Arctic Explorer's Legwraps", from = "Den of Nalorakk", bonus = "12854" },
       { slot = "Ring", itemID = 268252, name = "Apex Brute's Claw Ring", from = "Sszorak", bonus = "12854" },
       { slot = "Ring", itemID = 159459, name = "Ritual Binder's Ring", from = "King's Rest", bonus = "4786:12854" },
-      { slot = "Trinket", itemID = 270164, name = "Gebbo's Bottomless Bag", from = "The Lost Explorers", bonus = "12854" },
+      { slot = "Trinket", itemID = 281215, name = "Twisted Horror's Tendril", from = "The Unbinding of Kith'ix" },
       { slot = "Trinket", itemID = 270175, name = "Voracious Heart of Ula'tek", from = "Ula'tek", bonus = "13848" },
       { slot = "Trinket", itemID = 270173, name = "Zul'jin's Guillotine Technique", from = "Raw Damage · The Coiled Altar", bonus = "13848" },
+      { slot = "Trinket", itemID = 280617, name = "Lightbearer's Shield Fragment", from = "Group Defensive · The Unbinding of Kith'ix" },
     }},
   },
 })
 
 -- DEMONHUNTER 1480 (devourer-demon-hunter)
 ns.GuideStore:RegisterBiS(1480, {
-  source = "Gear guide, updated 2026/08/17",
-  patch = "12.1",
+  source = "Gear guide, updated 2026/10/13",
+  patch = "12.1.5",
   lists = {
     { title = "Guide", list = {
       { slot = "Weapon", itemID = 271092, name = "Jan'thrazet, the Soul Fang", from = "Ula'tek", bonus = "13848" },
       { slot = "Off-hand", itemID = 268211, name = "Baleful Hexblade", from = "The Coiled Altar", bonus = "13848" },
       { slot = "Head", itemID = 271537, name = "Abyssal Doomhound's Relentless Stare", from = "Ula'tek", bonus = "13848:13847" },
       { slot = "Neck", itemID = 268265, name = "Aqirbane Reliquary", from = "Ula'tek", bonus = "13848" },
-      { slot = "Shoulder", itemID = 271535, name = "Abyssal Doomhound's Jaws", from = "Voidscar Arena", bonus = "12854" },
+      { slot = "Shoulder", itemID = 271535, name = "Abyssal Doomhound's Jaws", from = "Vashnik the Malignant", bonus = "12854" },
       { slot = "Back", itemID = 268253, name = "Silken Voodoo Drape", from = "The Coiled Altar", bonus = "13848" },
-      { slot = "Chest", itemID = 271540, name = "Abyssal Doomhound's Coreguard", from = "Den of Nalorakk", bonus = "12854" },
+      { slot = "Chest", itemID = 271540, name = "Abyssal Doomhound's Coreguard", from = "General Kith'ix", bonus = "12854" },
       { slot = "Wrist", itemID = 244576, name = "Silvermoon Agent's Deflectors", from = "Crafting/Misc", bonus = "13751:12497:13836:8790" },
       { slot = "Hands", itemID = 271538, name = "Abyssal Doomhound's Studded Gauntlets", from = "Tier Set", bonus = "12854" },
       { slot = "Waist", itemID = 268256, name = "Sash of the Forlorn Vessel", from = "The Coiled Altar", bonus = "12854" },
       { slot = "Legs", itemID = 271536, name = "Abyssal Doomhound's Legwraps", from = "The Coiled Altar", bonus = "13848" },
       { slot = "Feet", itemID = 244569, name = "Silvermoon Agent's Sneakers", from = "Crafting/Misc", bonus = "13751:12497:13836:8790" },
-      { slot = "Ring", itemID = 268249, name = "Vile Alchemist's Band", from = "Vashnik the Malignant", bonus = "12854" },
+      { slot = "Ring", itemID = 281029, name = "Band of the Swarmcaller", from = "General Kith'ix" },
       { slot = "Ring", itemID = 158366, name = "Charged Sandstone Band", from = "Temple of Sethraliss", bonus = "12854" },
-      { slot = "Trinket", itemID = 250215, name = "Freightrunner's Flask", from = "Murder Row", bonus = "12854" },
-      { slot = "Trinket", itemID = 270167, name = "Wavecaller's Seastone", from = "Raid · Nymrissa Wavecaller", bonus = "12854" },
-      { slot = "Trinket", itemID = 270164, name = "Gebbo's Bottomless Bag", from = "M+ · The Lost Explorers", bonus = "12854" },
+      { slot = "Trinket", itemID = 281215, name = "Twisted Horror's Tendril", from = "General Kith'ix" },
+      { slot = "Trinket", itemID = 270164, name = "Gebbo's Bottomless Bag", from = "The Lost Explorers", bonus = "12854" },
     }},
   },
 })
 
 -- EVOKER 1467 (devastation-evoker)
 ns.GuideStore:RegisterBiS(1467, {
-  source = "Gear guide, updated 2026/08/31",
-  patch = "12.1",
+  source = "Gear guide, updated 2026/10/13",
+  patch = "12.1.5",
   lists = {
     { title = "Guide", list = {
       { slot = "Weapon", itemID = 271092, name = "Jan'thrazet, the Soul Fang", from = "Ula'tek", bonus = "13848" },
@@ -1052,15 +1055,15 @@ ns.GuideStore:RegisterBiS(1467, {
       { slot = "Ring", itemID = 268249, name = "Vile Alchemist's Band", from = "Vashnik the Malignant", bonus = "12854" },
       { slot = "Ring", itemID = 158366, name = "Charged Sandstone Band", from = "Temple of Sethraliss", bonus = "12854" },
       { slot = "Trinket", itemID = 270164, name = "Gebbo's Bottomless Bag", from = "The Lost Explorers", bonus = "12854" },
-      { slot = "Trinket", itemID = 270167, name = "Wavecaller's Seastone", from = "Nymrissa Wavecaller", bonus = "12854" },
+      { slot = "Trinket", itemID = 281215, name = "Twisted Horror's Tendril", from = "Kith'ix" },
     }},
   },
 })
 
 -- EVOKER 1468 (preservation-evoker)
 ns.GuideStore:RegisterBiS(1468, {
-  source = "Gear guide, updated 2026/08/16",
-  patch = "12.1",
+  source = "Gear guide, updated 2026/10/13",
+  patch = "12.1.5",
   lists = {
     { title = "Guide", list = {
       { slot = "Head", itemID = 271501, name = "Calamitous Echo's Magmashapers", from = "Temple of Sethraliss & Catalyst", bonus = "12854" },
@@ -1069,7 +1072,7 @@ ns.GuideStore:RegisterBiS(1468, {
       { slot = "Back", itemID = 268253, name = "Silken Voodoo Drape", from = "The Coiled Altar (Raid)", bonus = "13848" },
       { slot = "Chest", itemID = 271504, name = "Searing Caldera of Calamity", from = "Ula'tek (Raid) & Catalyst", bonus = "13848:13846" },
       { slot = "Wrist", itemID = 268217, name = "Rising Tide Wristguards", from = "Nymrissa Wavebinder (Raid)", bonus = "12854" },
-      { slot = "Hands", itemID = 271502, name = "Calamitous Echo's Ebon Greathorns", from = "Kings Rest & Catalyst", bonus = "12854" },
+      { slot = "Hands", itemID = 271502, name = "Calamitous Echo's Ebon Greathorns", from = "Kithix (Raid)", bonus = "12854" },
       { slot = "Waist", itemID = 268254, name = "Serpentine Mixing Belt", from = "Vashnik the Malignant (Raid)", bonus = "12854" },
       { slot = "Legs", itemID = 271500, name = "Earthen Pillars of Calamity", from = "The Coiled Altar (Raid) & Catalyst", bonus = "13848" },
       { slot = "Feet", itemID = 159388, name = "Sabatons of Coruscating Energy", from = "Temple of Sethraliss", bonus = "12854" },
@@ -1085,16 +1088,16 @@ ns.GuideStore:RegisterBiS(1468, {
 
 -- EVOKER 1473 (augmentation-evoker)
 ns.GuideStore:RegisterBiS(1473, {
-  source = "Gear guide, updated 2026/09/19",
-  patch = "12.1",
+  source = "Gear guide, updated 2026/10/13",
+  patch = "12.1.5",
   lists = {
     { title = "Guide", list = {
       { slot = "Weapon", itemID = 271092, name = "Jan'thrazet, the Soul Fang", from = "Ula'tek", bonus = "13848" },
       { slot = "Off-hand", itemID = 268197, name = "Spine of the Hissing Abyss", from = "Entombed Sentinels", bonus = "12854" },
       { slot = "Head", itemID = 271501, name = "Calamitous Echo's Magmashapers", from = "Tier Set", bonus = "12854" },
-      { slot = "Neck", itemID = 268265, name = "Aqirbane Reliquary", from = "Ula'tek", bonus = "13848" },
+      { slot = "Neck", itemID = 268251, name = "Amulet of the Twin Fangs", from = "Twin Fangs" },
       { slot = "Shoulder", itemID = 271499, name = "Calamitous Echo's Sundered Peaks", from = "Tier Set", bonus = "13848" },
-      { slot = "Back", itemID = 268253, name = "Silken Voodoo Drape", from = "The Coiled Altar", bonus = "13848" },
+      { slot = "Back", itemID = 268253, name = "Silken Voodoo Drape", from = "The Coiled Altart", bonus = "13848" },
       { slot = "Chest", itemID = 271504, name = "Searing Caldera of Calamity", from = "Tier Set", bonus = "13848:13846" },
       { slot = "Wrist", itemID = 244584, name = "Farstrider's Plated Bracers", from = "Crafting", bonus = "13751:12497:13836:12384:8791:8960:1808" },
       { slot = "Hands", itemID = 271502, name = "Calamitous Echo's Ebon Greathorns", from = "Tier Set", bonus = "12854" },
@@ -1102,9 +1105,9 @@ ns.GuideStore:RegisterBiS(1473, {
       { slot = "Legs", itemID = 271500, name = "Earthen Pillars of Calamity", from = "Tier Set", bonus = "13848" },
       { slot = "Feet", itemID = 268233, name = "Ferocious Scaleboots", from = "Sszorak", bonus = "12854" },
       { slot = "Ring", itemID = 268249, name = "Vile Alchemist's Band", from = "Vashnik the Malignant", bonus = "12854" },
-      { slot = "Ring", itemID = 158366, name = "Charged Sandstone Band", from = "Temple of Sethraliss", bonus = "12854" },
+      { slot = "Ring", itemID = 281029, name = "Band of the Swarmcaller", from = "Kith'ix" },
       { slot = "Trinket", itemID = 270168, name = "Font of Venomous Rage", from = "Ula'tek", bonus = "13848" },
-      { slot = "Trinket", itemID = 250224, name = "Mindpiercer's Sigil", from = "Voidscar Arena", bonus = "12854" },
+      { slot = "Trinket", itemID = 281215, name = "Twisted Horror's Tendril", from = "Kith'ix" },
     }},
   },
 })

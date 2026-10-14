@@ -53,14 +53,20 @@ def neutral_source(text, kind):
     return re.sub(r'source = "([^"]*)"', fix, text)
 
 
+# A list's rows up to its own closing line. Line by line, so an EMPTY list
+# (Icy Veins behind a Cloudflare check returns no rows) can't stretch the
+# match over the next list - a `.*?` across newlines deleted the guide list.
+LIST_BODY = r"(?:(?!    \}\},\n)[^\n]*\n)*?    \}\},\n"
+
+
 def strip_bis(src):
-    src = re.sub(r'    \{ title = "Icy Veins[^"]*", list = \{\n.*?\n    \}\},\n', "", src, flags=re.S)
+    src = re.sub(r'    \{ title = "Icy Veins[^"]*", list = \{\n' + LIST_BODY, "", src)
     src = src.replace('title = "Wowhead', 'title = "Guide')
     return neutral_source(src, "gear")
 
 
 def strip_trinkets(src):
-    src = re.sub(r'    \{ title = "Icy Veins", fightStyle = "icyveins", list = \{\n.*?\n    \}\},\n', "", src, flags=re.S)
+    src = re.sub(r'    \{ title = "Icy Veins", fightStyle = "icyveins", list = \{\n' + LIST_BODY, "", src)
     src = src.replace('{ title = "Wowhead", fightStyle = "wowhead", list = {', '{ title = "Guide", fightStyle = "guide", list = {')
     src = re.sub(r' siteTier = "[^"]*",', "", src)
     src = src.replace("The Icy Veins ranking is the only list here", "The guide ranking is the only list here")

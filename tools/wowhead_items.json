@@ -424,6 +424,11 @@
 "quality": 4,
 "slot": "Trinket"
 },
+"251123": {
+"name": "Nibbles' Training Rod",
+"quality": 4,
+"slot": "Weapon"
+},
 "251124": {
 "name": "Gauntlets of Fevered Defense",
 "quality": 4,
@@ -853,6 +858,11 @@
 "name": "Restless Spirit Shackles",
 "quality": 4,
 "slot": "Wrist"
+},
+"268245": {
+"name": "Entombed Cultist's Sabatons",
+"quality": 4,
+"slot": "Feet"
 },
 "268246": {
 "name": "Frothing Venom Spaulders",
@@ -1309,6 +1319,11 @@
 "quality": 4,
 "slot": "Chest"
 },
+"271542": {
+"name": "Damned Necrolyte's Shackles",
+"quality": 4,
+"slot": "Wrist"
+},
 "271544": {
 "name": "Spires of the Damned Necrolyte",
 "quality": 4,
@@ -1408,6 +1423,11 @@
 "name": "Chausses of Unbound Rancor",
 "quality": 4,
 "slot": "Legs"
+},
+"272240": {
+"name": "Miststalker's Striders",
+"quality": 4,
+"slot": "Feet"
 },
 "273649": {
 "name": "Stormbound Emblem of Dazar",
@@ -1533,5 +1553,55 @@
 "name": "Sharp Axe Holster",
 "quality": 3,
 "slot": "Trinket"
+},
+"280617": {
+"name": "Lightbearer's Shield Fragment",
+"quality": 4,
+"slot": "Trinket"
+},
+"280799": {
+"name": "Lu'selama, Light's Justice",
+"quality": 4,
+"slot": "Weapon"
+},
+"280835": {
+"name": "Sigil of the Impending Eclipse",
+"quality": 4,
+"slot": "Trinket"
+},
+"281029": {
+"name": "Band of the Swarmcaller",
+"quality": 4,
+"slot": "Ring"
+},
+"281056": {
+"name": "Sanctified Knight's Phoenixblade",
+"quality": 4,
+"slot": "Weapon"
+},
+"281215": {
+"name": "Twisted Horror's Tendril",
+"quality": 4,
+"slot": "Trinket"
+},
+"281235": {
+"name": "Voidweaver's Leggings",
+"quality": 4,
+"slot": "Legs"
+},
+"281236": {
+"name": "Chestwrap of Palpable Terror",
+"quality": 4,
+"slot": "Chest"
+},
+"281238": {
+"name": "Aberrant Commander's Gauntlets",
+"quality": 4,
+"slot": "Hands"
+},
+"281239": {
+"name": "Corroded Hulk's Skullcap",
+"quality": 4,
+"slot": "Head"
 }
 }
