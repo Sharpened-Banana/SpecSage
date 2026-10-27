@@ -41,7 +41,8 @@ local ADDON, ns = ...
 --     Battle.net Game Data API (client-credentials OAuth, US region) rather
 --     than SimC, on 2026-08-30. Methodology: every current-season Mythic+
 --     leaderboard (8-dungeon pool, period 1078; refreshed 2026-10-04 at
--- period 1083, and 2026-10-13 at period 1085, 12.1.5's first day - a
+-- period 1083, 2026-10-13 at period 1085 (12.1.5's first day) and
+-- 2026-10-27 at period 1086, the end of its second week - a
 -- field whose `source` carries an older date was kept because the newer
 -- sample had no clear most-common build) across all 83 US connected
 --     realms was scanned (top 20 groups per realm/dungeon) for each spec's
@@ -195,7 +196,7 @@ ns.GuideStore:RegisterSpec("WARRIOR", 71, {
   -- choices vary, so the share is reported as it is.
   mplusMetaLoadout = {
     string = "CcEASWsDSHNyPDXnbxuIhH3ZdjZmZmFzYmZGAAAghphZGzMbmZmZGmxMDAAAAgxyMDMhxy2ALgBMDTIzgNwMDDDmlZ2GgZGAMDDA",
-    source = "Blizzard Battle.net API, US region, 2026-10-13: top 50 current-season Mythic+ Arms Warriors by best keystone level in the first week of patch 12.1.5 (period 1085), sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick, tied with 1 other build (6/50, 12% each); 50/50 (100%) ran Slayer overall.",
+    source = "Blizzard Battle.net API, US region, 2026-10-27: top 50 current-season Mythic+ Arms Warriors by best keystone level in the second week of patch 12.1.5 (period 1086), sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick, tied with 1 other build (6/50, 12% each); 50/50 (100%) ran Slayer overall.",
     patch = "12.1.5",
     sampleSize = 50,
   },
@@ -307,7 +308,7 @@ ns.GuideStore:RegisterSpec("WARRIOR", 72, {
   -- choices vary, so the share is reported as it is.
   mplusMetaLoadout = {
     string = "CgEASWsDSHNyPDXnbxuIhH3ZdDAAAAAAgGDjxMzmZmZmZmZMzMzMzMzDsMjxMjZzMzMAAQMW2GYBMBzwEYG2AmZYAAAmZYMLDjBjB",
-    source = "Blizzard Battle.net API, US region, 2026-10-13: top 50 current-season Mythic+ Fury Warriors by best keystone level in the first week of patch 12.1.5 (period 1085), sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick (9/50, 18%); 38/50 (76%) ran Slayer overall.",
+    source = "Blizzard Battle.net API, US region, 2026-10-27: top 50 current-season Mythic+ Fury Warriors by best keystone level in the second week of patch 12.1.5 (period 1086), sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick (7/50, 14%); 31/50 (62%) ran Slayer overall.",
     patch = "12.1.5",
     sampleSize = 50,
   },
@@ -421,8 +422,8 @@ ns.GuideStore:RegisterSpec("WARRIOR", 73, {
   -- split; one exact code rarely commands a majority, since flex-point
   -- choices vary, so the share is reported as it is.
   mplusMetaLoadout = {
-    string = "CkEASWsDSHNyPDXnbxuIhH3ZdnBAAGzYmZmZmxsZmZZGjxImxwyMzMzYGmZAAAAwyMDwMGgB2glFjGzAYWiZ2AmZGGbAwMDAAzAjB",
-    source = "Blizzard Battle.net API, US region, 2026-10-13: top 49 current-season Mythic+ Protection Warriors by best keystone level in the first week of patch 12.1.5 (period 1085), sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick, tied with 1 other build (2/49, 4% each); 45/49 (92%) ran Mountain Thane overall.",
+    string = "CkEASWsDSHNyPDXnbxuIhH3Zd3yAAAjZmxMzMDziZmlZMGjGzYYxMzMjZYmBAAAALzMAGDwgtlZMbLbjmZGmhlZpxMbwYmZYsBAzMzMAgZgxA",
+    source = "Blizzard Battle.net API, US region, 2026-10-27: top 49 current-season Mythic+ Protection Warriors by best keystone level in the second week of patch 12.1.5 (period 1086), sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick (3/49, 6%); 49/49 (100%) ran Mountain Thane overall.",
     patch = "12.1.5",
     sampleSize = 49,
   },

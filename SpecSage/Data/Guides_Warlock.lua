@@ -24,7 +24,8 @@ local ADDON, ns = ...
 -- (client-credentials OAuth, US region) rather than SimC, on 2026-08-30.
 -- Methodology: every current-season Mythic+ leaderboard (8-dungeon pool,
 -- period 1078; refreshed 2026-10-04 at
--- period 1083, and 2026-10-13 at period 1085, 12.1.5's first day - a
+-- period 1083, 2026-10-13 at period 1085 (12.1.5's first day) and
+-- 2026-10-27 at period 1086, the end of its second week - a
 -- field whose `source` carries an older date was kept because the newer
 -- sample had no clear most-common build) across all 83 US connected realms was scanned (top 20 groups
 -- per realm/dungeon) for each spec's group members; the top-observed-keystone
@@ -301,8 +302,8 @@ ns.GuideStore:RegisterSpec("WARLOCK", 266, {
   -- split; one exact code rarely commands a majority, since flex-point
   -- choices vary, so the share is reported as it is.
   mplusMetaLoadout = {
-    string = "CoQAMrNP5kak+EBqLfUa3dMm+yMMzoZzMz2MzMzyAAAAAAAAGzYYBGYb0CNsYMzYZ2mZmxMAwMjZmxMDwYGzYDAAMmZmxwwyMGwA",
-    source = "Blizzard Battle.net API, US region, 2026-10-13: top 50 current-season Mythic+ Demonology Warlocks by best keystone level in the first week of patch 12.1.5 (period 1085), sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick (5/50, 10%); 50/50 (100%) ran Diabolist overall.",
+    string = "CoQAMrNP5kak+EBqLfUa3dMm+yMmZGNbMzmZmZWGAAAAAAAwYGDLwAbjWohFjZGLzyMzMmBAmZMzMmZAGzYGbAAgxMzMGGWmxAGA",
+    source = "Blizzard Battle.net API, US region, 2026-10-27: top 50 current-season Mythic+ Demonology Warlocks by best keystone level in the second week of patch 12.1.5 (period 1086), sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick (3/50, 6%); 50/50 (100%) ran Diabolist overall.",
     patch = "12.1.5",
     sampleSize = 50,
   },
@@ -420,10 +421,10 @@ ns.GuideStore:RegisterSpec("WARLOCK", 267, {
   -- split; one exact code rarely commands a majority, since flex-point
   -- choices vary, so the share is reported as it is.
   mplusMetaLoadout = {
-    string = "CsQAMrNP5kak+EBqLfUa3dMm+yMMzoZzMz2MzYWmNzMzsYmZZZMAAYGjZmZDMmxwCZgthFaswAAAjBDAwMDwYGzMbAAAmZmBAAzwA",
-    source = "Blizzard Battle.net API, US region, 2026-10-04: top 50 current-season Mythic+ Destruction Warlocks by best keystone level, sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick, tied with 1 other build (3/50, 6% each); 45/50 (90%) ran Diabolist overall.",
-    patch = "12.1",
-    sampleSize = 50,
+    string = "CsQAMrNP5kak+EBqLfUa3dMm+yMMzoZzMz2MzYWmNzMzsYmZZZMAAYGjZmZBMmxwCZgthFaswAAAjBDAwMDwYGzMbAAAmZmBAAzwA",
+    source = "Blizzard Battle.net API, US region, 2026-10-27: top 48 current-season Mythic+ Destruction Warlocks by best keystone level in the second week of patch 12.1.5 (period 1086), sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick (3/48, 6%); 39/48 (81%) ran Diabolist overall.",
+    patch = "12.1.5",
+    sampleSize = 48,
   },
   tips = {
     "Never let Immolate fall off the target — its ticks are a steady source of Soul Shards.",

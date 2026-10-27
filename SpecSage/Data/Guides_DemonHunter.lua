@@ -19,10 +19,12 @@ local ADDON, ns = ...
 -- tuning this pass — EXCEPT Havoc (577) and Vengeance (581),
 -- which each gained an `mplusMetaLoadout` (DESIGN.md's v1.4 section) this
 -- pass: pulled live from Blizzard's own Battle.net Game Data API
--- (client-credentials OAuth, US region) rather than SimC, on 2026-08-30.
+-- (client-credentials OAuth, US region) rather than SimC, on 2026-08-30;
+-- Devourer (1480) got its first one on 2026-10-27.
 -- Methodology: every current-season Mythic+ leaderboard (8-dungeon pool,
 -- period 1078; refreshed 2026-10-04 at
--- period 1083, and 2026-10-13 at period 1085, 12.1.5's first day - a
+-- period 1083, 2026-10-13 at period 1085 (12.1.5's first day) and
+-- 2026-10-27 at period 1086, the end of its second week - a
 -- field whose `source` carries an older date was kept because the newer
 -- sample had no clear most-common build) across all 83 US connected realms was scanned (top 20 groups
 -- per realm/dungeon) for each spec's group members; the top-observed-keystone
@@ -158,8 +160,8 @@ ns.GuideStore:RegisterSpec("DEMONHUNTER", 577, {
   -- split; one exact code rarely commands a majority, since flex-point
   -- choices vary, so the share is reported as it is.
   mplusMetaLoadout = {
-    string = "CEkAvaDi4uyGvRjRjFbhHwBCvYmZGzMz2MmZmxYmMmZAAAAAAAzixsNDzMwMWmZmZYmBzyALzmZMMLaaMzMmxGAAAwAAQAwMDGACAAM",
-    source = "Blizzard Battle.net API, US region, 2026-10-13: top 50 current-season Mythic+ Havoc Demon Hunters by best keystone level in the first week of patch 12.1.5 (period 1085), sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick (15/50, 30%); 39/50 (78%) ran Fel-Scarred overall.",
+    string = "CEkAvaDi4uyGvRjRjFbhHwBCvYGMzMz2MmZmxYmMmZAAAAAAAzixsNDzMz2MzYZmxMWmZYsMz2MYYstxkMmZMjFAAAAAAEgZGgBgAAAD",
+    source = "Blizzard Battle.net API, US region, 2026-10-27: top 50 current-season Mythic+ Havoc Demon Hunters by best keystone level in the second week of patch 12.1.5 (period 1086), sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick, tied with 1 other build (6/50, 12% each); 42/50 (84%) ran Aldrachi Reaver overall.",
     patch = "12.1.5",
     sampleSize = 50,
   },
@@ -277,8 +279,8 @@ ns.GuideStore:RegisterSpec("DEMONHUNTER", 581, {
   -- split; one exact code rarely commands a majority, since flex-point
   -- choices vary, so the share is reported as it is.
   mplusMetaLoadout = {
-    string = "CUkAvaDi4uyGvRjRjFbhHwBCvAAYMzMjhZkZmBWMjZwMjZGz8AzMzYYmZmx2YGjxMAAAAAAACYmZsBAAAgBmZmZml2mZmBAzAAAAYA",
-    source = "Blizzard Battle.net API, US region, 2026-10-13: top 49 current-season Mythic+ Vengeance Demon Hunters by best keystone level in the first week of patch 12.1.5 (period 1085), sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick (3/49, 6%); 48/49 (98%) ran Annihilator overall.",
+    string = "CUkAvaDi4uyGvRjRjFbhHwBCvAAMjZmZMMjMzMGWmZmZgZMzYmZmZGDGmxmZmtxYGAAAAAAABMzM2AAAAwgZmZmZ2abmZGAAAAAgB",
+    source = "Blizzard Battle.net API, US region, 2026-10-27: top 49 current-season Mythic+ Vengeance Demon Hunters by best keystone level in the second week of patch 12.1.5 (period 1086), sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick, tied with 1 other build (2/49, 4% each); 49/49 (100%) ran Annihilator overall.",
     patch = "12.1.5",
     sampleSize = 49,
   },
@@ -318,8 +320,8 @@ ns.GuideStore:RegisterSpec("DEMONHUNTER", 581, {
 -- one) carry a new `omnium_talents=` field with no equivalent in this file's
 -- schema or in any MID1 profile - an apparent new patch-12.1 "Omnium" trait
 -- layer this pass did not investigate further or attempt to represent here.
--- No mplusMetaLoadout: that requires a live Blizzard Battle.net API pull,
--- and this pass had no API credentials to run one.
+-- mplusMetaLoadout: first pulled 2026-10-27 (period 1086), the 2026-09-02
+-- pass having had no Battle.net API credentials; same method as the others.
 ns.GuideStore:RegisterSpec("DEMONHUNTER", 1480, {
   specName = "Devourer",
   role = "DAMAGER",
@@ -405,6 +407,17 @@ ns.GuideStore:RegisterSpec("DEMONHUNTER", 1480, {
     string = "CgcBAAAAAAAAAAAAAAAAAAAAAAAWMzMzMzMzMwMAAAAAAALzYMYGAAAAAAAAmxMMmZmZYmZGzsNzYsptFAEwAMjZmZbmZa2mZbmZMjBA",
     source = "SimulationCraft default profile, Void-Scarred hero tree (credit, not endorsement of 'best') - SimC has not yet published a separate MID2 Annihilator profile for this brand-new spec",
     patch = "12.1",
+  },
+  -- Live top-players pull (DESIGN.md's v1.4 section), NOT SimC - see this
+  -- file's header for the methodology. The `source` line below carries the
+  -- pull's date, sample size, the plurality share and the hero-talent
+  -- split; one exact code rarely commands a majority, since flex-point
+  -- choices vary, so the share is reported as it is.
+  mplusMetaLoadout = {
+    string = "CgcBvaDi4uyGvRjRjFbhHwBCvAA2mxMzMzYmxwMAAAAAAALGz2gZAAAAAAAAYGzwMzMzMzMzMMziZMWkFmZmZ2abmZGADDABegxMMmB",
+    source = "Blizzard Battle.net API, US region, 2026-10-27: top 49 current-season Mythic+ Devourer Demon Hunters by best keystone level in the second week of patch 12.1.5 (period 1086), sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick (10/49, 20%); 32/49 (65%) ran Annihilator overall.",
+    patch = "12.1.5",
+    sampleSize = 49,
   },
   tips = {
     "This spec is still young — everything here follows SimulationCraft's current APL, not settled best practice.",

@@ -22,7 +22,8 @@ local ADDON, ns = ...
 -- (client-credentials OAuth, US region) rather than SimC, on 2026-08-30.
 -- Methodology: every current-season Mythic+ leaderboard (8-dungeon pool,
 -- period 1078; refreshed 2026-10-04 at
--- period 1083, and 2026-10-13 at period 1085, 12.1.5's first day - a
+-- period 1083, 2026-10-13 at period 1085 (12.1.5's first day) and
+-- 2026-10-27 at period 1086, the end of its second week - a
 -- field whose `source` carries an older date was kept because the newer
 -- sample had no clear most-common build) across all 83 US connected realms was scanned (top 20 groups
 -- per realm/dungeon) for each spec's group members; the top-observed-keystone
@@ -171,8 +172,8 @@ ns.GuideStore:RegisterSpec("DRUID", 102, {
   -- split; one exact code rarely commands a majority, since flex-point
   -- choices vary, so the share is reported as it is.
   mplusMetaLoadout = {
-    string = "CYGADBD3hSPCL9Y9gz68WcKvMAAAAAAAAAAAAAAAAAWoMbNjxMDwsMzMzMLMYMLzsMzCzM2YZmlxMjxGGGgx22MDGz2IwEAAAgFmZmZwmhxYAAYmBLDA",
-    source = "Blizzard Battle.net API, US region, 2026-10-13: top 50 current-season Mythic+ Balance Druids by best keystone level in the first week of patch 12.1.5 (period 1085), sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick (5/50, 10%); 49/50 (98%) ran Elune's Chosen overall.",
+    string = "CYGADBD3hSPCL9Y9gz68WcKvMAAAAAAAAAAAAAAAAAWoMbNjxMDwsYmZmZhBjZZmlZWYmxGLzsMmZM2wwAM22mZwY2GBmAAAAsYmZmZwmhxYAAYmBLDA",
+    source = "Blizzard Battle.net API, US region, 2026-10-27: top 50 current-season Mythic+ Balance Druids by best keystone level in the second week of patch 12.1.5 (period 1086), sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick (7/50, 14%); 46/50 (92%) ran Elune's Chosen overall.",
     patch = "12.1.5",
     sampleSize = 50,
   },
@@ -286,7 +287,7 @@ ns.GuideStore:RegisterSpec("DRUID", 103, {
   -- choices vary, so the share is reported as it is.
   mplusMetaLoadout = {
     string = "CcGADBD3hSPCL9Y9gz68WcKvMAAAAAAgZmZ2YmZmxY2M2mZZGzMmZAAAAYJY2M8AmZUzYWMzMzsMmhBAAAAAwADAAAgmZZWmZmBEYBmZGgFGMAAAmZDD",
-    source = "Blizzard Battle.net API, US region, 2026-10-13: top 50 current-season Mythic+ Feral Druids by best keystone level in the first week of patch 12.1.5 (period 1085), sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick (6/50, 12%); 41/50 (82%) ran Druid of the Claw overall.",
+    source = "Blizzard Battle.net API, US region, 2026-10-27: top 50 current-season Mythic+ Feral Druids by best keystone level in the second week of patch 12.1.5 (period 1086), sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick (13/50, 26%); 45/50 (90%) ran Druid of the Claw overall.",
     patch = "12.1.5",
     sampleSize = 50,
   },
@@ -392,7 +393,7 @@ ns.GuideStore:RegisterSpec("DRUID", 104, {
   -- choices vary, so the share is reported as it is.
   mplusMetaLoadout = {
     string = "CgGADBD3hSPCL9Y9gz68WcKvMAAAAAAAAAAAAgZmxsYmZMziZxMmZZZgZzwoJamZWmZmZmlxMAAAAAAMjNDYZbmBjZZAMFAAAYDzMALGDDYxCAzMAG",
-    source = "Blizzard Battle.net API, US region, 2026-10-13: top 50 current-season Mythic+ Guardian Druids by best keystone level in the first week of patch 12.1.5 (period 1085), sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick (9/50, 18%); 50/50 (100%) ran Elune's Chosen overall.",
+    source = "Blizzard Battle.net API, US region, 2026-10-27: top 50 current-season Mythic+ Guardian Druids by best keystone level in the second week of patch 12.1.5 (period 1086), sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick (11/50, 22%); 50/50 (100%) ran Elune's Chosen overall.",
     patch = "12.1.5",
     sampleSize = 50,
   },

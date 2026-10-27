@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+**Improved**
+- Top players' Mythic+ builds refreshed from Blizzard's leaderboards (US, 2026-10-27, the end of 12.1.5's second week) for 30 specs; 20 changed. Devourer gets a top players' build for the first time, so all 40 specs now have one. Havoc's top players have moved to Aldrachi Reaver, and Frost Mage's are now split evenly between Spellslinger and Frostfire. Brewmaster and Destruction move off their October 4 builds. Ten specs keep their October 13 builds because the new sample had no clear most-common build: Holy Paladin, Beast Mastery, Assassination, Subtlety, Holy Priest, Shadow, Restoration Shaman, Affliction, Restoration Druid and Preservation.
+
 ## 1.3.6 (2026-10-13)
 
 **Improved**

@@ -22,7 +22,8 @@ local ADDON, ns = ...
 -- OAuth, US region) rather than SimC (Protection first, on 2026-08-30; Holy
 -- and Retribution followed the same day in a second pass). Methodology:
 -- every current-season Mythic+ leaderboard (8-dungeon pool, period 1078; refreshed 2026-10-04 at
--- period 1083, and 2026-10-13 at period 1085, 12.1.5's first day - a
+-- period 1083, 2026-10-13 at period 1085 (12.1.5's first day) and
+-- 2026-10-27 at period 1086, the end of its second week - a
 -- field whose `source` carries an older date was kept because the newer
 -- sample had no clear most-common build)
 -- across all 83 US connected realms was scanned (top 20 groups per
@@ -254,8 +255,8 @@ ns.GuideStore:RegisterSpec("PALADIN", 66, {
   -- split; one exact code rarely commands a majority, since flex-point
   -- choices vary, so the share is reported as it is.
   mplusMetaLoadout = {
-    string = "CIEAzbn3egSOtoSwvPw1U1vTLsZYWGzYmZmZWWGjZZWmlZMAADAAAAAAaamZZmxMDDbtBgBGwMYDAAgAMzsst0yMjFLLMDgBzshBAzMAYmBMWA",
-    source = "Blizzard Battle.net API, US region, 2026-10-13: top 50 current-season Mythic+ Protection Paladins by best keystone level in the first week of patch 12.1.5 (period 1085), sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick (5/50, 10%); 45/50 (90%) ran Lightsmith overall.",
+    string = "CIEAzbn3egSOtoSwvPw1U1vTLsZYWGzYmZmZW2GjZZWmlZMAADAAAAAAaamZZmxMDDbtBgBGwMYDAAgAMzsst0yMjFLLMDgBzshBAzMAYmBMWA",
+    source = "Blizzard Battle.net API, US region, 2026-10-27: top 50 current-season Mythic+ Protection Paladins by best keystone level in the second week of patch 12.1.5 (period 1086), sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick (2/50, 4%); 50/50 (100%) ran Lightsmith overall.",
     patch = "12.1.5",
     sampleSize = 50,
   },
@@ -361,8 +362,8 @@ ns.GuideStore:RegisterSpec("PALADIN", 70, {
   -- split; one exact code rarely commands a majority, since flex-point
   -- choices vary, so the share is reported as it is.
   mplusMetaLoadout = {
-    string = "CYEAzbn3egSOtoSwvPw1U1vTLAAAAAwoZbbmZWGzMzAAAAAAYmyYGmZsNmthZ2mxYMGmxCbAYWmtZmZrBBAAsAYAwYGGYGzMbAzMDjZMYA",
-    source = "Blizzard Battle.net API, US region, 2026-10-13: top 50 current-season Mythic+ Retribution Paladins by best keystone level in the first week of patch 12.1.5 (period 1085), sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick, tied with 1 other build (7/50, 14% each); 46/50 (92%) ran Herald of the Sun overall.",
+    string = "CYEAzbn3egSOtoSwvPw1U1vTLAAAAAwoZbbmZWGzYGAAAAAAzUmlZYmx2Y2GmZbGjxYYGLsBgZZ2mZmtmZm2mZ2mBAsAYAwYmNgZMzshlZmZGGzYwA",
+    source = "Blizzard Battle.net API, US region, 2026-10-27: top 50 current-season Mythic+ Retribution Paladins by best keystone level in the second week of patch 12.1.5 (period 1086), sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick, tied with 1 other build (5/50, 10% each); 50/50 (100%) ran Herald of the Sun overall.",
     patch = "12.1.5",
     sampleSize = 50,
   },

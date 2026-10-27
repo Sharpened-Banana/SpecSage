@@ -22,7 +22,8 @@ local ADDON, ns = ...
 -- (client-credentials OAuth, US region) rather than SimC, on 2026-08-30.
 -- Methodology: every current-season Mythic+ leaderboard (8-dungeon pool,
 -- period 1078; refreshed 2026-10-04 at
--- period 1083, and 2026-10-13 at period 1085, 12.1.5's first day - a
+-- period 1083, 2026-10-13 at period 1085 (12.1.5's first day) and
+-- 2026-10-27 at period 1086, the end of its second week - a
 -- field whose `source` carries an older date was kept because the newer
 -- sample had no clear most-common build) across all 83 US connected realms was scanned (top 20 groups
 -- per realm/dungeon) for each spec's group members; the top-observed-keystone
@@ -157,7 +158,7 @@ ns.GuideStore:RegisterSpec("PRIEST", 256, {
   -- choices vary, so the share is reported as it is.
   mplusMetaLoadout = {
     string = "CAQAR03Gt7xPmcDNOjs2Zlb3yCDsMDWmZMmBmZbmtZmZmxMDAAAAAAAAAghZZGMzMDzYmBMNTMAzsghwYWGgxgFAAYMzMjBzAMzMTwM",
-    source = "Blizzard Battle.net API, US region, 2026-10-13: top 50 current-season Mythic+ Discipline Priests by best keystone level in the first week of patch 12.1.5 (period 1085), sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick (7/50, 14%); 37/50 (74%) ran Oracle overall.",
+    source = "Blizzard Battle.net API, US region, 2026-10-27: top 50 current-season Mythic+ Discipline Priests by best keystone level in the second week of patch 12.1.5 (period 1086), sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick (2/50, 4%); 44/50 (88%) ran Oracle overall.",
     patch = "12.1.5",
     sampleSize = 50,
   },

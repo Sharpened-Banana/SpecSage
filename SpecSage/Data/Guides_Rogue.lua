@@ -20,7 +20,8 @@ local ADDON, ns = ...
 -- (client-credentials OAuth, US region) rather than SimC, on 2026-08-30.
 -- Methodology: every current-season Mythic+ leaderboard (8-dungeon pool,
 -- period 1078; refreshed 2026-10-04 at
--- period 1083, and 2026-10-13 at period 1085, 12.1.5's first day - a
+-- period 1083, 2026-10-13 at period 1085 (12.1.5's first day) and
+-- 2026-10-27 at period 1086, the end of its second week - a
 -- field whose `source` carries an older date was kept because the newer
 -- sample had no clear most-common build) across all 83 US connected realms was scanned (top 20 groups
 -- per realm/dungeon) for each spec's group members; the top-observed-keystone
@@ -273,10 +274,10 @@ ns.GuideStore:RegisterSpec("ROGUE", 260, {
   -- split; one exact code rarely commands a majority, since flex-point
   -- choices vary, so the share is reported as it is.
   mplusMetaLoadout = {
-    string = "CQQA5HmDzx68KWyrW/8Y781L7Dgx2MMzMjZmtZmZMzMzsAmZbaZw2MAAAAAAbbzMzwMzMziZmZbAAAAYmBAjZxwQGYWYhWYjBYmBDMA",
-    source = "Blizzard Battle.net API, US region, 2026-10-13: top 49 current-season Mythic+ Outlaw Rogues by best keystone level in the first week of patch 12.1.5 (period 1085), sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick (6/49, 12%); 48/49 (98%) ran Trickster overall.",
+    string = "CQQA5HmDzx68KWyrW/8Y781L7Dgx2MMzMzMzsNzMzMzMjFwMbTLD2mBAAAAAMbLzMzwMjZWMzMbDAAAAjBMY2mFzMzoZmNmFW2mWYjBYmZmZgB",
+    source = "Blizzard Battle.net API, US region, 2026-10-27: top 36 current-season Mythic+ Outlaw Rogues by best keystone level in the second week of patch 12.1.5 (period 1086), sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick (3/36, 8%); 35/36 (97%) ran Trickster overall.",
     patch = "12.1.5",
-    sampleSize = 49,
+    sampleSize = 36,
   },
   tips = {
     "Don't re-roll Roll the Bones just because it feels weak — check whether it's actually below the keep threshold first.",

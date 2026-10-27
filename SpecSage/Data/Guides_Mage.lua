@@ -20,7 +20,8 @@ local ADDON, ns = ...
 -- (client-credentials OAuth, US region) rather than SimC, on 2026-08-30.
 -- Methodology: every current-season Mythic+ leaderboard (8-dungeon pool,
 -- period 1078; refreshed 2026-10-04 at
--- period 1083, and 2026-10-13 at period 1085, 12.1.5's first day - a
+-- period 1083, 2026-10-13 at period 1085 (12.1.5's first day) and
+-- 2026-10-27 at period 1086, the end of its second week - a
 -- field whose `source` carries an older date was kept because the newer
 -- sample had no clear most-common build) across all 83 US connected realms was scanned (top 20 groups
 -- per realm/dungeon) for each spec's group members; the top-observed-keystone
@@ -173,8 +174,8 @@ ns.GuideStore:RegisterSpec("MAGE", 62, {
   -- split; one exact code rarely commands a majority, since flex-point
   -- choices vary, so the share is reported as it is.
   mplusMetaLoadout = {
-    string = "C4DAche08tHz49KSVf7iKFnyuNzwYZmZmFMzQzMGAAAGAwMz0sssMDAEbAAsBzMDbWmxMLzYMzMzMswMzMzMAADAAwAMzAMAYYmZA",
-    source = "Blizzard Battle.net API, US region, 2026-10-13: top 50 current-season Mythic+ Arcane Mages by best keystone level in the first week of patch 12.1.5 (period 1085), sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick (4/50, 8%); 50/50 (100%) ran Sunfury overall.",
+    string = "C4DAche08tHz49KSVf7iKFnyuNzwMLzMzsgZQzMGAAAGAwMz0sssMDAEbAAsBzMDbWmxMLzYMzMzMswMzMzMAADAAwAMzAMAYYmZA",
+    source = "Blizzard Battle.net API, US region, 2026-10-27: top 50 current-season Mythic+ Arcane Mages by best keystone level in the second week of patch 12.1.5 (period 1086), sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick (5/50, 10%); 50/50 (100%) ran Sunfury overall.",
     patch = "12.1.5",
     sampleSize = 50,
   },
@@ -276,10 +277,10 @@ ns.GuideStore:RegisterSpec("MAGE", 63, {
   -- split; one exact code rarely commands a majority, since flex-point
   -- choices vary, so the share is reported as it is.
   mplusMetaLoadout = {
-    string = "C8DAche08tHz49KSVf7iKFnyuNzwYZmZmFMzIzMzMAAAGAwMz0sstNDAwmZmx2MzMzYDAAAAALmZmZAAgZMmZmZMzsMAMzQYMgZYMA",
-    source = "Blizzard Battle.net API, US region, 2026-10-13: top 50 current-season Mythic+ Fire Mages by best keystone level in the first week of patch 12.1.5 (period 1085), sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick (5/50, 10%); 48/50 (96%) ran Sunfury overall.",
+    string = "C8DAche08tHz49KSVf7iKFnyuNzwMLzMmFMzgZmZGAAADAYmZMLbLzAAsZmZsNzMzM2AAAAAwiZmZGAAYGjZmZGzMbDAzMAzMgZYMA",
+    source = "Blizzard Battle.net API, US region, 2026-10-27: top 41 current-season Mythic+ Fire Mages by best keystone level in the second week of patch 12.1.5 (period 1086), sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick, tied with 1 other build (2/41, 5% each); 38/41 (93%) ran Sunfury overall.",
     patch = "12.1.5",
-    sampleSize = 50,
+    sampleSize = 41,
   },
   tips = {
     "Spend any Hot Streak before your Combustion pre-cast, then press Combustion as that cast finishes so the first Hot Streak of the window comes from Combustion's guaranteed crits.",
@@ -383,7 +384,7 @@ ns.GuideStore:RegisterSpec("MAGE", 64, {
   -- choices vary, so the share is reported as it is.
   mplusMetaLoadout = {
     string = "CAEAche08tHz49KSVf7iKFnyuNzwYZmZmFMzEzMmZmZmZWMzMzMzMzsMTzMbzCAAAaBAAWAAAAAYbZMzMDmtZMzM2WAAAAzMYGGDYAMA",
-    source = "Blizzard Battle.net API, US region, 2026-10-13: top 50 current-season Mythic+ Frost Mages by best keystone level in the first week of patch 12.1.5 (period 1085), sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick (8/50, 16%); 27/50 (54%) ran Spellslinger overall.",
+    source = "Blizzard Battle.net API, US region, 2026-10-27: top 50 current-season Mythic+ Frost Mages by best keystone level in the second week of patch 12.1.5 (period 1086), sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick, tied with 1 other build (2/50, 4% each); 25/50 (50%) each ran Spellslinger and Frostfire.",
     patch = "12.1.5",
     sampleSize = 50,
   },

@@ -22,7 +22,8 @@ local ADDON, ns = ...
 -- (client-credentials OAuth, US region) rather than SimC, on 2026-08-30.
 -- Methodology: every current-season Mythic+ leaderboard (8-dungeon pool,
 -- period 1078; refreshed 2026-10-04 at
--- period 1083, and 2026-10-13 at period 1085, 12.1.5's first day - a
+-- period 1083, 2026-10-13 at period 1085 (12.1.5's first day) and
+-- 2026-10-27 at period 1086, the end of its second week - a
 -- field whose `source` carries an older date was kept because the newer
 -- sample had no clear most-common build) across all 83 US connected realms was scanned (top 20 groups
 -- per realm/dungeon) for each spec's group members; the top-observed-keystone
@@ -186,8 +187,8 @@ ns.GuideStore:RegisterSpec("EVOKER", 1467, {
   -- split; one exact code rarely commands a majority, since flex-point
   -- choices vary, so the share is reported as it is.
   mplusMetaLoadout = {
-    string = "CsbBPJc41CfcseY0baneJ1IHrBAAAAAAAAAAAjZwgZGmBGYMTjZmpZmZ2mZmZmZmZmZGwMzMzYmZZmZgBGD2glxox2AyMBYDzgZGM8AA",
-    source = "Blizzard Battle.net API, US region, 2026-10-13: top 50 current-season Mythic+ Devastation Evokers by best keystone level in the first week of patch 12.1.5 (period 1085), sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick, tied with 1 other build (5/50, 10% each); 49/50 (98%) ran Scalecommander overall.",
+    string = "CsbBPJc41CfcseY0baneJ1IHrBAAAAAAAAAAAjZwgZGmBGYMTjZmpZmZ2mZmZmZmZmZGwMzMzYmZbmZgBGD2glxox2AyMBYDzgZGM8AA",
+    source = "Blizzard Battle.net API, US region, 2026-10-27: top 50 current-season Mythic+ Devastation Evokers by best keystone level in the second week of patch 12.1.5 (period 1086), sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick (5/50, 10%); 48/50 (96%) ran Scalecommander overall.",
     patch = "12.1.5",
     sampleSize = 50,
   },
@@ -405,10 +406,10 @@ ns.GuideStore:RegisterSpec("EVOKER", 1473, {
   -- split; one exact code rarely commands a majority, since flex-point
   -- choices vary, so the share is reported as it is.
   mplusMetaLoadout = {
-    string = "CEcBPJc41CfcseY0baneJ1IHrNMzMbzMzMzyAzsMjxMmBAAAAAAAAmhZGYM1YmZGAAAAMzMjxMzyYmBmZzYwCsMGGbDgZiYDjZwMDgB",
-    source = "Blizzard Battle.net API, US region, 2026-10-13: top 49 current-season Mythic+ Augmentation Evokers by best keystone level in the first week of patch 12.1.5 (period 1085), sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick (4/49, 8%); 33/49 (67%) ran Chronowarden overall.",
+    string = "CEcBPJc41CfcseY0baneJ1IHrNMzMbzMzMzyMYmlZYmxMAAAAAAAAwM8AmBjpGzMzAAAAgZmZMmZ2GzMwMbGYMjFWgBmhhGxCYmZGAYA",
+    source = "Blizzard Battle.net API, US region, 2026-10-27: top 31 current-season Mythic+ Augmentation Evokers by best keystone level in the second week of patch 12.1.5 (period 1086), sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick (2/31, 6%); 27/31 (87%) ran Chronowarden overall.",
     patch = "12.1.5",
-    sampleSize = 49,
+    sampleSize = 31,
   },
   tips = {
     "Communicate with the allies you're buffing so Ebon Might and Prescience land while their own cooldowns are active.",

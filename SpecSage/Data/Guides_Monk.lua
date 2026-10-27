@@ -22,7 +22,8 @@ local ADDON, ns = ...
 -- (client-credentials OAuth, US region) rather than SimC, on 2026-08-30.
 -- Methodology: every current-season Mythic+ leaderboard (8-dungeon pool,
 -- period 1078; refreshed 2026-10-04 at
--- period 1083, and 2026-10-13 at period 1085, 12.1.5's first day - a
+-- period 1083, 2026-10-13 at period 1085 (12.1.5's first day) and
+-- 2026-10-27 at period 1086, the end of its second week - a
 -- field whose `source` carries an older date was kept because the newer
 -- sample had no clear most-common build) across all 83 US connected realms was scanned (top 20 groups
 -- per realm/dungeon) for each spec's group members; the top-observed-keystone
@@ -172,10 +173,10 @@ ns.GuideStore:RegisterSpec("MONK", 268, {
   -- split; one exact code rarely commands a majority, since flex-point
   -- choices vary, so the share is reported as it is.
   mplusMetaLoadout = {
-    string = "CwQAQnG51S19isUJoJoTeJ/IKDAAAgZbzYGGzyMzGzMjBAAAAAAYZBzEzMwMM2gxMzMDzGzMGLDLbPw22shZBAAWmlplZbmlBAACghNGmZATjBAAMA",
-    source = "Blizzard Battle.net API, US region, 2026-10-04: top 50 current-season Mythic+ Brewmaster Monks by best keystone level, sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick (3/50, 6%); 45/50 (90%) ran Master of Harmony overall.",
-    patch = "12.1",
-    sampleSize = 50,
+    string = "CwQAQnG51S19isUJoJoTeJ/IKDAAAgZbzYGGzyMzGzMjBAAAAAAYZBzEzMwMM2gxMzMDz2YmxYZYZ7B22mNMLAAwysMtMbzsMAAz2s0MzMbMsBmZmZYaMAAgB",
+    source = "Blizzard Battle.net API, US region, 2026-10-27: top 49 current-season Mythic+ Brewmaster Monks by best keystone level in the second week of patch 12.1.5 (period 1086), sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick, tied with 1 other build (2/49, 4% each); 45/49 (92%) ran Master of Harmony overall.",
+    patch = "12.1.5",
+    sampleSize = 49,
   },
   tips = {
     "Purify when the stagger pool is meaningfully full, not reflexively on cooldown — timing it right smooths damage better.",
@@ -288,7 +289,7 @@ ns.GuideStore:RegisterSpec("MONK", 270, {
   -- choices vary, so the share is reported as it is.
   mplusMetaLoadout = {
     string = "C4QAQnG51S19isUJoJoTeJ/IKDAAAAAAAgBWmZZML2mxMz2mBmhZzMbLLzMWYMNjZADGwYmZmhZDzwsMTAAAAAEgFbzsNbzMgAAYMAzAGDsIjZA",
-    source = "Blizzard Battle.net API, US region, 2026-10-13: top 50 current-season Mythic+ Mistweaver Monks by best keystone level in the first week of patch 12.1.5 (period 1085), sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick (6/50, 12%); 47/50 (94%) ran Conduit of the Celestials overall.",
+    source = "Blizzard Battle.net API, US region, 2026-10-27: top 50 current-season Mythic+ Mistweaver Monks by best keystone level in the second week of patch 12.1.5 (period 1086), sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick (4/50, 8%); 50/50 (100%) ran Conduit of the Celestials overall.",
     patch = "12.1.5",
     sampleSize = 50,
   },
@@ -395,8 +396,8 @@ ns.GuideStore:RegisterSpec("MONK", 269, {
   -- split; one exact code rarely commands a majority, since flex-point
   -- choices vary, so the share is reported as it is.
   mplusMetaLoadout = {
-    string = "C0QAQnG51S19isUJoJoTeJ/IKPzYAMGbzMz2MAAAAAAAAAAAALDzEmhhBMjhZmZGmNMDzyMBAsYmtZmxMzMDEAbAoZZWamZmFAmBmZAglxAGwA",
-    source = "Blizzard Battle.net API, US region, 2026-10-13: top 50 current-season Mythic+ Windwalker Monks by best keystone level in the first week of patch 12.1.5 (period 1085), sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick (4/50, 8%); 34/50 (68%) ran Conduit of the Celestials overall.",
+    string = "C0QAQnG51S19isUJoJoTeJ/IKPzYMgxYbmx2MAAAAAAAAAAAALDz0MmhhBMMMzMzwsxMDWmJAgFmtxMmZmZgAYxMLz2YCCAYGDgZAGbDgZmZzA",
+    source = "Blizzard Battle.net API, US region, 2026-10-27: top 50 current-season Mythic+ Windwalker Monks by best keystone level in the second week of patch 12.1.5 (period 1086), sampled across all 83 US connected realms' leaderboards. This exact build was the plurality pick (2/50, 4%); 48/50 (96%) ran Conduit of the Celestials overall.",
     patch = "12.1.5",
     sampleSize = 50,
   },
